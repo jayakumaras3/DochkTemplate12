@@ -1,0 +1,295 @@
+
+
+@media only screen and (max-width: 844px) {
+  /* Common styles for both portrait and landscape */
+
+  /* Example: Set the font size to be smaller for better readability on smaller screens */
+ #pageNo {
+    left: 34%;
+    font-size: 25px;
+    padding: 0px;
+    margin: 0px;
+}
+#TmenuIcon
+{
+	width: 60px;
+    height: 38px;
+	margin-left: -454px;
+}
+.footer {
+    /* position: absolute; */
+    /* right: 123px; */
+    left: -8px;
+    top: 3px;
+    height: 746px;
+    background-color: white;
+    float: right;
+    width: 110px;
+    border-radius: 5px;
+    z-index: 1000;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+    padding-left: 0%;
+    padding-top: 3%;
+}
+.pageClass {
+    width: 73px;
+    margin-top: 41px !important;
+}
+.contentArea {
+    position: relative;
+    float: left;
+    width: 1235px;
+    height: 749px;
+    left: 8px;
+    box-shadow: 0px 0px 5px rgb(0 0 0 / 0%);
+}
+.pageContent {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 94% !important;
+    margin-top: -4px;
+    margin-left: 0px;
+}
+#ProgressBar {
+    margin-left: 0px;
+    margin-top: 0px !important;
+    /* margin-right: 113px; */
+    padding-left: 28px;
+    padding-top: 0px;
+}
+.footer>div {
+    float: revert-layer;
+    position: relative;
+    /* margin-left: 22px; */
+    /* margin-top: 34px; */
+    /* padding: 35px; */
+    margin: 20px;
+    padding: 46px;
+}
+
+.resourceClass
+{
+		background-image: url(../images/footer-menu/resource.svg);
+        background-repeat: no-repeat;
+        width: 25px;
+        height: 31px;
+        margin-left: 46px !important;
+}
+.headingArea1 {
+    position: absolute;
+  
+    z-index: 1002;
+    margin-left: 2px;
+	        margin-left: 453px;
+			height: 102%;
+   /* margin-top: 9px;*/
+}
+#TmenuIcon1
+{
+	margin-top: 3%;
+	height: 64px;
+    width: 124px;
+}
+/*.headingArea {
+    position: relative;
+    height: 49px;
+    left: 5%;
+    margin-top: 4px;
+    width: 95%;
+    /* background-color: #333333; */
+   /* background-color: #1e2946;
+    color: white;
+    border-top-left-radius: 1px;
+    border-top-right-radius: 1px;
+    font-size: 19px;
+    font-weight: bold;
+    padding: 8px 20px;
+}*/
+    .headingArea {
+        position: relative;
+        height: 49px;
+        /* left: 5%; */
+        margin-top: 4px;
+        width: 100%;
+        /* background-color: #333333; */
+        background-color: #ffffff;
+        color: #000000;
+        border-top-left-radius: 1px;
+        border-top-right-radius: 1px;
+        font-size: 19px;
+        font-weight: bold;
+        padding: 8px 20px 8px 61px;
+    }
+.sideBar {
+    position: absolute;
+    width: 453px;
+    height: 763px;
+    background-color: white;
+    float: left;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+.pageClass
+{
+    /* width: 73px; */
+    /* margin-top: 14px !important; */
+}
+  /* You can add more common styles for mobile devices as needed */
+
+
+#tocData li {
+    /* list-style: none; */
+    right: 29px;
+    align-content: center;
+    width: 100%;
+    font-weight: bold;
+    position: relative;
+    font-size: 30px;
+    /* padding-left: 11px; */
+    margin-bottom: 2px;
+}
+#sideBarHeader div {
+    width: 50%;
+    position: relative;
+    float: left;
+    margin-bottom: 12px;
+    padding-bottom: 67px;
+    padding-left: 20px !important;
+    text-align: left;
+    font-size: 31px;
+    height: 30px;
+}
+
+.sideBartopicHeader {
+    padding: 4px;
+    font-size: 24px;
+}
+.sideBar li {
+    list-style: square;
+    right: 0px;
+    font-weight: bold;
+    position: relative;
+    min-height: 70px;
+    font-size: 32px;
+}
+.sideBar > .tocData {
+    position: relative;
+    float: left;
+    width: 94%;
+    overflow: auto;
+    height: 413px;
+    background-color: white;
+    font-size: 39px;
+    margin-left: 11PX;
+}
+.copyright {
+    font-size: 37px;
+    bottom: 13px;
+    width: 100%;
+    height: 43px;
+    text-align: center;
+    position: absolute;
+    display: block;
+}
+.toggle-box + label:before {
+    background-color: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #333;
+    content: "+";
+    display: block;
+    float: left;
+    font-weight: bold;
+    height: 20px;
+    line-height: 20px;
+    margin-right: 5px;
+    text-align: center;
+    width: 20px;
+    font-size: 30px;
+}
+.toggle-box + label {
+    cursor: pointer;
+    display: block;
+    width: 100% !important;
+    font-weight: bold;
+    line-height: 21px;
+    margin-top: 5px;
+    margin-left: -20px;
+}
+.sideBartopicHeader {
+    padding: 14px;
+    font-size: 33px;
+}
+.sideBar #sideBarHeader {
+    width: 100%;
+    height: 76px;
+    position: relative;
+    bottom: 0;
+    top: 0px;
+}
+.exitClass {
+    height: 50px;
+    background-image: url(../images/footer-menu/exit_Iphone.png);
+    background-repeat: no-repeat;
+    width: 79px;
+}
+canvas {
+	    width: 60px !important;
+    height: 60px !important;
+}
+.muteClass {
+    background-image: url(../images/footer-menu/Leran_iphone.png);
+    background-repeat: no-repeat;
+    width: 79px;
+    height: 50px;
+}
+.prevClass {
+    background-image: url(../images/footer-menu/prev_iphone.svg);
+    background-repeat: no-repeat;
+    width: 71px;
+    height: 37px;
+    padding-bottom: 26px !important;
+    margin-left: 16px !important;
+}
+.nextClass {
+    background-image: url(../images/footer-menu/Next_iphone.svg);
+    background-repeat: no-repeat;
+    width: 79px;
+    height: 50px;
+    margin-top: 65px !important;
+}
+.nextClassHighlight {
+    background-image: url(../images/footer-menu/Next_H_iphone.svg);
+}
+.exitHighlight
+{
+    background-image:  url("../images/footer-menu/Power_Iphone_Height.png") !important;
+}
+.toggle-box + label + ul {
+    margin-bottom: 10px;
+    margin-left: 0px;
+    margin-top: 12px;
+}
+.logo {
+    margin-top: 20px;
+    position: relative;
+    width: 80%;
+    margin-left: 8%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+}
+@media only screen
+  and (min-device-width: 768px) /* Minimum width for iPad landscape mode */
+  and (max-device-width: 1024px) /* Maximum width for iPad portrait mode */
+  and (-webkit-min-device-pixel-ratio: 1) { /* Ensuring it's an iPad by checking pixel ratio */
+  /* Your CSS styles specific to iPad here */
+  .contentArea {
+  
+    box-shadow: 0px 0px 5px rgb(0 0 0 / 0%);
+}
+}
