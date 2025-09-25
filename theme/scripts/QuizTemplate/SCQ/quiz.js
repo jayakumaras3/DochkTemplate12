@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			</div>
 			</div>
 			<div class="options" >${optionsHtml}</div>
-			<button aria-label="Submit quiz" title="Submit Quiz" role="button" class="btn ColorSet_CR FSize20" id="submitBtn" tabindex="0">
+			<button aria-label="Submit quiz" role="button" class="btn ColorSet_CR FSize20" id="submitBtn" tabindex="0">
 			${parent.mainData.quizButton}
 			</button>
 			<div class="feedback"  ><p tabindex="0" id="feedback"> </p></div>
