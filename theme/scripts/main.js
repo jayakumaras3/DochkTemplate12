@@ -13,6 +13,7 @@ var ResumeYES="Yes";
 var ResumeNO="No";
 var ResumeTitle="Resume";
 var Menutitle="Menutitle";
+var LearningAidsTitle= "LearningAidsTitle";
 var NextTitle= "NextT";
 var Prevtitle="PrevT";
 var VttLabel="English";
@@ -580,7 +581,7 @@ function processMasterValue1(data) {
   ResumeNO = data.ResumeNO || "";
   ResumeTitle = data.ResumeTitle || "";
   Menutitle = data.Menutitle || "";
-  NextTitle = data.NextTitle || "";
+  LearningAidsTitle = data.LearningAidsTitle || "";
   Prevtitle = data.Prevtitle || "";
   CourseName = data.CourseName || "";
   PageLevelCourseComplete = data.PageLevelCourseComplete || false;

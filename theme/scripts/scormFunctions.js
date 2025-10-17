@@ -224,6 +224,9 @@ function AfterTemaplateJson() {
 
     const prevBtn = document.getElementById("prev");
     if (prevBtn) prevBtn.title = NextTitle;
+	
+    const resource1Btn = document.getElementById("resource1");
+    if (resource1Btn) resource1Btn.title = LearningAidsTitle;
 
     const nextBtn = document.getElementById("next");
     if (nextBtn) nextBtn.title = Prevtitle;

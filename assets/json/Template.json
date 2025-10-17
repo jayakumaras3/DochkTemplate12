@@ -5,6 +5,7 @@
   "AudioVersionEnable": true,
   "CertificateEnabled": true,
   "PageLevelCourseComplete": false,
+  "LearningAidsTitle": " LearningAidsTitle",
   
   "MenuShowHideBool": "true",
   "Menutitle": "Menu",
