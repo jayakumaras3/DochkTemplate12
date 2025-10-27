@@ -582,6 +582,7 @@ function processMasterValue1(data) {
   ResumeTitle = data.ResumeTitle || "";
   Menutitle = data.Menutitle || "";
   LearningAidsTitle = data.LearningAidsTitle || "";
+  NextTitle = data.NextTitle || "";
   Prevtitle = data.Prevtitle || "";
   CourseName = data.CourseName || "";
   PageLevelCourseComplete = data.PageLevelCourseComplete || false;
