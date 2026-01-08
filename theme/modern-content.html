@@ -1,0 +1,42 @@
+<div class="content-card">
+    <h2 ng-if="cc.header">{{cc.header}}</h2>
+    
+    <!-- Video Content -->
+    <div ng-if="cc.pageContentType == 'video'">
+        <div class="video-container">
+            <video src="{{cc.pageContent}}" 
+                   id="vidArea" 
+                   onended="onendofvideo()" 
+                   controls 
+                   onvolumechange="volumechange_fun()" 
+                   onpause="onPauseVid()" 
+                   controlsList="nodownload" 
+                   disablePictureInPicture 
+                   onchange="videochange">
+                <track id="englishTrack" kind="captions" src="assets/vtt/En_en_1.vtt" srclang="en" label="English" default>
+            </video>
+        </div>
+        <p class="video-caption">Video 1.2: Common indicators of phishing attempts</p>
+        <p>Phishing attacks are deceptive communications designed to trick you into revealing sensitive information. Watch the video above to learn the basics.</p>
+    </div>
+
+    <!-- HTML Content -->
+    <div ng-if="cc.pageContentType == 'html'" ng-include="cc.pageContent"></div>
+
+    <!-- Quiz Content -->
+    <div ng-if="cc.pageContentType == 'quiz'" class="quiz-card">
+        <p><span class="info-icon">i</span>Select the best answer.</p>
+        <div class="quiz-option">
+            <input type="radio" name="quizOption" id="option1">
+            <label for="option1">Reply immediately with the payment details.</label>
+        </div>
+        <div class="quiz-option">
+            <input type="radio" name="quizOption" id="option2">
+            <label for="option2">Verify the request by calling the vendor using a trusted phone number.</label>
+        </div>
+        <div class="quiz-option">
+            <input type="radio" name="quizOption" id="option3">
+            <label for="option3">Forward the email to the entire finance team.</label>
+        </div>
+    </div>
+</div>

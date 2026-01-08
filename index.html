@@ -4,16 +4,8 @@
     <meta name='viewport' content='initial-scale = 1, minimum-scale = 1, maximum-scale = 1'/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="shortcut icon" href="../theme/images/favicon.ico">
-    <title></title>
-    <link href="theme/css/bootstrap.css" rel="stylesheet">
-    <link href="theme/css/sideBar.css" rel="stylesheet">
-    <link href="theme/css/content.css" rel="stylesheet">
-    <link href="theme/css/footer.css" rel="stylesheet">
-    <link href="theme/css/custom.css" rel="stylesheet">
-	 <link href="theme/css/mobile.css" rel="stylesheet">
-	 <link href="theme/css/toc.css" rel="stylesheet">
-	 <link href="theme/css/Color.css" rel="stylesheet">
-    <link href="theme/css/certification.css" rel="stylesheet" >
+    <title>Corporate eLearning</title>
+    <link href="theme/css/modern-style.css" rel="stylesheet">
     <script src="theme/lib/angular-1.5.8/angular.min.js"></script>
     <script src="theme/lib/angular-1.5.8/angular-route.min.js"></script>
     <script src="theme/lib/angular-1.5.8/angular-sanitize.min.js"></script>
@@ -21,12 +13,6 @@
     <script src="theme/lib/angular.radialIndicator.js"></script>
     <script src="theme/lib/jquery-3.1.1.min.js"></script>
     <script src="theme/lib/bootstrap.min.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/common/Proxy.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/common/Extend.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/common/EventDispatcher.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/SoundInstance.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/Preloadjs.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/Soundjs.js"></script>
     <script src="theme/lib/createjs-2015.11.26.min.js"></script>
     <script src="theme/scripts/service/globalSettingService.js"></script>
     <script src="theme/scripts/service/globalVariableService.js"></script>
@@ -38,59 +24,43 @@
     <script src="theme/scripts/controller/loginController.js"></script>
     <script src="theme/scripts/app.js"></script>
     <script src="theme/scripts/main.js"></script>
-	<script src="theme/scripts/jMain.js"></script>
-	<script type="text/javascript" src="theme/scripts/SCORM_API_wrapper.js"></script>
-   <script type="text/javascript" src="theme/scripts/scormtrack.js"></script>
-   <script type="text/javascript" src="theme/scripts/scormFunctions.js"></script>
-   
-   <script type="text/javascript" src="theme/scripts/loader.js"></script>
-  
+    <script src="theme/scripts/jMain.js"></script>
+    <script type="text/javascript" src="theme/scripts/SCORM_API_wrapper.js"></script>
+    <script type="text/javascript" src="theme/scripts/scormtrack.js"></script>
+    <script type="text/javascript" src="theme/scripts/scormFunctions.js"></script>
+    <script type="text/javascript" src="theme/scripts/loader.js"></script>
 </head>
-<script>
-
-</script>
 <body ng-app="aristoFramework">
-<div id="mainPage" ng-view="">
-
-</div>
-<script src="theme/scripts/resize.js"></script>
-	<div id="resumemainContainer" class="resume_container" role="dialog" aria-modal="true" aria-labelledby="Resumeheading" aria-describedby="resume_id" tabindex="0">
-  <div class="preloaderDisplayresume" aria-hidden="true"></div>
-
-  <div id="resumeArea" class="resume_content_container">
-    <div  tabindex="0" id="Resumeheading" class="resume_content_header ColorSet_CR FSize18">
-      Resume
+    <div class="course-player">
+        <header class="course-header">
+            <a href="#" class="back-arrow">←</a>
+            <div class="course-title">Cybersecurity Fundamentals</div>
+            <div class="header-icons">
+                <span class="icon">🔊</span>
+                <span class="icon hamburger-menu">☰</span>
+            </div>
+        </header>
+        <div class="breadcrumb">
+            <a href="#">Module 1: Introduction</a> > <a href="#">Phishing Attacks</a>
+        </div>
+        <main class="main-content" ng-view>
+            <!-- Angular's ng-view will populate this area -->
+        </main>
+        <footer class="course-footer">
+            <div class="page-progress">
+                PAGE 3 OF 11
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 25%;"></div>
+            </div>
+            <div class="footer-actions">
+                <button class="transcript-btn">📄 Transcript</button>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary">Previous</button>
+                    <button class="btn btn-primary">Next</button>
+                </div>
+            </div>
+        </footer>
     </div>
-
-    <div  tabindex="0" id="resume_id" class="resume_content_text FSize17">
-      Are you sure you want to continue where you left?
-    </div>
-
-    <div class="row h-100" role="group" aria-label="Resume confirmation buttons">
-      <div class="col-xs-6 text-center">
-        <button  tabindex="0"
-          id="resumeyes"
-          onclick="yesBtnClick()"
-          class="btn btn-large btn-default text-center yes-btn ColorSet_CR"
-          aria-label="Yes"
-        >
-          Yes
-        </button>
-      </div>
-      <div class="col-xs-6 text-center">
-        <button  tabindex="0"
-          id="resumeno"
-          onclick="noBtnClick()"
-          class="btn btn-large btn-default text-center no-btn ColorSet_CR"
-          aria-label="No"
-        >
-          No
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
 </body>
-
 </html>

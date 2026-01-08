@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
-    <link rel="stylesheet" href="../../../css/SCQ_style.css">	
-    <link rel="stylesheet" href="../../../css/Color.css">
-	
+  <meta charset="UTF-8">
+  <title>Single Choice Quiz</title>
+  <link rel="stylesheet" href="../../../../theme/css/modern.css">
+  <link rel="stylesheet" href="SCQ_modern.css">
 </head>
 <body>
-<div id="parentquizContainer">	</div>									  
-    <div id="quizContainer"></div>
-    <script src="quiz.js"></script>
+  <div class="quiz-card">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+    <button id="submit-btn">Submit</button>
+    <div id="feedback" class="feedback"></div>
+  </div>
+
+  <script src="quiz.js"></script>
 </body>
 </html>

@@ -2,67 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title></title>
-  <link rel="stylesheet" href="assets/style.css">
-  <script>
-    function startCourse() {
-      parent.beginButCall();
-    }
-
-    function playAudio() {
-      parent.audioButCall();
-    }
-	 function changeImageOnHover(button, src) {
-    button.querySelector('img').src = src;
-  }
-
-  function resetImageOnHover(button, src) {
-    button.querySelector('img').src = src;
-  }
-  </script>
+  <title>Mobile Security</title>
+  <link rel="stylesheet" href="assets/modern.css">
 </head>
 <body>
+  <div class="card">
+    <h2>Mobile Security Essentials</h2>
+    <p>A short course on the mobile security landscape and best practices for Nokia and Samsung devices in India.</p>
 
-  <!-- Title -->
-  <div class="title" >
-  <p tabindex="0">  Mobile Security<br>of nokia and samsung<br>in india</p>
-	<br>
-<br>
+    <div class="course-details">
+      <p><span class="info-icon">?</span><strong>Estimated time:</strong> 10 minutes</p>
+      <p><span class="info-icon">?</span><strong>Assessment:</strong> 2 quiz items</p>
+      <p><span class="info-icon">?</span><strong>Resources:</strong> Downloadable materials included</p>
+    </div>
+
+    <div class="buttons">
+      <button onclick="parent.beginButCall()">Begin Course</button>
+    </div>
   </div>
-		
-	<div class="info" role="list" aria-label="Course Info">
-    <div class="info-item" role="listitem">
-      <img class="info-time" src="assets/time.png" alt="Estimated time: 10 minutes">
-       <p tabindex="0">10 Min</p>
-    </div>
-    <div class="info-item" role="listitem">
-      <img class="info-quiz" src="assets/quiz.png" alt="Contains 2 quiz items">
-       <p tabindex="0">2 Quiz Items</p>
-    </div>
-    <div class="info-item" role="listitem">
-      <img class="info-download" src="assets/download.png" alt="Includes downloadable resources">
-      <p tabindex="0">Downloadable <br>Resources</p>
-    </div>
-
-
-    <!-- Buttons -->
-
-		<div class="buttons">
-		  <button class="btn" onclick="startCourse()" aria-label="Begin Course" 
-				  onmouseover="changeImageOnHover(this, 'assets/begin-hover.png')" 
-				  onmouseout="resetImageOnHover(this, 'assets/begin.png')">
-			<img src="assets/begin.png" alt="Begin Course">
-		  </button>
-		  
-		 <!-- <button class="btn" onclick="playAudio()" aria-label="Play Audio Version" 
-				  onmouseover="changeImageOnHover(this, 'assets/audio-hover.png')" 
-				  onmouseout="resetImageOnHover(this, 'assets/audio.png')">
-			<img src="assets/audio.png" alt="Audio Version">
-		  </button> -->
-		</div>
-		  </div>
-
-  
-
 </body>
 </html>

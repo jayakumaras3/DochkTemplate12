@@ -1,0 +1,50 @@
+body {
+    font-family: sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.quiz-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    max-width: 800px;
+    width: 100%;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.quiz-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.quiz-option input[type="checkbox"] {
+    margin-right: 12px;
+}
+
+.feedback {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 4px;
+}
+
+.feedback.correct {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.feedback.incorrect {
+    background-color: #f8d7da;
+    color: #721c24;
+}
