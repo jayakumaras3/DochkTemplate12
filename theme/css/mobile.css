@@ -14,7 +14,7 @@
 {
 	width: 60px;
     height: 38px;
-	margin-left: -454px;
+	/*margin-left: -454px;*/
 }
 .footer {
     /* position: absolute; */
@@ -282,6 +282,75 @@ canvas {
     border-top-right-radius: 5px;
 }
 
+body:has(.vertical-video-layout) .contentArea {
+    width: 100% !important;
+    height: calc(100vh - 63px) !important;
+    left: 0 !important;
+}
+
+body:has(.vertical-video-layout) .pageContent {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 8px 10px 88px !important;
+}
+
+body:has(.vertical-video-layout) .headingArea1 {
+    margin-left: 10px !important;
+    height: auto !important;
+}
+
+body:has(.vertical-video-layout) #TmenuIcon {
+    margin-left: 0 !important;
+    width: 38px !important;
+    height: 23px !important;
+}
+
+body:has(.vertical-video-layout) .footer {
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 84px !important;
+    padding: 0 10px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0)) !important;
+}
+
+body:has(.vertical-video-layout) .footer > div {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+}
+
+body:has(.vertical-video-layout) .footer #prev,
+body:has(.vertical-video-layout) .footer .prevClass {
+    left: 10px !important;
+}
+
+body:has(.vertical-video-layout) .footer #next,
+body:has(.vertical-video-layout) .footer .nextClass,
+body:has(.vertical-video-layout) .footer .nextClassHighlight {
+    right: 10px !important;
+    margin-top: 0 !important;
+}
+
+body:has(.vertical-video-layout) #ProgressBar {
+    bottom: 90px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body:has(.vertical-video-layout) .vertical-video-layout {
+    --reel-width: min(94vw, calc(84vh * 9 / 16));
+}
+
 }
 @media only screen
   and (min-device-width: 768px) /* Minimum width for iPad landscape mode */
@@ -292,4 +361,107 @@ canvas {
   
     box-shadow: 0px 0px 5px rgb(0 0 0 / 0%);
 }
+}
+
+@media only screen and (max-width: 844px) {
+    .contentArea.video-mode {
+        height: calc(100vh - 54px) !important;
+    }
+
+    .contentArea.video-mode .pageContent {
+        padding: 8px 8px 88px !important;
+    }
+
+    .contentArea.video-mode .headingArea {
+        height: 46px !important;
+        padding: 6px 10px 6px 46px !important;
+        font-size: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+    }
+
+    .contentArea.video-mode .headingArea > span {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        line-height: 1.2 !important;
+    }
+
+    .contentArea.video-mode #pagenoHeader {
+        float: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-left: 8px !important;
+        min-width: 56px !important;
+        min-height: 28px !important;
+        line-height: 1 !important;
+        padding: 2px 10px !important;
+    }
+
+    .contentArea.video-mode .headingArea1 {
+        margin-left: -9px !important;
+        margin-top: 0 !important;
+        top: 16px !important;
+        height: 20px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .contentArea.video-mode #TmenuIcon {
+        width: 32px !important;
+        height: 20px !important;
+        margin-top: 0 !important;
+        display: block !important;
+    }
+
+    .contentArea.video-mode .shorts-container {
+        width: min(96vw, calc(89vh * 9 / 16));
+        max-height: 89vh;
+    }
+
+    .contentArea.video-mode .action-bar {
+        right: 6px;
+        gap: 8px;
+    }
+
+    .contentArea.video-mode .action-btn {
+        width: 40px;
+        height: 40px;
+        background-size: 17px 17px;
+    }
+
+    .contentArea.video-mode + .footer {
+        height: 82px !important;
+    }
+
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass,
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight {
+        width: 48px !important;
+        height: 48px !important;
+    }
+
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass {
+    /*    left: 8px !important;*/
+    }
+
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight {
+       /* right: 8px !important;*/
+    }
+
+    .contentArea.video-mode + .footer #ProgressBar {
+        width: 62px !important;
+        height: 62px !important;
+        bottom: 88px !important;
+    }
 }

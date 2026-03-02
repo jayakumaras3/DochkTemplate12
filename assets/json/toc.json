@@ -1,10 +1,10 @@
 {
   "0": [
     {
-      "name": "96",
+      "name": "2239",
       "title": "Welcome",
       "header": "Welcome",
-      "transcript": "<p>&nbsp</p>",
+      "transcript": " ",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -14,7 +14,7 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/html/page1/Screen_01.html",
+            "src": "assets/html/2239/index.html",
             "id": "Screen_01.html"
           },
           {
@@ -25,17 +25,17 @@
         "content": [
           {
             "type": "captivate",
-            "path": "assets/html/page1/Screen_01.html",
+            "path": "assets/html/2239/index.html",
             "functionName": "captivate"
           }
         ]
       }
     },
     {
-      "name": "97",
+      "name": "1997",
       "title": "Audio Version",
       "header": "Audio Version",
-      "transcript": "",
+      "transcript": " ",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -45,8 +45,8 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/video/audio.mp4",
-            "id": "audio.mp4"
+            "src": "assets/video/en_2.mp4",
+            "id": "en_2.mp4"
           },
           {
             "src": "theme/scripts/Screen_01.js",
@@ -56,17 +56,17 @@
         "content": [
           {
             "type": "video",
-            "path": "assets/video/audio.mp4",
+            "path": "assets/video/en_2.mp4",
             "onendnextscrn": "false"
           }
         ]
       }
     },
     {
-      "name": "98",
-      "title": "Introduction dfgdfggdf  dfgfgdfg dgdfg",
-      "header": "Introduction dfgdfggdf  dfgfgdfg dgdfg",
-      "transcript": "<p>Welcome to the course: A Deep Dive Into Phishing...</p>",
+      "name": "1996",
+      "title": "Introduction",
+      "header": "Introduction",
+      "transcript": "<p>Welcome to the course: Boosting Efficiency With Microsoft Copilot.</p>\r\n\r\n<p>This extensive course on Microsoft Copilot, your AI-driven assistant is aimed at boosting productivity and creativity in professional settings, is structured to enable you to fully harness the capabilities of Copilot. It offers an in-depth exploration of its features, functionalities, and practical applications within Microsoft 365 tools.</p>\r\n\r\n<p>From automating tedious tasks in Excel to producing refined documents in Word, optimizing communication in Outlook, and fostering collaboration in Teams, Copilot is revolutionizing our work processes.</p>\r\n\r\n<p>You will discover how its sophisticated features &ndash; such as natural language comprehension, content creation, and data analysis &ndash; can streamline intricate workflows, minimize errors, and allow for more time dedicated to strategic planning.</p>\r\n\r\n<p>In this course, you will:</p>\r\n\r\n<ul>\r\n\t<li>Describe generative AI and Copilot</li>\r\n\t<li>State the key features of Copilot, and</li>\r\n\t<li>Explain the best practices for using Copilot&nbsp;</li>\r\n</ul>\r\n",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -94,10 +94,10 @@
       }
     },
     {
-      "name": "99",
-      "title": "Choosing the Target",
-      "header": "Choosing the Target",
-      "transcript": "<p>The first step of any attacker...</p>",
+      "name": "1998",
+      "title": "Introduction to Generative AI and Copilot",
+      "header": "Introduction to Generative AI and Copilot",
+      "transcript": "<p>Traditional AI has been enhancing our lives for decades, from voice assistants like Siri and Alexa to recommendation systems on Netflix and Amazon.</p>\r\n\r\n<p>Generative AI, or Gen AI, however, takes this a step further by crafting entirely new content, whether writing a haiku, simplifying complex concepts, or analyzing data.</p>\r\n\r\n<p>Gen AI is truly a revolutionary frontier in artificial intelligence.</p>\r\n\r\n<p>Think of it as the smartest, most resourceful person you know, who is always ready to assist and teach you, without ever losing patience! Sound too good to be true, doesn&rsquo;t it? Well, like any human, it isn&rsquo;t infallible and can definitely make mistakes.</p>\r\n\r\n<p>Gen AI relies on Large Language Models (or LLMs) and foundation models. These are neural networks trained on vast amounts of data. These model predict and generate content word by word, making them capable of mimicking human creativity.</p>\r\n\r\n<p>While immensely capable, these systems are also responsibly guided by human filters, so they&rsquo;ll assist with productivity rather than, say, bank heists!</p>\r\n\r\n<p>Enter Microsoft Copilot, a tool that brings Gen AI into the workplace. Copilot is integrated directly into Microsoft 365 apps like Word, Excel, PowerPoint, Outlook, and Teams, turning these familiar tools into powerhouses of creativity and productivity.</p>\r\n\r\n<p>It works alongside you, helping draft documents, create compelling presentations, analyze complex datasets, and even craft thoughtful emails.</p>\r\n\r\n<p>However, Copilot doesn&rsquo;t stop there. Its Business Chat feature connects data across apps &ndash; like emails, calendars, and chats &ndash; allowing you to give natural language prompts such as, &ldquo;Summarize today&rsquo;s meetings and prepare a status update.&rdquo; It retrieves relevant information and generates clear, actionable responses.</p>\r\n\r\n<p>Importantly, Copilot keeps you in control. It suggests ideas and content, but you decide what to keep, modify, or discard. In the subsequent sections, we&rsquo;ll learn more about the capabilities of Copilot, and how it can help you streamline your work.</p>\r\n",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -124,11 +124,11 @@
         ]
       }
     },
-	{
-      "name": "100",
-      "title": "Knowledge Check 1",
-      "header": "Knowledge Check 1",
-      "transcript": "",
+    {
+      "name": "1999",
+      "title": "Check Your Understanding 1",
+      "header": "Check Your Understanding 1",
+      "transcript": " ",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -138,8 +138,8 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/Quiz/100/index.html",
-            "id": "index.html"
+            "src": "assets/Quiz/1999/index.html",
+            "id": "Screen_01.html"
           },
           {
             "src": "theme/scripts/Screen_01.js",
@@ -149,47 +149,17 @@
         "content": [
           {
             "type": "captivate",
-            "path": "assets/Quiz/100/index.html",
-            "functionName": "captivate"
-          }
-        ]
-      }
-    },{
-      "name": "102",
-      "title": "Knowledge Check 2",
-      "header": "Knowledge Check 2",
-      "transcript": "",
-      "settings": {
-        "sidebar": true,
-        "header": true,
-        "footer": true,
-        "fullScreen": false,
-        "pageNumber": "Page 1/11",
-        "module": 0,
-        "preloader": [
-          {
-            "src": "assets/Quiz/102/index.html",
-            "id": "index.html"
-          },
-          {
-            "src": "theme/scripts/Screen_01.js",
-            "id": "Screen_01"
-          }
-        ],
-        "content": [
-          {
-            "type": "captivate",
-            "path": "assets/Quiz/102/index.html",
+            "path": "assets/Quiz/1999/index.html",
             "functionName": "captivate"
           }
         ]
       }
     },
-	{
-      "name": "106",
-      "title": "Quiz",
-      "header": "Quiz",
-      "transcript": "",
+    {
+      "name": "2000",
+      "title": "Key Features of Copilot",
+      "header": "Key Features of Copilot",
+      "transcript": "<p>At the heart of Copilot&rsquo;s capabilities lies Natural Language Processing (or NLP). This feature enables Copilot to understand and respond to human language as naturally as you or I would.</p>\r\n\r\n<p>You can try giving it intuitive commands like:</p>\r\n\r\n<p>&ldquo;Summarize today&rsquo;s meeting notes.&rdquo;</p>\r\n\r\n<p>&ldquo;Draft an email response based on the attached feedback,&rdquo; or</p>\r\n\r\n<p>&ldquo;Find trends in last quarter&rsquo;s sales data.&rdquo;</p>\r\n\r\n<p>Do this and sit back and watch as Copilot delivers results tailored to your needs. Its standout feature is its ability to create high-quality content efficiently.</p>\r\n\r\n<p>Integrating Copilot into Microsoft 365 tools like Word, Excel, PowerPoint, Teams, and Outlook transforms them into AI-powered assistants that simplify workflows. Let&rsquo;s delve deeper into this.</p>\r\n\r\n<p>With Word, Copilot can act as a writing assistant, by helping draft documents, summarizing lengthy text, or rewriting sections for clarity and impact.</p>\r\n\r\n<p>Do you need to write an article, a blog post, or a proposal? Copilot can craft a first draft based on your prompts. For instance, you can ask it to &ldquo;Create a two-page project proposal for a new marketing campaign,&rdquo; and it generates a structured and professional draft.</p>\r\n\r\n<p>Also, when you&rsquo;re tired of sifting through long reports or research papers, turn to Copilot. It condenses them into concise summaries, allowing you to focus on the key takeaways.</p>\r\n\r\n<p>It can also rewrite sentences or paragraphs to improve clarity, tone, or style. For example, you might ask, &ldquo;Make this paragraph more conversational&rdquo; or &ldquo;Simplify this section for an audience unfamiliar with financial jargon.&rdquo; This is particularly useful for editing emails, reports, or complex instructions.</p>\r\n\r\n<p>Now, let&rsquo;s look at how Copilot can simplify Excel for you.</p>\r\n\r\n<p>Copilot can analyze datasets to uncover insights and trends. For example, a prompt like &ldquo;Identify the top-performing regions for sales in Q3&rdquo; generates clear insights, complete with visualizations.</p>\r\n\r\n<p>And if you&rsquo;re struggling with formulas, look no further, Copilot can suggest the appropriate functions based on your needs. You can say, &ldquo;Calculate the year-over-year growth for these sales figures,&rdquo; and it will apply the correct formula.</p>\r\n\r\n<p>And finally, save time by automating tasks like formatting tables, sorting data, or cleaning up inconsistencies. A simple command such as &ldquo;Format this data for presentation&rdquo; ensures a polished result without manual adjustments.</p>\r\n\r\n<p>On Powerpoint, Copilot can do so many things, from helping you choose the right themes and designs to align with your presentation&rsquo;s tone, to transforming text outlines or bullet points into well-structured slides. For instance, &ldquo;Create a three-slide presentation summarizing this document&rdquo; results in organized, visually appealing slides.</p>\r\n\r\n<p>It can also generate charts, diagrams, or graphics to illustrate complex ideas. You can try a prompt like, &ldquo;Add a pie chart to represent the budget breakdown&rdquo; to obtain complex data in a pleasing visual form.</p>\r\n\r\n<p>In collaboration-focused tools like Microsoft Teams, Copilot enhances communication and project management. During meetings, Copilot can transcribe discussions, generate action items, and even summarize meeting highlights for absent team members.</p>\r\n\r\n<p>The Business Chat feature connects data across Microsoft 365 apps to enable advanced workflows. For example, you can ask, &ldquo;Send a summary of today&rsquo;s meeting to the sales team with key takeaways,&rdquo; and it pulls information from meeting notes, emails, and chat history to craft the message.</p>\r\n\r\n<p>Copilot integrates across apps, enabling fluid transitions. For instance, data visualized in Excel can be exported into a PowerPoint slide with a simple command like &ldquo;Add this chart to my presentation.&rdquo;</p>\r\n\r\n<p>The seamless integration of Copilot across workplace tools ensures tasks that once required multiple steps and tools are now completed effortlessly in one system.</p>\r\n",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -199,8 +169,70 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/Quiz/106/index.html",
-            "id": "story.html"
+            "src": "assets/video/en_6.mp4",
+            "id": "en_6.mp4"
+          },
+          {
+            "src": "theme/scripts/Screen_01.js",
+            "id": "Screen_01"
+          }
+        ],
+        "content": [
+          {
+            "type": "video",
+            "path": "assets/video/en_6.mp4",
+            "onendnextscrn": "false"
+          }
+        ]
+      }
+    },
+    {
+      "name": "2001",
+      "title": "Best Practices for Using Copilot",
+      "header": "Best Practices for Using Copilot",
+      "transcript": "<p>To fully harness the potential of Microsoft 365 Copilot, users should adopt best practices that ensure effective, secure, and ethical interactions with the AI.</p>\r\n\r\n<p>The quality of Copilot&rsquo;s output depends heavily on the clarity and structure of your prompts.</p>\r\n\r\n<p>So, be Specific: The more detailed your prompt, the better Copilot can meet your needs. For example, instead of saying, &ldquo;Explain this document,&rdquo; a more effective prompt would be, &ldquo;Summarize this technical document in three bullet points suitable for a non-technical audience.&rdquo;</p>\r\n\r\n<p>Iterate and Refine: Copilot thrives on user feedback. If the response isn&rsquo;t quite right, rephrase or add more details to your prompt. For instance, if you&rsquo;re unsatisfied with a report draft, you can guide Copilot with commands like, &ldquo;Rewrite this section to emphasize cost efficiency.&rdquo;</p>\r\n\r\n<p>Experiment with Creativity: Beyond structured tasks, Copilot is a powerful tool for brainstorming and generating innovative ideas. Ask it for alternative headlines, creative slide titles, or new ways to present data.</p>\r\n\r\n<p>As with any AI tool, maintaining data privacy is paramount. Use Copilot within trusted, organization-approved platforms to ensure compliance with data security protocols.</p>\r\n\r\n<p>Avoid sharing unnecessary personal or sensitive information and ensure that any shared data is encrypted and anonymized when possible. For example, instead of uploading raw customer details, work with summarized or generalized datasets.</p>\r\n\r\n<p>Familiarize yourself with how Copilot accesses your organization&#39;s data (emails, documents, etc.), ensuring it&rsquo;s in line with your company&rsquo;s privacy policies.</p>\r\n\r\n<p>And most importantly, always review and verify AI outputs to ensure they align with your intentions and ethical standards.&nbsp;</p>\r\n\r\n<p>AI models can inadvertently reflect biases in their training data. Be vigilant in identifying and correcting any biases in Copilot&rsquo;s responses, especially when generating content or making decisions that could impact others.</p>\r\n\r\n<p>And when presenting Copilot-generated outputs to stakeholders, be clear about its role. Transparency builds trust and sets realistic expectations about AI&rsquo;s capabilities and limitations.</p>\r\n\r\n<p>By following these practices, users can maximize Copilot&rsquo;s potential while upholding privacy, security, and responsibility.&nbsp;</p>\r\n",
+      "settings": {
+        "sidebar": true,
+        "header": true,
+        "footer": true,
+        "fullScreen": false,
+        "pageNumber": "Page 1/11",
+        "module": 0,
+        "preloader": [
+          {
+            "src": "assets/video/en_7.mp4",
+            "id": "en_7.mp4"
+          },
+          {
+            "src": "theme/scripts/Screen_01.js",
+            "id": "Screen_01"
+          }
+        ],
+        "content": [
+          {
+            "type": "video",
+            "path": "assets/video/en_7.mp4",
+            "onendnextscrn": "false"
+          }
+        ]
+      }
+    },
+    {
+      "name": "2002",
+      "title": "Check Your Understanding 2",
+      "header": "Check Your Understanding 2",
+      "transcript": " ",
+      "settings": {
+        "sidebar": true,
+        "header": true,
+        "footer": true,
+        "fullScreen": false,
+        "pageNumber": "Page 1/11",
+        "module": 0,
+        "preloader": [
+          {
+            "src": "assets/Quiz/2002/index.html",
+            "id": "Screen_01.html"
           },
           {
             "src": "theme/scripts/Screen_01.js",
@@ -210,16 +242,17 @@
         "content": [
           {
             "type": "captivate",
-            "path": "assets/Quiz/106/index.html",
+            "path": "assets/Quiz/2002/index.html",
             "functionName": "captivate"
           }
         ]
       }
-    },{
-      "name": "102",
-      "title": "Knowledge Check",
-      "header": "Knowledge Check",
-      "transcript": "",
+    },
+    {
+      "name": "2003",
+      "title": "Summary",
+      "header": "Summary",
+      "transcript": "<p>Congratulations! You have completed the course: Boosting Efficiency With Microsoft Copilot.</p>\r\n\r\n<p>In this course, you have learned that:</p>\r\n\r\n<ul>\r\n\t<li>Gen AI relies on Large Language Models (or LLMs) and foundation models. These are neural networks trained on vast amounts of data and can predict and generate content word by word.</li>\r\n\t<li>You learned that Microsoft 365 Copilot is integrated directly into Microsoft 365 apps like Word, Excel, PowerPoint, Outlook, and Teams, turning these tools into powerhouses of creativity and productivity.</li>\r\n\t<li>You also learned the quality of Copilot&rsquo;s output depends heavily on the clarity and structure of it&rsquo;s prompts.</li>\r\n\t<li>And finally, you learned that maintaining data privacy is paramount. Ensure Copilot is integrated into secure, organization-approved environments. Always review and verify AI outputs to ensure they align with your intentions and ethical standards.</li>\r\n</ul>\r\n\r\n<p>&nbsp;</p>\r\n",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -229,8 +262,39 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/Quiz/107/index.html",
-            "id": "index.html"
+            "src": "assets/video/en_9.mp4",
+            "id": "en_9.mp4"
+          },
+          {
+            "src": "theme/scripts/Screen_01.js",
+            "id": "Screen_01"
+          }
+        ],
+        "content": [
+          {
+            "type": "video",
+            "path": "assets/video/en_9.mp4",
+            "onendnextscrn": "false"
+          }
+        ]
+      }
+    },
+    {
+      "name": "2004",
+      "title": "Quiz",
+      "header": "Quiz",
+      "transcript": " ",
+      "settings": {
+        "sidebar": true,
+        "header": true,
+        "footer": true,
+        "fullScreen": false,
+        "pageNumber": "Page 1/11",
+        "module": 0,
+        "preloader": [
+          {
+            "src": "assets/Quiz/2004/index.html",
+            "id": "Screen_01.html"
           },
           {
             "src": "theme/scripts/Screen_01.js",
@@ -240,7 +304,7 @@
         "content": [
           {
             "type": "captivate",
-            "path": "assets/Quiz/107/index.html",
+            "path": "assets/Quiz/2004/index.html",
             "functionName": "captivate"
           }
         ]

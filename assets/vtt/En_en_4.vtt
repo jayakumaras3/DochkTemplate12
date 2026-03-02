@@ -1,121 +1,136 @@
-WEBVTT
+﻿WEBVTT
 
-1
-00:00:08.240 --> 00:00:09.830
-The first step of any attacker would
+00:00:04.593 --> 00:00:08.167
+Traditional AI has been enhancing our lives for decades,
 
-2
-00:00:09.830 --> 00:00:11.654
-be to choose the perfect target.
+00:00:08.167 --> 00:00:11.536
+from voice assistants like Siri and Alexa to
 
-3
-00:00:11.654 --> 00:00:13.094
-Now let's look at their process
+00:00:11.536 --> 00:00:14.220
+recommendation systems on Netflix and Amazon.
 
-4
-00:00:13.094 --> 00:00:15.110
-of zeroing in on a target.
+00:00:14.960 --> 00:00:18.352
+Generative AI, or Gen AI, however, takes this a
 
-5
-00:00:15.110 --> 00:00:18.758
-Demographics play a pivotal role in target selection.
+00:00:18.352 --> 00:00:22.192
+step further by crafting entirely new content,
 
-6
-00:00:18.758 --> 00:00:21.742
-Attackers tailor their phishing campaigns to specific
+00:00:22.192 --> 00:00:26.048
+whether writing a haiku, simplifying complex concepts,
 
-7
-00:00:21.742 --> 00:00:24.830
-demographics, understanding that different groups may have
+00:00:26.048 --> 00:00:30.810
+or analyzing data. Gen AI is truly
 
-8
-00:00:24.830 --> 00:00:27.838
-varying susceptibilities and behaviors online.
+00:00:30.810 --> 00:00:34.770
+a revolutionary frontier in artificial intelligence.
 
-9
-00:00:27.838 --> 00:00:31.014
-Whether it's age, occupation, or geographic
+00:00:34.770 --> 00:00:38.346
+Think of it as the smartest, most resourceful
 
-10
-00:00:31.014 --> 00:00:33.812
-location, attackers leverage this information to
+00:00:38.346 --> 00:00:41.170
+person you know, who is always ready to
 
-11
-00:00:33.812 --> 00:00:35.804
-craft more convincing lures.
+00:00:41.170 --> 00:00:45.390
+assist and teach you, without ever losing patience!
 
-12
-00:00:35.804 --> 00:00:39.100
-Behavior patterns provide invaluable insights into the
+00:00:46.050 --> 00:00:48.594
+Sound too good to be true, doesn’t it?
 
-13
-00:00:39.100 --> 00:00:42.028
-habits and tendencies of potential victims.
+00:00:48.594 --> 00:00:51.290
+Well, like any human, it isn’t
 
-14
-00:00:42.028 --> 00:00:45.076
-By studying online behaviors such as browsing
+00:00:51.290 --> 00:00:54.470
+infallible and can definitely make mistakes.
 
-15
-00:00:45.076 --> 00:00:48.948
-history, social media activity, or shopping preferences,
+00:00:55.210 --> 00:00:58.162
+Gen AI relies on Large Language Models
 
-16
-00:00:48.948 --> 00:00:51.356
-attackers can tailor their approach to align
+00:00:58.162 --> 00:01:01.770
+(or LLMs) and foundation models.
 
-17
-00:00:51.356 --> 00:00:53.916
-with the targets interests and preferences.
+00:01:01.770 --> 00:01:04.001
+These are neural networks trained
 
-18
-00:00:53.916 --> 00:00:57.076
-The abundance of personal information available online
+00:01:04.001 --> 00:01:05.790
+on vast amounts of data.
 
-19
-00:00:57.076 --> 00:00:59.844
-serves as a treasure trove for attackers.
+00:01:06.330 --> 00:01:09.610
+These model predict and generate content word by
 
-20
-00:00:59.844 --> 00:01:03.740
-From social media profiles to publicly available databases,
+00:01:09.610 --> 00:01:13.610
+word, making them capable of mimicking human creativity.
 
-21
-00:01:03.740 --> 00:01:07.060
-attackers exploit this wealth of information to personalize
+00:01:13.610 --> 00:01:17.282
+While immensely capable, these systems are also responsibly
 
-22
-00:01:07.060 --> 00:01:10.084
-their attacks, making them more convincing and difficult
+00:01:17.282 --> 00:01:20.278
+guided by human filters, so they’ll assist
 
-23
-00:01:10.084 --> 00:01:12.540
-to discern from legitimate communication.
+00:01:20.278 --> 00:01:23.330
+with productivity rather than, say, bank heists!
 
-24
-00:01:12.540 --> 00:01:16.396
-Ultimately, attackers seek out individuals or organizations
+00:01:24.390 --> 00:01:27.270
+Enter Microsoft Copilot, a tool that
 
-25
-00:01:16.396 --> 00:01:19.028
-with weak cybersecurity practices or those who
+00:01:27.270 --> 00:01:29.570
+brings Gen AI into the workplace.
 
-26
-00:01:19.028 --> 00:01:21.188
-are more susceptible to their tricks.
+00:01:30.150 --> 00:01:34.374
+Copilot is integrated directly into Microsoft 365
 
-27
-00:01:21.188 --> 00:01:23.748
-Whether it's a lack of awareness, inadequate
+00:01:34.374 --> 00:01:37.766
+apps like Word, Excel, PowerPoint, Outlook, and
 
-28
-00:01:23.748 --> 00:01:26.468
-security measures, or a propensity to trust
+00:01:37.766 --> 00:01:42.062
+Teams, turning these familiar tools into powerhouses
 
-29
-00:01:26.468 --> 00:01:31.108
-unsolicited communications, attackers exploit vulnerabilities to maximize
+00:01:42.062 --> 00:01:44.290
+of creativity and productivity.
 
-30
-00:01:31.108 --> 00:01:32.034
-their chances of success.
+00:01:44.940 --> 00:01:48.372
+It works alongside you, helping draft
+
+00:01:48.372 --> 00:01:52.764
+documents, create compelling presentations, analyze complex data
+
+00:01:52.764 --> 00:01:55.960
+sets, and even craft thoughtful emails.
+
+00:01:56.620 --> 00:01:59.532
+However, Copilot doesn’t stop there.
+
+00:01:59.532 --> 00:02:02.708
+Its Business Chat feature connects data across apps –
+
+00:02:02.708 --> 00:02:06.092
+like emails, calendars, and chats – allowing you to
+
+00:02:06.092 --> 00:02:10.027
+give natural language prompts such as, “Summarize today’s meetings
+
+00:02:10.027 --> 00:02:12.210
+and prepare a status update.”
+
+00:02:12.210 --> 00:02:14.338
+It retrieves relevant information and
+
+00:02:14.338 --> 00:02:17.390
+generates clear, actionable responses.
+
+00:02:18.770 --> 00:02:22.930
+Importantly, Copilot keeps you in control.
+
+00:02:22.930 --> 00:02:25.650
+It suggests ideas and content, but you
+
+00:02:25.650 --> 00:02:29.790
+decide what to keep, modify, or discard.
+
+00:02:30.450 --> 00:02:32.706
+In the subsequent sections, we’ll learn more
+
+00:02:32.706 --> 00:02:35.074
+about the capabilities of Copilot, and how
+
+00:02:35.074 --> 00:02:37.090
+it can help you streamline your work.

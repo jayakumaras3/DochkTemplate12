@@ -111,7 +111,7 @@
         "callback": "customizeFn",
         "role":"button",
 		"tabindex":"0",
-        "tooltip":"Learning Aids"
+        "tooltip":""
 		
 
       },

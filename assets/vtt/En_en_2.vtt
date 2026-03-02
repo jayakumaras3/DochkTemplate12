@@ -1,0 +1,673 @@
+﻿WEBVTT
+
+00:00:00.500 --> 00:00:03.512
+Welcome to the course Boosting Efficiency with Microsoft
+
+00:00:03.512 --> 00:00:08.384
+Copilot This extensive course on Microsoft Copilot, your
+
+00:00:08.384 --> 00:00:11.912
+AI-driven assistant aimed at boosting productivity
+
+00:00:11.912 --> 00:00:14.460
+and creativity in professional settings,
+
+00:00:15.200 --> 00:00:17.056
+It's structured to enable you to
+
+00:00:17.056 --> 00:00:19.864
+fully harness the capabilities of Copilot.
+
+00:00:19.864 --> 00:00:21.688
+It offers an in-depth exploration
+
+00:00:21.688 --> 00:00:24.776
+of its features, functionalities, and practical
+
+00:00:24.776 --> 00:00:27.740
+applications within Microsoft 365 tools.
+
+00:00:28.290 --> 00:00:31.186
+From automating tedious tasks in Excel to
+
+00:00:31.186 --> 00:00:35.178
+producing refined documents in Word, optimizing communication
+
+00:00:35.178 --> 00:00:38.350
+in Outlook, and fostering collaboration in Teams,
+
+00:00:38.375 --> 00:00:42.320
+Copilot is revolutionizing our work processes.
+
+00:00:43.151 --> 00:00:45.895
+You will discover how its sophisticated features –
+
+00:00:45.920 --> 00:00:49.616
+such as natural language comprehension, content creation,
+
+00:00:49.786 --> 00:00:53.937
+and data analysis can streamline intricate workflows,
+
+00:00:53.962 --> 00:00:56.598
+minimize errors, and allow for more time
+
+00:00:56.623 --> 00:00:59.343
+dedicated to strategic planning.
+
+00:00:59.473 --> 00:01:03.235
+In this course, you will: Describe generative AI
+
+00:01:03.260 --> 00:01:06.704
+and Copilot State the key features of Copilot
+
+00:01:06.729 --> 00:01:10.243
+And explain the best practices for using Copilot
+
+00:01:10.657 --> 00:01:15.384
+Introduction to Generative AI and Copilot Traditional AI
+
+00:01:15.409 --> 00:01:18.126
+has been enhancing our lives for decades, from
+
+00:01:18.151 --> 00:01:21.807
+voice assistants like Siri and Alexa to recommendation
+
+00:01:21.832 --> 00:01:23.712
+systems on Netflix and Amazon.
+
+00:01:24.384 --> 00:01:27.760
+Generative AI, or Gen AI, however, takes this a
+
+00:01:27.785 --> 00:01:31.625
+step further by crafting entirely new content,
+
+00:01:31.650 --> 00:01:35.482
+whether writing a haiku, simplifying complex concepts,
+
+00:01:35.507 --> 00:01:40.619
+or analyzing data. Gen AI is truly a
+
+00:01:40.644 --> 00:01:44.244
+revolutionary frontier in artificial intelligence.
+
+00:01:44.346 --> 00:01:47.867
+Think of it as the smartest, most resourceful
+
+00:01:47.892 --> 00:01:50.672
+person you know, who is always ready to
+
+00:01:50.697 --> 00:01:54.901
+assist and teach you, without ever losing patience!
+
+00:01:55.522 --> 00:01:58.066
+Sounds too good to be true, doesn’t it?
+
+00:01:58.091 --> 00:02:00.867
+Well, like any human, it isn’t
+
+00:02:00.892 --> 00:02:04.032
+infallible and can definitely make mistakes.
+
+00:02:04.769 --> 00:02:07.705
+Gen AI relies on Large Language Models
+
+00:02:07.730 --> 00:02:11.354
+(or LLMs) and foundation models.
+
+00:02:11.379 --> 00:02:13.675
+These are neural networks trained
+
+00:02:13.700 --> 00:02:15.424
+on vast amounts of data.
+
+00:02:15.870 --> 00:02:19.150
+These models predict and generate content word by
+
+00:02:19.175 --> 00:02:22.773
+word, making them capable of mimicking human creativity.
+
+00:02:23.083 --> 00:02:26.755
+While immensely capable, these systems are also responsibly
+
+00:02:26.780 --> 00:02:29.988
+guided by human filters, so they’ll assist with
+
+00:02:30.013 --> 00:02:32.793
+productivity rather than, say, bank heists!
+
+00:02:33.820 --> 00:02:36.636
+Enter Microsoft Copilot, a tool that
+
+00:02:36.661 --> 00:02:38.945
+brings Gen AI into the workplace.
+
+00:02:39.658 --> 00:02:43.818
+Copilot is integrated directly into Microsoft 365
+
+00:02:43.843 --> 00:02:47.249
+apps like Word, Excel, PowerPoint, Outlook, and
+
+00:02:47.274 --> 00:02:51.586
+Teams, turning these familiar tools into powerhouses
+
+00:02:51.611 --> 00:02:53.903
+of creativity and productivity.
+
+00:02:54.447 --> 00:02:57.879
+It works alongside you, helping you draft
+
+00:02:57.904 --> 00:03:01.992
+documents, create compelling presentations, analyze complex
+
+00:03:02.017 --> 00:03:05.390
+datasets, and even craft thoughtful emails.
+
+00:03:05.932 --> 00:03:08.828
+However, Copilot doesn’t stop there.
+
+00:03:08.993 --> 00:03:11.858
+Its Business Chat feature connects data across
+
+00:03:11.883 --> 00:03:15.547
+apps – like emails, calendars, and chats – allowing you
+
+00:03:15.572 --> 00:03:18.748
+to give natural language prompts such as, “Summarize
+
+00:03:18.773 --> 00:03:21.335
+today’s meetings and prepare a status update.”
+
+00:03:21.884 --> 00:03:24.012
+It retrieves relevant information and
+
+00:03:24.037 --> 00:03:26.890
+generates clear, actionable responses.
+
+00:03:28.232 --> 00:03:32.320
+Importantly, Copilot keeps you in control.
+
+00:03:32.494 --> 00:03:35.278
+It suggests ideas and content, but you
+
+00:03:35.303 --> 00:03:39.164
+decide what to keep, modify, or discard.
+
+00:03:40.039 --> 00:03:42.250
+In the subsequent sections, we’ll learn more
+
+00:03:42.275 --> 00:03:44.563
+about the capabilities of Copilot, and how
+
+00:03:44.588 --> 00:03:47.062
+it can help you streamline your work.
+
+00:03:47.702 --> 00:03:50.758
+Key Features of Copilot At the heart of
+
+00:03:50.783 --> 00:03:55.976
+Copilot’s capabilities lies Natural Language Processing (or NLP).
+
+00:03:56.406 --> 00:04:01.190
+This feature enables Copilot to understand and respond to human
+
+00:04:01.215 --> 00:04:03.945
+language as naturally as you or I would.
+
+00:04:04.328 --> 00:04:06.703
+You can try giving it intuitive commands like:
+
+00:04:06.842 --> 00:04:10.354
+“Summarize today’s meeting notes.” “Draft an email response
+
+00:04:10.379 --> 00:04:14.139
+based on the attached feedback.” or “Find trends
+
+00:04:14.164 --> 00:04:16.352
+in last quarter’s sales data.”
+
+00:04:16.987 --> 00:04:20.687
+Do this and sit back and watch as
+
+00:04:20.712 --> 00:04:23.546
+Copilot delivers results tailored to your needs.
+
+00:04:23.696 --> 00:04:25.728
+Its standout feature is its ability to
+
+00:04:25.753 --> 00:04:30.225
+create high-quality content efficiently. Integrating Copilot
+
+00:04:30.250 --> 00:04:33.706
+into Microsoft 365 tools like Word, Excel,
+
+00:04:33.731 --> 00:04:38.047
+PowerPoint, Teams, and Outlook transforms them into
+
+00:04:38.545 --> 00:04:42.085
+AI-powered assistants that simplify workflows.
+
+00:04:42.576 --> 00:04:45.624
+Let’s delve deeper into this. With Word,
+
+00:04:45.649 --> 00:04:48.085
+Copilot can act as a writing assistant,
+
+00:04:48.400 --> 00:04:51.968
+by helping draft documents, summarizing lengthy text,
+
+00:04:51.993 --> 00:04:54.976
+or rewriting sections for clarity and impact.
+
+00:04:55.827 --> 00:04:57.459
+Do you need to write an article,
+
+00:04:57.484 --> 00:04:59.625
+a blog post, or a proposal?
+
+00:05:00.045 --> 00:05:03.257
+Copilot can craft a first draft based on your prompts.
+
+00:05:03.501 --> 00:05:06.629
+For instance, you can ask it to “Create a
+
+00:05:06.654 --> 00:05:09.968
+two-page project proposal for a new marketing campaign,”
+
+00:05:10.276 --> 00:05:13.937
+and it generates a structured and professional draft.
+
+00:05:14.532 --> 00:05:17.172
+Also, when you’re tired of sifting through long
+
+00:05:17.197 --> 00:05:20.351
+reports or research papers, turn to Copilot.
+
+00:05:21.003 --> 00:05:25.210
+It condenses them into concise summaries, allowing
+
+00:05:25.235 --> 00:05:27.250
+you to focus on the key takeaways.
+
+00:05:27.891 --> 00:05:30.507
+It can also rewrite sentences or paragraphs
+
+00:05:30.605 --> 00:05:33.625
+to improve clarity, tone, or style.
+
+00:05:34.084 --> 00:05:37.020
+For example, you might ask, “Make this
+
+00:05:37.045 --> 00:05:40.413
+paragraph more conversational” or “Simplify this section
+
+00:05:40.438 --> 00:05:42.726
+for an audience unfamiliar with financial
+
+00:05:42.751 --> 00:05:45.273
+jargon.” This is particularly useful for
+
+00:05:45.298 --> 00:05:48.460
+editing emails, reports, or complex instructions.
+
+00:05:48.510 --> 00:05:50.492
+Now, let’s look at how Copilot
+
+00:05:50.517 --> 00:05:53.046
+can simplify Excel for you.
+
+00:05:53.953 --> 00:05:55.961
+Copilot can analyze datasets
+
+00:05:55.986 --> 00:05:58.114
+to uncover insights and trends.
+
+00:05:58.139 --> 00:06:01.059
+For example, a prompt like “Identify the
+
+00:06:01.084 --> 00:06:03.468
+top-performing regions for sales in Q3”
+
+00:06:03.493 --> 00:06:07.585
+generates clear insights, complete with visualizations.
+
+00:06:07.998 --> 00:06:09.134
+And if you’re struggling with
+
+00:06:09.159 --> 00:06:10.976
+formulas, look no further,
+
+00:06:11.382 --> 00:06:13.140
+Copilot can suggest the appropriate
+
+00:06:13.165 --> 00:06:14.734
+functions based on your needs.
+
+00:06:14.916 --> 00:06:17.476
+You can say, “Calculate the year-over-
+
+00:06:17.501 --> 00:06:19.171
+year growth for these sales figures,” and
+
+00:06:19.196 --> 00:06:21.742
+it will apply the correct formula.
+
+00:06:22.098 --> 00:06:24.687
+And finally, save time by automating
+
+00:06:24.712 --> 00:06:27.792
+tasks like formatting tables, sorting data,
+
+00:06:27.817 --> 00:06:29.765
+or cleaning up inconsistencies.
+
+00:06:30.249 --> 00:06:32.929
+A simple command such as “Format this data for
+
+00:06:32.954 --> 00:06:38.794
+presentation” ensures a polished result without manual adjustments. On
+
+00:06:38.819 --> 00:06:43.173
+Powerpoint, Copilot can do so many things, from helping
+
+00:06:43.198 --> 00:06:45.502
+you choose the right themes and designs to align
+
+00:06:45.527 --> 00:06:49.039
+with your presentation’s tone, to transforming text outlines or
+
+00:06:49.064 --> 00:06:52.000
+bullet points into well-structured slides.
+
+00:06:52.404 --> 00:06:55.452
+For instance, “Create a three-slide presentation
+
+00:06:55.477 --> 00:06:58.101
+summarizing this document” results in
+
+00:06:58.126 --> 00:07:00.671
+organized, visually appealing slides.
+
+00:07:00.933 --> 00:07:03.813
+It can also generate charts, diagrams,
+
+00:07:03.838 --> 00:07:07.138
+or graphics to illustrate complex ideas.
+
+00:07:08.193 --> 00:07:10.223
+You can try a prompt like, “Add a
+
+00:07:10.248 --> 00:07:12.872
+pie chart to represent the budget breakdown” to
+
+00:07:12.897 --> 00:07:16.054
+obtain complex data in a pleasing visual form.
+
+00:07:16.981 --> 00:07:19.237
+In collaboration-focused tools like
+
+00:07:19.262 --> 00:07:23.222
+Microsoft Teams, Copilot enhances communication
+
+00:07:23.247 --> 00:07:26.320
+and project management. During meetings,
+
+00:07:26.345 --> 00:07:29.425
+Copilot can transcribe discussions, generate action
+
+00:07:29.450 --> 00:07:32.482
+items, and even summarize meeting highlights
+
+00:07:32.507 --> 00:07:34.195
+for absent team members.
+
+00:07:34.625 --> 00:07:37.457
+The Business Chat feature connects data across
+
+00:07:37.482 --> 00:07:41.148
+Microsoft 365 apps to enable advanced workflows.
+
+00:07:41.538 --> 00:07:44.250
+For example, you can ask, “Send a summary of
+
+00:07:44.275 --> 00:07:47.035
+today’s meeting to the sales team with key takeaways,”
+
+00:07:47.144 --> 00:07:51.280
+and it pulls information from meeting notes, emails, and
+
+00:07:51.305 --> 00:07:53.601
+chat history to craft the message.
+
+00:07:53.929 --> 00:07:55.992
+Copilot integrates across apps,
+
+00:07:56.017 --> 00:07:57.648
+enabling fluid transitions.
+
+00:07:57.857 --> 00:08:00.726
+For instance, data visualized in Excel can be
+
+00:08:00.751 --> 00:08:03.767
+exported into a PowerPoint slide with a simple command
+
+00:08:03.792 --> 00:08:06.046
+like “Add this chart to my presentation.”
+
+00:08:06.546 --> 00:08:10.273
+The seamless integration of Copilot across workplace tools
+
+00:08:10.298 --> 00:08:13.410
+ensures tasks that once required multiple steps and
+
+00:08:13.435 --> 00:08:17.625
+tools are now completed effortlessly in one system.
+
+00:08:19.060 --> 00:08:23.132
+Best Practices for Using Copilot To fully harness
+
+00:08:23.157 --> 00:08:26.941
+the potential of Microsoft 365 Copilot, users should
+
+00:08:26.966 --> 00:08:31.992
+adopt best practices that ensure effective, secure, and
+
+00:08:32.017 --> 00:08:34.281
+ethical interactions with the AI.
+
+00:08:34.932 --> 00:08:38.656
+The quality of Copilot’s output depends heavily on the
+
+00:08:38.681 --> 00:08:42.984
+clarity and structure of your prompts. so Be Specific:
+
+00:08:43.524 --> 00:08:45.828
+The more detailed your prompt, the better
+
+00:08:45.853 --> 00:08:47.531
+Copilot can meet your needs.
+
+00:08:48.142 --> 00:08:51.566
+For example, instead of saying, “Explain this
+
+00:08:51.591 --> 00:08:54.507
+document,” a more effective prompt would be,
+
+00:08:54.726 --> 00:08:58.187
+“Summarize this technical document in three bullet
+
+00:08:58.212 --> 00:09:01.250
+points suitable for a non-technical audience.”
+
+00:09:02.116 --> 00:09:07.382
+Iterate and Refine: Copilot thrives on user feedback.
+
+00:09:07.662 --> 00:09:10.906
+If the response isn’t quite right, rephrase
+
+00:09:10.931 --> 00:09:13.070
+or add more details to your prompt.
+
+00:09:13.317 --> 00:09:16.445
+For instance, if you’re unsatisfied with a report
+
+00:09:16.470 --> 00:09:19.367
+draft, you can guide Copilot with commands like,
+
+00:09:19.573 --> 00:09:23.132
+“Rewrite this section to emphasize cost efficiency.”
+
+00:09:23.604 --> 00:09:28.724
+Experiment with Creativity: Beyond structured tasks,
+
+00:09:28.833 --> 00:09:30.875
+Copilot is a powerful tool for
+
+00:09:30.900 --> 00:09:33.548
+brainstorming and generating innovative ideas.
+
+00:09:33.709 --> 00:09:36.781
+Ask it for alternative headlines, creative slide
+
+00:09:36.806 --> 00:09:39.312
+titles, or new ways to present data.
+
+00:09:39.772 --> 00:09:41.596
+As with any AI tool,
+
+00:09:41.621 --> 00:09:44.304
+maintaining data privacy is paramount.
+
+00:09:44.730 --> 00:09:48.138
+Use Copilot within trusted, organization-approved platforms
+
+00:09:48.163 --> 00:09:51.203
+to ensure compliance with data security protocols.
+
+00:09:51.730 --> 00:09:55.362
+Avoid sharing unnecessary personal or sensitive information
+
+00:09:55.387 --> 00:09:58.155
+and ensure that any shared data is
+
+00:09:58.180 --> 00:10:00.920
+encrypted and anonymized when possible.
+
+00:10:01.769 --> 00:10:05.742
+For example, instead of uploading raw customer details,
+
+00:10:06.201 --> 00:10:09.621
+work with summarized or generalized datasets.
+
+00:10:10.131 --> 00:10:12.827
+Familiarize yourself with how Copilot accesses
+
+00:10:12.852 --> 00:10:16.414
+your organization's data (emails, documents, etc.),
+
+00:10:16.467 --> 00:10:17.490
+ensuring it’s in line with
+
+00:10:17.515 --> 00:10:19.250
+your company’s privacy policies.
+
+00:10:19.580 --> 00:10:23.596
+And most importantly, always review and verify
+
+00:10:23.621 --> 00:10:26.173
+AI outputs to ensure they align with
+
+00:10:26.198 --> 00:10:28.539
+your intentions and ethical standards.
+
+00:10:29.293 --> 00:10:31.525
+AI models can inadvertently reflect
+
+00:10:31.550 --> 00:10:33.101
+biases in their training data.
+
+00:10:33.587 --> 00:10:37.355
+Be vigilant in identifying and correcting any biases
+
+00:10:37.380 --> 00:10:41.023
+in Copilot’s responses, especially when generating content
+
+00:10:41.048 --> 00:10:43.934
+or making decisions that could impact others.
+
+00:10:45.350 --> 00:10:48.006
+And when presenting Copilot-generated outputs to
+
+00:10:48.031 --> 00:10:50.554
+stakeholders, be clear about its role.
+
+00:10:51.141 --> 00:10:54.898
+Transparency builds trust and sets realistic
+
+00:10:54.923 --> 00:10:58.531
+expectations about AI’s capabilities and limitations.
+
+00:10:59.408 --> 00:11:01.906
+By following these practices, users can
+
+00:11:01.931 --> 00:11:05.603
+maximize Copilot’s potential while upholding privacy,
+
+00:11:05.628 --> 00:11:07.690
+security, and responsibility.
+
+00:11:08.332 --> 00:11:09.803
+Congratulations!
+
+00:11:09.828 --> 00:11:12.004
+You completed the course: Boosting
+
+00:11:12.029 --> 00:11:14.625
+Efficiency With Microsoft Copilot
+
+00:11:15.279 --> 00:11:18.519
+In this course, you learned: That Gen AI relies
+
+00:11:18.544 --> 00:11:23.924
+on Large Language Models (or LLMs) and foundation models.
+
+00:11:24.521 --> 00:11:28.078
+These are neural networks trained on vast amounts of data
+
+00:11:28.103 --> 00:11:32.023
+and can predict and generate content word by word.
+
+00:11:32.692 --> 00:11:36.812
+You Learned that Microsoft 365 Copilot is integrated
+
+00:11:36.837 --> 00:11:41.589
+directly into Microsoft 365 apps like Word, Excel,
+
+00:11:41.614 --> 00:11:46.198
+PowerPoint, Outlook, and Teams, turning these tools into
+
+00:11:46.223 --> 00:11:49.147
+powerhouses of creativity and productivity.
+
+00:11:49.867 --> 00:11:54.019
+You also learned the quality of Copilot's output depends
+
+00:11:54.044 --> 00:11:58.062
+heavily on the clarity and structure of its prompts.
+
+00:11:58.194 --> 00:12:00.372
+And finally, you learned that
+
+00:12:00.397 --> 00:12:03.382
+maintaining data privacy is paramount.
+
+00:12:03.891 --> 00:12:06.179
+Ensure Copilot is integrated into
+
+00:12:06.204 --> 00:12:08.664
+secure, organization-approved environments.
+
+00:12:09.279 --> 00:12:12.890
+Always review and verify AI outputs to ensure
+
+00:12:12.915 --> 00:12:15.979
+they align with your intentions and ethical standards.

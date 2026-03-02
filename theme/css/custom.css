@@ -1,35 +1,49 @@
-.resume_container {
-    position: absolute;
-    width:100%; 
-    height:100%;
+﻿.resume_container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10001;
 }
 
 .preloaderDisplayresume {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-color: rgb(0, 0, 0);
-    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
     opacity: 1;
-    z-index: 10001;
+    z-index: 1;
  
 }
 
 .resume_content_container{
     background-color:#fff; 
     border-radius: 5px;   
-    width: 400px;    
-    height: 167px;  
+    width: min(400px, calc(100vw - 24px));
+    min-height: 174px;
+    height: auto;
+    max-height: calc(100vh - 24px);
     border-radius: 10px;  
-    z-index: 10003;    
-    position: absolute;left:0;right:0;top:0;bottom:0;margin:auto;padding: 3%;
+    z-index: 2;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 48px 16px 22px;
+    overflow-y: auto;
 }
 
 .resume_content_header{
     position: absolute;    
     left: 0px; 
-    height: 35px; 
+    height: 40px; 
     border-radius: 10px 10px 0px 0px; 
-    padding: 5px;  top: 0px;    
+    padding: 5px;
+    top: 0px;    
     color: #fff;    
     font-weight: bold;    
    /* font-size: 18px;   */ 
@@ -40,9 +54,33 @@
 .resume_content_text{
     font-weight:bold;
     text-align: center; 
-    margin-top: 9px; 
+    margin-top: 4%;
    /* font-size:17px; */
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+.resume_content_container .row {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    margin-top: 7%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.resume_content_container .row > [class*="col-"] {
+    float: none;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.resume_content_container .h-100 {
+    height: auto !important;
 }
 
 .yes-btn{
@@ -54,3 +92,1458 @@
     color:white; 
     border: none;
 }
+
+.resume_content_container .yes-btn,
+.resume_content_container .no-btn {
+    min-width: 54px;
+    height: 40px;
+    margin: 0;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* Reels-style video layout (compatibility-first, no JS changes) */
+.contentArea.video-mode {
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100vh - 63px) !important;
+    box-shadow: none !important;
+    display: flex;
+    flex-direction: column;
+    background: #0d0f13;
+}
+
+.contentArea.video-mode .headingArea {
+    background: rgba(255, 255, 255, 0.94);
+}
+
+.contentArea.video-mode .pageContent {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    width: 100% !important;
+    height: auto !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 10px 12px 90px;
+    background: #111;
+}
+
+.contentArea.video-mode .vertical-video-layout {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contentArea.video-mode .vertical-video-layout:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+}
+
+.contentArea.video-mode .vertical-video-frame {
+    position: relative;
+    width: 43vh;
+    max-width: 92vw;
+    height: 76vh;
+    max-height: 85vh;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.48);
+    z-index: 1;
+}
+
+.contentArea.video-mode #vidArea {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+    object-fit: cover;
+    border-radius: 20px;
+    background: #000;
+}
+
+.contentArea.video-mode #vidArea::cue {
+    font-size: 20px;
+    line-height: 1.6;
+    padding: 8px 10px;
+}
+
+.contentArea.video-mode + .footer {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    height: 86px !important;
+    border-radius: 0 !important;
+    z-index: 1005;
+    box-shadow: none !important;
+    padding: 0 14px !important;
+    margin: 0 !important;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0));
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+}
+
+.contentArea.video-mode + .footer > div {
+    float: none !important;
+    position: relative !important;
+    margin: 0 !important;
+}
+
+.contentArea.video-mode + .footer #prev,
+.contentArea.video-mode + .footer .prevClass,
+.contentArea.video-mode + .footer #next,
+.contentArea.video-mode + .footer .nextClass,
+.contentArea.video-mode + .footer .nextClassHighlight {
+    position: fixed !important;
+    right: calc(50% - (min(94vw, calc(90vh * 9 / 16)) / 2) + 8px) !important;
+    left: auto !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    background-color: rgba(0, 0, 0, 0.45) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 20px 20px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    z-index: 1006 !important;
+}
+
+.contentArea.video-mode + .footer #prev,
+.contentArea.video-mode + .footer .prevClass {
+    top: calc(50% - 32px) !important;
+    transform: translateY(-50%) !important;
+    background-image: url("../images/footer-menu/chevron-up.svg") !important;
+}
+
+.contentArea.video-mode + .footer #next,
+.contentArea.video-mode + .footer .nextClass,
+.contentArea.video-mode + .footer .nextClassHighlight {
+    top: calc(50% + 32px) !important;
+    transform: translateY(-50%) !important;
+    background-image: url("../images/footer-menu/chevron-down.svg") !important;
+}
+
+.contentArea.video-mode #clickNextId {
+    top: auto !important;
+    bottom: 94px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%);
+    z-index: 1007;
+}
+
+.contentArea.video-mode + .footer #ProgressBar {
+    display: block !important;
+    position: fixed !important;
+    left: 50% !important;
+    bottom: 92px !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    width: 70px !important;
+    height: 70px !important;
+    z-index: 1006 !important;
+}
+
+/* ===== Shorts / Reels UI Redesign ===== */
+.contentArea.video-mode {
+    position: relative;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100vh - 63px) !important;
+    box-shadow: none !important;
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(circle at center, #1b1d22 0%, #111318 58%, #090b0f 100%);
+}
+
+.contentArea.video-mode .headingArea {
+    height: 52px;
+    background: rgba(16, 18, 24, 0.5) !important;
+    backdrop-filter: blur(8px);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px 8px 56px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.contentArea.video-mode .headingArea > span {
+    max-width: calc(100% - 120px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.contentArea.video-mode #pagenoHeader {
+    float: none;
+    min-width: 62px;
+    text-align: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #fff;
+    font-weight: 600;
+}
+
+.contentArea.video-mode .pageContent {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    width: 100% !important;
+    height: auto !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 8px 14px 94px;
+    animation: shortsFadeIn .35s ease;
+}
+
+.contentArea.video-mode .shorts-container {
+    position: relative;
+    width: min(94vw, calc(90vh * 9 / 16));
+    max-height: 90vh;
+    aspect-ratio: 9 / 16;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: shortsVideoPop .35s ease;
+}
+
+.contentArea.video-mode .shorts-video-frame {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
+}
+
+.contentArea.video-mode .shorts-bottom-gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 36%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0));
+    pointer-events: none;
+}
+
+.contentArea.video-mode #vidArea {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    display: block;
+    border-radius: 20px;
+    background: #000;
+}
+
+.contentArea.video-mode #vidArea::cue {
+    font-size: 20px;
+    line-height: 1.7;
+    padding: 8px 10px;
+}
+
+.contentArea.video-mode .action-bar {
+    display: none !important;
+}
+
+.contentArea.video-mode .action-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background-color: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+}
+
+.contentArea.video-mode .action-btn:hover,
+.contentArea.video-mode .action-btn:focus-visible {
+    transform: scale(1.06);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 3px rgba(126, 165, 255, 0.2), 0 10px 24px rgba(0, 0, 0, 0.35);
+    outline: none;
+}
+
+.contentArea.video-mode .action-btn.like {
+    background-image: url("../images/footer-menu/Resource.svg");
+}
+
+.contentArea.video-mode .action-btn.comment {
+    background-image: url("../images/footer-menu/CC.png");
+}
+
+.contentArea.video-mode .action-btn.share {
+    background-image: url("../images/footer-menu/next.svg");
+}
+
+.contentArea.video-mode .action-btn.bookmark {
+    background-image: url("../images/footer-menu/Certificate.svg");
+}
+
+.contentArea.video-mode + .footer {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    height: 86px !important;
+    border-radius: 0 !important;
+    background: linear-gradient(to top, rgba(2, 3, 6, 0.85), rgba(2, 3, 6, 0));
+    box-shadow: none !important;
+    padding: 0 12px !important;
+    z-index: 1005;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.contentArea.video-mode + .footer > div {
+    float: none !important;
+    margin: 0 !important;
+    position: relative !important;
+}
+
+.contentArea.video-mode + .footer #prev,
+.contentArea.video-mode + .footer .prevClass,
+.contentArea.video-mode + .footer #next,
+.contentArea.video-mode + .footer .nextClass,
+.contentArea.video-mode + .footer .nextClassHighlight {
+    position: fixed !important;
+    right: calc(47% - (min(94vw, calc(90vh * 9 / 16)) / 2) + 8px) !important;
+    left: auto !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    background-color: rgba(0, 0, 0, 0.45) !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 20px 20px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: transform .2s ease, box-shadow .2s ease;
+    z-index: 1006 !important;
+}
+
+.contentArea.video-mode + .footer #prev:hover,
+.contentArea.video-mode + .footer .prevClass:hover,
+.contentArea.video-mode + .footer #next:hover,
+.contentArea.video-mode + .footer .nextClass:hover,
+.contentArea.video-mode + .footer .nextClassHighlight:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 0 26px rgba(130, 174, 255, 0.26), 0 10px 26px rgba(0, 0, 0, 0.35) !important;
+}
+
+.contentArea.video-mode + .footer #prev,
+.contentArea.video-mode + .footer .prevClass {
+    top: calc(50% - 32px) !important;
+    transform: translateY(-50%) !important;
+    background-image: url("../images/footer-menu/chevron-up.svg") !important;
+}
+
+.contentArea.video-mode + .footer #next,
+.contentArea.video-mode + .footer .nextClass,
+.contentArea.video-mode + .footer .nextClassHighlight {
+    top: calc(50% + 32px) !important;
+    transform: translateY(-50%) !important;
+    background-image: url("../images/footer-menu/chevron-down.svg") !important;
+}
+
+.contentArea.video-mode + .footer #ProgressBar {
+    display: block !important;
+    position: fixed !important;
+    left: 50% !important;
+    bottom: 92px !important;
+    transform: translateX(-50%) !important;
+    width: 72px !important;
+    height: 72px !important;
+    margin: 0 !important;
+    border-radius: 50%;
+    background: transparent !important;
+    box-shadow: none !important;
+    z-index: 1006 !important;
+}
+
+.contentArea.video-mode #clickNextId {
+    top: auto !important;
+    right: auto !important;
+    left: 50% !important;
+    bottom: 95px !important;
+    transform: translateX(-50%);
+    z-index: 1007;
+}
+
+@keyframes shortsFadeIn {
+    from { opacity: .0; }
+    to { opacity: 1; }
+}
+
+@keyframes shortsVideoPop {
+    from { opacity: .0; transform: scale(.97); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ===== App-style Vertical Reel Layout (All page types) ===== */
+
+/* HARD RESET */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#mainPage {
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #0b1220 !important;
+    transform: none !important;
+    left: 0 !important;
+    top: 0 !important;
+    position: relative !important;
+}
+
+#mainPage {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+}
+
+
+/* =======================================================================
+   REELS PRESENTATION LAYER — RESPONSIVE ASPECT-RATIO ARCHITECTURE
+   Professional reels layout that works in portrait, landscape, and iframe.
+   Uses dynamic viewport units and aspect-ratio for perfect visibility.
+   ======================================================================= */
+
+/*  1. Viewport root — full dynamic viewport with fallback  */
+html, body {
+    width: 100% !important;
+    height: 100vh !important; /* Fallback */
+    height: 100dvh !important;
+    min-height: 100vh !important; /* Fallback */
+    min-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    overflow-x: hidden !important; /* Prevent horizontal scroll */
+    background: #0a0d14 !important;
+    position: relative !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+/*  2. Root container — flex-centered app shell  */
+.wholeContainer.reels-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    height: 100vh !important; /* Fallback */
+    height: 100dvh !important;
+    min-height: 100vh !important; /* Fallback */
+    min-height: 100dvh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    box-sizing: border-box !important;
+    touch-action: pan-y !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+/* Portrait orientation: full height, auto width based on 9:16 aspect ratio */
+@media (orientation: portrait) {
+    html, body {
+        background: #000 !important; /* Hide any SCORM background elements */
+    }
+    
+    .wholeContainer.reels-wrapper {
+        background: #000 !important;
+        width: 100vw !important; /* Full viewport width to hide SCORM sidebars */
+        max-width: 100vw !important;
+    }
+}
+
+/* Landscape orientation: centered with dark stage */
+@media (orientation: landscape) {
+    body {
+        background: radial-gradient(circle at 50% 40%, #1a1f2e 0%, #0d1018 60%, #06080c 100%) !important;
+    }
+    
+    .wholeContainer.reels-wrapper {
+        background: #000 !important;
+    }
+}
+
+/* Desktop: add shadow for depth */
+@media (min-width: 769px) and (orientation: landscape) {
+    .wholeContainer.reels-wrapper {
+        box-shadow: 0 0 60px rgba(0,0,0,0.8) !important;
+    }
+}
+
+/*  3. Sidebar overlay — positioned absolutely within app shell  */
+.wholeContainer.reels-wrapper .sideBar {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0,0,0,0.55) !important;
+    z-index: 3000 !important;
+    display: none !important;    
+    align-items: center !important;
+    justify-content: center !important;
+    float: none !important;
+}
+
+.wholeContainer.reels-wrapper .sideBar[style*="display: block"],
+.wholeContainer.reels-wrapper .sideBar[style*="display:block"] {
+    display: flex !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarPanel {
+    width: min(320px, 80%) !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    background: #fff !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-shadow: 4px 0 30px rgba(0,0,0,0.5) !important;
+}
+
+/* Landscape: narrower sidebar to save space */
+@media (orientation: landscape) and (max-height: 600px) {
+    .wholeContainer.reels-wrapper .sideBarPanel {
+        width: min(280px, 70%) !important;
+    }
+}
+
+.wholeContainer.reels-wrapper .sideBarHeader {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 14px 16px !important;
+    flex-shrink: 0 !important;
+    border-bottom: 1px solid #eee !important;
+}
+
+.wholeContainer.reels-wrapper .sideBar .logo {
+    max-width: 150px !important;
+    width: auto !important;
+    height: auto !important;
+    display: block !important;
+}
+
+.wholeContainer.reels-wrapper .sideBar .menu-close-btn {
+    background: transparent !important;
+    border: none !important;
+    color: #333 !important;
+    font-size: 22px !important;
+    cursor: pointer !important;
+    padding: 4px 8px !important;
+    line-height: 1 !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuWrapper {
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+    display: flex !important;
+    min-height: 0 !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuContent {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    padding: 16px !important;
+    min-height: 0 !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader {
+    width: 100% !important;
+    height: auto !important;
+    top: auto !important;
+    margin-bottom: 10px !important;
+    position: static !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuContent .tocData {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarFooter {
+    text-align: center !important;
+    padding: 16px !important;
+    font-size: 13px !important;
+    color: #888 !important;
+    flex-shrink: 0 !important;
+    border-top: 1px solid #eee !important;
+}
+
+/*  4. Content area — aspect-ratio constrained reels frame (ALWAYS CENTERED)  */
+.wholeContainer.reels-wrapper .contentArea {
+    position: relative !important;
+    width: auto !important; /* Auto width - sized by aspect ratio */
+    height: 100vh !important; /* Fallback */
+    height: 100dvh !important;
+    max-height: 100vh !important; /* Fallback */
+    max-height: 100dvh !important;
+    aspect-ratio: 9 / 16 !important; /* Always maintain 9:16 ratio */
+    margin: 0 auto !important; /* Center horizontally */
+    padding: 0 !important;
+    float: none !important;
+    overflow: hidden !important;
+    display: block !important;
+    background: #000 !important;
+    z-index: 1 !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+    max-width: calc(100vh * 9 / 16) !important; /* Fallback */
+    max-width: calc(100dvh * 9 / 16) !important;
+}
+
+/* Portrait: height-driven scaling with aspect-ratio */
+@media (orientation: portrait) {
+    .wholeContainer.reels-wrapper .contentArea {
+        /* Use height as primary dimension, width auto from aspect-ratio */
+        width: auto !important;
+        height: 100vh !important; /* Fallback */
+        height: 100dvh !important;
+        max-height: 100vh !important; /* Fallback */
+        max-height: 100dvh !important;
+        /* Let aspect-ratio calculate width automatically */
+        max-width: calc(100vh * 9 / 16) !important; /* Fallback */
+        max-width: calc(100dvh * 9 / 16) !important;
+        /* On very wide portrait tablets, also respect viewport width */
+        max-width: min(calc(100dvh * 9 / 16), 100vw) !important;
+    }
+}
+
+/* Landscape: always centered with aspect ratio constraint */
+@media (orientation: landscape) {
+    .wholeContainer.reels-wrapper .contentArea {
+        width: auto !important;
+        max-width: calc(100vh * 9 / 16) !important; /* Fallback */
+        max-width: calc(100dvh * 9 / 16) !important;
+    }
+}
+
+/* Desktop wide screens: limit to reasonable max width but stay centered */
+@media (min-width: 1200px) and (orientation: landscape) {
+    .wholeContainer.reels-wrapper .contentArea {
+        max-width: 480px !important;
+    }
+}
+
+/* Tablet landscape: ensure proper sizing */
+@media (min-width: 768px) and (max-width: 1199px) and (orientation: landscape) {
+    .wholeContainer.reels-wrapper .contentArea {
+        max-width: min(480px, calc(100dvh * 9 / 16)) !important;
+    }
+}
+
+/*  5. Reels shell / scroll container  */
+.wholeContainer.reels-wrapper .reels-wrapper-shell {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.wholeContainer.reels-wrapper .reels-container {
+    width: 100% !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scroll-snap-type: y mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    touch-action: pan-y !important;
+    box-sizing: border-box !important;
+}
+
+.wholeContainer.reels-wrapper .reels-container::-webkit-scrollbar {
+    display: none !important;
+}
+
+/*  6. Individual slide — fills content area using dynamic viewport  */
+.wholeContainer.reels-wrapper .reel-slide {
+    width: 100% !important;
+    height: 100vh !important; /* Fallback */
+    height: 100dvh !important;
+    min-height: 100vh !important; /* Fallback */
+    min-height: 100dvh !important;
+    max-height: 100vh !important; /* Fallback */
+    max-height: 100dvh !important;
+    scroll-snap-align: start !important;
+    position: relative !important; /* Positioning context for menu icon */
+    overflow: hidden !important; /* Hide scroll content */
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #0a0d14 !important;
+    box-sizing: border-box !important;
+}
+
+/*  7. Fixed top bar (header row inside slide)  */
+.wholeContainer.reels-wrapper .reel-fixed-top {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    z-index: 1200 !important;
+    pointer-events: none !important;
+    overflow: visible !important; /* Ensure menu icon not clipped */
+}
+
+.wholeContainer.reels-wrapper .reel-fixed-top > * {
+    pointer-events: auto !important;
+}
+
+/*  8. Header title bar  */
+.wholeContainer.reels-wrapper .headingArea {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 44px !important;
+    max-width: none !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 12px 0 54px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    z-index: 1200 !important;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.0) 100%) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border-bottom: none !important;
+    float: none !important;
+    box-sizing: border-box !important;
+}
+
+/* Landscape small height: compact header */
+@media (orientation: landscape) and (max-height: 500px) {
+    .wholeContainer.reels-wrapper .headingArea {
+        height: 40px !important;
+        padding: 0 10px 0 46px !important;
+    }
+    
+    .wholeContainer.reels-wrapper .headingArea1 {
+        top: 8px !important;
+        left: 10px !important;
+        padding: 4px !important;
+    }
+    
+    .wholeContainer.reels-wrapper #TmenuIcon {
+        width: 20px !important;
+        height: 20px !important;
+        min-width: 20px !important;
+        min-height: 20px !important;
+    }
+}
+
+.wholeContainer.reels-wrapper .headingArea > span {
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.2px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    line-height: 1.2 !important;
+}
+
+.wholeContainer.reels-wrapper #pagenoHeader {
+    flex-shrink: 0 !important;
+    padding: 4px 10px !important;
+    border-radius: 12px !important;
+    background: rgba(255,255,255,0.15) !important;
+    border: 1px solid rgba(255,255,255,0.25) !important;
+    color: #fff !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    margin-left: 8px !important;
+    float: none !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    height: 22px !important;
+}
+
+.wholeContainer.reels-wrapper #certificateid {
+    display: none !important;
+}
+
+.wholeContainer.reels-wrapper .line2 {
+    display: none !important;
+}
+
+/*  9. Menu icon (hamburger) - always visible inside reels frame  */
+.wholeContainer.reels-wrapper .headingArea1 {
+    position: absolute !important;
+    top: 1px !important;
+    left: 12px !important;
+    width: auto !important;
+    max-width: none !important;
+    transform: none !important;
+    z-index: 1300 !important; /* Above all reels content */
+    margin: 0 !important;
+    padding: 6px !important; /* Touchable area */
+    float: none !important;
+    background: rgba(0, 0, 0, 0.35) !important; /* Subtle background for visibility */
+    border-radius: 8px !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background 0.2s ease !important;
+}
+
+.wholeContainer.reels-wrapper #TmenuIcon {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+    display: block !important;
+    filter: brightness(0) invert(1) drop-shadow(0 1px 3px rgba(0,0,0,0.4)) !important;
+    cursor: pointer !important;
+    object-fit: contain !important;
+}
+
+.wholeContainer.reels-wrapper .headingArea1:hover {
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/*  10. Page content — fills entire slide  */
+.wholeContainer.reels-wrapper .pageContent {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    display: block !important;
+    overflow: hidden !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    box-sizing: border-box !important;
+}
+
+/*  11. HTML page — fills slide fully with smooth scrolling  */
+.wholeContainer.reels-wrapper #htmlArea {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    background: transparent !important;
+    color: inherit !important;
+    scrollbar-width: thin !important;
+}
+
+.wholeContainer.reels-wrapper #htmlArea::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+.wholeContainer.reels-wrapper #htmlArea::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.3) !important;
+    border-radius: 3px !important;
+}
+
+.wholeContainer.reels-wrapper #htmlArea::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+/*  12. Video fills slide  */
+.wholeContainer.reels-wrapper .shorts-container {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.wholeContainer.reels-wrapper .shorts-video-frame {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    background: #000 !important;
+}
+
+.wholeContainer.reels-wrapper video,
+.wholeContainer.reels-wrapper #vidArea {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: #000 !important;
+}
+
+.wholeContainer.reels-wrapper .shorts-bottom-gradient {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 35% !important;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%) !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+}
+
+/*  13. Flash / Captivate / HTML frames  */
+.wholeContainer.reels-wrapper #flashArea,
+.wholeContainer.reels-wrapper #captivateFrame {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    box-sizing: border-box !important;
+}
+
+/*  14. Action bar (video)  */
+.wholeContainer.reels-wrapper .action-bar {
+    position: absolute !important;
+    right: 14px !important;
+    bottom: 100px !important;
+    top: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 14px !important;
+    z-index: 100 !important;
+}
+
+/* Landscape: lower position to avoid crowding */
+@media (orientation: landscape) and (max-height: 600px) {
+    .wholeContainer.reels-wrapper .action-bar {
+        bottom: 70px !important;
+        gap: 10px !important;
+    }
+}
+
+.wholeContainer.reels-wrapper .action-btn {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba(255,255,255,0.25) !important;
+    background: rgba(0,0,0,0.45) !important;
+    cursor: pointer !important;
+    position: relative !important;
+    color: #fff !important;
+}
+
+.wholeContainer.reels-wrapper .action-btn::before {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -52%) !important;
+    color: #fff !important;
+    font-size: 18px !important;
+    line-height: 1 !important;
+}
+
+.wholeContainer.reels-wrapper .action-btn.like::before   { content: "\2665"; }
+.wholeContainer.reels-wrapper .action-btn.comment::before{ content: "\2709"; }
+.wholeContainer.reels-wrapper .action-btn.share::before  { content: "\2197"; }
+.wholeContainer.reels-wrapper .action-btn.bookmark::before{ content: "\2605"; }
+
+/*  15. "Click to continue"  */
+.wholeContainer.reels-wrapper #clickNextId {
+    position: absolute !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+    top: auto !important;
+    z-index: 1200 !important;
+    color: rgba(255,255,255,0.75) !important;
+    font-size: 13px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+/*  16. Original footer — hide entirely (float controls replace it)  */
+.wholeContainer.reels-wrapper .footer {
+    position: fixed !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    z-index: -1 !important;
+}
+
+/*  17. Floating nav controls — positioned relative to content area  */
+.wholeContainer.reels-wrapper .reels-float-controls {
+    position: absolute !important;
+    right: 18px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    z-index: 2000 !important;
+    pointer-events: auto !important;
+}
+
+/* Landscape small height: smaller buttons */
+@media (orientation: landscape) and (max-height: 500px) {
+    .wholeContainer.reels-wrapper .reels-float-controls {
+        gap: 8px !important;
+    }
+    
+    .wholeContainer.reels-wrapper .reels-nav-btn {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+    }
+}
+
+.wholeContainer.reels-wrapper .reels-nav-btn {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: 1.5px solid rgba(255,255,255,0.3) !important;
+    background: rgba(10,15,30,0.6) !important;
+    color: #fff !important;
+    font-size: 18px !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    backdrop-filter: blur(6px) !important;
+    transition: background 0.2s ease, transform 0.15s ease !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+}
+
+.wholeContainer.reels-wrapper .reels-nav-btn:hover {
+    background: rgba(60,90,180,0.7) !important;
+    transform: scale(1.1) !important;
+}
+
+.wholeContainer.reels-wrapper .reels-nav-btn:active {
+    transform: scale(0.95) !important;
+}
+
+/*  18. Progress bar, circles, other footer items — hide  */
+.wholeContainer.reels-wrapper .footer .navCircle,
+.wholeContainer.reels-wrapper .footer .pageClass,
+.wholeContainer.reels-wrapper .footer .replayClass,
+.wholeContainer.reels-wrapper .footer .pauseClass,
+.wholeContainer.reels-wrapper .footer .playClass,
+.wholeContainer.reels-wrapper .footer .muteClass,
+.wholeContainer.reels-wrapper .footer .unmuteClass,
+.wholeContainer.reels-wrapper .footer .exitClass,
+.wholeContainer.reels-wrapper .footer .exitClass1,
+.wholeContainer.reels-wrapper .footer .ccClass,
+.wholeContainer.reels-wrapper .footer .searchClass,
+.wholeContainer.reels-wrapper .footer .resourceClass,
+.wholeContainer.reels-wrapper .footer #slider,
+.wholeContainer.reels-wrapper #ProgressBar {
+    display: none !important;
+}
+
+/*  19. Mobile — identical (already full-width, just tweak spacing)  */
+@media (max-width: 480px) {
+    .wholeContainer.reels-wrapper .headingArea {
+        padding: 0 10px 0 46px !important;
+        height: 44px !important;
+    }
+
+    .wholeContainer.reels-wrapper .headingArea1 {
+        top: 10px !important;
+        left: 10px !important;
+        padding: 5px !important;
+    }
+    
+    .wholeContainer.reels-wrapper #TmenuIcon {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px !important;
+        min-height: 22px !important;
+    }
+
+    .wholeContainer.reels-wrapper .reels-float-controls {
+        right: 10px !important;
+        gap: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper .reels-nav-btn {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 16px !important;
+    }
+
+    .wholeContainer.reels-wrapper .action-bar {
+        right: 8px !important;
+        bottom: 80px !important;
+        gap: 10px !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 1 — BOOTSTRAP GRID ESCAPE
+   Prevents any .container / .row from constraining slide width.
+   Scoped inside .wholeContainer.reels-wrapper for safety.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.wholeContainer.reels-wrapper .container,
+.wholeContainer.reels-wrapper .container-fluid,
+.wholeContainer.reels-wrapper .container-sm,
+.wholeContainer.reels-wrapper .container-md,
+.wholeContainer.reels-wrapper .container-lg,
+.wholeContainer.reels-wrapper .container-xl,
+.wholeContainer.reels-wrapper .container-xxl,
+.wholeContainer.reels-wrapper .row,
+.wholeContainer.reels-wrapper .main-wrapper,
+.wholeContainer.reels-wrapper .content-wrapper {
+    max-width: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    float: none !important;
+}
+
+/* Bootstrap columns — keep padding for readability */
+.wholeContainer.reels-wrapper [class*="col-"] {
+    float: none !important;
+    max-width: none !important;
+    width: 100% !important;
+    flex: 0 0 100% !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 3 — BLOCK body FLEX-CENTERING injected by ng-include HTML pages
+   Belt-and-suspenders: the source HTML is already fixed, but this guard
+   ensures no future content asset can re-break layout via body flex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+body {
+    display: block !important;
+    justify-content: unset !important;
+    align-items: unset !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 6 — REMOVE MOBILE-FRAME CONSTRAINTS inside HTML slides
+   assets/html/*/index.html uses .mobile-layout { max-width: 430px }
+   and similar phone-frame wrappers. Override them to fill the slide.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── All first-level wrappers inside the HTML slide fill the frame ── */
+.wholeContainer.reels-wrapper #htmlArea > *,
+.wholeContainer.reels-wrapper #htmlArea .mobile-layout,
+.wholeContainer.reels-wrapper #htmlArea .page-wrapper,
+.wholeContainer.reels-wrapper #htmlArea .slide-wrapper,
+.wholeContainer.reels-wrapper #htmlArea .app-wrapper,
+.wholeContainer.reels-wrapper #htmlArea .screen-wrapper,
+.wholeContainer.reels-wrapper #htmlArea .phone-frame,
+.wholeContainer.reels-wrapper #htmlArea .card-wrapper {
+    max-width: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.wholeContainer.reels-wrapper #htmlArea .mobile-layout {
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: none !important;
+    /* belt-and-suspenders: kill any centering flex on the wrapper itself */
+    justify-content: unset !important;
+    align-self: stretch !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 7 & 8 — HEADER GLOBAL + REMOVE PARENT FLEX CENTERING
+   Ensure no ancestor flex-centers the slides or the header.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Step 4 slide-inner equivalent: reel-slide fills identically for
+      both video and HTML content types. pageContent is the slide-inner. ── */
+.wholeContainer.reels-wrapper .reel-slide,
+.wholeContainer.reels-wrapper .contentArea,
+.wholeContainer.reels-wrapper .reels-wrapper-shell,
+.wholeContainer.reels-wrapper .reels-container {
+    /* No flex-centering anywhere in the scroll stack */
+    justify-content: unset !important;
+    align-items: unset !important;
+}
+
+/* Step 5: pageContent is the slide-inner for HTML AND video — must be
+   position:absolute fill, not flex-centered, identical for both types. */
+.wholeContainer.reels-wrapper .pageContent {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    display: block !important;
+    justify-content: unset !important;
+    align-items: unset !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    box-sizing: border-box !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 4 — NEUTRALISE LEGACY contentArea.video-mode RULES
+   The old .contentArea.video-mode blocks (lines ~108-505) have equal or
+   higher specificity than the reels rules and set:
+     • height: calc(100vh - 63px)  → black gap at bottom
+     • display: flex; align-items/justify-content: center  → centers content
+     • .pageContent: flex, padding, height:auto  → breaks full-height fill
+     • .shorts-container: aspect-ratio 9/16  → constrains video to a box
+   These must be killed with identical-or-higher specificity inside .reels-wrapper.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* --- contentArea itself: allow aspect-ratio centering, no legacy constraints --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode,
+.wholeContainer.reels-wrapper .contentArea {
+    /* DO NOT set position: absolute or width: 100% - breaks flex centering */
+    /* DO NOT set left: 0 or inset: 0 - prevents aspect-ratio layout */
+    min-height: unset !important;
+    max-height: none !important;
+    display: block !important;
+    flex-direction: unset !important;
+    align-items: unset !important;
+    justify-content: unset !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    float: none !important;
+    transform: none !important;
+}
+
+/* --- headingArea inside reels: full-width overlay, no flex-shrink --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode .headingArea,
+.wholeContainer.reels-wrapper .contentArea .headingArea {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 52px !important;
+    display: flex !important;
+    align-items: center !important;
+    flex: unset !important;
+    flex-shrink: 0 !important;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 100%) !important;
+    backdrop-filter: none !important;
+    border-radius: 0 !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1200 !important;
+}
+
+/* --- pageContent: absolute fill, no flex centering, no padding, no height:auto --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode .pageContent,
+.wholeContainer.reels-wrapper .contentArea .pageContent {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: unset !important;
+    max-height: none !important;
+    flex: unset !important;
+    display: block !important;
+    align-items: unset !important;
+    justify-content: unset !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    float: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    animation: none !important;
+    box-sizing: border-box !important;
+}
+
+/* --- shorts-container: absolute fill (not aspect-ratio box) --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode .shorts-container,
+.wholeContainer.reels-wrapper .shorts-container {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    aspect-ratio: unset !important;
+    display: block !important;
+    align-items: unset !important;
+    justify-content: unset !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    animation: none !important;
+}
+
+/* --- shorts-video-frame: absolute fill --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode .shorts-video-frame,
+.wholeContainer.reels-wrapper .shorts-video-frame {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    background: #000 !important;
+    box-shadow: none !important;
+}
+
+/* --- video / vidArea: absolute fill with cover --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode #vidArea,
+.wholeContainer.reels-wrapper .contentArea.video-mode video,
+.wholeContainer.reels-wrapper #vidArea,
+.wholeContainer.reels-wrapper video {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 0 !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* --- htmlArea: absolute fill, zero padding --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode ~ * #htmlArea,
+.wholeContainer.reels-wrapper #htmlArea {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    display: block !important;
+}
+
+/* --- Quiz / SCQ slides: #contentContainer must fill the htmlArea --- */
+.wholeContainer.reels-wrapper #htmlArea #contentContainer {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    overflow: hidden !important;
+    display: block !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 5 — MAKE QUIZ SLIDE BACKGROUND MATCH REELS DARK THEME
+   Quiz HTML is loaded as pageContentType 'html'. The white background
+   comes from the quiz template's own body/html styles. Override via the
+   slide background so any uncovered area is dark, not white.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.wholeContainer.reels-wrapper .reel-slide {
+    background: #0d1017 !important;
+}
+
+/* Quiz slides tend to have white backgrounds — give them a white slide bg
+   so the quiz content merges cleanly. The dark bg only shows if quiz
+   content doesn't fill full height. */
+.wholeContainer.reels-wrapper .reel-slide:has(#htmlArea) {
+    background: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   END OF LEGACY NEUTRALISATION BLOCK
+   ═══════════════════════════════════════════════════════════════════════ */

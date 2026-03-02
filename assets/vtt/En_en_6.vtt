@@ -1,157 +1,265 @@
-WEBVTT
+﻿WEBVTT
 
-1
-00:00:08.320 --> 00:00:10.806
-Once the target has been identified, the next
+00:00:04.641 --> 00:00:06.504
+At the heart of Copilot’s capabilities
 
-2
-00:00:10.806 --> 00:00:13.354
-step is to craft the perfect phishing email.
+00:00:06.504 --> 00:00:10.960
+lies Natural Language Processing (or NLP).
 
-3
-00:00:14.294 --> 00:00:17.114
-Let's dissect the anatomy of these emails,
+00:00:10.960 --> 00:00:15.360
+This feature enables Copilot to understand and respond to
 
-4
-00:00:18.214 --> 00:00:21.054
-revealing the sinister techniques employed by cyber
+00:00:15.360 --> 00:00:18.832
+human language as naturally as you or I would.
 
-5
-00:00:21.054 --> 00:00:23.394
-criminals to manipulate and deceive.
+00:00:18.832 --> 00:00:21.440
+You can try giving it intuitive commands like:
 
-6
-00:00:23.974 --> 00:00:27.038
-Phishers employ familiar looking email ids to
+00:00:21.440 --> 00:00:25.016
+“Summarize today’s meeting notes.” “Draft an email response
 
-7
-00:00:27.038 --> 00:00:29.918
-lure unsuspecting victims into their traps.
+00:00:25.016 --> 00:00:28.692
+based on the attached feedback. ”or“ Find trends
 
-8
-00:00:29.918 --> 00:00:33.042
-By spoofing or mimicking legitimate email addresses of
+00:00:28.692 --> 00:00:30.880
+in last quarter’s sales data.”
 
-9
-00:00:33.042 --> 00:00:36.426
-trusted entities such as banks, companies, or even
+00:00:31.660 --> 00:00:35.180
+Do this and sit back and watch as
 
-10
-00:00:36.426 --> 00:00:39.402
-acquaintances, phishers aim to instill a false sense
+00:00:35.180 --> 00:00:38.268
+Copilot delivers results tailored to your needs.
 
-11
-00:00:39.402 --> 00:00:42.274
-of trust and legitimacy in their targets.
+00:00:38.268 --> 00:00:40.236
+Its standout feature is its ability to
 
-12
-00:00:42.274 --> 00:00:45.290
-Since the subject line is what the receiver's eyes go
+00:00:40.236 --> 00:00:44.708
+create high-quality content efficiently. Integrating Copilot
 
-13
-00:00:45.290 --> 00:00:49.974
-to first, it has to pique curiosity or invoke urgency.
+00:00:44.708 --> 00:00:48.228
+into Microsoft 365 tools like Word, Excel,
 
-14
-00:00:50.514 --> 00:00:53.330
-Whether it's a tempting offer, a dire warning,
+00:00:48.228 --> 00:00:52.400
+PowerPoint, Teams, and Outlook transforms them into
 
-15
-00:00:53.330 --> 00:00:56.282
-or an intriguing question, the subject line sets
+00:00:53.130 --> 00:00:57.130
+AI-powered assistants that simplify workflows.
 
-16
-00:00:56.282 --> 00:00:58.654
-the stage for the deception that follows.
+00:00:57.130 --> 00:01:00.242
+Let’s delve deeper into this. With Word,
 
-17
-00:00:59.424 --> 00:01:03.112
-Urgency is a common tactic, compelling recipients to
+00:01:00.242 --> 00:01:02.946
+Copilot can act as a writing assistant,
 
-18
-00:01:03.112 --> 00:01:06.624
-act swiftly without pausing for rational scrutiny.
+00:01:02.946 --> 00:01:06.514
+by helping draft documents, summarizing lengthy text,
 
-19
-00:01:06.624 --> 00:01:10.024
-Next, the sender address poses as a familiar
+00:01:06.514 --> 00:01:09.630
+or rewriting sections for clarity and impact.
 
-20
-00:01:10.024 --> 00:01:14.352
-entity, exploiting trust and familiarity to lower defenses.
+00:01:10.250 --> 00:01:11.962
+Do you need to write an article,
 
-21
-00:01:14.352 --> 00:01:17.464
-Whether it's impersonating a reputable company, a trusted
+00:01:11.962 --> 00:01:14.578
+a blog post, or a proposal?
 
-22
-00:01:17.464 --> 00:01:20.800
-colleague, or a governmental authority, the sender address
+00:01:14.578 --> 00:01:18.074
+Copilot can craft a first draft based on your prompts.
 
-23
-00:01:20.800 --> 00:01:23.944
-serves as the gateway to deception, luring recipients
+00:01:18.074 --> 00:01:21.156
+For instance, you can ask it to “Create a
 
-24
-00:01:23.944 --> 00:01:26.692
-into a false sense of security within the
+00:01:21.156 --> 00:01:24.756
+two-page project proposal for a new marketing campaign,”
 
-25
-00:01:26.692 --> 00:01:29.820
-body of the email, persuasive language and emotional
+00:01:24.756 --> 00:01:29.060
+and it generates a structured and professional draft.
 
-26
-00:01:29.820 --> 00:01:34.124
-triggers manipulate recipients into taking desired actions.
+00:01:29.060 --> 00:01:31.764
+Also, when you’re tired of sifting through long
 
-27
-00:01:34.124 --> 00:01:36.820
-Urgency and fear are often employed,
+00:01:31.764 --> 00:01:35.548
+reports or research papers, turn to Copilot.
 
-28
-00:01:36.820 --> 00:01:39.148
-compelling recipients to click on malicious
+00:01:35.548 --> 00:01:39.788
+It condenses them into concise summaries, allowing
 
-29
-00:01:39.148 --> 00:01:41.604
-links or divulge sensitive information.
+00:01:39.788 --> 00:01:41.840
+you to focus on the key takeaways.
 
-30
-00:01:41.604 --> 00:01:45.972
-By leveraging current events, cybercriminals exploit topicality to
+00:01:42.420 --> 00:01:45.196
+It can also rewrite sentences or paragraphs
 
-31
-00:01:45.972 --> 00:01:48.860
-increase the relevance and credibility of their ruse,
+00:01:45.196 --> 00:01:48.638
+to improve clarity, tone, or style.
 
-32
-00:01:48.860 --> 00:01:51.348
-making it more difficult to discern the deception
+00:01:48.638 --> 00:01:51.526
+For example, you might ask, “Make this
 
-33
-00:01:51.348 --> 00:01:53.844
-amidst the chaos of the digital landscape.
+00:01:51.526 --> 00:01:54.958
+paragraph more conversational” or “Simplify this section
 
-34
-00:01:54.744 --> 00:01:58.344
-Furthermore, the inclusion of logos, branding, and
+00:01:54.958 --> 00:01:58.142
+for an audience unfamiliar with financial jargon.”
 
-35
-00:01:58.344 --> 00:02:01.832
-imagery mimics legitimate communications, further blurring the
+00:01:58.142 --> 00:02:00.206
+This is particularly useful for editing
 
-36
-00:02:01.832 --> 00:02:04.320
-line between reality and deception.
+00:02:00.206 --> 00:02:03.278
+emails, reports, or complex instructions.
 
-37
-00:02:04.320 --> 00:02:06.520
-Recipients are lulled into a false sense
+00:02:03.278 --> 00:02:05.102
+Now, let’s look at how Copilot
 
-38
-00:02:06.520 --> 00:02:09.192
-of security, trusting the authenticity of the
+00:02:05.102 --> 00:02:07.770
+can simplify Excel for you.
 
-39
-00:02:09.192 --> 00:02:11.104
-email based on visual cues alone.
+00:02:08.550 --> 00:02:10.494
+Copilot can analyze datasets
+
+00:02:10.494 --> 00:02:12.622
+to uncover insights and trends.
+
+00:02:12.622 --> 00:02:15.646
+For example, a prompt like “Identify the
+
+00:02:15.646 --> 00:02:18.094
+top-performing regions for sales in Q3”
+
+00:02:18.094 --> 00:02:22.590
+generates clear insights, complete with visualizations.
+
+00:02:22.590 --> 00:02:23.790
+And if you’re struggling with
+
+00:02:23.790 --> 00:02:25.806
+formulas, look no further,
+
+00:02:25.806 --> 00:02:27.702
+Copilot can suggest the appropriate
+
+00:02:27.702 --> 00:02:29.550
+functions based on your needs.
+
+00:02:29.550 --> 00:02:32.110
+You can say, “Calculate the year-over-
+
+00:02:32.110 --> 00:02:33.966
+year growth for these sales figures,” and
+
+00:02:33.966 --> 00:02:36.630
+it will apply the correct formula.
+
+00:02:36.630 --> 00:02:39.206
+And finally, save time by automating
+
+00:02:39.206 --> 00:02:42.376
+tasks like formatting tables, sorting data,
+
+00:02:42.376 --> 00:02:44.760
+or cleaning up inconsistencies.
+
+00:02:44.760 --> 00:02:47.240
+A simple command such as “Format this data
+
+00:02:47.240 --> 00:02:50.992
+for presentation” ensures a polished result without manual
+
+00:02:50.992 --> 00:02:56.472
+adjustments. On Powerpoint, Copilot can do so many
+
+00:02:56.472 --> 00:02:58.768
+things, from helping you choose the right themes
+
+00:02:58.768 --> 00:03:01.568
+and designs to align with your presentation’s tone,
+
+00:03:01.568 --> 00:03:04.888
+to transforming text outlines or bullet points into
+
+00:03:04.888 --> 00:03:06.878
+well-structured slides.
+
+00:03:06.878 --> 00:03:09.934
+For instance, “Create a three-slide presentation
+
+00:03:09.934 --> 00:03:12.646
+summarizing this document” results in
+
+00:03:12.646 --> 00:03:15.470
+organized, visually appealing slides.
+
+00:03:15.470 --> 00:03:19.686
+It can also generate charts, diagrams, or graphics to
+
+00:03:19.686 --> 00:03:24.390
+illustrate complex ideas. You can try a prompt like,
+
+00:03:24.390 --> 00:03:27.118
+“Add a pie chart to represent the budget breakdown”
+
+00:03:27.118 --> 00:03:30.730
+to obtain complex data in a pleasing visual form.
+
+00:03:31.520 --> 00:03:33.712
+In collaboration-focused tools like
+
+00:03:33.712 --> 00:03:37.720
+Microsoft Teams, Copilot enhances communication
+
+00:03:37.720 --> 00:03:40.920
+and project management. During meetings,
+
+00:03:40.920 --> 00:03:43.984
+Copilot can transcribe discussions, generate action
+
+00:03:43.984 --> 00:03:47.080
+items, and even summarize meeting highlights
+
+00:03:47.080 --> 00:03:49.120
+for absent team members.
+
+00:03:49.120 --> 00:03:51.952
+The Business Chat feature connects data across
+
+00:03:51.952 --> 00:03:56.024
+Microsoft 365 apps to enable advanced workflows.
+
+00:03:56.024 --> 00:03:58.826
+For example, you can ask, “Send a summary of
+
+00:03:58.826 --> 00:04:01.650
+today’s meeting to the sales team with key takeaways,”
+
+00:04:01.650 --> 00:04:05.722
+and it pulls information from meeting notes, emails, and
+
+00:04:05.722 --> 00:04:08.434
+chat history to craft the message.
+
+00:04:08.434 --> 00:04:10.610
+Copilot integrates across apps,
+
+00:04:10.610 --> 00:04:12.322
+enabling fluid transitions.
+
+00:04:12.322 --> 00:04:15.850
+For instance, data visualized in Excel can be
+
+00:04:15.850 --> 00:04:18.498
+exported into a PowerPoint slide with a simple
+
+00:04:18.498 --> 00:04:21.610
+command like “Add this chart to my presentation.”
+
+00:04:21.610 --> 00:04:24.802
+The seamless integration of Copilot across workplace
+
+00:04:24.802 --> 00:04:27.640
+tools ensures tasks that once required
+
+00:04:27.640 --> 00:04:30.552
+multiple steps and tools are now completed
+
+00:04:30.552 --> 00:04:32.400
+effortlessly in one system.
