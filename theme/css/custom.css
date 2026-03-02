@@ -921,10 +921,11 @@ html, body {
     font-weight: 500 !important;
     margin-left: 8px !important;
     float: none !important;
-    line-height: 1 !important;
-    display: inline-flex !important;
+    display: flex !important;
     align-items: center !important;
-    height: 22px !important;
+    justify-content: center !important;
+    height: auto !important;
+    line-height: 1.4 !important;
 }
 
 .wholeContainer.reels-wrapper #certificateid {
@@ -947,15 +948,10 @@ html, body {
     margin: 0 !important;
     padding: 6px !important; /* Touchable area */
     float: none !important;
-    background: rgba(0, 0, 0, 0.35) !important; /* Subtle background for visibility */
-    border-radius: 8px !important;
-    backdrop-filter: blur(6px) !important;
-    -webkit-backdrop-filter: blur(6px) !important;
     height: auto !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    transition: background 0.2s ease !important;
 }
 
 .wholeContainer.reels-wrapper #TmenuIcon {
@@ -969,9 +965,7 @@ html, body {
     object-fit: contain !important;
 }
 
-.wholeContainer.reels-wrapper .headingArea1:hover {
-    background: rgba(0, 0, 0, 0.5) !important;
-}
+
 
 /*  10. Page content — fills entire slide  */
 .wholeContainer.reels-wrapper .pageContent {

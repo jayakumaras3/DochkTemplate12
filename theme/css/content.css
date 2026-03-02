@@ -76,13 +76,11 @@
     position: absolute;
     height: 109%;
     width: 88%;
-    background-color: rgba(0, 0, 0, 0.2);
     z-index: 1001;
     margin-left: 256px;
 	cursor: pointer;
 }
 .headingArea2 {
-	background-color: rgba(0, 0, 0, 0.2);
     margin-top: 0px;
     position: absolute;
     /* height: 56px; */
