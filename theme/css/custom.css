@@ -289,7 +289,10 @@
 }
 
 .contentArea.video-mode .headingArea > span {
-    display: none !important;
+    max-width: calc(100% - 120px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .contentArea.video-mode #pagenoHeader {
@@ -302,7 +305,6 @@
     border: 1px solid rgba(255, 255, 255, 0.22);
     color: #fff;
     font-weight: 600;
-    margin-left: auto !important;
 }
 
 .contentArea.video-mode .pageContent {
@@ -899,7 +901,16 @@ html, body {
 }
 
 .wholeContainer.reels-wrapper .headingArea > span {
-    display: none !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.2px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    line-height: 1.2 !important;
 }
 
 .wholeContainer.reels-wrapper #pagenoHeader {
@@ -911,7 +922,7 @@ html, body {
     color: #fff !important;
     font-size: 11px !important;
     font-weight: 500 !important;
-    margin-left: auto !important;
+    margin-left: 8px !important;
     float: none !important;
     display: flex !important;
     align-items: center !important;
@@ -1141,20 +1152,113 @@ html, body {
     white-space: nowrap !important;
 }
 
-/*  16. Original footer — hide entirely (float controls replace it)  */
+/*  16. Original footer — repositioned as floating reels nav (replaces float controls)  */
 .wholeContainer.reels-wrapper .footer {
-    position: fixed !important;
-    left: -9999px !important;
-    top: -9999px !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    opacity: 0 !important;
-    z-index: -1 !important;
+    position: absolute !important;
+    right: 18px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    z-index: 2001 !important;
+    width: auto !important;
+    height: auto !important;
+    left: auto !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
-/*  17. Floating nav controls — positioned relative to content area  */
+/* Style footer #prev / .prevClass as circular reels-style ▲ button */
+.wholeContainer.reels-wrapper .footer #prev,
+.wholeContainer.reels-wrapper .footer .prevClass {
+    position: static !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: 1.5px solid rgba(255,255,255,0.3) !important;
+    background-color: rgba(10,15,30,0.6) !important;
+    background-image: url("../images/footer-menu/chevron-up.svg") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 22px 22px !important;
+    backdrop-filter: blur(6px) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease, transform 0.15s ease !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    order: 1 !important;
+}
+
+/* Style footer #next / .nextClass as circular reels-style ▼ button */
+.wholeContainer.reels-wrapper .footer #next,
+.wholeContainer.reels-wrapper .footer .nextClass,
+.wholeContainer.reels-wrapper .footer .nextClassHighlight {
+    position: static !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: 1.5px solid rgba(255,255,255,0.3) !important;
+    background-color: rgba(10,15,30,0.6) !important;
+    background-image: url("../images/footer-menu/chevron-down.svg") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 22px 22px !important;
+    backdrop-filter: blur(6px) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease, transform 0.15s ease !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    order: 2 !important;
+}
+
+/* Hover state */
+.wholeContainer.reels-wrapper .footer #prev:hover,
+.wholeContainer.reels-wrapper .footer .prevClass:hover,
+.wholeContainer.reels-wrapper .footer #next:hover,
+.wholeContainer.reels-wrapper .footer .nextClass:hover,
+.wholeContainer.reels-wrapper .footer .nextClassHighlight:hover {
+    background-color: rgba(60,90,180,0.7) !important;
+    transform: scale(1.1) !important;
+}
+
+/* Active state */
+.wholeContainer.reels-wrapper .footer #prev:active,
+.wholeContainer.reels-wrapper .footer .prevClass:active,
+.wholeContainer.reels-wrapper .footer #next:active,
+.wholeContainer.reels-wrapper .footer .nextClass:active,
+.wholeContainer.reels-wrapper .footer .nextClassHighlight:active {
+    transform: scale(0.95) !important;
+}
+
+/* .hideContent is already display:none from content.css — works automatically */
+
+/* Hide all other non-nav footer children */
+.wholeContainer.reels-wrapper .footer > div:not([id='prev']):not([id='next']):not(.prevClass):not(.nextClass):not(.nextClassHighlight) {
+    display: none !important;
+}
+
+/*  17. Floating nav controls — DISABLED: footer buttons now handle navigation  */
 .wholeContainer.reels-wrapper .reels-float-controls {
     position: absolute !important;
     right: 18px !important;
@@ -1164,8 +1268,9 @@ html, body {
     flex-direction: column !important;
     align-items: center !important;
     gap: 12px !important;
-    z-index: 2000 !important;
-    pointer-events: auto !important;
+    z-index: 1999 !important;    /* below footer z-index: 2001 */
+    pointer-events: none !important; /* disabled — footer buttons handle clicks */
+    opacity: 0.35 !important;        /* visually inactive */
 }
 
 /* Landscape small height: smaller buttons */

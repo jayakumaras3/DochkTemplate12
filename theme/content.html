@@ -148,29 +148,6 @@
 
     </div>
 
-    <div ng-controller="footerBar as fb" class="reels-float-controls" ng-show="fb.showFooter">
-        <button
-            type="button"
-            class="reels-nav-btn reels-nav-up"
-            ng-if="(fb.navigationBtn | filter:{id:'prev'}:true).length"
-            ng-click="fb.navigationBtnClick((fb.navigationBtn | filter:{id:'prev'}:true)[0])"
-            aria-label="Previous"
-            title="Previous"
-        >
-            ▲
-        </button>
-        <button
-            type="button"
-            class="reels-nav-btn reels-nav-down"
-            ng-if="(fb.navigationBtn | filter:{id:'next'}:true).length"
-            ng-click="fb.navigationBtnClick((fb.navigationBtn | filter:{id:'next'}:true)[0])"
-            aria-label="Next"
-            title="Next"
-        >
-            ▼
-        </button>
-    </div>
-
 </div>
 
 <div id="preloader">
