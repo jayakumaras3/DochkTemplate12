@@ -1253,8 +1253,46 @@ html, body {
 
 /* .hideContent is already display:none from content.css — works automatically */
 
-/* Hide all other non-nav footer children */
-.wholeContainer.reels-wrapper .footer > div:not([id='prev']):not([id='next']):not(.prevClass):not(.nextClass):not(.nextClassHighlight) {
+/* Style footer .resourceClass (Learning Aids) as circular button below next */
+.wholeContainer.reels-wrapper .footer .resourceClass {
+    position: static !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: 1.5px solid rgba(255,255,255,0.3) !important;
+    background-color: rgba(10,15,30,0.6) !important;
+    background-image: url("../images/footer-menu/resource.svg") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 22px 22px !important;
+    backdrop-filter: blur(6px) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease, transform 0.15s ease !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    order: 3 !important;           /* Below next button (order: 2) */
+}
+
+/* Hover state for Learning Aids */
+.wholeContainer.reels-wrapper .footer .resourceClass:hover {
+    background-color: rgba(60,90,180,0.7) !important;
+    transform: scale(1.1) !important;
+}
+
+/* Active state for Learning Aids */
+.wholeContainer.reels-wrapper .footer .resourceClass:active {
+    transform: scale(0.95) !important;
+}
+
+/* Hide all other non-nav footer children (prev, next, resource are exceptions) */
+.wholeContainer.reels-wrapper .footer > div:not([id='prev']):not([id='next']):not(.prevClass):not(.nextClass):not(.nextClassHighlight):not(.resourceClass) {
     display: none !important;
 }
 
@@ -1325,7 +1363,6 @@ html, body {
 .wholeContainer.reels-wrapper .footer .exitClass1,
 .wholeContainer.reels-wrapper .footer .ccClass,
 .wholeContainer.reels-wrapper .footer .searchClass,
-.wholeContainer.reels-wrapper .footer .resourceClass,
 .wholeContainer.reels-wrapper .footer #slider,
 .wholeContainer.reels-wrapper #ProgressBar {
     display: none !important;
