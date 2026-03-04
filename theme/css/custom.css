@@ -305,7 +305,7 @@ body {
     height: 40px !important;
     border-radius: 50% !important;
     background-color: rgba(0, 0, 0, 0.45) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border: none !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: 20px 20px !important;
@@ -389,7 +389,7 @@ body {
     padding: 3px 10px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    border: none !important;
     color: #fff;
     font-weight: 600;
 }
@@ -467,7 +467,7 @@ body {
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.24);
+    border: none !important;
     background-color: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(10px);
     cursor: pointer;
@@ -519,7 +519,7 @@ body {
     width: 40px !important;
     height: 40px !important;
     border-radius: 50% !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border: none !important;
     background-color: rgba(0, 0, 0, 0.45) !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
@@ -1007,7 +1007,7 @@ html, body {
     padding: 4px 10px !important;
     border-radius: 12px !important;
     background: rgba(255,255,255,0.15) !important;
-    border: 1px solid rgba(255,255,255,0.25) !important;
+    border: none !important;
     color: #fff !important;
     font-size: 11px !important;
     font-weight: 500 !important;
@@ -1205,7 +1205,7 @@ html, body {
     width: 44px !important;
     height: 44px !important;
     border-radius: 50% !important;
-    border: 1px solid rgba(255,255,255,0.25) !important;
+    border: none !important;
     background: rgba(0,0,0,0.45) !important;
     cursor: pointer !important;
     position: relative !important;
@@ -1272,7 +1272,7 @@ html, body {
     width: 44px !important;
     height: 44px !important;
     border-radius: 50% !important;
-    border: 1.5px solid rgba(255,255,255,0.3) !important;
+    border: none !important;
     background-color: rgba(10,15,30,0.6) !important;
     background-image: url("../images/footer-menu/chevron-up.svg") !important;
     background-position: center !important;
@@ -1301,7 +1301,7 @@ html, body {
     width: 44px !important;
     height: 44px !important;
     border-radius: 50% !important;
-    border: 1.5px solid rgba(255,255,255,0.3) !important;
+    border: none !important;
     background-color: rgba(10,15,30,0.6) !important;
     background-image: url("../images/footer-menu/chevron-down.svg") !important;
     background-position: center !important;
@@ -1349,7 +1349,7 @@ html, body {
     width: 44px !important;
     height: 44px !important;
     border-radius: 50% !important;
-    border: 1.5px solid rgba(255,255,255,0.3) !important;
+    border: none !important;
     background-color: rgba(10,15,30,0.6) !important;
     background-image: url("../images/footer-menu/resource.svg") !important;
     background-position: center !important;
@@ -1520,7 +1520,7 @@ html, body {
     width: 44px !important;
     height: 44px !important;
     border-radius: 50% !important;
-    border: 1.5px solid rgba(255,255,255,0.3) !important;
+    border: none !important;
     background: rgba(10,15,30,0.6) !important;
     color: #fff !important;
     font-size: 18px !important;

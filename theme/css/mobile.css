@@ -21,13 +21,14 @@
     /* right: 123px; */
     left: -8px;
     top: 3px;
-    height: 746px;
-    background-color: white;
+    height: auto;
+    background-color: transparent !important;
+    background: none !important;
     float: right;
-    width: 110px;
-    border-radius: 5px;
+    width: auto;
+    border-radius: 0 !important;
     z-index: 1000;
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+    box-shadow: none !important;
     padding-left: 0%;
     padding-top: 3%;
 }
@@ -68,13 +69,13 @@
     padding: 46px;
 }
 
-.resourceClass
-{
-		background-image: url(../images/footer-menu/resource.svg);
-        background-repeat: no-repeat;
-        width: 25px;
-        height: 31px;
-        margin-left: 46px !important;
+.resourceClass {
+    background-image: url("../images/footer-menu/resource.svg") !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 22px 22px !important;
+    width: 44px !important;
+    height: 44px !important;
 }
 .headingArea1 {
     position: absolute;
@@ -489,6 +490,88 @@ body:has(.vertical-video-layout) .vertical-video-layout {
     }
 }
 
+/* ── Portal: mobile portrait — fix button overlap via flexbox layout ── */
+@media only screen and (max-width: 844px) and (orientation: portrait) {
+    
+    /* Footer → flex column to stack buttons vertically */
+    .contentArea.video-mode + .footer {
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        justify-content: flex-end !important;
+        gap: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    /* All buttons: relative positioning, no overlap via fixed */
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass,
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight,
+    .contentArea.video-mode + .footer .resourceClass {
+        position: relative !important;
+        right: auto !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: 44px !important;
+        height: 44px !important;
+        background-size: 20px 20px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Prev: up arrow */
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass {
+        order: 1 !important;
+        background-image: url("../images/footer-menu/chevron-up.svg") !important;
+    }
+
+    /* Next: down arrow */
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight {
+        order: 2 !important;
+        background-image: url("../images/footer-menu/chevron-down.svg") !important;
+    }
+
+    /* Resource/Learning Aid: positioned at bottom of the button stack */
+    .contentArea.video-mode + .footer .resourceClass {
+        order: 3 !important;
+        background-image: url("../images/footer-menu/resource.svg") !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+    }
+
+    /* Progress bar: hide from flex layout, keep fixed at center bottom */
+    .contentArea.video-mode + .footer #ProgressBar {
+        position: fixed !important;
+        right: auto !important;
+        bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        order: -1 !important;
+    }
+
+    /*
+     * BUTTON STATE RESET — ensure buttons remain interactive on page navigation.
+     * Responsive Learning Aids might hide buttons via display:none during transitions.
+     * Force display:flex to override any hidden state, allowing normal button interaction.
+     */
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass,
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight,
+    .contentArea.video-mode + .footer .resourceClass {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+}
+
 /* ── Portrait: phones up to 844 px wide ──────────────────────── */
 @media only screen and (max-width: 844px) and (orientation: portrait) {
     .footer #prev,
@@ -588,6 +671,42 @@ body:has(.vertical-video-layout) .vertical-video-layout {
             /* Respect side notch area */
             left: env(safe-area-inset-left, 0px) !important;
             right: env(safe-area-inset-right, 0px) !important;
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       MOBILE HEADER BACKGROUND REMOVAL
+       Remove background gradient and backdrop-filter on mobile devices
+       both in portrait and landscape modes
+       ═══════════════════════════════════════════════════════════════════ */
+    
+    /* Portrait mode: remove header background */
+    @media (max-width: 844px) and (orientation: portrait) {
+        .contentArea.video-mode .headingArea {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .wholeContainer.reels-wrapper .headingArea {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+    }
+
+    /* Landscape mode: remove header background */
+    @media (max-width: 844px) and (orientation: landscape) {
+        .contentArea.video-mode .headingArea {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .wholeContainer.reels-wrapper .headingArea {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
         }
     }
 }
