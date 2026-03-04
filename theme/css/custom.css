@@ -1180,15 +1180,15 @@ html, body {
 .wholeContainer.reels-wrapper .footer #prev,
 .wholeContainer.reels-wrapper .footer .prevClass {
     position: static !important;
-    width: 48px !important;
-    height: 48px !important;
+    width: 44px !important;
+    height: 44px !important;
     border-radius: 50% !important;
     border: 1.5px solid rgba(255,255,255,0.3) !important;
     background-color: rgba(10,15,30,0.6) !important;
     background-image: url("../images/footer-menu/chevron-up.svg") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    background-size: 24px 24px !important;
+    background-size: 22px 22px !important;
     backdrop-filter: blur(6px) !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
     cursor: pointer !important;
@@ -1310,6 +1310,108 @@ html, body {
     z-index: 1999 !important;    /* below footer z-index: 2001 */
     pointer-events: none !important; /* disabled — footer buttons handle clicks */
     opacity: 0.35 !important;        /* visually inactive */
+}
+
+/* ── Responsive nav-button scaling ────────────────────────────── */
+
+/* Portrait: phones up to 844 px wide */
+@media (max-width: 844px) and (orientation: portrait) {
+    .wholeContainer.reels-wrapper .footer {
+        right: 12px !important;
+        gap: 12px !important;
+    }
+
+    .wholeContainer.reels-wrapper .footer #prev,
+    .wholeContainer.reels-wrapper .footer .prevClass,
+    .wholeContainer.reels-wrapper .footer #next,
+    .wholeContainer.reels-wrapper .footer .nextClass,
+    .wholeContainer.reels-wrapper .footer .nextClassHighlight,
+    .wholeContainer.reels-wrapper .footer .resourceClass {
+        width: 44px !important;
+        height: 44px !important;
+        background-size: 22px 22px !important;
+        margin: 0 !important;
+    }
+
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass,
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight,
+    .contentArea.video-mode + .footer .resourceClass {
+        width: 44px !important;
+        height: 44px !important;
+        right: 12px !important;
+        background-size: 22px 22px !important;
+    }
+
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass {
+        top: calc(50% - 56px) !important;
+        transform: translateY(-50%) !important;
+    }
+
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight {
+        top: calc(50% + 56px) !important;
+        transform: translateY(-50%) !important;
+    }
+
+    .contentArea.video-mode + .footer .resourceClass {
+        top: calc(50% + 112px) !important;
+        transform: translateY(-50%) !important;
+    }
+}
+
+/* Landscape: phones in landscape orientation */
+@media (max-width: 844px) and (orientation: landscape) {
+    .wholeContainer.reels-wrapper .footer {
+        right: 10px !important;
+        gap: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper .footer #prev,
+    .wholeContainer.reels-wrapper .footer .prevClass,
+    .wholeContainer.reels-wrapper .footer #next,
+    .wholeContainer.reels-wrapper .footer .nextClass,
+    .wholeContainer.reels-wrapper .footer .nextClassHighlight,
+    .wholeContainer.reels-wrapper .footer .resourceClass {
+        width: 40px !important;
+        height: 40px !important;
+        background-size: 20px 20px !important;
+        margin: 0 !important;
+    }
+
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass,
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight,
+    .contentArea.video-mode + .footer .resourceClass {
+        width: 40px !important;
+        height: 40px !important;
+        right: 10px !important;
+        background-size: 20px 20px !important;
+    }
+
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass {
+        top: calc(50% - 50px) !important;
+        transform: translateY(-50%) !important;
+    }
+
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight {
+        top: calc(50% + 50px) !important;
+        transform: translateY(-50%) !important;
+    }
+
+    .contentArea.video-mode + .footer .resourceClass {
+        top: calc(50% + 100px) !important;
+        transform: translateY(-50%) !important;
+    }
 }
 
 /* Landscape small height: smaller buttons */

@@ -465,3 +465,35 @@ body:has(.vertical-video-layout) .vertical-video-layout {
         bottom: 88px !important;
     }
 }
+
+/* ── Portrait: phones up to 844 px wide ──────────────────────── */
+@media only screen and (max-width: 844px) and (orientation: portrait) {
+    .footer #prev,
+    .footer .prevClass,
+    .footer #next,
+    .footer .nextClass,
+    .footer .nextClassHighlight,
+    .footer .resourceClass {
+        width: 44px !important;
+        height: 44px !important;
+        background-size: 22px 22px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+/* ── Landscape: phones rotated ───────────────────────────────── */
+@media only screen and (max-width: 844px) and (orientation: landscape) {
+    .footer #prev,
+    .footer .prevClass,
+    .footer #next,
+    .footer .nextClass,
+    .footer .nextClassHighlight,
+    .footer .resourceClass {
+        width: 40px !important;
+        height: 40px !important;
+        background-size: 20px 20px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
