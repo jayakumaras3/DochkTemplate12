@@ -396,7 +396,7 @@ body:has(.vertical-video-layout) .vertical-video-layout {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        margin-left: 8px !important;
+        /*margin-left: 8px !important;*/
         min-width: 56px !important;
         min-height: 28px !important;
         line-height: 1 !important;
