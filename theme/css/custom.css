@@ -1,4 +1,37 @@
-﻿.resume_container {
+﻿/* ═══════════════════════════════════════════════════════════════════════
+   GLOBAL RESETS — iOS Safari + Android viewport normalization
+   ─ -webkit-fill-available: iOS Safari ≤15 uses actual visible viewport
+     (excludes URL bar / home indicator) so 100% = true screen real estate.
+   ─ 100dvh: iOS Safari 16+ / modern browsers (shrinks when URL bar hides).
+   ═══════════════════════════════════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    /* iOS Safari ≤15: true visible height (excludes dynamic browser chrome) */
+    height: -webkit-fill-available !important;
+    /* Overridden to 100dvh by the second declaration below in modern browsers */
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    /* Inherit the -webkit-fill-available anchor set on html */
+    min-height: -webkit-fill-available !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+.resume_container {
     position: fixed;
     top: 0;
     left: 0;
@@ -107,40 +140,77 @@
 
 /* Reels-style video layout (compatibility-first, no JS changes) */
 .contentArea.video-mode {
+    position: relative !important;
     left: 0 !important;
     width: 100% !important;
-    height: calc(100vh - 63px) !important;
+    /*
+     * No subtraction needed: the SCORM player uses a <frameset> and this CSS
+     * runs inside the CONTENT frame. Inside the frame, 100vh/100dvh already
+     * equals the frame height (device height minus the outer 44px nav row).
+     * Subtracting any additional px here creates a black gap at the bottom.
+     *
+     * Layer 1 — base (all browsers, including older iOS Safari)
+     */
+    height: 100vh !important;
+    /* Layer 2 — iOS Safari ≤15: 100% resolves against html's
+       -webkit-fill-available height = true visible area, no URL-bar gap */
+    height: 100% !important;
+    /* Layer 3 — iOS Safari 16+ / Chrome / Firefox: dynamic viewport unit
+       (shrinks when the browser chrome slides away, no jump/reflow) */
+    height: 100dvh !important;
     box-shadow: none !important;
-    display: flex;
-    flex-direction: column;
-    background: #0d0f13;
+    background: #000;
+    overflow: hidden !important;
+    padding-top: 0 !important;
+    margin: 0 !important;
 }
 
 .contentArea.video-mode .headingArea {
-    background: rgba(255, 255, 255, 0.94);
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 54px !important;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent) !important;
+    backdrop-filter: blur(4px) !important;
+    z-index: 1001 !important;
+    display: flex !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+    padding: 8px 16px 8px 46px !important;
+    border-bottom: none !important;
 }
 
 .contentArea.video-mode .pageContent {
-    position: relative;
-    flex: 1;
-    min-height: 0;
+    position: absolute !important;
+    top: 54px !important;
+    left: 0 !important;
+    right: 0 !important;
+    /* Footer rendered height = 60px base + env(safe-area-inset-bottom) for
+       home indicator on notched iPhones (iPhone X/11/12/13/14/15/16).      */
+    bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
     width: 100% !important;
-    height: auto !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    padding: 10px 12px 90px;
-    background: #111;
+    /*
+     * CRITICAL: Do NOT use height:auto here. iOS Safari cannot resolve
+     * percentage heights on children when the parent height is 'auto',
+     * even if top+bottom constraints are set. Remove height entirely so
+     * the top/bottom constraints define the box size unambiguously.
+     */
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #000 !important;
 }
 
 .contentArea.video-mode .vertical-video-layout {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
 }
 
 .contentArea.video-mode .vertical-video-layout:before {
@@ -155,25 +225,39 @@
 }
 
 .contentArea.video-mode .vertical-video-frame {
-    position: relative;
-    width: 43vh;
-    max-width: 92vw;
-    height: 76vh;
-    max-height: 85vh;
-    border-radius: 20px;
-    overflow: hidden;
-    background: #000;
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.48);
-    z-index: 1;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    background: #000 !important;
+    box-shadow: none !important;
+    z-index: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .contentArea.video-mode #vidArea {
+    /* position:absolute + inset:0 ensures iOS Safari stretches the <video>
+       element to fill its container. height:100% alone is unreliable on
+       iOS Safari when the containing block height is constraint-derived.  */
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    display: block;
-    object-fit: cover;
-    border-radius: 20px;
-    background: #000;
+    display: block !important;
+    object-fit: cover !important;
+    border-radius: 0 !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .contentArea.video-mode #vidArea::cue {
@@ -189,17 +273,18 @@
     bottom: 0 !important;
     top: auto !important;
     width: 100% !important;
-    height: 86px !important;
+    height: auto !important;
+    min-height: 60px !important;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
     border-radius: 0 !important;
-    z-index: 1005;
+    z-index: 1005 !important;
     box-shadow: none !important;
-    padding: 0 14px !important;
     margin: 0 !important;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0));
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 10px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4)) !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    gap: 10px !important;
 }
 
 .contentArea.video-mode + .footer > div {
@@ -266,13 +351,15 @@
 
 /* ===== Shorts / Reels UI Redesign ===== */
 .contentArea.video-mode {
-    position: relative;
+    position: relative !important;
     left: 0 !important;
     width: 100% !important;
-    height: calc(100vh - 63px) !important;
+    /* Same three-layer height fallback chain — no subtraction (inside frame) */
+    height: 100vh !important;
+    height: 100% !important;
+    height: 100dvh !important;
     box-shadow: none !important;
-    display: flex;
-    flex-direction: column;
+    overflow: hidden !important;
     background: radial-gradient(circle at center, #1b1d22 0%, #111318 58%, #090b0f 100%);
 }
 
@@ -307,39 +394,37 @@
     font-weight: 600;
 }
 
-.contentArea.video-mode .pageContent {
-    position: relative;
-    flex: 1;
-    min-height: 0;
-    width: 100% !important;
-    height: auto !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    padding: 8px 14px 94px;
-    animation: shortsFadeIn .35s ease;
-}
-
 .contentArea.video-mode .shorts-container {
-    position: relative;
-    width: min(94vw, calc(90vh * 9 / 16));
-    max-height: 90vh;
-    aspect-ratio: 9 / 16;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: unset !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
     animation: shortsVideoPop .35s ease;
 }
 
 .contentArea.video-mode .shorts-video-frame {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    border-radius: 20px;
-    overflow: hidden;
-    background: #000;
-    box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    background: #000 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .contentArea.video-mode .shorts-bottom-gradient {
@@ -353,12 +438,19 @@
 }
 
 .contentArea.video-mode #vidArea {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover;
-    display: block;
-    border-radius: 20px;
-    background: #000;
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 0 !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .contentArea.video-mode #vidArea::cue {
@@ -408,25 +500,6 @@
 
 .contentArea.video-mode .action-btn.bookmark {
     background-image: url("../images/footer-menu/Certificate.svg");
-}
-
-.contentArea.video-mode + .footer {
-    position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    top: auto !important;
-    width: 100% !important;
-    height: 86px !important;
-    border-radius: 0 !important;
-    background: linear-gradient(to top, rgba(2, 3, 6, 0.85), rgba(2, 3, 6, 0));
-    box-shadow: none !important;
-    padding: 0 12px !important;
-    z-index: 1005;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 8px;
 }
 
 .contentArea.video-mode + .footer > div {
@@ -574,8 +647,14 @@ html, body {
     min-height: 100vh !important; /* Fallback */
     min-height: 100dvh !important;
     display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    /*
+     * align-items: stretch — children fill the full cross-axis height.
+     * align-items: center (old value) caused the reels-wrapper-shell to
+     * shrink to its content height and get centered with black bars above
+     * and below it.
+     */
+    align-items: stretch !important;
+    justify-content: flex-start !important;
     overflow: hidden !important;
     background: #000 !important;
     margin: 0 !important;
@@ -817,16 +896,26 @@ html, body {
     display: none !important;
 }
 
-/*  6. Individual slide — allows scrollable content with fixed header  */
+/*  6. Individual slide — exactly one viewport tall, clips overflow  */
 .wholeContainer.reels-wrapper .reel-slide {
     width: 100% !important;
-    height: auto !important;
-    min-height: 100vh !important; /* Fallback */
+    /*
+     * MUST be a fixed height (not auto). height:auto makes the slide grow
+     * to fit content; with min-height:100dvh the slide might be 100dvh but
+     * the scroll-snap engine then has no reliable snap-boundary, and iOS
+     * shows the next slide partially. Using height:100dvh makes each slide
+     * exactly one viewport unit — identical to TikTok / Instagram Reels.
+     */
+    height: 100vh !important;   /* Fallback for browsers without dvh */
+    height: 100dvh !important;  /* iOS Safari 16+ / Chrome / Firefox */
+    min-height: 100vh !important;
     min-height: 100dvh !important;
-    max-height: none !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
     scroll-snap-align: start !important;
-    position: relative !important; /* Positioning context for menu icon */
-    overflow: visible !important; /* Allow content to be scrollable */
+    scroll-snap-stop: always !important;
+    position: relative !important;
+    overflow: hidden !important; /* Clip video/content to slide boundary */
     display: flex !important;
     flex-direction: column !important;
     margin: 0 !important;
@@ -971,39 +1060,39 @@ html, body {
 
 
 
-/*  10. Page content — fills entire slide  */
+/*  10. Page content — absolute fill behind the sticky header  */
 .wholeContainer.reels-wrapper .pageContent {
-    position: relative !important;
-    inset: auto !important;
+    /*
+     * position:absolute + inset:0 fills reel-slide edge-to-edge.
+     * The sticky/fixed header floats above this layer via z-index.
+     * height:100% is set explicitly because iOS Safari resolves
+     * percentage heights on absolutely positioned elements more reliably
+     * when an explicit height is present alongside top+bottom constraints.
+     */
+    position: absolute !important;
+    inset: 0 !important;
     width: 100% !important;
-    height: auto !important;
-    min-height: 100% !important;
+    height: 100% !important;
     max-width: none !important;
     max-height: none !important;
     margin: 0 !important;
     padding: 0 !important;
     float: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
+    overflow: hidden !important;
     border-radius: 0 !important;
     box-shadow: none !important;
     background: transparent !important;
     box-sizing: border-box !important;
-    -webkit-overflow-scrolling: touch !important;
 }
 
-/*  11. HTML page — fills slide fully with smooth scrolling  */
+/*  11. HTML page — absolute fill so iframe content fills slide  */
 .wholeContainer.reels-wrapper #htmlArea {
-    position: relative !important;
-    inset: auto !important;
+    position: absolute !important;
+    inset: 0 !important;
     width: 100% !important;
-    height: auto !important;
-    min-height: 100% !important;
-    flex: 1 !important;
-    overflow: visible !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -1026,27 +1115,23 @@ html, body {
     background: transparent !important;
 }
 
-/*  12. Video fills slide  */
+/*  12. Video fills slide — absolute inset  */
 .wholeContainer.reels-wrapper .shorts-container {
-    position: relative !important;
-    inset: auto !important;
+    position: absolute !important;
+    inset: 0 !important;
     width: 100% !important;
-    height: auto !important;
-    flex: 1 !important;
-    min-height: 300px !important;
-    display: flex !important;
-    flex-direction: column !important;
+    height: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+    overflow: hidden !important;
 }
 
 .wholeContainer.reels-wrapper .shorts-video-frame {
-    position: relative !important;
-    inset: auto !important;
+    position: absolute !important;
+    inset: 0 !important;
     width: 100% !important;
-    height: auto !important;
-    flex: 1 !important;
-    overflow: visible !important;
+    height: 100% !important;
+    overflow: hidden !important;
     background: #000 !important;
 }
 
@@ -1075,15 +1160,19 @@ html, body {
     z-index: 10 !important;
 }
 
-/*  13. Flash / Captivate / HTML frames  */
+/*  13. Flash / Captivate / HTML frames — absolute fill  */
 .wholeContainer.reels-wrapper #flashArea,
 .wholeContainer.reels-wrapper #captivateFrame {
-    position: relative !important;
-    inset: auto !important;
+    /*
+     * height:auto + min-height:100% fails on iOS: percentage min-heights
+     * don't resolve when the parent height comes from top+bottom constraints
+     * rather than an explicit height property. Use position:absolute;inset:0
+     * instead — this is reliable across all browsers and iOS versions.
+     */
+    position: absolute !important;
+    inset: 0 !important;
     width: 100% !important;
-    height: auto !important;
-    min-height: 100% !important;
-    flex: 1 !important;
+    height: 100% !important;
     border: none !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -1604,24 +1693,8 @@ body {
     align-items: unset !important;
 }
 
-/* Step 5: pageContent is the slide-inner for HTML AND video — must be
-   position:absolute fill, not flex-centered, identical for both types. */
-.wholeContainer.reels-wrapper .pageContent {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important;
-    max-height: none !important;
-    display: block !important;
-    justify-content: unset !important;
-    align-items: unset !important;
-    overflow: hidden !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    float: none !important;
-    box-sizing: border-box !important;
-}
+/* Step 5: pageContent rule — see section "10. Page content" above which
+   is now the single authoritative rule (position:absolute; inset:0; height:100%). */
 
 /* ═══════════════════════════════════════════════════════════════════════
    STEP 4 — NEUTRALISE LEGACY contentArea.video-mode RULES
