@@ -6,7 +6,7 @@
   /* Example: Set the font size to be smaller for better readability on smaller screens */
  #pageNo {
     left: 34%;
-    font-size: 25px;
+    font-size: 14px;
     padding: 0px;
     margin: 0px;
 }
@@ -147,7 +147,7 @@
     width: 100%;
     font-weight: bold;
     position: relative;
-    font-size: 30px;
+    font-size: 14px;
     /* padding-left: 11px; */
     margin-bottom: 2px;
 }
@@ -159,37 +159,37 @@
     padding-bottom: 67px;
     padding-left: 20px !important;
     text-align: left;
-    font-size: 31px;
+    font-size: 15px;
     height: 30px;
 }
 
 .sideBartopicHeader {
     padding: 4px;
-    font-size: 24px;
+    font-size: 13px;
 }
 .sideBar li {
     list-style: square;
     right: 0px;
     font-weight: bold;
     position: relative;
-    min-height: 70px;
-    font-size: 32px;
+    min-height: auto;
+    font-size: 14px;
 }
 .sideBar > .tocData {
     position: relative;
     float: left;
     width: 94%;
     overflow: auto;
-    height: 413px;
+    height: auto;
     background-color: white;
-    font-size: 39px;
-    margin-left: 11PX;
+    font-size: 14px;
+    margin-left: 11px;
 }
 .copyright {
-    font-size: 37px;
+    font-size: 12px;
     bottom: 13px;
     width: 100%;
-    height: 43px;
+    height: auto;
     text-align: center;
     position: absolute;
     display: block;
@@ -209,7 +209,7 @@
     margin-right: 5px;
     text-align: center;
     width: 20px;
-    font-size: 30px;
+    font-size: 14px;
 }
 .toggle-box + label {
     cursor: pointer;
@@ -221,12 +221,12 @@
     margin-left: -20px;
 }
 .sideBartopicHeader {
-    padding: 14px;
-    font-size: 33px;
+    padding: 8px;
+    font-size: 13px;
 }
 .sideBar #sideBarHeader {
     width: 100%;
-    height: 76px;
+    height: auto;
     position: relative;
     bottom: 0;
     top: 0px;
@@ -457,115 +457,33 @@ body:has(.vertical-video-layout) .vertical-video-layout {
     }
 
     .contentArea.video-mode + .footer {
-        /* Never hardcode a px height — it prevents safe-area-inset from expanding
-           the footer on notched iPhones (home indicator would overlay buttons).   */
+        right: 12px !important;
+        gap: 12px !important;
         height: auto !important;
-        min-height: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+        min-height: auto !important;
     }
 
     .contentArea.video-mode + .footer #prev,
     .contentArea.video-mode + .footer .prevClass,
     .contentArea.video-mode + .footer #next,
     .contentArea.video-mode + .footer .nextClass,
-    .contentArea.video-mode + .footer .nextClassHighlight {
-        width: 48px !important;
-        height: 48px !important;
-    }
-
-    .contentArea.video-mode + .footer #prev,
-    .contentArea.video-mode + .footer .prevClass {
-    /*    left: 8px !important;*/
-    }
-
-    .contentArea.video-mode + .footer #next,
-    .contentArea.video-mode + .footer .nextClass,
-    .contentArea.video-mode + .footer .nextClassHighlight {
-       /* right: 8px !important;*/
-    }
-
-    .contentArea.video-mode + .footer #ProgressBar {
-        width: 62px !important;
-        height: 62px !important;
-        bottom: 88px !important;
+    .contentArea.video-mode + .footer .nextClassHighlight,
+    .contentArea.video-mode + .footer .resourceClass {
+        width: 44px !important;
+        height: 44px !important;
+        background-size: 22px 22px !important;
     }
 }
 
-/* ── Portal: mobile portrait — fix button overlap via flexbox layout ── */
-@media only screen and (max-width: 844px) and (orientation: portrait) {
-    
-    /* Footer → flex column to stack buttons vertically */
-    .contentArea.video-mode + .footer {
-        flex-direction: column !important;
-        align-items: flex-end !important;
-        justify-content: flex-end !important;
-        gap: 12px !important;
-        padding-right: 12px !important;
-    }
-
-    /* All buttons: relative positioning, no overlap via fixed */
+/* ── Mobile: button visibility reset on page navigation ── */
+@media only screen and (max-width: 844px) {
     .contentArea.video-mode + .footer #prev,
     .contentArea.video-mode + .footer .prevClass,
     .contentArea.video-mode + .footer #next,
     .contentArea.video-mode + .footer .nextClass,
     .contentArea.video-mode + .footer .nextClassHighlight,
     .contentArea.video-mode + .footer .resourceClass {
-        position: relative !important;
-        right: auto !important;
-        left: auto !important;
-        top: auto !important;
-        transform: none !important;
-        width: 44px !important;
-        height: 44px !important;
-        background-size: 20px 20px !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    /* Prev: up arrow */
-    .contentArea.video-mode + .footer #prev,
-    .contentArea.video-mode + .footer .prevClass {
-        order: 1 !important;
-        background-image: url("../images/footer-menu/chevron-up.svg") !important;
-    }
-
-    /* Next: down arrow */
-    .contentArea.video-mode + .footer #next,
-    .contentArea.video-mode + .footer .nextClass,
-    .contentArea.video-mode + .footer .nextClassHighlight {
-        order: 2 !important;
-        background-image: url("../images/footer-menu/chevron-down.svg") !important;
-    }
-
-    /* Resource/Learning Aid: positioned at bottom of the button stack */
-    .contentArea.video-mode + .footer .resourceClass {
-        order: 3 !important;
-        background-image: url("../images/footer-menu/resource.svg") !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-    }
-
-    /* Progress bar: hide from flex layout, keep fixed at center bottom */
-    .contentArea.video-mode + .footer #ProgressBar {
-        position: fixed !important;
-        right: auto !important;
-        bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        order: -1 !important;
-    }
-
-    /*
-     * BUTTON STATE RESET — ensure buttons remain interactive on page navigation.
-     * Responsive Learning Aids might hide buttons via display:none during transitions.
-     * Force display:flex to override any hidden state, allowing normal button interaction.
-     */
-    .contentArea.video-mode + .footer #prev,
-    .contentArea.video-mode + .footer .prevClass,
-    .contentArea.video-mode + .footer #next,
-    .contentArea.video-mode + .footer .nextClass,
-    .contentArea.video-mode + .footer .nextClassHighlight,
-    .contentArea.video-mode + .footer .resourceClass {
-        display: flex !important;
+        display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
         pointer-events: auto !important;
@@ -708,5 +626,76 @@ body:has(.vertical-video-layout) .vertical-video-layout {
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
         }
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE FONT SIZE OVERRIDES
+   Targets phones ≤ 768px to keep all text readable and appropriately
+   sized in the sidebar, TOC, tabs, and page content areas.
+   ═══════════════════════════════════════════════════════════════════ */
+@media only screen and (max-width: 768px) {
+
+    /* Sidebar panel tabs (Menu / Transcript) */
+    .sideBarMenuContent #sideBarHeader div,
+    #sideBarHeader div,
+    #sideBarHeader .tab,
+    #sideBarHeader a {
+        font-size: 15px !important;
+        padding-bottom: 8px !important;
+        height: auto !important;
+    }
+
+    /* TOC list items */
+    #tocData li,
+    .tocData li {
+        font-size: 14px !important;
+        min-height: auto !important;
+        line-height: 1.5 !important;
+    }
+
+    /* Sidebar list items */
+    .sideBar li,
+    .sideBarMenuContent li {
+        font-size: 14px !important;
+        min-height: auto !important;
+        line-height: 1.6 !important;
+    }
+
+    /* TOC section / topic headers */
+    .sideBartopicHeader {
+        font-size: 13px !important;
+        padding: 6px 8px !important;
+    }
+
+    /* Sidebar scrollable content area */
+    .sideBar > .tocData,
+    .sideBarMenuContent .tocData {
+        font-size: 14px !important;
+        height: auto !important;
+    }
+
+    /* Copyright footer text */
+    .copyright {
+        font-size: 12px !important;
+        height: auto !important;
+    }
+
+    /* Toggle expand/collapse label */
+    .toggle-box + label,
+    .toggle-box + label:before {
+        font-size: 14px !important;
+    }
+
+    /* Page number display */
+    #pageNo,
+    #pagenoHeader {
+        font-size: 13px !important;
+    }
+
+    /* General heading area text */
+    .headingArea span,
+    .headingArea .title {
+        font-size: 14px !important;
     }
 }
