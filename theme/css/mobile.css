@@ -248,22 +248,31 @@ canvas {
     height: 50px;
 }
 .prevClass {
-    background-image: url(../images/footer-menu/prev_iphone.svg);
-    background-repeat: no-repeat;
-    width: 71px;
-    height: 37px;
-    padding-bottom: 26px !important;
-    margin-left: 16px !important;
+    background-image: url(../images/footer-menu/set%202_up%20btn.png) !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-color: transparent !important;
+    width: 44px !important;
+    height: 44px !important;
+    padding-bottom: 0 !important;
+    margin-left: 0 !important;
 }
 .nextClass {
-    background-image: url(../images/footer-menu/Next_iphone.svg);
-    background-repeat: no-repeat;
-    width: 79px;
-    height: 50px;
-    margin-top: 65px !important;
+    background-image: url(../images/footer-menu/set%202_down%20btn.png) !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-color: transparent !important;
+    width: 44px !important;
+    height: 44px !important;
+    margin-top: 0 !important;
 }
 .nextClassHighlight {
-    background-image: url(../images/footer-menu/Next_H_iphone.svg);
+    background-image: url(../images/footer-menu/set%202_down%20btn.png) !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-color: transparent !important;
 }
 .exitHighlight
 {
@@ -474,7 +483,18 @@ body:has(.vertical-video-layout) .vertical-video-layout {
     .contentArea.video-mode + .footer .prevClass,
     .contentArea.video-mode + .footer #next,
     .contentArea.video-mode + .footer .nextClass,
-    .contentArea.video-mode + .footer .nextClassHighlight,
+    .contentArea.video-mode + .footer .nextClassHighlight {
+        width: 44px !important;
+        height: 44px !important;
+        background-image: url(../images/footer-menu/set%202_up%20btn.png) !important;
+        background-size: contain !important;
+        background-color: transparent !important;
+    }
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight {
+        background-image: url(../images/footer-menu/set%202_down%20btn.png) !important;
+    }
     .contentArea.video-mode + .footer .resourceClass {
         width: 44px !important;
         height: 44px !important;
@@ -503,7 +523,23 @@ body:has(.vertical-video-layout) .vertical-video-layout {
     .footer .prevClass,
     .footer #next,
     .footer .nextClass,
-    .footer .nextClassHighlight,
+    .footer .nextClassHighlight {
+        width: 44px !important;
+        height: 44px !important;
+        background-size: contain !important;
+        background-color: transparent !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .footer #prev,
+    .footer .prevClass {
+        background-image: url(../images/footer-menu/set%202_up%20btn.png) !important;
+    }
+    .footer #next,
+    .footer .nextClass,
+    .footer .nextClassHighlight {
+        background-image: url(../images/footer-menu/set%202_down%20btn.png) !important;
+    }
     .footer .resourceClass {
         width: 44px !important;
         height: 44px !important;
@@ -519,7 +555,23 @@ body:has(.vertical-video-layout) .vertical-video-layout {
     .footer .prevClass,
     .footer #next,
     .footer .nextClass,
-    .footer .nextClassHighlight,
+    .footer .nextClassHighlight {
+        width: 40px !important;
+        height: 40px !important;
+        background-size: contain !important;
+        background-color: transparent !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .footer #prev,
+    .footer .prevClass {
+        background-image: url(../images/footer-menu/set%202_up%20btn.png) !important;
+    }
+    .footer #next,
+    .footer .nextClass,
+    .footer .nextClassHighlight {
+        background-image: url(../images/footer-menu/set%202_down%20btn.png) !important;
+    }
     .footer .resourceClass {
         width: 40px !important;
         height: 40px !important;
