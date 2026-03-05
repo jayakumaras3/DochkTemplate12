@@ -283,6 +283,13 @@ canvas {
     border-top-right-radius: 5px;
 }
 
+.sideBarHeader .logo {
+    width: 88% !important;
+    max-width: 250px !important;
+    margin-left: 0 !important;
+    margin-top: 8px !important;
+}
+
 body:has(.vertical-video-layout) .contentArea {
     width: 100% !important;
     height: 100vh !important;   /* fallback */

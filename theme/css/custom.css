@@ -699,8 +699,8 @@ html, body {
 }
 
 .wholeContainer.reels-wrapper .sideBar .logo {
-    max-width: 150px !important;
-    width: auto !important;
+    max-width: 270px !important;
+    width: 86% !important;
     height: auto !important;
     display: block !important;
 }

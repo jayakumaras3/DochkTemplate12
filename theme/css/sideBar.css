@@ -192,6 +192,14 @@
     font-weight: bold;
 }
 
+.sideBarHeader .logo {
+    max-width: 220px !important;
+    width: 72% !important;
+    height: auto !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+}
+
 .sideBartopicHeader {
     padding: 4px;
     font-size: 16px;
