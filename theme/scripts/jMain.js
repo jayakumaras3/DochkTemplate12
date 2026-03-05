@@ -276,13 +276,16 @@ function menuEnable_fun_firstpage() {
 }
 function pagenumberEna_DIsable(bool)
 {
+    var pageNoHeader = document.getElementById('pagenoHeader');
+    if (!pageNoHeader) {
+        return;
+    }
 	if(bool)
 	{
-		document.getElementById('pagenoHeader').style.display="block";
+        pageNoHeader.style.setProperty('display', 'inline-flex', 'important');
 	}
 	else{
-		
-		document.getElementById('pagenoHeader').style.display="none";
+        pageNoHeader.style.setProperty('display', 'none', 'important');
 	}
 	
 }

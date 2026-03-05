@@ -211,18 +211,26 @@ var stage, preload, lib = {};
 		var currentPageNo=this.globalVariableService.getPageCounter()-skipPage;
 		//console.log("this.globalVariableService.getPageCounter() :"+this.globalVariableService.getPageCounter());
 		var TotalPageNo=Totalpage-skipPage;
+        var actualPageCounter = this.globalVariableService.getPageCounter();
+        var hidePageNumberForAudioIntro = AudioVersionEnable && (actualPageCounter === 1 || actualPageCounter === 2);
 		//console.log("TotalPageNo1:: "+Totalpage)
        // document.getElementById("pageNo").innerHTML = ""+currentPageNo+"/"+TotalPageNo;
-	    if(AudioVersionEnable){
+        if(hidePageNumberForAudioIntro){
+        document.getElementById("pagenoHeader").innerHTML = "";
+        pagenumberEna_DIsable(false);
+        }
+        else if(AudioVersionEnable){
 		//	console.log("currentPageNo cc :"+currentPageNo);
 			var curcurrentPageNo=currentPageNo-1;
 			var curTotalPageNo=TotalPageNo-1;
 			//console.log("curcurrentPageNo "+curcurrentPageNo);
 	    document.getElementById("pagenoHeader").innerHTML = ""+curcurrentPageNo+"/"+curTotalPageNo;
+        pagenumberEna_DIsable(true);
 		}
 		else{
 		//	console.log("currentPageNo22  "+currentPageNo);
 			document.getElementById("pagenoHeader").innerHTML = ""+currentPageNo+"/"+TotalPageNo;
+            pagenumberEna_DIsable(true);
 		}
 
 		var footerEvent;
@@ -330,7 +338,6 @@ var stage, preload, lib = {};
 				 {
 					nextElem.addClass("disabledClass");
 					nextElem.removeAttr("title", NextTitle)
-					 pagenumberEna_DIsable(false);
 					if(TogglemenuControl)
 					{
 						
@@ -343,14 +350,12 @@ var stage, preload, lib = {};
 				 } else if(this.globalVariableService.getPageCounter()==2)
 				 {
 				//	 alert();
-						pagenumberEna_DIsable(false);
 						menuEnDisble_fun(true);
 					    nextElem.addClass("disabledClass");
 						nextElem.removeAttr("title", NextTitle);
 					 
 				 }else
 				 {
-					  pagenumberEna_DIsable(true);
 					 menuEnDisble_fun(true); 
 				 }
 			 

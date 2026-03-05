@@ -330,14 +330,14 @@ body {
 
 .contentArea.video-mode + .footer #prev,
 .contentArea.video-mode + .footer .prevClass {
-    background-image: url("../images/footer-menu/chevron-up.svg") !important;
+    background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
     order: 1 !important;
 }
 
 .contentArea.video-mode + .footer #next,
 .contentArea.video-mode + .footer .nextClass,
 .contentArea.video-mode + .footer .nextClassHighlight {
-    background-image: url("../images/footer-menu/chevron-down.svg") !important;
+    background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
     order: 2 !important;
 }
 
@@ -1326,7 +1326,7 @@ html, body {
     border-radius: 50% !important;
     border: none !important;
     background-color: rgba(10,15,30,0.6) !important;
-    background-image: url("../images/footer-menu/chevron-up.svg") !important;
+    background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: 22px 22px !important;
@@ -1355,7 +1355,7 @@ html, body {
     border-radius: 50% !important;
     border: none !important;
     background-color: rgba(10,15,30,0.6) !important;
-    background-image: url("../images/footer-menu/chevron-down.svg") !important;
+    background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: 22px 22px !important;
@@ -1962,4 +1962,27 @@ body {
 .wholeContainer.reels-wrapper #pagenoHeader {
     margin-left: auto !important;
     margin-right: 0 !important;
+}
+
+/* Force custom previous/next assets for reels nav buttons (all views) */
+.wholeContainer.reels-wrapper .footer #prev,
+.wholeContainer.reels-wrapper .footer .prevClass,
+.contentArea.video-mode + .footer #prev,
+.contentArea.video-mode + .footer .prevClass {
+    background-image: url("../images/footer-menu/chevron-up.svg") !important;
+    background-size: 22px 22px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+.wholeContainer.reels-wrapper .footer #next,
+.wholeContainer.reels-wrapper .footer .nextClass,
+.wholeContainer.reels-wrapper .footer .nextClassHighlight,
+.contentArea.video-mode + .footer #next,
+.contentArea.video-mode + .footer .nextClass,
+.contentArea.video-mode + .footer .nextClassHighlight {
+    background-image: url("../images/footer-menu/chevron-down.svg") !important;
+    background-size: 22px 22px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
 }
