@@ -91,6 +91,105 @@
   </div>
 </div>
 
+<!-- Orientation Guard Overlay (Portrait-only course) -->
+<div id="orientationOverlay" class="orientation-overlay" role="alert" aria-live="assertive" aria-atomic="true" style="display:none;">
+    <div class="orientation-overlay__panel">
+        <div class="orientation-overlay__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 2v16h8V4H8Zm9.8 9.9 1.4 1.4a7 7 0 1 1 1.1-8.1l-1.8.9a5 5 0 1 0-.7 5.8ZM19 3h3v3h-2V5h-1V3Z"/>
+            </svg>
+        </div>
+        <h2 class="orientation-overlay__title">Please Rotate Your Device</h2>
+        <p class="orientation-overlay__text">This course is optimized for portrait view. Please rotate your device back to continue.</p>
+    </div>
+</div>
+
+<script>
+(function () {
+    var overlay = document.getElementById('orientationOverlay');
+    if (!overlay) return;
+
+    function getViewportSize() {
+        if (window.visualViewport) {
+            return { width: window.visualViewport.width, height: window.visualViewport.height };
+        }
+        return {
+            width: window.innerWidth || document.documentElement.clientWidth || 0,
+            height: window.innerHeight || document.documentElement.clientHeight || 0
+        };
+    }
+
+    function isLandscapeMode() {
+        var vp = getViewportSize();
+        if (vp.width && vp.height && Math.abs(vp.width - vp.height) > 2) {
+            return vp.width > vp.height;
+        }
+        if (window.screen && window.screen.orientation && window.screen.orientation.type) {
+            return window.screen.orientation.type.indexOf('landscape') > -1;
+        }
+        if (window.matchMedia) {
+            return window.matchMedia('(orientation: landscape)').matches;
+        }
+        return window.innerWidth > window.innerHeight;
+    }
+
+    function showOverlay() {
+        overlay.style.display = 'flex';
+        overlay.classList.add('is-visible');
+    }
+
+    function hideOverlay() {
+        overlay.classList.remove('is-visible');
+        overlay.style.display = 'none';
+    }
+
+    function updateOrientationOverlay() {
+        if (isLandscapeMode()) {
+            showOverlay();
+        } else {
+            hideOverlay();
+        }
+    }
+
+    var scheduled = false;
+    function scheduleUpdate() {
+        if (scheduled) return;
+        scheduled = true;
+        window.requestAnimationFrame(function () {
+            scheduled = false;
+            updateOrientationOverlay();
+        });
+    }
+
+    window.addEventListener('resize', scheduleUpdate);
+    window.addEventListener('orientationchange', function () {
+        setTimeout(updateOrientationOverlay, 150);
+    });
+
+    if (window.matchMedia) {
+        var mq = window.matchMedia('(orientation: landscape)');
+        if (mq.addEventListener) {
+            mq.addEventListener('change', scheduleUpdate);
+        } else if (mq.addListener) {
+            mq.addListener(scheduleUpdate);
+        }
+    }
+
+    if (window.screen && window.screen.orientation && window.screen.orientation.addEventListener) {
+        window.screen.orientation.addEventListener('change', scheduleUpdate);
+    }
+
+    if (window.visualViewport && window.visualViewport.addEventListener) {
+        window.visualViewport.addEventListener('resize', scheduleUpdate);
+    }
+
+    document.addEventListener('visibilitychange', scheduleUpdate);
+
+    // Run immediately
+    updateOrientationOverlay();
+}());
+</script>
+
 </body>
 
 </html>

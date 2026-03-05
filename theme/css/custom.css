@@ -755,6 +755,110 @@ html, body {
     border-top: 1px solid #eee !important;
 }
 
+.orientation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(18px, env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) max(18px, env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+    background: rgba(8, 11, 18, 0.92);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .28s ease;
+}
+
+.orientation-overlay.is-visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.orientation-overlay__panel {
+    width: min(540px, 100%);
+    text-align: center;
+    color: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
+    padding: clamp(20px, 4vw, 34px);
+    animation: orientationOverlayIn .3s ease;
+}
+
+.orientation-overlay__icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    color: #93c5fd;
+    background: rgba(59, 130, 246, 0.18);
+}
+
+.orientation-overlay__icon svg {
+    width: 36px;
+    height: 36px;
+    fill: currentColor;
+}
+
+.orientation-overlay__title {
+    margin: 0;
+    font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.orientation-overlay__text {
+    margin: 10px 0 0;
+    font-size: clamp(0.95rem, 1.65vw, 1.08rem);
+    line-height: 1.55;
+    color: #dbeafe;
+    font-weight: 500;
+}
+
+@keyframes orientationOverlayIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.985);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .orientation-overlay__icon {
+        width: 56px;
+        height: 56px;
+    }
+
+    .orientation-overlay__icon svg {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orientation-overlay {
+        transition: opacity .2s ease;
+    }
+
+    .orientation-overlay__panel {
+        animation: none;
+    }
+}
+
 /*  4. Content area — aspect-ratio constrained reels frame (ALWAYS CENTERED)  */
 .wholeContainer.reels-wrapper .contentArea {
     position: relative !important;
