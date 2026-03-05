@@ -158,6 +158,9 @@ var tocDataClick = function (data) {
     if (data.parentNode.className !== "disabledClass") {
         var sideBarController = angular.element(document.querySelector(".sideBar"));
         sideBarController.scope().sb.tocDataClick(data);
+    if (typeof menuClose === "function") {
+      menuClose();
+    }
     }
 
 };
