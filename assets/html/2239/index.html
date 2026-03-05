@@ -2,50 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Conversational AI Course</title>
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; width: 100%; }
 
-    :root {
-      --navy: #1b2a3e;
-      --grey: #96b0c6;
-      --white: #ffffff;
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      background: #111d2b;
+    body {
+      background: #0f1923;
       font-family: 'Source Sans 3', sans-serif;
       -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
     }
 
-    /* Full viewport card */
+    /* ══════════════════════════════════
+       CARD
+    ══════════════════════════════════ */
     .c-card {
       width: 100%;
       height: 100vh;
       height: 100dvh;
-      background: var(--navy);
+      max-width: 480px;
+      background: #1b2a3e;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      /* Only clip on x axis — hero image edges */
+      overflow-x: hidden;
+      overflow-y: hidden;
     }
 
-    /* Hero — fixed at 55% of viewport height, image cropped to fit */
+    /* ══════════════════════════════════
+       HERO  (JS sets exact px height)
+    ══════════════════════════════════ */
     .c-hero {
-      flex: 0 0 55%;
+      flex: 0 0 auto;
       width: 100%;
       overflow: hidden;
       line-height: 0;
     }
-
     .c-hero img {
       display: block;
       width: 100%;
@@ -54,82 +55,103 @@
       object-position: top center;
     }
 
-    /* Body — remaining 45% */
+    /* ══════════════════════════════════
+       BODY  — flex column
+       Two equal spacers sandwich the
+       content so spacing is always equal
+       top & bottom regardless of height
+    ══════════════════════════════════ */
     .c-body {
-      flex: 1 1 auto;
+      flex: 1 1 0%;
+      min-height: 0;
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
-      padding: 16px 18px 20px;
+      padding: 0 5%;
       overflow: hidden;
     }
 
-    /* Title */
-    .c-title {
-      font-size: clamp(1.25rem, 4.8vw, 1.55rem);
-      font-weight: 800;
-      line-height: 1.2;
-      color: var(--white);
-      letter-spacing: -.015em;
-      margin: 0;
+    /* Equal flex spacers above & below content */
+    .c-spacer-top {
+      flex: 0.4 1 0%;
+      min-height: 0;
+    }
+    .c-spacer-bottom {
+      flex: 0.8 1 0%;
+      min-height: 8px;
     }
 
-    /* Meta strip */
+    /* ══════════════════════════════════
+       CONTENT  — title + meta + buttons
+    ══════════════════════════════════ */
+    .c-content {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.6vh, 18px);
+      overflow: visible;
+    }
+
+    /* ── Title ── */
+    .c-title {
+      color: #fff;
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -.015em;
+      font-size: clamp(1.32rem, 3.3vw + 1.95vh, 2.78rem);
+    }
+
+    /* ── Meta strip ── */
     .c-meta {
       display: flex;
       align-items: center;
-      flex-wrap: nowrap;
-    /*  border-top: 1px solid rgba(255,255,255,.08);*/
-      padding-top: 10px;
+      /* ALLOW wrap so meta items never overflow */
+      flex-wrap: wrap;
+      gap: 4px;
+      padding-top: 0;
     }
 
     .c-meta__item {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: clamp(4px, 0.7vw, 7px);
       flex-shrink: 0;
     }
 
     .c-meta__icon {
-      width: 16px;
-      height: 16px;
+      width:  clamp(16px, 1.8vw + 0.8vh, 20px);
+      height: clamp(16px, 1.8vw + 0.8vh, 20px);
       object-fit: contain;
+      flex-shrink: 0;
     }
 
     .c-meta__label {
-      font-size: .68rem;
+      color: #96b0c6;
       font-weight: 600;
-      color: var(--grey);
-      line-height: 1.25;
+      line-height: 1.2;
+      font-size: clamp(0.58rem, 0.9vw + 0.35vh, 0.72rem);
       white-space: nowrap;
     }
 
     .c-meta__item--dl .c-meta__label {
       white-space: normal;
-      max-width: 65px;
-    }
-
-    .c-meta__pipe {
-      width: 1px;
-      height: 20px;
-      background: rgba(255,255,255,.15);
-      flex-shrink: 0;
-      margin: 0 8px;
+      max-width: clamp(46px, 10vw, 70px);
     }
 
     .c-meta__pipe-img {
-      height: 20px;
-      width: auto;
       flex-shrink: 0;
-      margin: 0 8px;
+      height: clamp(16px, 1.8vw + 0.8vh, 20px);
+      width: auto;
       display: block;
+      margin: 0 clamp(5px, 1.0vw, 10px);
     }
 
-    /* Buttons */
+    /* ── Buttons ── */
     .c-btns {
       display: flex;
       align-items: center;
-      gap: 10px;
+      /* KEY FIX: wrap so second button drops to next line when narrow */
+      flex-wrap: wrap;
+      gap: clamp(6px, 1.4vw, 12px);
     }
 
     .c-btn {
@@ -138,87 +160,142 @@
       padding: 0;
       cursor: pointer;
       display: inline-flex;
+      /* KEY FIX: shrink allowed so button image scales down on narrow */
+      flex-shrink: 1;
+      min-width: 0;
       -webkit-tap-highlight-color: transparent;
       outline: none;
-      transition: transform .14s ease, filter .14s ease;
+      transition: transform .13s ease, filter .13s ease;
     }
-
-    .c-btn:hover  { transform: translateY(-2px); filter: brightness(1.08); }
-    .c-btn:active { transform: translateY(1px);  filter: brightness(.93);  }
+    .c-btn:hover         { transform: translateY(-2px); filter: brightness(1.09); }
+    .c-btn:active        { transform: translateY(1px);  filter: brightness(.92);  }
     .c-btn:focus-visible { outline: 2px solid #00c4cc; outline-offset: 3px; border-radius: 50px; }
 
-    .c-btn--begin img { height: 46px; width: auto; display: block; }
-    .c-btn--audio img { height: 36px; width: auto; display: block; }
+    /* Button images: max-width 100% so they never overflow their container */
+    .c-btn--begin img {
+      display: block;
+      height: clamp(32px, 1.4vw + 4.2vh, 56px);
+      width: auto;
+      max-width: 100%;
+    }
+    .c-btn--audio img {
+      display: block;
+      height: clamp(26px, 1.1vw + 3.6vh, 46px);
+      width: auto;
+      max-width: 100%;
+    }
 
-    /* Tablet/Desktop — center the card */
+    /* ══════════════════════════════════
+       BREAKPOINTS
+    ══════════════════════════════════ */
+
+    /* Full-bleed on small phones */
+    @media (max-width: 479px) {
+      body { align-items: flex-start; }
+      .c-card { max-width: 100%; border-radius: 0; }
+    }
+
+    /* Rounded card ≥ 480px */
     @media (min-width: 480px) {
-      body {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
       .c-card {
-        max-width: 475px;
-      /*  border-radius: 18px; */
-        box-shadow: 0 40px 80px rgba(0,0,0,.65);
+        border-radius: 18px;
+        box-shadow: 0 32px 80px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.05);
       }
+    }
+
+    /* Tablet / desktop */
+    @media (min-width: 768px) {
+      .c-card { max-width: 520px; }
+    }
+
+    /* Landscape phone → side-by-side */
+    @media (orientation: landscape) and (max-height: 520px) {
+      .c-card  { flex-direction: row; max-width: 100%; border-radius: 0; }
+      .c-hero  { flex: 0 0 48%; height: 100%; }
+      .c-body  { padding: 0 4%; }
+      .c-title { font-size: clamp(0.8rem, 2vw + 0.8vh, 1.15rem); }
     }
   </style>
 </head>
 <body>
 
-  <div class="c-card">
+  <div class="c-card" id="card">
 
-    <!-- Hero image — cropped to 55% height -->
-    <div class="c-hero">
-      <img
-        src="Screen_01_Top_part_1150_x_1150.png"
-        alt="Conversational AI Course Header"
-      />
+    <!-- Hero -->
+    <div class="c-hero" id="hero">
+      <img src="Screen_01_Top_part_1150_x_1150.png" alt="Conversational AI Course Header"/>
     </div>
 
     <!-- Body -->
     <div class="c-body">
 
-      <h1 class="c-title">
-        Conversational AI:<br>
-        Concepts, Capabilities,<br>
-        and Use Cases
-      </h1>
+      <!-- Top spacer (smaller = content sits higher) -->
+      <div class="c-spacer-top"></div>
 
-      <div class="c-meta">
-        <div class="c-meta__item">
-          <img class="c-meta__icon" src="icon_course_duration.png" alt="Duration"/>
-          <span class="c-meta__label">20 Min</span>
+      <!-- Content: always fully visible, never clipped -->
+      <div class="c-content">
+
+        <h1 class="c-title">
+          Conversational AI:<br>
+          Concepts, Capabilities,<br>
+          and Use Cases
+        </h1>
+
+        <div class="c-meta">
+          <div class="c-meta__item">
+            <img class="c-meta__icon" src="icon_course_duration.png" alt="Duration"/>
+            <span class="c-meta__label">20 Min</span>
+          </div>
+          <img class="c-meta__pipe-img" src="icon_midline.png" alt="" role="presentation"/>
+          <div class="c-meta__item">
+            <img class="c-meta__icon" src="icon_Quizes.png" alt="Quiz"/>
+            <span class="c-meta__label">3 Quiz Items</span>
+          </div>
+          <img class="c-meta__pipe-img" src="icon_midline.png" alt="" role="presentation"/>
+          <div class="c-meta__item c-meta__item--dl">
+            <img class="c-meta__icon" src="icon_Downloadable_resources.png" alt="Downloads"/>
+            <span class="c-meta__label">Downloadable<br>Resources</span>
+          </div>
         </div>
 
-        <img class="c-meta__pipe-img" src="icon_midline.png" alt="|"/>
-
-        <div class="c-meta__item">
-          <img class="c-meta__icon" src="icon_Quizes.png" alt="Quiz"/>
-          <span class="c-meta__label">3 Quiz Items</span>
+        <!-- Buttons wrap to second line when card is narrow -->
+        <div class="c-btns">
+          <button class="c-btn c-btn--begin" type="button" aria-label="Begin Course">
+            <img src="Bitmap3.png" alt="Begin Course"/>
+          </button>
+          <button class="c-btn c-btn--audio" type="button" aria-label="Audio Version">
+            <img src="Bitmap5.png" alt="Audio Version"/>
+          </button>
         </div>
 
-        <img class="c-meta__pipe-img" src="icon_midline.png" alt="|"/>
-
-        <div class="c-meta__item c-meta__item--dl">
-          <img class="c-meta__icon" src="icon_Downloadable_resources.png" alt="Downloads"/>
-          <span class="c-meta__label">Downloadable<br>Resources</span>
-        </div>
       </div>
 
-      <div class="c-btns">
-        <button class="c-btn c-btn--begin" type="button" aria-label="Begin Course">
-          <img src="Bitmap3.png" alt="Begin Course"/>
-        </button>
-        <button class="c-btn c-btn--audio" type="button" aria-label="Audio Version">
-          <img src="Bitmap5.png" alt="Audio Version"/>
-        </button>
-      </div>
+      <!-- Bottom spacer (bigger = breathing room below buttons) -->
+      <div class="c-spacer-bottom"></div>
 
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function () {
+      var card = document.getElementById('card');
+      var hero = document.getElementById('hero');
+
+      function update() {
+        var isLandscape = window.matchMedia('(orientation: landscape) and (max-height: 520px)').matches;
+        if (isLandscape) {
+          hero.style.height = '';
+          return;
+        }
+        var cardH = card.getBoundingClientRect().height;
+        hero.style.height = (cardH * 0.58).toFixed(1) + 'px';
+      }
+
+      update();
+      window.addEventListener('resize', update);
+      window.addEventListener('orientationchange', function () { setTimeout(update, 150); });
+    })();
+  </script>
 </body>
 </html>

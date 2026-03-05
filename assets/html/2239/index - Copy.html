@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conversational AI Course</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --navy: #1b2a3e;
+      --grey: #96b0c6;
+      --white: #ffffff;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background: var(--navy);
+      font-family: 'Source Sans 3', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Full viewport card */
+    .c-card {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Hero — proportional viewport height */
+    .c-hero {
+      flex: 0 0 58%;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      max-height: none;
+    }
+
+    .c-hero img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    /* Body — remaining 45% */
+    .c-body {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0;
+      padding: clamp(10px, 1.9vh, 16px) clamp(12px, 3.8vw, 20px) clamp(12px, 2.2vh, 18px);
+      overflow: hidden;
+    }
+
+    /* Title */
+    .c-title {
+      font-size: clamp(1.05rem, 5.2vw, 1.9rem);
+      font-weight: 800;
+      line-height: 1.16;
+      color: var(--white);
+      letter-spacing: -.015em;
+      margin: 0;
+    }
+
+    /* Meta strip */
+    .c-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: clamp(8px, 1.6vh, 16px);
+      padding-top: 0;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .c-meta__item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .c-meta__icon {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+
+    .c-meta__label {
+      font-size: .68rem;
+      font-weight: 600;
+      color: var(--grey);
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    .c-meta__item--dl .c-meta__label {
+      white-space: normal;
+      max-width: 60px;
+      line-height: 1.15;
+    }
+
+    .c-meta__pipe {
+      width: 1px;
+      height: 20px;
+      background: rgba(255,255,255,.15);
+      flex-shrink: 0;
+      margin: 0 8px;
+    }
+
+    .c-meta__pipe-img {
+      height: 20px;
+      width: auto;
+      flex-shrink: 0;
+      margin: 0 8px;
+      display: block;
+    }
+
+    /* Buttons */
+    .c-btns {
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      gap: 10px;
+      flex-wrap: wrap;
+      width: 100%;
+      margin-top: auto;
+    }
+
+    .c-btn {
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+      display: inline-flex;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+      transition: transform .14s ease, filter .14s ease;
+    }
+
+    .c-btn:hover  { transform: translateY(-2px); filter: brightness(1.08); }
+    .c-btn:active { transform: translateY(1px);  filter: brightness(.93);  }
+    .c-btn:focus-visible { outline: 2px solid #00c4cc; outline-offset: 3px; border-radius: 50px; }
+
+    .c-btn--begin img { height: clamp(36px, 5.8vh, 52px); width: auto; display: block; }
+    .c-btn--audio img { height: clamp(30px, 4.8vh, 42px); width: auto; display: block; }
+
+    /* Mobile portrait — ensure content fits */
+    @media (orientation: portrait) and (max-width: 480px) {
+      .c-hero {
+        flex: 0 0 54%;
+      }
+
+      .c-body {
+        flex: 1 1 auto;
+        padding: 12px 14px 14px;
+        gap: 0;
+        justify-content: flex-start;
+      }
+
+      .c-title {
+        font-size: clamp(1rem, 6.2vw, 1.55rem);
+      }
+
+      .c-meta {
+        padding-top: 0;
+        gap: 4px;
+      }
+
+      .c-meta__label {
+        font-size: .65rem;
+      }
+
+      .c-meta__item--dl .c-meta__label {
+        max-width: 55px;
+        font-size: .63rem;
+      }
+
+      .c-btn--begin img { height: clamp(34px, 5.2vh, 42px); }
+      .c-btn--audio img { height: clamp(28px, 4.2vh, 34px); }
+    }
+
+    /* Landscape orientation — reduce sizes for smaller viewport height */
+    @media (orientation: landscape) and (max-height: 600px) {
+      .c-hero {
+        flex: 0 0 50%;
+      }
+
+      .c-body {
+        flex: 1 1 auto;
+        padding: 8px 12px 10px;
+        gap: 0;
+        justify-content: flex-start;
+      }
+
+      .c-title {
+        font-size: clamp(1rem, 4vw, 1.3rem);
+        line-height: 1.15;
+        margin: 0;
+      }
+
+      .c-meta {
+        padding-top: 0;
+        gap: 3px;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+
+      .c-meta__label {
+        font-size: .58rem;
+      }
+
+      .c-meta__item--dl .c-meta__label {
+        max-width: 50px;
+        font-size: .56rem;
+      }
+
+      .c-meta__pipe-img {
+        margin: 0 2px;
+        height: 14px;
+      }
+
+      .c-btns {
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .c-btn--begin img { height: clamp(30px, 8vh, 38px); }
+      .c-btn--audio img { height: clamp(24px, 6.5vh, 30px); }
+    }
+
+    /* Extra small landscape — further compression */
+    @media (orientation: landscape) and (max-height: 500px) {
+      .c-hero {
+        flex: 0 0 46%;
+      }
+
+      .c-body {
+        flex: 1 1 auto;
+        padding: 6px 10px 8px;
+        gap: 0;
+        justify-content: flex-start;
+      }
+
+      .c-title {
+        font-size: clamp(0.85rem, 3.5vw, 1.05rem);
+        line-height: 1.1;
+      }
+
+      .c-meta {
+        padding-top: 0;
+        gap: 2px;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+
+      .c-meta__label {
+        font-size: .52rem;
+      }
+
+      .c-meta__item--dl .c-meta__label {
+        max-width: 45px;
+        font-size: .5rem;
+      }
+
+      .c-meta__pipe-img {
+        height: 12px;
+        margin: 0 2px;
+      }
+
+      .c-btns {
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .c-btn--begin img { height: clamp(28px, 7vh, 34px); }
+      .c-btn--audio img { height: clamp(22px, 5.5vh, 28px); }
+    }
+
+    /* Tablet/Desktop — center the card */
+    @media (min-width: 480px) {
+      body {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 0;
+        height: 100vh;
+        height: 100dvh;
+      }
+      .c-card {
+        width: 100%;
+        max-width: 475px;
+        height: 100vh;
+        height: 100dvh;
+        background: var(--navy);
+        box-shadow: 0 40px 80px rgba(0,0,0,.65);
+      }
+
+      .c-hero {
+        flex: 0 0 55%;
+        max-height: none;
+      }
+
+      .c-body {
+        flex: 1 1 auto;
+        padding: 14px 18px 16px;
+        gap: 0;
+        justify-content: flex-start;
+        overflow: hidden;
+      }
+
+      .c-title {
+        font-size: clamp(1.2rem, 3.2vw, 1.62rem);
+      }
+
+      .c-meta {
+        flex-wrap: wrap;
+        padding-top: 0;
+        gap: 8px;
+      }
+
+      .c-meta__label {
+        font-size: .72rem;
+      }
+
+      .c-meta__item--dl .c-meta__label {
+        max-width: 65px;
+      }
+
+      .c-btn--begin img { height: clamp(40px, 5.6vh, 50px); }
+      .c-btn--audio img { height: clamp(32px, 4.5vh, 40px); }
+    }
+
+    /* Large desktop */
+    @media (min-width: 768px) {
+      body {
+        padding: 0;
+      }
+      .c-card {
+        max-width: 520px;
+        box-shadow: 0 40px 80px rgba(0,0,0,.65);
+      }
+
+      .c-hero {
+        flex: 0 0 55%;
+        max-height: none;
+      }
+
+      .c-body {
+        gap: 0;
+        padding: 16px 20px 18px;
+      }
+
+      .c-title {
+        font-size: clamp(1.35rem, 3vw, 1.75rem);
+      }
+
+      .c-btn--begin img { height: clamp(44px, 5.2vh, 52px); }
+      .c-btn--audio img { height: clamp(34px, 4.2vh, 42px); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="c-card">
+
+    <!-- Hero image — cropped to 55% height -->
+    <div class="c-hero">
+      <img
+        src="Screen_01_Top_part_1150_x_1150.png"
+        alt="Conversational AI Course Header"
+      />
+    </div>
+
+    <!-- Body -->
+    <div class="c-body">
+
+      <h1 class="c-title">
+        Conversational AI:<br>
+        Concepts, Capabilities,<br>
+        and Use Cases
+      </h1>
+
+      <div class="c-meta">
+        <div class="c-meta__item">
+          <img class="c-meta__icon" src="icon_course_duration.png" alt="Duration"/>
+          <span class="c-meta__label">20 Min</span>
+        </div>
+
+        <img class="c-meta__pipe-img" src="icon_midline.png" alt="|"/>
+
+        <div class="c-meta__item">
+          <img class="c-meta__icon" src="icon_Quizes.png" alt="Quiz"/>
+          <span class="c-meta__label">3 Quiz Items</span>
+        </div>
+
+        <img class="c-meta__pipe-img" src="icon_midline.png" alt="|"/>
+
+        <div class="c-meta__item c-meta__item--dl">
+          <img class="c-meta__icon" src="icon_Downloadable_resources.png" alt="Downloads"/>
+          <span class="c-meta__label">Downloadable<br>Resources</span>
+        </div>
+      </div>
+
+      <div class="c-btns">
+        <button class="c-btn c-btn--begin" type="button" aria-label="Begin Course">
+          <img src="Bitmap3.png" alt="Begin Course"/>
+        </button>
+        <button class="c-btn c-btn--audio" type="button" aria-label="Audio Version">
+          <img src="Bitmap5.png" alt="Audio Version"/>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
