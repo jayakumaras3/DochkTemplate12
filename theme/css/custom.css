@@ -346,11 +346,6 @@ body {
     order: 3 !important;
 }
 
-.contentArea.video-mode + .footer #prev:hover,
-.contentArea.video-mode + .footer .prevClass:hover,
-.contentArea.video-mode + .footer #next:hover,
-.contentArea.video-mode + .footer .nextClass:hover,
-.contentArea.video-mode + .footer .nextClassHighlight:hover,
 .contentArea.video-mode + .footer .resourceClass:hover {
     background-color: rgba(60,90,180,0.7) !important;
     transform: scale(1.15) !important;
@@ -1342,11 +1337,11 @@ html, body {
     height: 44px !important;
     border-radius: 50% !important;
     border: none !important;
-    background-color: rgba(10,15,30,0.6) !important;
+    background-color: transparent !important;
     background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    background-size: 22px 22px !important;
+    background-size: contain !important;
     backdrop-filter: blur(6px) !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
     cursor: pointer !important;
@@ -1371,11 +1366,11 @@ html, body {
     height: 44px !important;
     border-radius: 50% !important;
     border: none !important;
-    background-color: rgba(10,15,30,0.6) !important;
+    background-color: transparent !important;
     background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    background-size: 22px 22px !important;
+    background-size: contain !important;
     backdrop-filter: blur(6px) !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
     cursor: pointer !important;
@@ -1391,15 +1386,7 @@ html, body {
     order: 2 !important;
 }
 
-/* Hover state */
-.wholeContainer.reels-wrapper .footer #prev:hover,
-.wholeContainer.reels-wrapper .footer .prevClass:hover,
-.wholeContainer.reels-wrapper .footer #next:hover,
-.wholeContainer.reels-wrapper .footer .nextClass:hover,
-.wholeContainer.reels-wrapper .footer .nextClassHighlight:hover {
-    background-color: rgba(60,90,180,0.7) !important;
-    transform: scale(1.15) !important;
-}
+/* Hover state — removed for prev/next buttons */
 
 /* Active state */
 .wholeContainer.reels-wrapper .footer #prev:active,
@@ -1986,10 +1973,11 @@ body {
 .wholeContainer.reels-wrapper .footer .prevClass,
 .contentArea.video-mode + .footer #prev,
 .contentArea.video-mode + .footer .prevClass {
-    background-image: url("../images/footer-menu/chevron-up.svg") !important;
-    background-size: 22px 22px !important;
+    background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
+    background-size: contain !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
+    background-color: transparent !important;
 }
 
 .wholeContainer.reels-wrapper .footer #next,
@@ -1998,8 +1986,9 @@ body {
 .contentArea.video-mode + .footer #next,
 .contentArea.video-mode + .footer .nextClass,
 .contentArea.video-mode + .footer .nextClassHighlight {
-    background-image: url("../images/footer-menu/chevron-down.svg") !important;
-    background-size: 22px 22px !important;
+    background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
+    background-size: contain !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
+    background-color: transparent !important;
 }
