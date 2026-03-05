@@ -655,14 +655,29 @@ html, body {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100% !important;
+    right: 0 !important;
+    width: auto !important;
     height: 100% !important;
     background: rgba(0,0,0,0.55) !important;
     z-index: 3000 !important;
     display: none !important;    
-    align-items: center !important;
-    justify-content: center !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
     float: none !important;
+}
+
+/* Keep menu full-width start on portrait screens */
+@media (orientation: portrait) {
+    .wholeContainer.reels-wrapper .sideBar {
+        left: 0 !important;
+    }
+}
+
+/* Align menu start to centered 9:16 content column in landscape */
+@media (orientation: landscape) {
+    .wholeContainer.reels-wrapper .sideBar {
+        left: calc((100vw - min(480px, calc(100dvh * 9 / 16))) / 2) !important;
+    }
 }
 
 .wholeContainer.reels-wrapper .sideBar[style*="display: block"],
@@ -671,7 +686,8 @@ html, body {
 }
 
 .wholeContainer.reels-wrapper .sideBarPanel {
-    width: min(320px, 80%) !important;
+    width: clamp(280px, 32vw, 360px) !important;
+    max-width: 88vw !important;
     height: 100% !important;
     max-height: 100% !important;
     background: #fff !important;
@@ -685,7 +701,8 @@ html, body {
 /* Landscape: narrower sidebar to save space */
 @media (orientation: landscape) and (max-height: 600px) {
     .wholeContainer.reels-wrapper .sideBarPanel {
-        width: min(280px, 70%) !important;
+        width: clamp(250px, 30vw, 320px) !important;
+        max-width: 82vw !important;
     }
 }
 
