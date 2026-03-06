@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function() {
   ${parent.QuestionCountText} ${index + 1} ${parent.QuestionOFText} ${questionsData.length}
 </p>
 <div id="timer">${formattedTime}</div></div>
-		 	<img class="Bulb" src="../../../images/Bulb.svg" alt="Bulb"/>
+		 	
 		 
 		 
         `;
