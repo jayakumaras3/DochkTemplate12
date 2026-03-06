@@ -100,12 +100,13 @@ body {
     flex-direction: column;
     gap: 14px;
     margin: 10px 0 28px;
+    padding: 0;
 }
 
 .answer {
     position: relative;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     gap: 12px;
     padding: 14px 16px;
@@ -135,12 +136,11 @@ input.checkbox {
     min-width: 20px;
     min-height: 20px;
     margin: 0;
-    margin-top: 2px;
     padding: 0;
     flex-shrink: 0;
     cursor: pointer;
     accent-color: var(--accent);
-    vertical-align: top;
+    vertical-align: middle;
     display: inline-block;
 }
 
@@ -156,6 +156,14 @@ input.checkbox {
     padding: 0;
     word-wrap: break-word;
     overflow-wrap: break-word;
+}
+
+.answer > .tickSymbol {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: visible;
+    pointer-events: none;
 }
 
 #submitBtn,
@@ -249,6 +257,7 @@ input.checkbox {
     color: #16a34a;
     font-size: 0.95rem;
     margin-right: 2px;
+    position: absolute;
 }
 
 .highlight {
@@ -317,7 +326,7 @@ input.checkbox {
 
     .answer {
         min-height: 56px;
-        align-items: flex-start;
+        align-items: center;
         justify-content: flex-start;
     }
 
@@ -328,11 +337,10 @@ input.checkbox {
         width: 18px;
         height: 18px;
         margin: 0;
-        margin-top: 2px;
     }
 
     .answer label {
-        align-items: flex-start;
+        line-height: 1.5;
         padding: 0;
     }
 
@@ -353,13 +361,13 @@ input.checkbox {
         padding: 12px 12px;
         gap: 10px;
         min-height: 52px;
-        align-items: flex-start;
+        align-items: center;
         justify-content: flex-start;
     }
 
     .answer label {
         font-size: 0.98rem;
-        align-items: flex-start;
+        line-height: 1.45;
         padding: 0;
     }
 
@@ -370,7 +378,6 @@ input.checkbox {
         min-width: 18px;
         min-height: 18px;
         margin: 0;
-        margin-top: 2px;
     }
 }
 
