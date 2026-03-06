@@ -310,7 +310,7 @@ body {
     height: 44px !important;
     border-radius: 50% !important;
     border: none !important;
-    background-color: rgba(10,15,30,0.6) !important;
+   /* background-color: rgba(10,15,30,0.6) !important;*/
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: 22px 22px !important;
@@ -343,7 +343,8 @@ body {
 
 .contentArea.video-mode + .footer .resourceClass {
     background-image: url("../images/footer-menu/Resource.png") !important;
-    background-color: rgba(10,15,30,0.6) !important;
+  /*  background-color: rgba(10,15,30,0.6) !important;*/
+    background-size: contain !important;
     order: 3 !important;
 }
 

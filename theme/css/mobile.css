@@ -498,7 +498,7 @@ body:has(.vertical-video-layout) .vertical-video-layout {
     .contentArea.video-mode + .footer .resourceClass {
         width: 44px !important;
         height: 44px !important;
-        background-size: 22px 22px !important;
+        background-size: contain !important;
     }
 }
 
