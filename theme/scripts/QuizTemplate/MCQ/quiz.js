@@ -54,6 +54,7 @@ const parentquestionHtml = `
 		 	<img class="Bulb" src="../../../images/Bulb.svg" alt="Bulb"/>`;
 		parentquizContainer.innerHTML = parentquestionHtml;
                         quizContainer.innerHTML = questionHtml;
+                        attachAnswerClickHandlers();
                         document.getElementById('submitBtn').addEventListener('click', checkAnswer);
             }
 
@@ -241,9 +242,14 @@ window.selectOption1 = function(idx) {
 
         // Handle correct answer highlight
         if (option.dataset.correct === 'true') {
+            // Add correct class to optionDiv for green background highlighting
+            if (optionDiv) {
+                optionDiv.classList.add('correct');
+            }
             let element = document.getElementById(Opttickclass);
             if (element) {
-                element.style.setProperty("--before-visibility", "visible");
+                // Don't show the tick mark, hide it instead
+                element.style.setProperty("--before-visibility", "hidden");
             }
         }
     }
@@ -262,53 +268,33 @@ window.selectOption1 = function(idx) {
 						div.setAttribute("aria-checked", "false");
 					}
 				}
-            loadQuestion();
-        });
-		document.addEventListener("DOMContentLoaded", function() {
-			
- // Define the same click handler used for adding listeners
+    loadQuestion();
+});
+
+// Define the same click handler used for adding listeners
 function answerClickHandler(event) {
-    const checkbox = this.querySelector('input[type="checkbox"]');
-
-    // Toggle checkbox only if it's not already the clicked element
-    if (event.target !== checkbox) {
+    if(!SubmtBool) {
+        const checkbox = this.querySelector('input[type="checkbox"]');
         checkbox.checked = !checkbox.checked;
+        handleOptionSelection(checkbox);
     }
-
-    // Handle selection logic
-    handleOptionSelection(checkbox);
 }
 
 // This stores the divs so we can reference them in both add/remove
 let answerDivs = [];
 
-// Add event listeners on page load
-document.addEventListener("DOMContentLoaded", function () {
+// Add event listeners after each question loads
+function attachAnswerClickHandlers() {
     answerDivs = Array.from(document.querySelectorAll('.answer'));
     answerDivs.forEach(answerDiv => {
+        answerDiv.removeEventListener('click', answerClickHandler);
         answerDiv.addEventListener('click', answerClickHandler);
     });
-});
-
-// 🔻 NEW FUNCTION: Call this to disable answer click behavior
-function disableAnswerClicks() {
-    if (answerDivs.length === 0) {
-        answerDivs = Array.from(document.querySelectorAll('.answer'));
-    }
-    answerDivs.forEach(answerDiv => {
-        answerDiv.removeEventListener('click', answerClickHandler);
-    });
-}
+    
+    // Also add checkbox handlers to prevent double-toggle
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('click', function(event) {
-            event.stopPropagation(); // Prevent the div click from triggering again
+        checkbox.addEventListener('change', function(event) {
             handleOptionSelection(this);
         });
     });
-
-    document.querySelectorAll('label.clicken').forEach(label => {
-        label.addEventListener('click', function(event) {
-            event.stopPropagation(); // Prevent double toggling
-        });
-    });
-});
+}

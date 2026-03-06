@@ -70,10 +70,10 @@
 }
 
 .resourceClass {
-    background-image: url("../images/footer-menu/resource.svg") !important;
+    background-image: url("../images/footer-menu/") !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
-    background-size: 22px 22px !important;
+    background-size: contain !important;
     width: 44px !important;
     height: 44px !important;
 }

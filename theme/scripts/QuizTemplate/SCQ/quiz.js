@@ -197,9 +197,14 @@ window.handleKeydown=function(event, idx) {
 
         // Handle correct answer highlight
         if (option.dataset.correct === 'true') {
+            // Add correct class to optionDiv for green background highlighting
+            if (optionDiv) {
+                optionDiv.classList.add('correct');
+            }
             let element = document.getElementById(Opttickclass);
             if (element) {
-                element.style.setProperty("--before-visibility", "visible");
+                // Don't show the tick mark, hide it instead
+                element.style.setProperty("--before-visibility", "hidden");
             }
           //  optionReset();
            // option.checked = true;

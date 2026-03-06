@@ -230,9 +230,25 @@ input.checkbox,
 }
 
 .correct {
-    color: #0f5132;
-    background: #d1f5e4;
-    border: 1px solid #7ddcb0;
+    color: var(--text-secondary) !important;
+    background: #ffffff !important;
+    border: 3px solid #105326 !important;
+}
+
+.correct .tickSymbol::before,
+.correct #Opttick0::before,
+.correct #Opttick1::before,
+.correct #Opttick2::before,
+.correct #Opttick3::before,
+.correct #Opttick4::before,
+.correct #Opttick5::before,
+.correct #Opttick6::before,
+.correct #Opttick7::before,
+.correct #Opttick8::before,
+.correct #Opttick9::before,
+.correct #Opttick10::before,
+.correct #Opttick11::before {
+    visibility: hidden !important;
 }
 
 .incorrect {

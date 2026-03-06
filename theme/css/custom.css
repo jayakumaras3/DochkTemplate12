@@ -342,13 +342,9 @@ body {
 }
 
 .contentArea.video-mode + .footer .resourceClass {
-    background-image: url("../images/footer-menu/resource.svg") !important;
+    background-image: url("../images/footer-menu/Resource.png") !important;
+    background-color: rgba(10,15,30,0.6) !important;
     order: 3 !important;
-}
-
-.contentArea.video-mode + .footer .resourceClass:hover {
-    background-color: rgba(60,90,180,0.7) !important;
-    transform: scale(1.15) !important;
 }
 
 .contentArea.video-mode + .footer #ProgressBar {
@@ -503,7 +499,7 @@ body {
 }
 
 .contentArea.video-mode .action-btn.like {
-    background-image: url("../images/footer-menu/Resource.svg");
+    background-image: url("../images/footer-menu/Resource.png");
 }
 
 .contentArea.video-mode .action-btn.comment {
@@ -1406,11 +1402,11 @@ html, body {
     height: 44px !important;
     border-radius: 50% !important;
     border: none !important;
-    background-color: rgba(10,15,30,0.6) !important;
-    background-image: url("../images/footer-menu/resource.svg") !important;
+   /* background-color: rgba(10,15,30,0.6) !important;*/
+    background-image: url("../images/footer-menu/Resource.png") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    background-size: 22px 22px !important;
+    background-size: contain !important;
     backdrop-filter: blur(6px) !important;
     box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
     cursor: pointer !important;
@@ -1426,15 +1422,15 @@ html, body {
     order: 3 !important;           /* Below next button (order: 2) */
 }
 
-/* Hover state for Learning Aids */
+/* Hover state for Learning Aids — disabled */
 .wholeContainer.reels-wrapper .footer .resourceClass:hover {
-    background-color: rgba(60,90,180,0.7) !important;
-    transform: scale(1.1) !important;
+    transform: none !important;
+   /* background-color: rgba(10,15,30,0.6) !important;*/
 }
 
 /* Active state for Learning Aids */
 .wholeContainer.reels-wrapper .footer .resourceClass:active {
-    transform: scale(0.95) !important;
+    transform: none !important;
 }
 
 /* Hide all other non-nav footer children (prev, next, resource are exceptions) */
@@ -1480,7 +1476,7 @@ html, body {
     .contentArea.video-mode + .footer .resourceClass {
         width: 44px !important;
         height: 44px !important;
-        background-size: 22px 22px !important;
+        background-size: contain !important;
         margin: 0 !important;
         top: auto !important;
         right: auto !important;
@@ -1509,7 +1505,7 @@ html, body {
     .contentArea.video-mode + .footer .resourceClass {
         width: 40px !important;
         height: 40px !important;
-        background-size: 20px 20px !important;
+        background-size: contain !important;
         margin: 0 !important;
         top: auto !important;
         right: auto !important;
@@ -1609,6 +1605,26 @@ html, body {
         right: 8px !important;
         bottom: 80px !important;
         gap: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper .footer {
+        right: 12px !important;
+        gap: 12px !important;
+    }
+
+    .wholeContainer.reels-wrapper .footer #prev,
+    .wholeContainer.reels-wrapper .footer .prevClass,
+    .wholeContainer.reels-wrapper .footer #next,
+    .wholeContainer.reels-wrapper .footer .nextClass,
+    .wholeContainer.reels-wrapper .footer .nextClassHighlight,
+    .wholeContainer.reels-wrapper .footer .resourceClass {
+        width: 44px !important;
+        height: 44px !important;
+        background-size: contain !important;
+        margin: 0 !important;
+        top: auto !important;
+        right: auto !important;
+        transform: none !important;
     }
 }
 
