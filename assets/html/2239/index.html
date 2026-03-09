@@ -189,14 +189,14 @@
        BREAKPOINTS
     ══════════════════════════════════ */
 
-    /* Full-bleed on small phones */
-    @media (max-width: 479px) {
-      body { align-items: flex-start; }
-      .c-card { max-width: 100%; border-radius: 0; }
+    /* Full-bleed when frame is too narrow to show equal margins */
+    @media (max-width: 540px) {
+      body { align-items: flex-start; justify-content: flex-start; }
+      .c-card { max-width: 100%; border-radius: 0; box-shadow: none; }
     }
 
-    /* Rounded card ≥ 480px */
-    @media (min-width: 480px) {
+    /* Rounded card — only when viewport has room for equal side margins */
+    @media (min-width: 541px) {
       .c-card {
         border-radius: 18px;
         box-shadow: 0 32px 80px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.05);
