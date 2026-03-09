@@ -124,6 +124,10 @@ body {
     margin-bottom: 20px;
     line-height: 1.55;
     color: var(--text-primary);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    padding-right: 12px;
 }
 
 #question-header,
@@ -132,6 +136,10 @@ body {
     font-size: clamp(1.1rem, 1rem + 0.45vw, 1.4rem);
     font-weight: 700;
     margin-bottom: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    padding-right: 12px;
 }
 
 .redtext,
@@ -142,6 +150,10 @@ body {
     font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
     font-style: italic;
     line-height: 1.45;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    padding-right: 12px;
 }
 
 .redtext1 {
@@ -218,6 +230,7 @@ input.checkbox,
     padding: 0;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .answer > .tickSymbol {
@@ -381,12 +394,20 @@ input.checkbox,
     margin: 0 0 14px;
     line-height: 1.2;
     color: var(--text-primary);
+    padding-right: 56px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .Startpage_sub {
     width: 100%;
     line-height: 1.85;
     color: var(--text-secondary);
+    padding-right: 56px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .Startpage_sub p {
@@ -544,6 +565,24 @@ input.checkbox,
     #question-header,
     #question-text {
         font-size: 1.04rem;
+        padding-right: 8px;
+    }
+
+    .question {
+        padding-right: 8px;
+    }
+
+    .redtext,
+    .redtext1,
+    .instext,
+    #inste {
+        padding-right: 8px;
+        font-size: 0.95rem;
+    }
+
+    .answer label {
+        font-size: clamp(0.9rem, 2vw, 1rem);
+        line-height: 1.4;
     }
 
     .answer {
@@ -589,17 +628,9 @@ input.checkbox,
     .results {
         padding: clamp(14px, 2.5vw, 20px);
     }
-}
-
-
-/* Extra small screens: ensure heading text wraps without overlap */
-@media (max-width: 380px) {
-    #resultsHeading {
-        font-size: clamp(1.2rem, 4vw, 2rem);
-        padding-right: 32px;
-    }
     
-    .results {
-        padding: clamp(14px, 2.5vw, 20px);
+    .headerAss,
+    .Startpage_sub {
+        padding-right: 40px;
     }
 }
