@@ -28,7 +28,7 @@ body {
 
 body {
     --page-pad: clamp(14px, 2.2vw, 26px);
-    --top-clearance: clamp(20px, 3vh, 34px);
+    --top-clearance: clamp(29px, 3vh, 34px);
     font-family: 'Open Sans', Arial, sans-serif;
     color: var(--text-primary);
     background: linear-gradient(160deg, var(--bg-start), var(--bg-end));
@@ -128,6 +128,7 @@ body {
     overflow-wrap: break-word;
     word-break: break-word;
     padding-right: 12px;
+    font-weight:700;
 }
 
 #question-header,
@@ -149,28 +150,12 @@ body {
     color: #b45309;
     font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
     font-style: italic;
-    font-weight: 400;
     line-height: 1.45;
     word-wrap: break-word;
     overflow-wrap: break-word;
     word-break: break-word;
     padding-right: 12px;
-}
-
-/* Override <strong> tags and spans inside instruction text */
-.redtext strong,
-.redtext1 strong,
-.instext strong,
-#inste strong,
-.redtext span,
-.redtext1 span,
-.instext span,
-#inste span,
-.redtext span strong,
-.redtext1 span strong,
-.instext span strong,
-#inste span strong {
-    font-weight: 400 !important;
+    font-weight: 100;
 }
 
 .redtext1 {
