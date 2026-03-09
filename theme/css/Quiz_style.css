@@ -149,11 +149,28 @@ body {
     color: #b45309;
     font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
     font-style: italic;
+    font-weight: 400;
     line-height: 1.45;
     word-wrap: break-word;
     overflow-wrap: break-word;
     word-break: break-word;
     padding-right: 12px;
+}
+
+/* Override <strong> tags and spans inside instruction text */
+.redtext strong,
+.redtext1 strong,
+.instext strong,
+#inste strong,
+.redtext span,
+.redtext1 span,
+.instext span,
+#inste span,
+.redtext span strong,
+.redtext1 span strong,
+.instext span strong,
+#inste span strong {
+    font-weight: 400 !important;
 }
 
 .redtext1 {
