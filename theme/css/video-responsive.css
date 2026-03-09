@@ -1,0 +1,78 @@
+/* 
+   VIDEO-RESPONSIVE.CSS  (loaded last  wins all cascade ties)
+
+   ROOT CAUSE OF CROPPING
+   
+   custom.css contains a "legacy neutralisation" block (no media query)
+   that sets:
+       shorts-container   display: block
+       shorts-video-frame  position:absolute; inset:0  (landscape fill)
+       video/#vidArea      object-fit: cover  (crops top/bottom)
+
+   On a landscape container (1024  700) with a portrait 9:16 video,
+   object-fit:cover scales the video to fill the 1024px width, making
+   the video 1024  1820 px then crops 560px from each end  severe.
+
+   FIX STRATEGY
+   
+   Avoid `orientation: landscape` (unreliable inside SCORM iframes).
+   Use raw pixel conditions instead:
+
+     (min-width: 1024px)
+        iPad landscape, all laptops/desktops, large tablets landscape
+
+     (min-width: 768px) and (max-height: 900px)
+        Smaller landscape tablets / phones in landscape
+
+   Portrait phones (max-width: 767px) and portrait tablets (7681024)
+   do NOT match either condition, so the original cover behaviour is
+   preserved for those devices.
+    */
+
+@media (min-width: 1024px),
+       (min-width: 768px) and (max-height: 900px) {
+
+    /*  1. Container: flex stage, centres the portrait frame  */
+    .wholeContainer.reels-wrapper .contentArea.video-mode .shorts-container,
+    .wholeContainer.reels-wrapper .shorts-container,
+    .contentArea.video-mode .shorts-container {
+        position: absolute !important;
+        inset: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #000 !important;
+        overflow: hidden !important;
+    }
+
+    /*  2. Frame: portrait-shaped box, height-bound, never stretches  */
+    .wholeContainer.reels-wrapper .contentArea.video-mode .shorts-video-frame,
+    .wholeContainer.reels-wrapper .shorts-video-frame,
+    .contentArea.video-mode .shorts-video-frame {
+        position: relative !important;
+        inset: auto !important;
+        /* Height fills the container; width auto-calculated from ratio */
+        height: 100% !important;
+        width: auto !important;
+        aspect-ratio: 9 / 16 !important;
+        max-width: 100% !important;
+        flex-shrink: 0 !important;
+        overflow: hidden !important;
+        background: #000 !important;
+    }
+
+    /*  3. Video: fill portrait frame, object-fit:contain = no crops  */
+    .wholeContainer.reels-wrapper .contentArea.video-mode #vidArea,
+    .wholeContainer.reels-wrapper .contentArea.video-mode video,
+    .wholeContainer.reels-wrapper #vidArea,
+    .wholeContainer.reels-wrapper video,
+    .contentArea.video-mode #vidArea {
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        display: block !important;
+        background: #000 !important;
+    }
+}

@@ -49,9 +49,7 @@ const optionsHtml = questionData.options.map((option, index) => {
                             </div>
 							<img class="Qmark" src="../../../images/Bulb.svg" alt="Q">
                         `;
-const parentquestionHtml = `
-		 
-		 	<img class="Bulb" src="../../../images/Bulb.svg" alt="Bulb"/>`;
+const parentquestionHtml = ``;
 		parentquizContainer.innerHTML = parentquestionHtml;
                         quizContainer.innerHTML = questionHtml;
                         attachAnswerClickHandlers();

@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 const parentquestionHtml = `
-  <img class="Bulb" src="../../../images/Bulb.svg" alt="Bulb Icon representing a hint or idea" />
+  
 `;
 
 

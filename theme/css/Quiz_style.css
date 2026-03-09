@@ -385,7 +385,7 @@ input.checkbox,
 
 .Startpage_sub {
     width: 100%;
-    line-height: 1.55;
+    line-height: 1.85;
     color: var(--text-secondary);
 }
 
@@ -555,7 +555,7 @@ input.checkbox,
     }
 
     .answer label {
-        font-size: 0.98rem;
+        font-size: 0.88rem;
         line-height: 1.45;
         padding: 0;
     }
