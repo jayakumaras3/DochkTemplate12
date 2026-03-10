@@ -1475,7 +1475,7 @@ html, body {
     position: static !important;
     width: 44px !important;
     height: 44px !important;
-    border-radius: 0 !important;
+    border-radius: 50% !important;
     border: none !important;
     background-color: transparent !important;
     background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
@@ -1502,7 +1502,7 @@ html, body {
     position: static !important;
     width: 44px !important;
     height: 44px !important;
-    border-radius: 0 !important;
+    border-radius: 50% !important;
     border: none !important;
     background-color: transparent !important;
     background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
@@ -1540,7 +1540,7 @@ html, body {
     position: static !important;
     width: 44px !important;
     height: 44px !important;
-    border-radius: 0 !important;
+    border-radius: 50% !important;
     border: none !important;
     background-image: url("../images/footer-menu/Resource.png") !important;
     background-position: center !important;
@@ -2251,7 +2251,7 @@ body {
     margin: 0 !important;
     width: 4rem !important;
     height: 4rem !important;
-    border-radius: 0 !important;
+    border-radius: 50% !important;
     border: none !important;
     display: flex !important;
     align-items: center !important;
@@ -2311,9 +2311,9 @@ body {
 .wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
 .wholeContainer.reels-wrapper .rightNavPanel .footer #resource1,
 .wholeContainer.reels-wrapper .rightNavPanel .footer .resourceClass {
-    width: 4rem !important;
+ /*   width: 4rem !important;
     height: 4rem !important;
-    border-radius: 0 !important;
+    border-radius: 50% !important;
     border: none !important;
     background-color: transparent !important;
     background-position: center !important;
@@ -2321,7 +2321,7 @@ body {
     background-size: 56px 56px !important;
     box-shadow: none !important;
     color: transparent !important;
-    font-size: 0 !important;
+    font-size: 0 !important;*/
 }
 
 .wholeContainer.reels-wrapper .rightNavPanel .footer #prev,
