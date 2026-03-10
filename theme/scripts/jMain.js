@@ -117,7 +117,7 @@ function TtoggleMenu() {
 
             } else {
                 Tmenu = false;
-                menuIcon.src = "theme/images/footer-menu/Menuopen.svg";
+                menuIcon.src = "theme/images/footer-menu/Menuopen.png";
                 elements.style.display = "none";
                 menuIcon.style.display = "block";
                 menuIcon1.style.display = "none";
@@ -146,7 +146,7 @@ function TtoggleMenu() {
 
             } else {
                 Tmenu = false;
-                menuIcon.src = "theme/images/footer-menu/Menuopen.svg";
+                menuIcon.src = "theme/images/footer-menu/Menuopen.png";
                 elements.style.display = "none";
                 menuIcon.style.display = "block";
                 menuIcon1.style.display = "none";
@@ -224,14 +224,14 @@ function menuEnDisble_fun(bool) {
             //img.style.cursor = 'cursor'; 
 
         } else {
-            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.png');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
         }
 
     } else {
 
-        img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+        img.setAttribute('src', 'theme/images/footer-menu/Menuopen.png');
         img.style.pointerEvents = 'auto';
         img.style.cursor = 'pointer';
 
@@ -261,7 +261,7 @@ function menuEnable_fun_firstpage() {
     //Menu Disable added
      {
        {
-            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.png');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
            
@@ -330,14 +330,14 @@ function menuEnDisble_fun_PREV() {
             //img.style.cursor = 'cursor'; 
 
         } else {
-            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.png');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
         }
 
     } else {
 
-        img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+        img.setAttribute('src', 'theme/images/footer-menu/Menuopen.png');
         img.style.pointerEvents = 'auto';
         img.style.cursor = 'pointer';
 

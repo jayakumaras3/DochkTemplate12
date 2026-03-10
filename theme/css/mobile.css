@@ -156,7 +156,7 @@
     position: relative;
     float: left;
     margin-bottom: 12px;
-    padding-bottom: 67px;
+  /*  padding-bottom: 67px;*/
     padding-left: 20px !important;
     text-align: left;
     font-size: 15px;

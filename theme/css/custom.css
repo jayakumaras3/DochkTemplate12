@@ -1232,10 +1232,8 @@ html, body {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border-radius: 50% !important;
-    background: rgba(0,0,0,0.45) !important;
-    backdrop-filter: blur(6px) !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
     cursor: pointer !important;
 }
 
@@ -1245,7 +1243,6 @@ html, body {
     min-width: 24px !important;
     min-height: 24px !important;
     display: block !important;
-    filter: brightness(0) invert(1) drop-shadow(0 1px 3px rgba(0,0,0,0.4)) !important;
     cursor: pointer !important;
     object-fit: contain !important;
 }
@@ -1478,17 +1475,15 @@ html, body {
     position: static !important;
     width: 44px !important;
     height: 44px !important;
-    border-radius: 50% !important;
+    border-radius: 0 !important;
     border: none !important;
     background-color: transparent !important;
     background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: contain !important;
-    backdrop-filter: blur(6px) !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
     cursor: pointer !important;
-    transition: background-color 0.2s ease, transform 0.15s ease !important;
+    transition: transform 0.15s ease !important;
     color: transparent !important;
     font-size: 0 !important;
     top: auto !important;
@@ -1507,17 +1502,15 @@ html, body {
     position: static !important;
     width: 44px !important;
     height: 44px !important;
-    border-radius: 50% !important;
+    border-radius: 0 !important;
     border: none !important;
     background-color: transparent !important;
     background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: contain !important;
-    backdrop-filter: blur(6px) !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
     cursor: pointer !important;
-    transition: background-color 0.2s ease, transform 0.15s ease !important;
+    transition: transform 0.15s ease !important;
     color: transparent !important;
     font-size: 0 !important;
     top: auto !important;
@@ -1547,17 +1540,14 @@ html, body {
     position: static !important;
     width: 44px !important;
     height: 44px !important;
-    border-radius: 50% !important;
+    border-radius: 0 !important;
     border: none !important;
-   /* background-color: rgba(10,15,30,0.6) !important;*/
     background-image: url("../images/footer-menu/Resource.png") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-size: contain !important;
-    backdrop-filter: blur(6px) !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
     cursor: pointer !important;
-    transition: background-color 0.2s ease, transform 0.15s ease !important;
+    transition: transform 0.15s ease !important;
     color: transparent !important;
     font-size: 0 !important;
     top: auto !important;
@@ -2259,15 +2249,22 @@ body {
     left: auto !important;
     transform: none !important;
     margin: 0 !important;
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 50% !important;
+    width: 4rem !important;
+    height: 4rem !important;
+    border-radius: 0 !important;
+    border: none !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    background: rgba(0,0,0,0.45) !important;
-    backdrop-filter: blur(6px) !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel #TmenuIcon {
+    width: 4rem !important;
+    height: 4rem !important;
+    filter: none !important;
 }
 
 /* 2) Prev/Next stack */
@@ -2301,8 +2298,8 @@ body {
     margin: 0 !important;
 }
 
-/* Keep only Prev/Next in this panel for consistent global order */
-.wholeContainer.reels-wrapper .rightNavPanel .footer > div:not(#prev):not(#next) {
+/* Keep only navigation icons in this panel */
+.wholeContainer.reels-wrapper .rightNavPanel .footer > div:not(#prev):not(#next):not(#resource):not(#resource1) {
     display: none !important;
 }
 
@@ -2310,15 +2307,19 @@ body {
 .wholeContainer.reels-wrapper .rightNavPanel .footer .prevClass,
 .wholeContainer.reels-wrapper .rightNavPanel .footer #next,
 .wholeContainer.reels-wrapper .rightNavPanel .footer .nextClass,
-.wholeContainer.reels-wrapper .rightNavPanel .footer .nextClassHighlight {
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 50% !important;
+.wholeContainer.reels-wrapper .rightNavPanel .footer .nextClassHighlight,
+.wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
+.wholeContainer.reels-wrapper .rightNavPanel .footer #resource1,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .resourceClass {
+    width: 4rem !important;
+    height: 4rem !important;
+    border-radius: 0 !important;
     border: none !important;
+    background-color: transparent !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    background-size: 22px 22px !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+    background-size: 56px 56px !important;
+    box-shadow: none !important;
     color: transparent !important;
     font-size: 0 !important;
 }
@@ -2334,6 +2335,14 @@ body {
 .wholeContainer.reels-wrapper .rightNavPanel .footer .nextClassHighlight {
     order: 2 !important;
     background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
+.wholeContainer.reels-wrapper .rightNavPanel .footer #resource1,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .resourceClass {
+    order: 3 !important;
+    background-image: url("../images/footer-menu/Resource.png") !important;
+    /*background-size: 20px 20px !important;*/
 }
 
 /* 3) Page number */
@@ -2360,7 +2369,7 @@ body {
 }
 
 .wholeContainer.reels-wrapper .rightNavPanel #pagenoHeader {
-    order: 3 !important;
+    order: 4 !important;
     position: static !important;
     top: auto !important;
     right: auto !important;
@@ -2369,12 +2378,12 @@ body {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-width: 44px !important;
-    padding: 4px 10px !important;
+    min-width: 56px !important;
+    padding: 6px 12px !important;
     border-radius: 12px !important;
     background: rgba(0,0,0,0.45) !important;
     color: #fff !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     line-height: 1.4 !important;
     text-align: center !important;
@@ -2388,17 +2397,20 @@ body {
 
     .wholeContainer.reels-wrapper .rightNavPanel .headingArea1,
     .wholeContainer.reels-wrapper .rightNavPanel .footer #prev,
-    .wholeContainer.reels-wrapper .rightNavPanel .footer #next {
+    .wholeContainer.reels-wrapper .rightNavPanel .footer #next,
+    .wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
+    .wholeContainer.reels-wrapper .rightNavPanel .footer #resource1 {
         width: 36px !important;
         height: 36px !important;
         background-size: 18px 18px !important;
     }
 
     .wholeContainer.reels-wrapper .rightNavPanel #TmenuIcon {
-        width: 20px !important;
-        height: 20px !important;
-        min-width: 20px !important;
-        min-height: 20px !important;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        filter: none !important;
     }
 
     .wholeContainer.reels-wrapper .rightNavPanel #pagenoHeader {
