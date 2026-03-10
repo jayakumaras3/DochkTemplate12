@@ -344,12 +344,12 @@ var stage, preload, lib = {};
 					}
 					else
 					{
+                        
 						menuEnDisble_fun(false);
 					}
 
 				 } else if(this.globalVariableService.getPageCounter()==2)
 				 {
-				//	 alert();
 						menuEnDisble_fun(true);
 					    nextElem.addClass("disabledClass");
 						nextElem.removeAttr("title", NextTitle);

@@ -1234,7 +1234,7 @@ html, body {
     justify-content: center !important;
     border-radius: 0 !important;
     background: transparent !important;
-    cursor: pointer !important;
+  /*  cursor: pointer !important;*/
 }
 
 .wholeContainer.reels-wrapper #TmenuIcon {

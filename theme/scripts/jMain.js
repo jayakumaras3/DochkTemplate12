@@ -216,12 +216,13 @@ function menuEnDisble_fun(bool) {
             headingArea.style.display = 'block';
 
             // Change the src attribute to the new image path
-            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.svg');
+            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.png');
             img.style.pointerEvents = 'none';
 
             TtoggleMenu();
             document.getElementById("pageNo").innerHTML = "Audio";
-            //img.style.cursor = 'cursor'; 
+          //  img.style.cursor = 'cursor'; 
+             img.style.pointerEvents = 'none';
 
         } else {
             img.setAttribute('src', 'theme/images/footer-menu/Menuopen.png');
@@ -301,7 +302,7 @@ function menuEnDisble_fun_firstpage() {
        {
             headingArea.style.display = 'block';
             // Change the src attribute to the new image path
-            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.svg');
+            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.png');
             img.style.pointerEvents = 'none';
         }
 
@@ -322,7 +323,7 @@ function menuEnDisble_fun_PREV() {
             headingArea.style.display = 'block';
 
             // Change the src attribute to the new image path
-            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.svg');
+            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.png');
             img.style.pointerEvents = 'none';
 
             TtoggleMenu();
