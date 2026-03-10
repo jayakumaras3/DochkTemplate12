@@ -52,6 +52,7 @@
         <div class="reels-container">
 			<div class="reel-slide" ng-class="{'video-slide': cc.pageContentType == 'video'}">
 				<div class="reel-fixed-top">
+        <div class="rightNavPanel" aria-label="Right navigation panel" role="group">
 		<div
   id="clickableDiv"
   class="headingArea1"
@@ -70,13 +71,43 @@
   aria-expanded="{{sb.menuOpen ? 'true' : 'false'}}"
   style="cursor: pointer;">
 		 <img title="Menu"  style="display:none;" id="TmenuIcon1" ng-click="sb.tocClick('toggleMenu')"  alt="image"></div> 
-        <div class="headingArea FSize14" ng-show="cc.showHeader"><span tabindex="0" role="text"> {{cc.header}}</span><div  tabindex="0" id="pagenoHeader"></div>
+    <div ng-controller="footerBar as fb" class="footer" ng-show="fb.showFooter">
+<div
+    ng-repeat="btn in fb.navigationBtn"
+    id="{{btn.id}}"
+    ng-click="fb.navigationBtnClick(btn)"
+    ng-class="(btn.display == 'yes') ? btn.class : btn.class + ' hideContent'"
+    role="button"
+    tabindex="0"
+    aria-label="{{btn.tooltip || btn.name}}"
+    title="{{btn.tooltip}}"
+>
+    {{btn.name}}
+</div>
+
+    <!-- Navigation Circles -->
+    <div
+        ng-repeat="circle in fb.navCircle"
+        class="navCircle"
+        ng-click="fb.navBtnClick($index)"
+        role="button"
+        tabindex="0"
+        aria-label="Navigation Circle {{$index + 1}}"
+        title="Navigation Circle {{$index + 1}}"
+    ></div>
+
+    </div>
+
+                <div tabindex="0" id="pagenoHeader"></div>
+
+                <div class="headingArea FSize14" ng-show="cc.showHeader"><span tabindex="0" role="text"> {{cc.header}}</span>
         <button id="certificateid" onclick="showCertificate()" aria-label="View Certificate">
   <img  id="Imagcertificateid" src="theme/images/footer-menu/Certificate.svg" alt="" style="height: 32px; vertical-align: middle;">
 </button>
 
 </div>
         <div class="line2"></div>
+		</div>
 				</div>
         <div class="pageContent" ng-class="cc.fullScreen == true ? 'fullContentArea' : ''">
             <div ng-include="cc.pageContent" onload="cc.finishLoading()" ng-if="cc.pageContentType == 'flash'"
@@ -121,33 +152,6 @@
         </div>
         </div>
     </div>
-    <div ng-controller="footerBar as fb" class="footer" ng-show="fb.showFooter">
-<div
-    ng-repeat="btn in fb.navigationBtn"
-    id="{{btn.id}}"
-    ng-click="fb.navigationBtnClick(btn)"
-    ng-class="(btn.display == 'yes') ? btn.class : btn.class + ' hideContent'"
-    role="button"
-    tabindex="0"
-    aria-label="{{btn.tooltip || btn.name}}"
-    title="{{btn.tooltip}}"
->
-    {{btn.name}}
-</div>
-
-    <!-- Navigation Circles -->
-    <div
-        ng-repeat="circle in fb.navCircle"
-        class="navCircle"
-        ng-click="fb.navBtnClick($index)"
-        role="button"
-        tabindex="0"
-        aria-label="Navigation Circle {{$index + 1}}"
-        title="Navigation Circle {{$index + 1}}"
-    ></div>
-
-    </div>
-
 </div>
 
 

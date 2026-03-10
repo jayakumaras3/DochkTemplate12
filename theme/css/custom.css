@@ -698,7 +698,9 @@ html, body {
     }
 
     /* Keep footer buttons anchored to the content column right edge */
-    .wholeContainer.reels-wrapper .footer {
+    .wholeContainer.reels-wrapper .footer,
+    .wholeContainer.reels-wrapper .headingArea1,
+    .wholeContainer.reels-wrapper #pagenoHeader {
         right: calc(50% - 222px) !important; /* 240px - 18px = stays 18px inside content */
     }
 }
@@ -751,6 +753,14 @@ html, body {
      * (where the column IS the full viewport).
      */
     .wholeContainer.reels-wrapper .footer {
+        right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 18px) !important;
+    }
+
+    /* Keep headingArea1 and pagenoHeader aligned with footer on landscape.
+     * position:fixed → 50% resolves against viewport width = same as 50vw.
+     */
+    .wholeContainer.reels-wrapper .headingArea1,
+    .wholeContainer.reels-wrapper #pagenoHeader {
         right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 18px) !important;
     }
 }
@@ -1086,43 +1096,51 @@ html, body {
     pointer-events: auto !important;
 }
 
-/*  8. Header title bar  */
+/*  8. Header title bar
+ * IMPORTANT: Do NOT set display:none here — #pagenoHeader lives inside
+ * .headingArea and display:none on a parent hides all descendants.
+ * Instead, collapse it to zero size with overflow:visible so its absolutely
+ * positioned child (#pagenoHeader) can still render.
+ */
 .wholeContainer.reels-wrapper .headingArea {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100% !important;
-    height: 44px !important;
-    max-width: none !important;
-    transform: none !important;
+    width: 0 !important;       /* zero width — takes no space */
+    height: 0 !important;      /* zero height — takes no space */
+    overflow: visible !important; /* allow children to escape bounds */
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
     margin: 0 !important;
-    padding: 0 12px 0 54px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    z-index: 1200 !important;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.0) 100%) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    color: #fff !important;
+    display: block !important; /* Must NOT be none */
+    pointer-events: none !important;
+    z-index: 2003 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
-    border-radius: 0 !important;
-    border-bottom: none !important;
-    float: none !important;
-    box-sizing: border-box !important;
+    flex: none !important;
+    transform: none !important;
 }
 
-/* Landscape small height: compact header */
+/* Hide all headingArea content except #pagenoHeader */
+.wholeContainer.reels-wrapper .headingArea > span,
+.wholeContainer.reels-wrapper .headingArea > button {
+    display: none !important;
+}
+
+/* Landscape small height: compact icons */
 @media (orientation: landscape) and (max-height: 500px) {
-    .wholeContainer.reels-wrapper .headingArea {
-        height: 40px !important;
-        padding: 0 10px 0 46px !important;
-    }
-    
     .wholeContainer.reels-wrapper .headingArea1 {
-        top: 8px !important;
-        left: 10px !important;
-        padding: 4px !important;
+        right: 10px !important;
+        width: 36px !important;
+        height: 36px !important;
+        top: calc(50vh - 110px) !important;
+    }
+
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        right: 10px !important;
+        top: calc(50vh - 134px) !important;
     }
     
     .wholeContainer.reels-wrapper #TmenuIcon {
@@ -1146,23 +1164,42 @@ html, body {
     line-height: 1.2 !important;
 }
 
+/*
+ * RIGHT PANEL — Page number pill
+ * Uses position:fixed so it is anchored to the viewport, not to the
+ * near-zero-height .reel-fixed-top containing block.
+ *
+ * Column layout (top → bottom), all right:18px:
+ *   pagenoHeader  top: calc(50vh - 166px)   ← 50vh - 78 - 12 - 44 - 12 - 20
+ *   headingArea1  top: calc(50vh - 134px)   ← 50vh - 78 - 12 - 44
+ *   footer group  top: 50%  (translateY(-50%)) → spans 50vh ± 78px
+ */
 .wholeContainer.reels-wrapper #pagenoHeader {
-    flex-shrink: 0 !important;
+    position: fixed !important;
+    right: 18px !important;
+    top: calc(50vh - 166px) !important;
+    left: auto !important;
+    float: none !important;
+    margin: 0 !important;
     padding: 4px 10px !important;
     border-radius: 12px !important;
-    background: rgba(255,255,255,0.15) !important;
+    background: rgba(0,0,0,0.45) !important;
     border: none !important;
     color: #fff !important;
     font-size: 11px !important;
-    font-weight: 500 !important;
-    margin-left: auto !important;
-    margin-right: 0 !important;
-    float: none !important;
+    font-weight: 600 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    min-width: 44px !important;
     height: auto !important;
     line-height: 1.4 !important;
+    z-index: 2002 !important;
+    pointer-events: none !important;
+    backdrop-filter: blur(4px) !important;
+    flex-shrink: 0 !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
 }
 
 .wholeContainer.reels-wrapper #certificateid {
@@ -1173,22 +1210,33 @@ html, body {
     display: none !important;
 }
 
-/*  9. Menu icon (hamburger) - always visible inside reels frame  */
+/*
+ * 9. Menu icon (hamburger)
+ * Uses position:fixed — viewport-relative, bypasses the near-zero-height
+ * .reel-fixed-top containing block that made position:absolute fail.
+ * Sits directly above the footer nav buttons in the right panel.
+ */
 .wholeContainer.reels-wrapper .headingArea1 {
-    position: absolute !important;
-    top: 1px !important;
-    left: 12px !important;
-    width: auto !important;
+    position: fixed !important;
+    right: 18px !important;
+    left: auto !important;
+    top: calc(50vh - 134px) !important; /* 50vh - 78(half-footer) - 12(gap) - 44(self) */
+    width: 44px !important;
+    height: 44px !important;
     max-width: none !important;
     transform: none !important;
-    z-index: 1300 !important; /* Above all reels content */
+    z-index: 2002 !important;
     margin: 0 !important;
-    padding: 6px !important; /* Touchable area */
+    padding: 0 !important;
     float: none !important;
-    height: auto !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    border-radius: 50% !important;
+    background: rgba(0,0,0,0.45) !important;
+    backdrop-filter: blur(6px) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+    cursor: pointer !important;
 }
 
 .wholeContainer.reels-wrapper #TmenuIcon {
@@ -1396,7 +1444,12 @@ html, body {
     white-space: nowrap !important;
 }
 
-/*  16. Original footer — repositioned as floating reels nav (replaces float controls)  */
+/*  16. Original footer — floating reels nav, centred vertically  */
+/*
+ * The footer contains: prev (▲) + next (▼) + resource.
+ * pagenoHeader and headingArea1 (menu) are now positioned ABOVE this group
+ * in the same right-panel column using the same right:18px anchor.
+ */
 .wholeContainer.reels-wrapper .footer {
     position: absolute !important;
     right: 18px !important;
@@ -1556,6 +1609,14 @@ html, body {
         gap: 12px !important;
     }
 
+    .wholeContainer.reels-wrapper .headingArea1 {
+        right: 12px !important;
+    }
+
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        right: 12px !important;
+    }
+
     .wholeContainer.reels-wrapper .footer #prev,
     .wholeContainer.reels-wrapper .footer .prevClass,
     .wholeContainer.reels-wrapper .footer #next,
@@ -1583,6 +1644,14 @@ html, body {
     .wholeContainer.reels-wrapper .footer {
         right: 10px !important;
         gap: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper .headingArea1 {
+        right: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        right: 10px !important;
     }
 
     .wholeContainer.reels-wrapper .footer #prev,
@@ -1666,15 +1735,13 @@ html, body {
 
 /*  19. Mobile — identical (already full-width, just tweak spacing)  */
 @media (max-width: 480px) {
-    .wholeContainer.reels-wrapper .headingArea {
-        padding: 0 10px 0 46px !important;
-        height: 44px !important;
+    .wholeContainer.reels-wrapper .headingArea1 {
+        right: 12px !important;
+        left: auto !important;
     }
 
-    .wholeContainer.reels-wrapper .headingArea1 {
-        top: 10px !important;
-        left: 10px !important;
-        padding: 5px !important;
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        right: 12px !important;
     }
     
     .wholeContainer.reels-wrapper #TmenuIcon {
@@ -2019,37 +2086,24 @@ body {
         isolation: isolate !important;
     }
 
-    /* 2 ── Header bar: fill the fixed wrapper, pad content below notch  */
+    /* 2 ── headingArea on iOS portrait: must stay zero-size (not restored to full-width) */
     .wholeContainer.reels-wrapper .headingArea {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        /* Full height of fixed wrapper */
-        height: 100% !important;
-        padding-top: env(safe-area-inset-top, 0px) !important;
-        padding-left: 54px !important;
-        padding-right: 12px !important;
-        padding-bottom: 0 !important;
-        z-index: 9100 !important;
-        -webkit-backdrop-filter: blur(8px) !important;
-        backdrop-filter: blur(8px) !important;
+        width: 0 !important;
+        height: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        display: block !important; /* pagenoHeader inside must render */
     }
 
-    /* 3 ── Hamburger icon: shift down past notch  */
+    /* 3 ── Hamburger icon: keep in right panel (position:fixed, viewport-relative) */
     .wholeContainer.reels-wrapper .headingArea1 {
-        top: env(safe-area-inset-top, 0px) !important;
         z-index: 9200 !important;
+        right: 12px !important;
+        left: auto !important;
     }
 
-    /* 4 ── Push scrollable content below the now-fixed header
-            Applies to both flex (.pageContent #10 rule) and the
-            absolute-fill override in the STEP 7 block.              */
-    .wholeContainer.reels-wrapper .pageContent,
-    .wholeContainer.reels-wrapper .contentArea.video-mode .pageContent,
-    .wholeContainer.reels-wrapper .contentArea .pageContent {
-        padding-top: calc(44px + env(safe-area-inset-top, 0px)) !important;
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        right: 12px !important;
     }
 }
 
@@ -2062,19 +2116,22 @@ body {
     display: none !important;
 }
 
-/* Right-align page number — over-ride all alignment rules */
+/* Global page number right-align fallback (non-reels pages) */
 #pagenoHeader {
     margin-left: auto !important;
-    text-align: right !important;
+    text-align: center !important;
 }
 
+/* Inside .headingArea (non-reels): keep original alignment */
 .headingArea #pagenoHeader {
     margin-left: auto !important;
     margin-right: 0 !important;
 }
 
+/* In reels-wrapper: pagenoHeader is absolute-positioned in right panel —
+   margin:auto no longer applies */
 .wholeContainer.reels-wrapper #pagenoHeader {
-    margin-left: auto !important;
+    margin-left: 0 !important;
     margin-right: 0 !important;
 }
 
@@ -2158,5 +2215,195 @@ body {
         object-fit: contain !important;
         display: block !important;
         background: #000 !important;
+    }
+}
+
+/* =====================================================================
+   GLOBAL RIGHT NAV PANEL (single reusable layout system)
+   Order: Menu -> Prev -> Next -> Page Number
+   ===================================================================== */
+.wholeContainer.reels-wrapper .rightNavPanel {
+    position: fixed !important;
+    top: 50% !important;
+    right: 18px !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: auto !important;
+    height: auto !important;
+    z-index: 2200 !important;
+    pointer-events: auto !important;
+}
+
+/* Keep panel anchored to content column on landscape/wide displays */
+@media (orientation: landscape) {
+    .wholeContainer.reels-wrapper .rightNavPanel {
+        right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 18px) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .wholeContainer.reels-wrapper .rightNavPanel {
+        right: 12px !important;
+    }
+}
+
+/* 1) Menu */
+.wholeContainer.reels-wrapper .rightNavPanel .headingArea1 {
+    order: 1 !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(0,0,0,0.45) !important;
+    backdrop-filter: blur(6px) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+}
+
+/* 2) Prev/Next stack */
+.wholeContainer.reels-wrapper .rightNavPanel .footer {
+    order: 2 !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    float: none !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .footer > div {
+    position: static !important;
+    float: none !important;
+    margin: 0 !important;
+}
+
+/* Keep only Prev/Next in this panel for consistent global order */
+.wholeContainer.reels-wrapper .rightNavPanel .footer > div:not(#prev):not(#next) {
+    display: none !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .footer #prev,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .prevClass,
+.wholeContainer.reels-wrapper .rightNavPanel .footer #next,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .nextClass,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .nextClassHighlight {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 22px 22px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+    color: transparent !important;
+    font-size: 0 !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .footer #prev,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .prevClass {
+    order: 1 !important;
+    background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .footer #next,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .nextClass,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .nextClassHighlight {
+    order: 2 !important;
+    background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
+}
+
+/* 3) Page number */
+.wholeContainer.reels-wrapper .rightNavPanel .headingArea {
+    order: 3 !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    display: block !important;
+    pointer-events: none !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .headingArea > span,
+.wholeContainer.reels-wrapper .rightNavPanel .headingArea > button,
+.wholeContainer.reels-wrapper .rightNavPanel .line2 {
+    display: none !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel #pagenoHeader {
+    order: 3 !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 44px !important;
+    padding: 4px 10px !important;
+    border-radius: 12px !important;
+    background: rgba(0,0,0,0.45) !important;
+    color: #fff !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    text-align: center !important;
+    pointer-events: none !important;
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    .wholeContainer.reels-wrapper .rightNavPanel {
+        gap: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper .rightNavPanel .headingArea1,
+    .wholeContainer.reels-wrapper .rightNavPanel .footer #prev,
+    .wholeContainer.reels-wrapper .rightNavPanel .footer #next {
+        width: 36px !important;
+        height: 36px !important;
+        background-size: 18px 18px !important;
+    }
+
+    .wholeContainer.reels-wrapper .rightNavPanel #TmenuIcon {
+        width: 20px !important;
+        height: 20px !important;
+        min-width: 20px !important;
+        min-height: 20px !important;
+    }
+
+    .wholeContainer.reels-wrapper .rightNavPanel #pagenoHeader {
+        font-size: 10px !important;
+        min-width: 36px !important;
+        padding: 3px 8px !important;
     }
 }
