@@ -172,7 +172,7 @@ input.checkbox,
     appearance: none;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent), #0f4db7);
+    background: #E5241D !important;
     color: #fff;
     font-family: 'Open Sans', Arial, sans-serif;
     font-size: 1.05rem;
@@ -182,7 +182,7 @@ input.checkbox,
     padding: 12px 24px;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.25s ease, background 0.25s ease, opacity 0.2s ease;
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28);
+    box-shadow: 0 8px 20px rgba(229, 36, 29, 0.28);
     margin-top: 24px;
     display: block;
     margin-left: auto;
@@ -191,9 +191,9 @@ input.checkbox,
 
 #submitBtn:hover,
 .btn:hover {
-    background: linear-gradient(135deg, var(--accent-hover), #1e40af);
+    background: #C41810 !important;
     transform: translateY(-1px);
-    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.34);
+    box-shadow: 0 12px 24px rgba(229, 36, 29, 0.34);
 }
 
 #submitBtn:active,
@@ -204,7 +204,7 @@ input.checkbox,
 #submitBtn:focus-visible,
 .btn:focus-visible,
 .answer:focus-visible {
-    outline: 3px solid rgba(37, 99, 235, 0.28);
+    outline: 3px solid rgba(229, 36, 29, 0.28);
     outline-offset: 2px;
 }
 
