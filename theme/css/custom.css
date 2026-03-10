@@ -172,7 +172,7 @@ body {
     right: 0 !important;
     height: 54px !important;
     background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent) !important;
-    backdrop-filter: blur(4px) !important;
+    backdrop-filter: blur(0px) !important;
     z-index: 1001 !important;
     display: flex !important;
     align-items: center !important;
@@ -595,7 +595,14 @@ html, body {
      * and below it.
      */
     align-items: stretch !important;
-    justify-content: flex-start !important;
+    /*
+     * justify-content: center — ensures the 9:16 content column is always
+     * horizontally centred in the viewport on all display sizes (1080p,
+     * 2K, 4K). Using flex-start previously relied solely on margin:0 auto
+     * on the contentArea child, which could fail in some edge cases on
+     * ultra-wide viewports. center + margin:0 auto = doubly safe.
+     */
+    justify-content: center !important;
     overflow: hidden !important;
     background: #000 !important;
     margin: 0 !important;
@@ -643,6 +650,59 @@ html, body {
     }
 }
 
+/* ─────────────────────────────────────────────────────────────────────
+   2K / 4K LARGE DISPLAY SAFE CENTERING
+   On ultra-wide viewports (2560px, 3840px) the JavaScript resize.js
+   function attempts to set body.style.left / body.style.transform to
+   scale & offset the page. Those inline styles are intentionally
+   nullified by the transform:none + left:0 rules above.
+   The rules below act as an explicit safety net ensuring the entire
+   design stays centred and never clips on either edge.
+   ───────────────────────────────────────────────────────────────────── */
+@media (min-width: 1920px) {
+    html, body {
+        /* Reinforce: no JS-injected offset can clip the centred layout */
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+        overflow-x: hidden !important;
+    }
+
+    .wholeContainer.reels-wrapper {
+        /* Explicit centring on ultra-wide: belt-AND-suspenders with
+           justify-content:center already set on the flex container     */
+        justify-content: center !important;
+        align-items: stretch !important;
+        overflow: hidden !important;
+        /* Prevent the dark stage from having unwanted left/right offset */
+        margin-left: auto !important;
+        margin-right: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Content column: cap to 480px and stay centred */
+    .wholeContainer.reels-wrapper .contentArea {
+        max-width: 480px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
+/* 4K specific — same rules, wider guard */
+@media (min-width: 2560px) {
+    .wholeContainer.reels-wrapper .contentArea {
+        max-width: 480px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    /* Keep footer buttons anchored to the content column right edge */
+    .wholeContainer.reels-wrapper .footer {
+        right: calc(50% - 222px) !important; /* 240px - 18px = stays 18px inside content */
+    }
+}
+
 /*  3. Sidebar overlay — positioned absolutely within app shell  */
 .wholeContainer.reels-wrapper .sideBar {
     position: absolute !important;
@@ -670,6 +730,28 @@ html, body {
 @media (orientation: landscape) {
     .wholeContainer.reels-wrapper .sideBar {
         left: calc((100vw - min(480px, calc(100dvh * 9 / 16))) / 2) !important;
+    }
+
+    /*
+     * In landscape, the 9:16 content column is narrower than the viewport
+     * and centred. The nav buttons must sit adjacent to the column's RIGHT
+     * edge, not at the viewport's right edge (which on 2K/4K could place
+     * them 1000+ px away in dead space).
+     *
+     * Formula explanation:
+     *   content_right_from_left = 50% + content_half_width
+     *   Desired right edge of button (18px inside content): content_right - 18px
+     *   CSS `right` = viewport - desired_position = 50% - content_half_width + 18px
+     *
+     *   content_half_width = min(240px, calc(100dvh * 9 / 32))
+     *     (half of min(480px, calc(100dvh * 9 / 16)))
+     *
+     * Result: on any screen size the buttons sit 18px inside the right
+     * edge of the content column — identical to how they sit on portrait
+     * (where the column IS the full viewport).
+     */
+    .wholeContainer.reels-wrapper .footer {
+        right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 18px) !important;
     }
 }
 
@@ -1780,7 +1862,7 @@ body {
     align-items: center !important;
     flex: unset !important;
     flex-shrink: 0 !important;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 100%) !important;
+   /* background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 100%) !important;*/
     backdrop-filter: none !important;
     border-radius: 0 !important;
     border-bottom: none !important;
