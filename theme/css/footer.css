@@ -1,16 +1,22 @@
 .footer {
-    position: relative;
-    left: 8px;
-    top: 8px;
-    height: 55px;
-    background-color: white;
-    float: left;
-    width: 99%;
-    border-radius: 5px;
-    z-index: 1000;
-	box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
-	padding-left: 11%;
-
+    position: fixed;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: auto;
+    background-color: transparent;
+    float: none;
+    width: auto;
+    border-radius: 0;
+    z-index: 2001;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    left: auto;
 }
 #ResourceClose
 {
@@ -49,13 +55,11 @@
 .disabledClass span:hover {
     color: #8f8f8f !important;
 }
-.footer>div
-{
-    float: right;
-    position: relative;
-    margin-right: 26px;
-    margin-top: 15px;
-}
+.footer > div {
+    float: none;
+    position: static;
+    margin: 0;
+    padding: 0;
 }
 .replayClass
 {

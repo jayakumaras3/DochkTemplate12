@@ -318,7 +318,6 @@ input.checkbox,
 .Startpagebtn:hover,
 .retrybtn:hover {
     background: #C41810 !important;
-    transform: translateY(-1px);
     box-shadow: 0 12px 24px rgba(229, 36, 29, 0.34);
 }
 
@@ -326,7 +325,7 @@ input.checkbox,
 .btn:active,
 .Startpagebtn:active,
 .retrybtn:active {
-    transform: translateY(0);
+    box-shadow: 0 6px 16px rgba(229, 36, 29, 0.22);
 }
 
 #submitBtn:focus-visible,

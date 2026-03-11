@@ -31,7 +31,7 @@
   "QuestionCountText": "Questions",
   "QuestionOFText": "of",
   "viewResult": "View Result",
-  "clicknote": "<i>Click <strong>Start</strong> to begin.</i>",
+  "clicknote": "<i>Click <b>Start</b> to begin.</i>",
   "TimeUpte": "Oops! Time's up!",
   "questions": [
     {

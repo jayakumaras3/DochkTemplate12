@@ -701,6 +701,7 @@ html, body {
     .wholeContainer.reels-wrapper .footer,
     .wholeContainer.reels-wrapper .headingArea1,
     .wholeContainer.reels-wrapper #pagenoHeader {
+        position: fixed !important;
         right: calc(50% - 222px) !important; /* 240px - 18px = stays 18px inside content */
     }
 }
@@ -752,15 +753,17 @@ html, body {
      * edge of the content column — identical to how they sit on portrait
      * (where the column IS the full viewport).
      */
-    .wholeContainer.reels-wrapper .footer {
-        right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 18px) !important;
-    }
-
     /* Keep headingArea1 and pagenoHeader aligned with footer on landscape.
      * position:fixed → 50% resolves against viewport width = same as 50vw.
      */
     .wholeContainer.reels-wrapper .headingArea1,
     .wholeContainer.reels-wrapper #pagenoHeader {
+        position: fixed !important;
+        right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 18px) !important;
+    }
+
+    .wholeContainer.reels-wrapper .footer {
+        position: fixed !important;
         right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 18px) !important;
     }
 }
@@ -1446,9 +1449,10 @@ html, body {
  * The footer contains: prev (▲) + next (▼) + resource.
  * pagenoHeader and headingArea1 (menu) are now positioned ABOVE this group
  * in the same right-panel column using the same right:18px anchor.
+ * FIXED positioning ensures no shifting when content/pages change.
  */
 .wholeContainer.reels-wrapper .footer {
-    position: absolute !important;
+    position: fixed !important;
     right: 18px !important;
     top: 50% !important;
     transform: translateY(-50%) !important;

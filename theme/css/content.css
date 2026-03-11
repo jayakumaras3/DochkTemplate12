@@ -38,9 +38,14 @@
 }
 #pagenoHeader
 {
-	    position: relative;
-		float: right;
-		
+    position: fixed;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1998;
+    float: none;
+    margin: 0;
+    padding: 0;
 }
 .fullContentArea {
     width: 1366px !important;
@@ -64,12 +69,13 @@
     padding: 8px 20px;
 }*/
 .headingArea1 {
-	margin-top: 4px;
-    position: absolute;
-    /* height: 56px; */
-    /* width: 80%; */
-    z-index: 1002;
-    margin-left: 12px;
+    position: fixed;
+    right: 18px;
+    top: 20px;
+    z-index: 2002;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
 }
 .headingcloser {
 	    margin-top: 0px;
