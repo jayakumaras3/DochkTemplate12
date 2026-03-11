@@ -396,15 +396,24 @@ body {
 }
 
 .contentArea.video-mode #pagenoHeader {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
     float: none;
-    min-width: 62px;
+    min-width: 44px;
+    height: auto;
     text-align: center;
-    padding: 3px 10px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.15);
+    padding: 6px 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.45) !important;
     border: none !important;
     color: #fff;
     font-weight: 600;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1998;
 }
 
 .contentArea.video-mode .shorts-container {
@@ -754,12 +763,17 @@ html, body {
      * (where the column IS the full viewport).
      */
     /* Keep headingArea1 and pagenoHeader aligned with footer on landscape.
-     * position:fixed → 50% resolves against viewport width = same as 50vw.
+     * position:fixed → bottom-right with responsive spacing
      */
     .wholeContainer.reels-wrapper .headingArea1,
     .wholeContainer.reels-wrapper #pagenoHeader {
         position: fixed !important;
-        right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 18px) !important;
+        right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 20px) !important;
+    }
+
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        bottom: 20px !important;
+        top: auto !important;
     }
 
     .wholeContainer.reels-wrapper .footer {
@@ -1172,24 +1186,24 @@ html, body {
  * Uses position:fixed so it is anchored to the viewport, not to the
  * near-zero-height .reel-fixed-top containing block.
  *
- * Column layout (top → bottom), all right:18px:
- *   pagenoHeader  top: calc(50vh - 166px)   ← 50vh - 78 - 12 - 44 - 12 - 20
- *   headingArea1  top: calc(50vh - 134px)   ← 50vh - 78 - 12 - 44
- *   footer group  top: 50%  (translateY(-50%)) → spans 50vh ± 78px
+ * Page number is positioned at bottom-right corner with consistent spacing:
+ *   pagenoHeader  right: 20px; bottom: 20px
+ *   Creates clear separation from content and other elements
  */
 .wholeContainer.reels-wrapper #pagenoHeader {
     position: fixed !important;
-    right: 18px !important;
-    top: calc(50vh - 166px) !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    top: auto !important;
     left: auto !important;
     float: none !important;
     margin: 0 !important;
-    padding: 4px 10px !important;
+    padding: 6px 12px !important;
     border-radius: 12px !important;
-    background: rgba(0,0,0,0.45) !important;
+    background: rgba(0, 0, 0, 0.45) !important;
     border: none !important;
     color: #fff !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     display: flex !important;
     align-items: center !important;
@@ -1197,7 +1211,9 @@ html, body {
     min-width: 44px !important;
     height: auto !important;
     line-height: 1.4 !important;
-    z-index: 2002 !important;
+    z-index: 1998 !important;
+    transform: none !important;
+}
     pointer-events: none !important;
     backdrop-filter: blur(4px) !important;
     flex-shrink: 0 !important;
@@ -1646,6 +1662,7 @@ html, body {
 
     .wholeContainer.reels-wrapper #pagenoHeader {
         right: 10px !important;
+        bottom: 16px !important;
     }
 
     .wholeContainer.reels-wrapper .footer #prev,
