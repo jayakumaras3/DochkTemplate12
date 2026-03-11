@@ -90,10 +90,11 @@
     margin-left: 230px;
 }
 #TmenuIcon {
-    width: 38px;
+   /*   width: 38px;
     height: 23px;
     cursor: pointer;
-    margin-top: 6px;
+  margin-top: 6px;*/
+  cursor: pointer;
 }
 #TmenuIcon1
 {
@@ -166,35 +167,53 @@ video::cue {
   padding: 10px;
 }
 
+/* ===== PRELOADER ANIMATIONS ===== */
+@keyframes spinnerRotate {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== BACKGROUND OVERLAY (used in preloader, resource area, exit popup) ===== */
 .preloaderDisplay {
     width: 100%;
     height: 100%;
     position: absolute;
+    top: 0;
+    left: 0;
     opacity: 0.6;
-    background-color: rgba(255,255,255,.5);
+    background-color: rgba(255, 255, 255, 0.5);
     z-index: 10001;
-
 }
-/*
-.preloaderDisplayresume {
+
+/* Override for the page-transition preloader — needs to be fully opaque
+   so dark video frames / canvas don't bleed through */
+#preloader > .preloaderDisplay {
+    background-color: rgba(255, 255, 255, 0.97);
+    opacity: 1;
+}
+
+/* ===== PRELOADER CONTAINER ===== */
+#preloader {
     width: 100%;
     height: 100%;
     position: absolute;
-    opacity: 1;
-    background-color: rgba(255,255,255,.5);
-    z-index: 10001;
-
-}*/
-
-#preloader {
-    width: 82.8%;
-    height: 100%;
-    position: absolute;
-    left: 236px;
+    left: 0;
     top: 0;
     display: none;
     z-index: 10000;
+    /* Use flexbox so the spinner is always centred regardless of template layout */
+    align-items: center;
+    justify-content: center;
+    /* Fade is driven entirely by PreloadManager via inline opacity */
+    transition: opacity 0.3s ease-in-out;
 }
+
+/* When PreloadManager calls show(), display is set to 'block' via JS.
+   Override it back to flex so the spinner centres correctly. */
+#preloader[style*="block"] {
+    display: flex !important;
+}
+
 .preloaderteempcls {
     width: 100% !important;
     height: 100%;
@@ -203,8 +222,85 @@ video::cue {
     top: 0;
     display: none;
     z-index: 10000;
+    transition: opacity 0.3s ease-in-out;
 }
 
+/* ===== SPINNER POSITIONING ===== */
+#preloaderText {
+    /* Centred by the flex parent — no absolute positioning needed */
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    z-index: 10002;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    /* Override any inline marginLeft set by contentController JS */
+    margin: 0 !important;
+}
+
+/* ===== CSS SPINNER ===== */
+.preloader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(180, 180, 180, 0.3);
+    border-top-color: #fa601e;
+    border-radius: 50%;
+    animation: spinnerRotate 0.85s linear infinite;
+    flex-shrink: 0;
+}
+
+/* Loading label below spinner */
+.preloader-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #777;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+}
+
+/* Safety: hide the old GIF if present */
+#preloaderText > img {
+    display: none !important;
+}
+
+#preloaderCount {
+    margin-left: 23.5%;
+    font-weight: bold;
+}
+
+/* ===== PROGRESS BAR VARIANT ===== */
+.preloader-progress-bar {
+    width: 140px;
+    height: 4px;
+    background-color: rgba(200, 200, 200, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.preloader-progress-bar::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #fa601e, transparent);
+    animation: slideProgress 1.5s ease-in-out infinite;
+}
+
+@keyframes slideProgress {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* ===== RESOURCE CONTENT ===== */
 #resourceContent {
     background-color: white;
     /* Responsive sizing: max 520px wide, fits within viewport */
@@ -219,27 +315,6 @@ video::cue {
     z-index: 100111 !important;
     overflow-y: auto !important;
     box-sizing: border-box !important;
-}
-
-#preloaderText {
-    margin-left: 40%;
-    margin-top: 25%;
-    z-index: 10002;
-
-}
-#preloaderText>img
-{
-    position:absolute;
-	left:0px;
-	top:0px;
-	bottom:0px;
-	right:0px;
-	margin:auto;
-}
-#preloaderCount {
-    margin-left: 23.5%;
-  /*  font-size: 24px;*/
-    font-weight: bold
 }
 
 #resourceArea {

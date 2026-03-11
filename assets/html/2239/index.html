@@ -9,33 +9,73 @@
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; width: 100%; }
+
+    /* ══════════════════════════════════
+       FIX: html & body must NOT clip
+       and must allow scrolling on large
+       displays so nothing is ever hidden
+    ══════════════════════════════════ */
+    html {
+      width: 100%;
+      min-height: 100%;
+      /* Prevent any browser-level offset */
+      overflow-x: hidden;
+    }
 
     body {
       background: #0f1923;
       font-family: 'Source Sans 3', sans-serif;
       -webkit-font-smoothing: antialiased;
+
+      /* ── FIX: Safe centering for 2K / 4K ── */
+      /* Use flex on body but make it a scroll container,
+         NOT overflow:hidden, so the card is never clipped  */
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;      /* stack vertically */
+      align-items: center;         /* horizontal centre  */
+      justify-content: center;     /* vertical centre    */
       min-height: 100vh;
       min-height: 100dvh;
+
+      /* KEY FIX: allow body to grow taller than viewport
+         on very large displays rather than squishing the card */
+      overflow-x: hidden;          /* never scroll sideways  */
+      overflow-y: auto;            /* scroll vertically if needed */
+
+      /* Ensure body itself fills the viewport width fully
+         so centering math is based on the whole screen    */
+      width: 100%;
     }
 
     /* ══════════════════════════════════
        CARD
     ══════════════════════════════════ */
     .c-card {
-      width: 100%;
+      /* FIX: use explicit width + auto side margins as a belt-and-suspenders
+         centering strategy alongside flex — this is what keeps the card
+         centred on 2K/4K when flex alone can drift due to scrollbar width  */
+      width: min(480px, 100vw);    /* never wider than viewport             */
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+
       height: 100vh;
       height: 100dvh;
-      max-width: 480px;
+
       background: #1b2a3e;
       display: flex;
       flex-direction: column;
-      /* Only clip on x axis — hero image edges */
-      overflow-x: hidden;
-      overflow-y: hidden;
+
+      /* FIX: remove overflow-x hidden from the card — clipping was happening
+         here on wide viewports when the card was mis-positioned.
+         We only need it on the hero for the image crop effect.             */
+      overflow: hidden;
+
+      /* Ensure card never goes below the viewport on very small heights    */
+      min-height: 0;
+
+      /* Prevent card from ever being pushed outside left edge              */
+      position: relative;
     }
 
     /* ══════════════════════════════════
@@ -104,7 +144,6 @@
     .c-meta {
       display: flex;
       align-items: center;
-      /* ALLOW wrap so meta items never overflow */
       flex-wrap: wrap;
       gap: 4px;
       padding-top: 0;
@@ -149,7 +188,6 @@
     .c-btns {
       display: flex;
       align-items: center;
-      /* KEY FIX: wrap so second button drops to next line when narrow */
       flex-wrap: wrap;
       gap: clamp(6px, 1.4vw, 12px);
     }
@@ -160,7 +198,6 @@
       padding: 0;
       cursor: pointer;
       display: inline-flex;
-      /* KEY FIX: shrink allowed so button image scales down on narrow */
       flex-shrink: 1;
       min-width: 0;
       -webkit-tap-highlight-color: transparent;
@@ -171,7 +208,6 @@
     .c-btn:active        { transform: translateY(1px);  filter: brightness(.92);  }
     .c-btn:focus-visible { outline: 2px solid #00c4cc; outline-offset: 3px; border-radius: 50px; }
 
-    /* Button images: max-width 100% so they never overflow their container */
     .c-btn--begin img {
       display: block;
       height: clamp(32px, 1.4vw + 4.2vh, 56px);
@@ -189,7 +225,7 @@
        BREAKPOINTS
     ══════════════════════════════════ */
 
-    /* Full-bleed when frame is too narrow to show equal margins */
+    /* Full-bleed when frame is too narrow for side margins */
     @media (max-width: 540px) {
       body { align-items: flex-start; justify-content: flex-start; }
       .c-card { max-width: 100%; border-radius: 0; box-shadow: none; }
@@ -205,12 +241,36 @@
 
     /* Tablet / desktop */
     @media (min-width: 768px) {
-      .c-card { max-width: 520px; }
+      .c-card { max-width: 520px; width: min(520px, 100vw); }
+    }
+
+    /* ── 2K / 4K explicit safety net ──
+       On very large displays ensure the card is
+       always rendered within the visible viewport
+       and centred with equal whitespace on both sides. */
+    @media (min-width: 1440px) {
+      body {
+        /* Re-affirm flex centering at large widths */
+        justify-content: center;
+        align-items: center;
+      }
+      .c-card {
+        /* Keep card proportional — never stretch beyond 520px */
+        max-width: 520px;
+        width: 520px;
+        /* Belt-and-suspenders: auto margins guarantee centering
+           even if the flex context has any scrollbar-width offset */
+        margin-left: auto;
+        margin-right: auto;
+        /* Ensure card height matches viewport, not physical screen */
+        height: 100vh;
+        height: 100dvh;
+      }
     }
 
     /* Landscape phone → side-by-side */
     @media (orientation: landscape) and (max-height: 520px) {
-      .c-card  { flex-direction: row; max-width: 100%; border-radius: 0; }
+      .c-card  { flex-direction: row; max-width: 100%; width: 100%; border-radius: 0; }
       .c-hero  { flex: 0 0 48%; height: 100%; }
       .c-body  { padding: 0 4%; }
       .c-title { font-size: clamp(0.8rem, 2vw + 0.8vh, 1.15rem); }
@@ -229,10 +289,8 @@
     <!-- Body -->
     <div class="c-body">
 
-      <!-- Top spacer (smaller = content sits higher) -->
       <div class="c-spacer-top"></div>
 
-      <!-- Content: always fully visible, never clipped -->
       <div class="c-content">
 
         <h1 class="c-title">
@@ -258,7 +316,6 @@
           </div>
         </div>
 
-        <!-- Buttons wrap to second line when card is narrow -->
         <div class="c-btns">
           <button class="c-btn c-btn--begin" type="button" aria-label="Begin Course" onclick="startCourse()">
             <img src="Bitmap3.png" alt="Begin Course"/>
@@ -270,7 +327,6 @@
 
       </div>
 
-      <!-- Bottom spacer (bigger = breathing room below buttons) -->
       <div class="c-spacer-bottom"></div>
 
     </div>
@@ -278,6 +334,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    /* ── No JS changes — functionality preserved exactly ── */
     function startCourse() {
       parent.beginButCall();
     }

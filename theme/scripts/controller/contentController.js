@@ -116,7 +116,12 @@ var stage, preload, lib = {};
      */
     p.getTocData = function () {
 
-        document.getElementById("preloader").style.opacity = "1";
+        // Show preloader using PreloadManager for smooth fade in
+        if (typeof PreloadManager !== 'undefined') {
+            PreloadManager.show();
+        } else {
+            document.getElementById("preloader").style.opacity = "1";
+        }
         this.toc = this.globalVariableService.getTocData();
 		if(this.globalVariableService.toclevel==false){
         this.modulenumber =this.globalVariableService.pagesmodcount[this.globalVariableService.getPageCounter()-1][0];
@@ -454,7 +459,12 @@ var stage, preload, lib = {};
     p.displayContent = function () {
         var contentCounter = this.globalVariableService.getContentCounter();
         currentContentValue = this.contentData[contentCounter];
-        document.getElementById("preloader").style.display = "none";
+        // Hide preloader using the PreloadManager for smooth fade out
+        if (typeof PreloadManager !== 'undefined') {
+            PreloadManager.hide();
+        } else {
+            document.getElementById("preloader").style.display = "none";
+        }
         document.body.style.display = "block";
         var self = this;
 		CurrentcontentType=currentContentValue.type;

@@ -185,6 +185,10 @@ function captivateIframeComplete() {
 }
 
 function checkNextContent(counter) {
+    // Show preloader when navigating via navigation circles
+    if (typeof PreloadManager !== 'undefined') {
+        PreloadManager.show();
+    }
     var contentController = angular.element(document.querySelector(".contentArea"));
     contentController.scope().cc.checkNextContent(counter);
 }
@@ -431,7 +435,12 @@ function showaudscript(num)
 
 }
 function hidePreloader() {
-    document.getElementById("preloader").style.display = "none";
+    // Hide preloader using PreloadManager for smooth fade out
+    if (typeof PreloadManager !== 'undefined') {
+        PreloadManager.hide();
+    } else {
+        document.getElementById("preloader").style.display = "none";
+    }
     if(document.getElementById("captivateFrame"))
     {
         setTimeout(function(){document.getElementById("captivateFrame").contentWindow.cp.cpEISetValue("m_VarHandle.cpCmndGotoFrameAndResume", parseInt(currentCaptivativeFrames));},100)
