@@ -1593,8 +1593,8 @@ html, body {
     transform: none !important;
 }
 
-/* Hide all other non-nav footer children (prev, next, resource are exceptions) */
-.wholeContainer.reels-wrapper .footer > div:not([id='prev']):not([id='next']):not(.prevClass):not(.nextClass):not(.nextClassHighlight):not(.resourceClass) {
+/* Hide all other non-nav footer children (prev, next, resource, menu are exceptions) */
+.wholeContainer.reels-wrapper .footer > div:not([id='prev']):not([id='next']):not(.prevClass):not(.nextClass):not(.nextClassHighlight):not(.resourceClass):not(#clickableDiv) {
     display: none !important;
 }
 
@@ -2329,8 +2329,8 @@ body {
     margin: 0 !important;
 }
 
-/* Keep only navigation icons in this panel */
-.wholeContainer.reels-wrapper .rightNavPanel .footer > div:not(#prev):not(#next):not(#resource):not(#resource1) {
+/* Keep only menu, nav buttons, and page number — hide everything else (navCircles etc) */
+.wholeContainer.reels-wrapper .rightNavPanel .footer > div:not(#clickableDiv):not(#prev):not(#next):not(#resource):not(#resource1):not(#pagenoHeader) {
     display: none !important;
 }
 
@@ -2369,21 +2369,21 @@ body {
 
 .wholeContainer.reels-wrapper .rightNavPanel .footer #prev,
 .wholeContainer.reels-wrapper .rightNavPanel .footer .prevClass {
-    order: 1 !important;
+    order: 2 !important;
     background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
 }
 
 .wholeContainer.reels-wrapper .rightNavPanel .footer #next,
 .wholeContainer.reels-wrapper .rightNavPanel .footer .nextClass,
 .wholeContainer.reels-wrapper .rightNavPanel .footer .nextClassHighlight {
-    order: 2 !important;
+    order: 3 !important;
     background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
 }
 
 .wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
 .wholeContainer.reels-wrapper .rightNavPanel .footer #resource1,
 .wholeContainer.reels-wrapper .rightNavPanel .footer .resourceClass {
-    order: 3 !important;
+    order: 4 !important;
     background-image: url("../images/footer-menu/Resource.png") !important;
     /*background-size: 20px 20px !important;*/
 }
@@ -2412,7 +2412,7 @@ body {
 }
 
 .wholeContainer.reels-wrapper .rightNavPanel #pagenoHeader {
-    order: 4 !important;
+    order: 5 !important;
     position: static !important;
     top: auto !important;
     right: auto !important;

@@ -53,6 +53,7 @@
 			<div class="reel-slide" ng-class="{'video-slide': cc.pageContentType == 'video'}">
 				<div class="reel-fixed-top">
         <div class="rightNavPanel" aria-label="Right navigation panel" role="group">
+    <div ng-controller="footerBar as fb" class="footer" ng-show="fb.showFooter">
 		<div
   id="clickableDiv"
   class="headingArea1"
@@ -70,8 +71,7 @@
   aria-haspopup="true"
   aria-expanded="{{sb.menuOpen ? 'true' : 'false'}}"
   style="cursor: pointer;">
-		 <img title="Menu"  style="display:none;" id="TmenuIcon1" ng-click="sb.tocClick('toggleMenu')"  alt="image"></div> 
-    <div ng-controller="footerBar as fb" class="footer" ng-show="fb.showFooter">
+		 <img title="Menu"  style="display:none;" id="TmenuIcon1" ng-click="sb.tocClick('toggleMenu')"  alt="image"></div>
 <div
     ng-repeat="btn in fb.navigationBtn"
     id="{{btn.id}}"
@@ -96,9 +96,8 @@
         title="Navigation Circle {{$index + 1}}"
     ></div>
 
+    <div tabindex="0" id="pagenoHeader"></div>
     </div>
-
-                <div tabindex="0" id="pagenoHeader"></div>
 
                 <div class="headingArea FSize14" ng-show="cc.showHeader"><span tabindex="0" role="text"> {{cc.header}}</span>
         <button id="certificateid" onclick="showCertificate()" aria-label="View Certificate">
