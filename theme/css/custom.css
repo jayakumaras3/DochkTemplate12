@@ -874,6 +874,11 @@ html, body {
     margin-bottom: -1px !important;
 }
 
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #toc_id span,
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #trans_id span {
+    font-size: 18px !important;
+}
+
 .wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader .tocclickedclscss {
     border-color: #d9d9d9 !important;
     border-bottom-color: #fff !important;
@@ -888,7 +893,7 @@ html, body {
     right: 0;
     bottom: -1px;
     height: 3px;
-    background-color: #FA6B1F;
+    background-color: #0088BB;
 }
 
 .wholeContainer.reels-wrapper .sideBarMenuContent .tocData {
