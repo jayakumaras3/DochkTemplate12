@@ -268,7 +268,7 @@ body {
 
 /* ── contentArea.video-mode footer: right-side flex column (matches reels-wrapper) ── */
 .contentArea.video-mode + .footer {
-    position: absolute !important;
+    position: fixed !important;
     right: 18px !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
@@ -281,7 +281,7 @@ body {
     flex-direction: column !important;
     align-items: center !important;
     gap: 12px !important;
-    z-index: 2001 !important;
+    z-index: 2200 !important;
     background: none !important;
     border: none !important;
     border-radius: 0 !important;
@@ -296,6 +296,7 @@ body {
     float: none !important;
     position: static !important;
     margin: 0 !important;
+    padding: 0 !important;
 }
 
 /* All nav buttons: static within the flex column */
@@ -306,18 +307,18 @@ body {
 .contentArea.video-mode + .footer .nextClassHighlight,
 .contentArea.video-mode + .footer .resourceClass {
     position: static !important;
-    width: 44px !important;
-    height: 44px !important;
+    width: 4rem !important;
+    height: 4rem !important;
+    min-width: 4rem !important;
+    min-height: 4rem !important;
     border-radius: 50% !important;
     border: none !important;
-   /* background-color: rgba(10,15,30,0.6) !important;*/
+    background-color: transparent !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    background-size: 22px 22px !important;
-    backdrop-filter: blur(6px) !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+    background-size: contain !important;
+    box-shadow: none !important;
     cursor: pointer !important;
-    transition: background-color 0.2s ease, transform 0.15s ease !important;
     color: transparent !important;
     font-size: 0 !important;
     display: block !important;
@@ -326,7 +327,9 @@ body {
     left: auto !important;
     right: auto !important;
     transform: none !important;
-}
+    margin: 0 !important;
+    padding: 0 !important;
+}}
 
 .contentArea.video-mode + .footer #prev,
 .contentArea.video-mode + .footer .prevClass {
@@ -2246,6 +2249,11 @@ body {
     height: auto !important;
     z-index: 2200 !important;
     pointer-events: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    overflow: visible !important;
 }
 
 /* Keep panel anchored to content column on landscape/wide displays */
@@ -2311,6 +2319,8 @@ body {
     flex-direction: column !important;
     align-items: center !important;
     gap: 12px !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
 }
 
 .wholeContainer.reels-wrapper .rightNavPanel .footer > div {
@@ -2332,17 +2342,29 @@ body {
 .wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
 .wholeContainer.reels-wrapper .rightNavPanel .footer #resource1,
 .wholeContainer.reels-wrapper .rightNavPanel .footer .resourceClass {
- /*   width: 4rem !important;
+    position: static !important;
+    width: 4rem !important;
     height: 4rem !important;
+    min-width: 4rem !important;
+    min-height: 4rem !important;
     border-radius: 50% !important;
     border: none !important;
     background-color: transparent !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    background-size: 56px 56px !important;
+    background-size: contain !important;
     box-shadow: none !important;
     color: transparent !important;
-    font-size: 0 !important;*/
+    font-size: 0 !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .wholeContainer.reels-wrapper .rightNavPanel .footer #prev,
@@ -2399,16 +2421,17 @@ body {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    min-width: 56px !important;
+    min-width: 45px !important;
     padding: 6px 12px !important;
     border-radius: 12px !important;
-    background: rgba(0,0,0,0.45) !important;
+    background: rgba(0,0,0,18%) !important;
     color: #fff !important;
     font-size: 10px !important;
     font-weight: 600 !important;
-    line-height: 1.4 !important;
+    line-height: 1 !important;
     text-align: center !important;
     pointer-events: none !important;
+    flex-shrink: 0 !important;
 }
 
 @media (orientation: landscape) and (max-height: 500px) {
@@ -2421,16 +2444,16 @@ body {
     .wholeContainer.reels-wrapper .rightNavPanel .footer #next,
     .wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
     .wholeContainer.reels-wrapper .rightNavPanel .footer #resource1 {
-        width: 36px !important;
-        height: 36px !important;
-        background-size: 18px 18px !important;
+        width: 4rem !important;
+        height: 4rem !important;
+        background-size: contain !important;
     }
 
     .wholeContainer.reels-wrapper .rightNavPanel #TmenuIcon {
-        width: 40px !important;
-        height: 40px !important;
-        min-width: 40px !important;
-        min-height: 40px !important;
+        width: 4rem !important;
+        height: 4rem !important;
+        min-width: 4rem !important;
+        min-height: 4rem !important;
         filter: none !important;
     }
 
