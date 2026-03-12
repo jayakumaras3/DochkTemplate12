@@ -11,16 +11,64 @@
 
 /*25-04-2022
 */
-#toc_id
-{
-	width: 49%;
-	padding-left: 15px !important;
+#sideBarHeader {
+    width: 100%;
+    height: auto;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    border-bottom: 1px solid #d9d9d9;
+    background-color: #fff;
+    padding-bottom: 0;
+    margin-bottom: 12px;
 }
+
+#toc_id,
 #trans_id
 {
-	/*display:none;*/
-	padding-left: 5px !important;
-	width: 50%;
+	flex: 1;
+    padding: 0;
+	text-align: center;
+	position: relative;
+	cursor: pointer;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    margin-bottom: -1px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+#toc_id:hover,
+#trans_id:hover {
+    background-color: #f9f9f9;
+}
+
+#toc_id span,
+#trans_id span {
+    display: block;
+    padding: 7px 0 8px;
+}
+
+.tocclickedclscss
+{
+	background-color: #fff;
+    border-color: #d9d9d9;
+    border-bottom-color: #fff !important;
+    font-weight: 600;
+	color: #333;
+	position: relative;
+    z-index: 2;
+}
+
+.tocclickedclscss::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 3px;
+    background-color: #FA6B1F;
 }
 
 .transcriptDownL {
@@ -32,7 +80,8 @@
 
 /*endEnd*/
 .sideBar > .tocData {
-	margin-top: 10px;
+	margin-top: 0;
+    padding-top: 10px;
 	position: relative;
     float: left;
     width: 100%;
@@ -48,10 +97,18 @@
 
 .sideBar #sideBarHeader {
     width: 100%;
-    height: 41px;
+    height: auto;
     position: relative;
     bottom: 0;
-     top: 0px; 
+    top: 0px;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    border-bottom: 1px solid #d9d9d9;
+    background-color: #fff;
+    padding-bottom: 0;
+    margin-bottom: 12px;
+    z-index: 2;
 }
 
 .line {
@@ -127,14 +184,53 @@
     height: auto;
     width: 100%;
     margin-bottom: 12px;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    border-bottom: 1px solid #d9d9d9;
+    padding-bottom: 0;
 }
 
 .sideBarContent #sideBarHeader div {
-    float: left;
-    width: 50%;
-    padding-left: 10px !important;
+    flex: 1;
+    padding: 0 !important;
+    text-align: center !important;
     font-size: 19px;
     box-sizing: border-box;
+    cursor: pointer;
+    position: relative;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    margin-bottom: -1px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.sideBarContent #sideBarHeader div:hover {
+    background-color: #f9f9f9;
+}
+
+.sideBarContent #sideBarHeader .tocclickedclscss {
+	border-color: #d9d9d9;
+	border-bottom-color: #fff !important;
+    background-color: #fff;
+    position: relative;
+	z-index: 2;
+}
+
+.sideBarContent #sideBarHeader div span {
+	display: block;
+    padding: 7px 0 8px;
+}
+
+.sideBarContent #sideBarHeader .tocclickedclscss::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -1px;
+	height: 3px;
+	background-color: #FA6B1F;
 }
 
 .sideBarContent .tocData {
@@ -145,7 +241,8 @@
     max-height: 58vh;
     background-color: #fff;
     padding-right: 12px;
-    margin-top: 8px;
+    margin-top: 0;
+    padding-top: 10px;
 }
 
 .sideBarFooter {
@@ -153,28 +250,6 @@
     text-align: center;
     font-size: 14px;
     color: #aaa;
-}
-
-#sideBarHeader div {
-   align-content: center;
-    /* width: 32%; */
-    position: relative;
-    float: left;
-    /* margin-bottom: 17px; */
-    /* padding-bottom: 38px; */
-    padding-left: 16px;
-    text-align: left;
-    font-size: 19px;
-    height: 35px;
-    border-bottom-color: #ddd;
-	
-}
-.tocclickedclscss
-{
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-bottom-color: transparent !important;
-    font-weight: bold;
 }
 
 .transcriptClass {
@@ -300,6 +375,17 @@ body {
 {
     color:#707070;
 }
+
+.activeTocItem {
+    color: #9E0A07 !important;
+    font-weight: bold !important;
+}
+
+#tocData li span.activeTocItem {
+    color: #9E0A07 !important;
+    font-weight: bold !important;
+}
+
 .tickSymbol::before{
 	
     content: '\2713'; /* Unicode for the tick symbol */

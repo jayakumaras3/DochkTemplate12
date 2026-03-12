@@ -731,6 +731,10 @@ if (img) {
 		//console.log("currentTOC::"+currentTOC);
 		totalCompletedToc.sort();
 		var sideBarController = angular.element(document.querySelectorAll("#tocData li span"));
+		
+		// Remove activeTocItem class from all items first
+		angular.element(document.querySelectorAll("#tocData li span")).removeClass("activeTocItem");
+		
 		for (var i = 0; i < totalCompletedToc.length; i++) {
 			var count = this.globalVariableService.getStartingPointTocCount();
 			for (var prop in sideBarController) {
@@ -746,6 +750,8 @@ if (img) {
 					if (count == currentTOC) {
 						angular.element(sideBarController[prop]).removeClass("visitedTOC");
 						angular.element(sideBarController[prop]).addClass("selectedToc");
+						// Add activeTocItem class for enhanced visual highlighting
+						angular.element(sideBarController[prop]).addClass("activeTocItem");
 						if ($($("#tocData li")[i]).hasClass('disabledClass')) {
 							$($("#tocData li")[i]).removeClass("disabledClass");
 						}

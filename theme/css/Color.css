@@ -1,7 +1,19 @@
 /* sidebar CSS *//* custom CSS  MCQ SCQ Quiz  _CR means only used for Color class  need to add in the PHP Also*/ 
 .selectedToc {
     color: #9E0A07 !important;
+    font-weight: bold !important;
 }
+
+#tocData li span.selectedToc {
+    color: #9E0A07 !important;
+    font-weight: bold !important;
+}
+
+#tocData li span.activeTocItem {
+    color: #9E0A07 !important;
+    font-weight: bold !important;
+}
+
 .ID_ColorSet_CR {
     color: #9E0A07;
 }
