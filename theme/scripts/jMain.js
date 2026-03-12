@@ -214,20 +214,23 @@ function menuEnDisble_fun(bool) {
     if (AudioVersionEnable) {
         if (temp == 2) {
             headingArea.style.display = 'block';
-
+          //  alert("Audio page");
             // Change the src attribute to the new image path
-            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.png');
+           // img.setAttribute('src', 'theme/images/footer-menu/disableMenu.png');
             img.style.pointerEvents = 'none';
 
             TtoggleMenu();
             document.getElementById("pageNo").innerHTML = "Audio";
-          //  img.style.cursor = 'cursor'; 
+           img.style.cursor = 'default'; 
              img.style.pointerEvents = 'none';
+             document.getElementById('clickableDiv').classList.add('disabledClass');
+             
 
         } else {
             img.setAttribute('src', 'theme/images/footer-menu/Menuopen.png');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
+            document.getElementById('clickableDiv').classList.remove('disabledClass');
         }
 
     } else {
@@ -302,7 +305,8 @@ function menuEnDisble_fun_firstpage() {
        {
             headingArea.style.display = 'block';
             // Change the src attribute to the new image path
-            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.png');
+            //img.setAttribute('src', 'theme/images/footer-menu/disableMenu.png');
+            document.getElementById('clickableDiv').classList.add('disabledClass');
             img.style.pointerEvents = 'none';
         }
 
@@ -323,22 +327,26 @@ function menuEnDisble_fun_PREV() {
             headingArea.style.display = 'block';
 
             // Change the src attribute to the new image path
-            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.png');
+            //img.setAttribute('src', 'theme/images/footer-menu/disableMenu.png');
+            
             img.style.pointerEvents = 'none';
 
             TtoggleMenu();
             document.getElementById("pageNo").innerHTML = "Audio";
             //img.style.cursor = 'cursor'; 
+            document.getElementById('clickableDiv').classList.add('disabledClass');
 
         } else {
             img.setAttribute('src', 'theme/images/footer-menu/Menuopen.png');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
+            document.getElementById('clickableDiv').classList.remove('disabledClass');
         }
 
     } else {
 
         img.setAttribute('src', 'theme/images/footer-menu/Menuopen.png');
+        document.getElementById('clickableDiv').classList.remove('disabledClass');
         img.style.pointerEvents = 'auto';
         img.style.cursor = 'pointer';
 

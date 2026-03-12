@@ -668,7 +668,7 @@ function generateResourceList(data) {
 		 onkeydown="handleKeydown_Close(event)">
 	  <img id="ResourceClose" src="theme/images/footer-menu/Navclose.png" alt="Close navigation menu" role="presentation">
 	</div>
-    <div class="leftResourceArea" style="font-size:34px;">
+    <div class="leftResourceArea" style="font-size:1.8rem;">
       <ul style="list-style-type: none; padding: 0;">
         ${resources.length > 0 
           ? resources.map(resource => `

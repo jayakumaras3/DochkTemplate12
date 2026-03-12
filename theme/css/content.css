@@ -87,7 +87,7 @@
     z-index: 2002;
     margin: 0;
     padding: 0;
-    cursor: pointer;
+   /* cursor: pointer;*/
 }
 .headingcloser {
 	    margin-top: 0px;
@@ -322,7 +322,7 @@ video::cue {
 #resourceContent {
     background-color: white;
     /* Responsive sizing: max 520px wide, fits within viewport */
-    width: clamp(280px, 80vw, 520px) !important;
+        width: clamp(275px, 80vw, 359px) !important;
     max-height: calc(100vh - 80px) !important;
     /* Remove old absolute positioning — overlay flex handles centering */
     position: relative !important;
@@ -398,7 +398,7 @@ video::cue {
     position: relative;
     width: 100%;
     float: none;
-    padding: 48px 24px 32px 24px;
+    padding: 20px 10px 10px 10px;
     box-sizing: border-box;
     margin: 0;
 }

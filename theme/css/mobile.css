@@ -166,9 +166,9 @@
     position: relative;
     float: left;
     margin-bottom: 12px;
-  /*  padding-bottom: 67px;*/
-    padding-left: 20px !important;
-    text-align: left;
+  /*  padding-bottom: 67px;
+    padding-left: 20px !important;*/
+    text-align: center;
     font-size: 15px;
     height: 30px;
 }
