@@ -8,7 +8,7 @@ var PreloadManager = (function () {
     'use strict';
 
     var FADE_MS        = 300;   // transition duration — matches CSS
-    var MIN_SHOW_MS    = 200;   // keep visible at least this long
+    var MIN_SHOW_MS    = 1000;  // keep visible at least this long (1 second)
     var PRELOADER_ID   = 'preloader';
 
     var _visible    = false;
