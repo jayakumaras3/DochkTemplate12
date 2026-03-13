@@ -596,10 +596,7 @@ if (img) {
 
 							this.globalVariableService.setPageCounter(count);
 							this.globalVariableService.addCompletePage(count);
-							// Delay content loading by 1 second to show preload screen
-							setTimeout(function() {
-								self.$rootScope.$broadcast("getTocData");
-							}, 1000);
+							self.$rootScope.$broadcast("getTocData");
 						}
 					} else {
 						if (count - 1 == data) {

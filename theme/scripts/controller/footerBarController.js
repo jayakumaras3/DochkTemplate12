@@ -383,11 +383,7 @@ var pauseTimer;
                 if (typeof PreloadManager !== 'undefined') {
                     PreloadManager.show();
                 }
-                // Delay content loading by 1 second
-                var self = this;
-                setTimeout(function() {
-                    self.rootScope.$broadcast("getTocData");
-                }, 1000);
+                this.rootScope.$broadcast("getTocData");
                 this.changeFooterNavigation();
                 break;
             case "mute":
@@ -579,12 +575,8 @@ var pauseTimer;
         this.globalVariableService.setPageCounter(pageCounter + 1);
         this.globalVariableService.setContentCounter(0);
         
-        // Delay content loading by 1 second to show preload screen
-        var self = this;
-        setTimeout(function() {
-            self.rootScope.$broadcast("getTocData");
-            self.rootScope.$broadcast("tocSelectedChange");
-        }, 1000);
+        this.rootScope.$broadcast("getTocData");
+        this.rootScope.$broadcast("tocSelectedChange");
         
         this.changeFooterNavigation();
     };
@@ -616,12 +608,8 @@ var pauseTimer;
         this.globalVariableService.setPageCounter(pageCounter - 1);
         this.globalVariableService.setContentCounter(0);
         
-        // Delay content loading by 1 second to show preload screen
-        var self = this;
-        setTimeout(function() {
-            self.rootScope.$broadcast("getTocData");
-            self.rootScope.$broadcast("tocSelectedChange");
-        }, 1000);
+        this.rootScope.$broadcast("getTocData");
+        this.rootScope.$broadcast("tocSelectedChange");
         
         this.changeFooterNavigation();
 		}

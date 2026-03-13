@@ -62,7 +62,7 @@
 .fullContentArea {
     width: 1366px !important;
     height: 768px !important;
-    left: -0px; !important;
+    left: 0 !important;
 }
 /*.headingArea1 {
 	//display:none;
@@ -494,4 +494,82 @@ video::cue {
     z-index: 100111 !important;
     overflow-y: auto !important;
     box-sizing: border-box !important;
+}
+
+/* ===== ORIENTATION MESSAGE (Portrait-only for phones) ===== */
+#orientationMessage {
+    position: fixed;
+    inset: 0;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000 !important;
+    background-image: linear-gradient(135deg, rgb(20, 20, 20), rgb(0, 0, 0)) !important;
+    z-index: 99999 !important;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    pointer-events: auto;
+}
+
+#orientationMessage[style*="display: flex"],
+#orientationMessage[style*="display:flex"] {
+    display: flex !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Hide body scroll when orientation overlay is visible */
+body:has(#orientationMessage[style*="display: flex"]),
+body:has(#orientationMessage[style*="display:flex"]) {
+    overflow: hidden !important;
+    height: 100vh !important;
+}
+
+.orientationMessageContent {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    max-width: 360px;
+    padding: 0 20px;
+}
+
+.orientationIcon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rotateIcon {
+    width: 80px;
+    height: 80px;
+    color: #e53935;
+    filter: drop-shadow(0 2px 8px rgba(229, 57, 53, 0.3));
+}
+
+.orientationTitle {
+    font-size: 28px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: 0.2px;
+}
+
+.orientationSubtext {
+    font-size: 14px;
+    font-weight: 400;
+    color: #b0b0b0;
+    margin: 0;
+    line-height: 1.5;
+    letter-spacing: 0.3px;
 }

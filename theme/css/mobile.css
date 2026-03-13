@@ -398,6 +398,61 @@ body:has(.vertical-video-layout) .vertical-video-layout {
 }
 }
 
+/* ===== ORIENTATION MESSAGE RESPONSIVE STYLES ===== */
+@media only screen and (max-width: 844px) {
+    /* Mobile phone styles for orientation message */
+    .orientationMessageContent {
+        gap: 20px;
+        max-width: 340px;
+        padding: 0 20px;
+    }
+
+    .orientationIcon {
+        width: 70px;
+        height: 70px;
+    }
+
+    .rotateIcon {
+        width: 70px;
+        height: 70px;
+    }
+
+    .orientationTitle {
+        font-size: 26px;
+    }
+
+    .orientationSubtext {
+        font-size: 13px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    /* Smaller phone styles */
+    .orientationMessageContent {
+        gap: 18px;
+        max-width: 300px;
+        padding: 0 15px;
+    }
+
+    .orientationIcon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .rotateIcon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .orientationTitle {
+        font-size: 24px;
+    }
+
+    .orientationSubtext {
+        font-size: 12px;
+    }
+}
+
 @media only screen and (max-width: 844px) {
     .contentArea.video-mode {
         position: relative !important;

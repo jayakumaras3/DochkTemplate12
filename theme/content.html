@@ -1,4 +1,20 @@
 <script language=JavaScript>var message="Function Disabled!";function clickIE4(){if (event.button==2){alert(message);return false;}}function clickNS4(e){if (document.layers||document.getElementById&&!document.all){if (e.which==2||e.which==3){alert(message);return false;}}}if (document.layers){document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS4;}else if (document.all&&!document.getElementById){document.onmousedown=clickIE4;}document.oncontextmenu=new Function("alert(message);return false") </script>
+
+<!-- Portrait-Only Overlay for Mobile Phones (Landscape Detection) -->
+<div id="orientationMessage" class="orientationMessage">
+    <div class="orientationMessageContent">
+        <div class="orientationIcon">
+            <svg class="rotateIcon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="3"/>
+                <path d="M 50 18 A 32 32 0 0 1 73 27" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                <polygon points="73,27 68,20 75,16" fill="currentColor"/>
+            </svg>
+        </div>
+        <h2 class="orientationTitle">Please Rotate Your Device</h2>
+        <p class="orientationSubtext">This procedure player is optimized for portrait view.</p>
+    </div>
+</div>
+
 <div ng-controller="mainController as mc" class="wholeContainer reels-wrapper">
     <div id="Tmenu" ng-controller="sideBar as sb" class="sideBar" ng-show="sb.showSideBar">
         <div class="sideBarPanel">
