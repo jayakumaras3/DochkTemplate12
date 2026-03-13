@@ -577,7 +577,7 @@ if (img) {
 
 		var count = this.globalVariableService.getStartingPointTocCount();
 		var sideBarController = angular.element(document.querySelectorAll("#tocData li span"));
-
+		var self = this;
 
 		for (var prop in sideBarController) {
 
@@ -596,7 +596,10 @@ if (img) {
 
 							this.globalVariableService.setPageCounter(count);
 							this.globalVariableService.addCompletePage(count);
-							this.$rootScope.$broadcast("getTocData");
+							// Delay content loading by 1 second to show preload screen
+							setTimeout(function() {
+								self.$rootScope.$broadcast("getTocData");
+							}, 1000);
 						}
 					} else {
 						if (count - 1 == data) {

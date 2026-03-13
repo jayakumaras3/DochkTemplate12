@@ -379,7 +379,15 @@ var pauseTimer;
                 }
 
                 this.commonForNaviagation();
-                this.rootScope.$broadcast("getTocData");
+                // Show preloader for replay action
+                if (typeof PreloadManager !== 'undefined') {
+                    PreloadManager.show();
+                }
+                // Delay content loading by 1 second
+                var self = this;
+                setTimeout(function() {
+                    self.rootScope.$broadcast("getTocData");
+                }, 1000);
                 this.changeFooterNavigation();
                 break;
             case "mute":
@@ -570,8 +578,14 @@ var pauseTimer;
         this.globalVariableService.addCompletePage(pageCounter + 1);
         this.globalVariableService.setPageCounter(pageCounter + 1);
         this.globalVariableService.setContentCounter(0);
-        this.rootScope.$broadcast("getTocData");
-        this.rootScope.$broadcast("tocSelectedChange");
+        
+        // Delay content loading by 1 second to show preload screen
+        var self = this;
+        setTimeout(function() {
+            self.rootScope.$broadcast("getTocData");
+            self.rootScope.$broadcast("tocSelectedChange");
+        }, 1000);
+        
         this.changeFooterNavigation();
     };
     p.prevBtnClick = function () {
@@ -601,8 +615,14 @@ var pauseTimer;
         this.globalVariableService.addCompletePage(pageCounter - 1);
         this.globalVariableService.setPageCounter(pageCounter - 1);
         this.globalVariableService.setContentCounter(0);
-        this.rootScope.$broadcast("getTocData");
-        this.rootScope.$broadcast("tocSelectedChange");
+        
+        // Delay content loading by 1 second to show preload screen
+        var self = this;
+        setTimeout(function() {
+            self.rootScope.$broadcast("getTocData");
+            self.rootScope.$broadcast("tocSelectedChange");
+        }, 1000);
+        
         this.changeFooterNavigation();
 		}
     };
