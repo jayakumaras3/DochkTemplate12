@@ -8,6 +8,9 @@ var OrientationManager = (function () {
     'use strict';
 
     var hideTimer = null;
+    var evalTimer = null;
+    var portraitConfirmTimer = null;
+    var overlayVisible = false;
 
     /**
      * Detect if the device is a mobile phone (not tablet or desktop)
@@ -51,6 +54,14 @@ var OrientationManager = (function () {
      * Check if device orientation is landscape
      */
     function isLandscape() {
+        if (screen.orientation && typeof screen.orientation.type === 'string') {
+            return screen.orientation.type.indexOf('landscape') === 0;
+        }
+
+        if (window.matchMedia) {
+            return window.matchMedia('(orientation: landscape)').matches;
+        }
+
         return window.innerWidth > window.innerHeight;
     }
 
@@ -71,6 +82,7 @@ var OrientationManager = (function () {
         messageEl.style.opacity = '1';
         messageEl.style.visibility = 'visible';
         messageEl.style.zIndex = '99999';
+        overlayVisible = true;
         
         // Force a reflow to ensure browser registers the changes
         void messageEl.offsetHeight;
@@ -91,6 +103,7 @@ var OrientationManager = (function () {
             messageEl.style.display = 'none';
             messageEl.style.visibility = 'hidden';
             hideTimer = null;
+            overlayVisible = false;
         }, 400);
     }
 
@@ -109,18 +122,49 @@ var OrientationManager = (function () {
     /**
      * Handle orientation change event
      */
-    function handleOrientationChange() {
+    function applyOrientationState() {
         if (!isMobilePhone()) { return; }
 
         if (isLandscape()) {
+            var wasVisible = overlayVisible;
+
+            if (portraitConfirmTimer !== null) {
+                clearTimeout(portraitConfirmTimer);
+                portraitConfirmTimer = null;
+            }
+
             // Phone rotated to landscape - show overlay
             showPortraitMessage();
-            // Attempt to lock back to portrait
-            lockToPortrait();
+            // Attempt to lock back to portrait when first entering landscape
+            if (!wasVisible) {
+                lockToPortrait();
+            }
         } else {
-            // Phone back to portrait - hide overlay
-            hidePortraitMessage();
+            // Only hide after orientation remains portrait for a short stable period.
+            if (portraitConfirmTimer !== null) {
+                clearTimeout(portraitConfirmTimer);
+            }
+
+            portraitConfirmTimer = setTimeout(function () {
+                portraitConfirmTimer = null;
+                if (!isLandscape()) {
+                    hidePortraitMessage();
+                }
+            }, 220);
         }
+    }
+
+    function handleOrientationChange() {
+        if (!isMobilePhone()) { return; }
+
+        if (evalTimer !== null) {
+            clearTimeout(evalTimer);
+        }
+
+        evalTimer = setTimeout(function () {
+            evalTimer = null;
+            applyOrientationState();
+        }, 80);
     }
 
     function attachOverlayWatcher() {
