@@ -408,17 +408,18 @@ body:has(.vertical-video-layout) .vertical-video-layout {
     }
 
     .orientationIcon {
-        width: 70px;
-        height: 70px;
+        width: 169px;
+        height: 169px;
     }
 
     .rotateIcon {
-        width: 70px;
-        height: 70px;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     .orientationTitle {
-        font-size: 26px;
+        font-size: 24px;
     }
 
     .orientationSubtext {
@@ -435,17 +436,18 @@ body:has(.vertical-video-layout) .vertical-video-layout {
     }
 
     .orientationIcon {
-        width: 60px;
-        height: 60px;
+        width: 143px;
+        height: 143px;
     }
 
     .rotateIcon {
-        width: 60px;
-        height: 60px;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     .orientationTitle {
-        font-size: 24px;
+        font-size: 22px;
     }
 
     .orientationSubtext {

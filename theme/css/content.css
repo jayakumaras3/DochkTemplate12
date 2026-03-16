@@ -535,14 +535,14 @@ body:has(#orientationMessage[style*="display:flex"]) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 24px;
+    gap: 28px;
     max-width: 360px;
     padding: 0 20px;
 }
 
 .orientationIcon {
-    width: 80px;
-    height: 80px;
+    width: 234px;
+    height: 234px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -550,19 +550,21 @@ body:has(#orientationMessage[style*="display:flex"]) {
 }
 
 .rotateIcon {
-    width: 80px;
-    height: 80px;
-    color: #e53935;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     filter: drop-shadow(0 2px 8px rgba(229, 57, 53, 0.3));
 }
 
 .orientationTitle {
-    font-size: 28px;
-    font-weight: 600;
+    font-size: 26px;
+    font-weight: 700;
     color: #ffffff;
     margin: 0;
-    line-height: 1.2;
-    letter-spacing: 0.2px;
+    line-height: 1.3;
+    letter-spacing: 0.5px;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 .orientationSubtext {
