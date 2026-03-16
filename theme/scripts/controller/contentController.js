@@ -500,14 +500,43 @@ var stage, preload, lib = {};
 				disableplapause();
 				this.timeout(function () {
                     self.scope.$apply();
+				
+				// Immediately after Angular creates the new video element (#vidArea with autoplay),
+				// pause it and remove autoplay to prevent the browser from auto-playing it.
+				// This ensures the only play trigger is onHidden() callback after preloader disappears.
 				var vid = document.getElementById("vidArea");
-				if (document.getElementById("vidArea")) {
-					vid.play();
-					
+				if (vid) {
+					vid.pause();  // Pause any auto-play attempt
+					vid.currentTime = 0;  // Reset to start
+					vid.removeAttribute('autoplay');  // Remove autoplay so browser doesn't retry
 				}
-				vid.oncontextmenu = function(event) {
-					event.preventDefault();
+				
+				// Defer video playback until preloader is fully hidden
+				// This ensures no audio plays while the preloader is visible (MIN_SHOW_MS + FADE_MS)
+				var startVideo = function () {
+					var vid = document.getElementById("vidArea");
+					if (vid) {
+						// Ensure context menu is disabled
+						vid.oncontextmenu = function(event) {
+							event.preventDefault();
+						};
+						// Play video (currentTime already reset above)
+						var playPromise = vid.play();
+						if (playPromise !== undefined) {
+							playPromise.catch(function(err) {
+								// If autoplay policy blocks play, silently fail
+								// User can manually click play button
+							});
+						}
+					}
 				};
+
+				// Use PreloadManager.onHidden() to ensure video only starts after preloader is completely hidden
+				if (typeof PreloadManager !== 'undefined') {
+					PreloadManager.onHidden(startVideo);
+				} else {
+					startVideo();
+				}
                 }, 10);
 				
                 break;
