@@ -8,7 +8,7 @@ var PreloadManager = (function () {
     'use strict';
 
     var FADE_MS        = 200;   // transition duration — matches CSS
-    var MIN_SHOW_MS    = 200;   // minimum visibility time (content loading delayed 1sec from nav handlers)
+    var MIN_SHOW_MS    = 2000;  // minimum visibility time — 2 seconds before page shows
     var PRELOADER_ID   = 'preloader';
 
     var _visible    = false;
