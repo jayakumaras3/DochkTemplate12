@@ -143,7 +143,9 @@ function pageSormTrack() {
 				
             if (pageArray[i] == "1") {
                 //	console.log("i: "+i);
+                if (elementToRemoveClass) {
                 elementToRemoveClass1.style.visibility = 'visible';
+                }
                 /*if (!elementToRemoveClass1.classList.contains('tickSymbol')) {
                 	
                 	//elementToRemoveClass1.classList.remove('tickSymbol');
@@ -151,13 +153,18 @@ function pageSormTrack() {
                 	
                 	
                 }*/
-                if (elementToRemoveClass.classList.contains('disabledClass')) {
-                    elementToRemoveClass.classList.remove('disabledClass');
+               if (elementToRemoveClass) {
+                    if (elementToRemoveClass.classList.contains('disabledClass')) {
+                        elementToRemoveClass.classList.remove('disabledClass');
+                    }
                 }
                 //angular.element(sideBarController[i]).addClass("visitedTOC");
 
             } else {
+
+                if (elementToRemoveClass1) {
 				elementToRemoveClass1.style.visibility = 'Hidden';
+                }
                 /*if(i == 1)
                 {
                 	//console.log(pageArray[i]);
@@ -165,7 +172,7 @@ function pageSormTrack() {
                 else*/
                 {
 
-                    if (elementToRemoveClass.classList.contains('disabledClass')) {
+                    if (elementToRemoveClass && elementToRemoveClass.classList.contains('disabledClass')) {
                         elementToRemoveClass.classList.remove('disabledClass');
                     }
                     if (masterBool) {
@@ -257,7 +264,10 @@ else
 
 function LanguageTrackChange(val1,val2)
 {
-	
+	/**
+	 * CAPTIONS FIX: Updated to work with videoTrackInitializer.js
+	 * Now includes cache-busting and proper reinitialization
+	 */
 	
 	 let video = document.getElementById("vidArea");
 
@@ -265,22 +275,24 @@ function LanguageTrackChange(val1,val2)
         console.error("Video element not found!");
         return;
     }
-    let oldTrack = document.getElementById("englishTrack");
+    
+    // Cache-busting: Add version timestamp to prevent caching issues
+    var cacheVersion = '?v=' + (new Date().getTime() / 60000 | 0);
+    
+    let oldTrack = document.getElementById("captionTrack");
     if (oldTrack) {
         video.removeChild(oldTrack); // Remove the existing track
     }
 
     // Get new track attributes from the selected option
-   // let selectedOption = this.options[this.selectedIndex];
-  //  let newSrc = val1;
     let newLang = val1;
     let newLabel = val2;
 
     // Create a new track element
     let newTrack = document.createElement("track");
-    newTrack.id = "englishTrack";
+    newTrack.id = "captionTrack";
     newTrack.kind = "captions";
-    newTrack.src = "assets/vtt/En_en_1.vtt";
+    newTrack.src = "assets/vtt/En_en_1.vtt" + cacheVersion;
     newTrack.srclang = newLang;
     newTrack.label = newLabel;
     newTrack.default = true;
@@ -288,57 +300,75 @@ function LanguageTrackChange(val1,val2)
     // Append the new track to the video element
     video.appendChild(newTrack);
 
-    // Reload subtitles
-    video.textTracks[0].mode = "showing";
+    // CRITICAL FIX: Force reinitialize captions after track attachment
+    if (window.VideoTrackInitializer && window.VideoTrackInitializer.reinitialize) {
+        setTimeout(function() {
+            VideoTrackInitializer.reinitialize();
+        }, 50);
+    }
 }
 function changeTrackSrc() {
-   var interval = setInterval(() => {
+    // Only process track changes for video content type
+    if (CurrentcontentType !== "video") {
+        return;
+    }
+
+    var interval = setInterval(() => {
         var video = document.getElementById('vidArea');
 
         // Check if the video is ready
         if (video && video.readyState >= 2) {
-			LanguageTrackChange(VttLanguage, VttLabel);
+            LanguageTrackChange(VttLanguage, VttLabel);
             clearInterval(interval); // Stop checking once the video is ready
 
-            if (CurrentcontentType === "video") {
-                var contentController = angular.element(document.querySelector(".contentArea"));
-                var temp = contentController.scope().cc.globalVariableService.pageCounter;
+            var contentController = angular.element(document.querySelector(".contentArea"));
+            var temp = contentController.scope().cc.globalVariableService.pageCounter;
 
-                // Get the video path
-                var videoPath = video.currentSrc;
+            // Get the video path
+            var videoPath = video.currentSrc;
 
-                // Get the video name without extension
-                var videoNameWithExtension = videoPath.split('/').pop(); // Splitting by '/' and getting the last part
-                var videoName = videoNameWithExtension.split('.')[0]; // Splitting by '.' and getting the first part (name without extension)
+            // Get the video name without extension
+            var videoNameWithExtension = videoPath.split('/').pop(); // Splitting by '/' and getting the last part
+            var videoName = videoNameWithExtension.split('.')[0]; // Splitting by '.' and getting the first part (name without extension)
 
-                var enStr = "assets/vtt/En_" + videoName + ".vtt";
-                var spStr = "assets/vtt/Sp_" + videoName + ".vtt";
-                var tuStr = "assets/vtt/Tu_" + videoName + ".vtt";
-                var chStr = "assets/vtt/Ch_" + videoName + ".vtt";
-                var englishTrack = document.getElementById('englishTrack');
-                var spanishTrack = document.getElementById('spanishTrack');
-                var chineseTrack = document.getElementById('chineseTrack');
-                var turkishTrack = document.getElementById('turkishTrack');
+            // CAPTIONS FIX: Add cache-busting to all track URLs
+            var cacheVersion = '?v=' + (new Date().getTime() / 60000 | 0);
+            
+            var enStr = "assets/vtt/En_" + videoName + ".vtt" + cacheVersion;
+            var spStr = "assets/vtt/Sp_" + videoName + ".vtt" + cacheVersion;
+            var tuStr = "assets/vtt/Tu_" + videoName + ".vtt" + cacheVersion;
+            var chStr = "assets/vtt/Ch_" + videoName + ".vtt" + cacheVersion;
+            
+            var englishTrack = document.getElementById('captionTrack');
+            var spanishTrack = document.getElementById('spanishTrack');
+            var chineseTrack = document.getElementById('chineseTrack');
+            var turkishTrack = document.getElementById('turkishTrack');
 
-                if (englishTrack) {
-                    englishTrack.src = enStr;
-                }
+            if (englishTrack) {
+                englishTrack.src = enStr;
+            }
 
-                if (spanishTrack) {
-                    spanishTrack.src = spStr;
-                }
-                if (chineseTrack) {
-                    chineseTrack.src = chStr;
-                }
-                if (turkishTrack) {
-                    turkishTrack.src = tuStr;
-                }
+            if (spanishTrack) {
+                spanishTrack.src = spStr;
+            }
+            if (chineseTrack) {
+                chineseTrack.src = chStr;
+            }
+            if (turkishTrack) {
+                turkishTrack.src = tuStr;
+            }
 
-                // After changing the track, call your function to change to the current track
-                changeToCurrentTrack();
+            // After changing the track, call your function to change to the current track
+            changeToCurrentTrack();
+            
+            // CRITICAL FIX: Reinitialize captions after track source change
+            if (window.VideoTrackInitializer && window.VideoTrackInitializer.reinitialize) {
+                setTimeout(function() {
+                    VideoTrackInitializer.reinitialize();
+                }, 100);
             }
         }
-    }, 200); // Check every 1000 milliseconds (1 second)
+    }, 200); // Check every 200 milliseconds
 }
 
 function pdfLoader() {
@@ -390,25 +420,30 @@ function changeToCurrentTrack() {
 
         //console.log("Video Name: " + videoName);
 
+        // CAPTIONS FIX: Add cache-busting to track URLs
+        var cacheVersion = '?v=' + (new Date().getTime() / 60000 | 0);
+        
         var tuStr = "";
         var currTrack = "";
-        if (CurrentLanguage == "englishTrack") {
-            currTrack = document.getElementById("englishTrack")
-            tuStr = "assets/vtt/En_" + videoName + ".vtt";
+        if (CurrentLanguage == "englishTrack" || CurrentLanguage == "captionTrack") {
+            currTrack = document.getElementById("captionTrack")
+            tuStr = "assets/vtt/En_" + videoName + ".vtt" + cacheVersion;
         } else if (CurrentLanguage == "spanishTrack") {
             currTrack = document.getElementById("spanishTrack")
-            tuStr = "assets/vtt/Sp_" + videoName + ".vtt";
+            tuStr = "assets/vtt/Sp_" + videoName + ".vtt" + cacheVersion;
         } else if (CurrentLanguage == "chineseTrack") {
             currTrack = document.getElementById("chineseTrack")
-            tuStr = "assets/vtt/Ch_" + videoName + ".vtt";
+            tuStr = "assets/vtt/Ch_" + videoName + ".vtt" + cacheVersion;
         } else if (CurrentLanguage == "turkishTrack") {
             currTrack = document.getElementById("turkishTrack")
-            tuStr = "assets/vtt/Tu_" + videoName + ".vtt";
+            tuStr = "assets/vtt/Tu_" + videoName + ".vtt" + cacheVersion;
         }
         //	console.log(CurrentLanguage);
         //	console.log(tuStr);
-        currTrack.src = tuStr;
-        currTrack.track.mode = "showing";
+        if (currTrack) {
+            currTrack.src = tuStr;
+            currTrack.track.mode = "showing";
+        }
     }
 
 }
@@ -426,12 +461,16 @@ function ResetTrack() {
         // Get the video name without extension
         var videoNameWithExtension = videoPath.split('/').pop(); // Splitting by '/' and getting the last part
         var videoName = videoNameWithExtension.split('.')[0]; // Splitting by '.' and getting the first part (name without extension)
-        var enStr = "assets/vtt/En_" + videoName + ".vtt";
-        var spStr = "assets/vtt/Sp_" + videoName + ".vtt";
-        var tuStr = "assets/vtt/Tu_" + videoName + ".vtt";
-        var chStr = "assets/vtt/Ch_" + videoName + ".vtt";
+        
+        // CAPTIONS FIX: Add cache-busting to track URLs
+        var cacheVersion = '?v=' + (new Date().getTime() / 60000 | 0);
+        
+        var enStr = "assets/vtt/En_" + videoName + ".vtt" + cacheVersion;
+        var spStr = "assets/vtt/Sp_" + videoName + ".vtt" + cacheVersion;
+        var tuStr = "assets/vtt/Tu_" + videoName + ".vtt" + cacheVersion;
+        var chStr = "assets/vtt/Ch_" + videoName + ".vtt" + cacheVersion;
 
-        var englishTrack = document.getElementById('englishTrack');
+        var englishTrack = document.getElementById('captionTrack');
         var spanishTrack = document.getElementById('spanishTrack');
         var chineseTrack = document.getElementById('chineseTrack');
         var turkishTrack = document.getElementById('turkishTrack');

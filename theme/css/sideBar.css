@@ -13,11 +13,13 @@
 */
 #toc_id
 {
-	width: 30%;
+	width: 49%;
+	padding-left: 15px !important;
 }
 #trans_id
 {
 	/*display:none;*/
+	padding-left: 5px !important;
 	width: 50%;
 }
 
@@ -81,7 +83,7 @@
     float: left;
     /* margin-bottom: 17px; */
     /* padding-bottom: 38px; */
-    padding-left: 16px !important;
+    padding-left: 16px 
     text-align: left;
     font-size: 19px;
     height: 35px;

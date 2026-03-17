@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name='viewport' content='initial-scale = 1, minimum-scale = 1, maximum-scale = 1'/>
+    <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover'/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="shortcut icon" href="../theme/images/favicon.ico">
     <title></title>
@@ -10,6 +10,7 @@
     <link href="theme/css/content.css" rel="stylesheet">
     <link href="theme/css/footer.css" rel="stylesheet">
     <link href="theme/css/custom.css" rel="stylesheet">
+    <link href="theme/css/video-responsive.css" rel="stylesheet">
 	 <link href="theme/css/mobile.css" rel="stylesheet">
 	 <link href="theme/css/toc.css" rel="stylesheet">
 	 <link href="theme/css/Color.css" rel="stylesheet">
@@ -30,6 +31,8 @@
     <script src="theme/lib/createjs-2015.11.26.min.js"></script>
     <script src="theme/scripts/service/globalSettingService.js"></script>
     <script src="theme/scripts/service/globalVariableService.js"></script>
+    <script src="theme/scripts/preloadManager.js"></script>
+    <script src="theme/scripts/orientationManager.js"></script>
     <script src="theme/scripts/controller/sideBarController.js"></script>
     <script src="theme/scripts/controller/footerBarController.js"></script>
     <script src="theme/scripts/controller/contentController.js"></script>
@@ -39,6 +42,9 @@
     <script src="theme/scripts/app.js"></script>
     <script src="theme/scripts/main.js"></script>
 	<script src="theme/scripts/jMain.js"></script>
+	<!-- VIDEO CAPTION INITIALIZATION - Handles caption loading on first page load -->
+	<script src="theme/scripts/videoTrackInitializer.js"></script>
+	<!-- VIDEO CAPTION DEBUGGER - Optional: Comment out in production -->
 	<script type="text/javascript" src="theme/scripts/SCORM_API_wrapper.js"></script>
    <script type="text/javascript" src="theme/scripts/scormtrack.js"></script>
    <script type="text/javascript" src="theme/scripts/scormFunctions.js"></script>

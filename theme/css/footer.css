@@ -12,6 +12,16 @@
 	padding-left: 11%;
 
 }
+.footer-logo {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 45px;
+    width: auto;
+    max-width: 80px;
+    z-index: 1001;
+}
 #ResourceClose
 {
 	 margin-left: -13%;

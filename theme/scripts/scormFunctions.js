@@ -224,6 +224,9 @@ function AfterTemaplateJson() {
 
     const prevBtn = document.getElementById("prev");
     if (prevBtn) prevBtn.title = NextTitle;
+	
+    const resource1Btn = document.getElementById("resource1");
+    if (resource1Btn) resource1Btn.title = LearningAidsTitle;
 
     const nextBtn = document.getElementById("next");
     if (nextBtn) nextBtn.title = Prevtitle;
@@ -254,24 +257,23 @@ function waitForVideoAndChangeTrack(val1, val2) {
 		}
 	});
 }*/
-function waitForSCORMAndInit(callback, maxAttempts = 50, interval = 200) {
-    let attempts = 0;
-    const wait = setInterval(() => {
-        if (typeof scorm !== "undefined" && typeof scorm.get === "function") {
-            clearInterval(wait);
-            callback();
-        } else {
-            attempts++;
-            if (attempts >= maxAttempts) {
-                clearInterval(wait);
-                console.error("SCORM API not available after waiting.");
-            }
-        }
-    }, interval);
-}
 
-window.addEventListener("load", function () {
-    waitForSCORMAndInit(() => {
+function waitForScormAndDomReady(callback, retries = 15, interval = 300) {
+    // Check both SCORM API and key DOM elements
+    const scormReady = typeof scorm !== "undefined" && scorm.get("cmi.core.lesson_status") !== null;
+    const domReady = document.getElementById("prev") && document.getElementById("next");
+
+    if (scormReady && domReady) {
+        callback();
+    } else if (retries > 0) {
+        setTimeout(() => waitForScormAndDomReady(callback, retries - 1, interval), interval);
+    } else {
+        console.warn("⚠️ SCORM or DOM not fully ready, continuing anyway.");
+        callback(); // still proceed to avoid hanging
+    }
+}
+window.addEventListener("DOMContentLoaded", function () {
+    waitForScormAndDomReady(() => {
         // Your original logic after SCORM and page are ready
         init();
     });

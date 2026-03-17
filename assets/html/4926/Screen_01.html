@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+    <link rel="stylesheet" href="assets/style.css">
+ 
+
+  <script>
+    function startCourse() {
+      parent.beginButCall(); // Calls LMS or SCORM wrapper
+    }
+
+    function playAudio() {
+      parent.audioButCall(); // Calls audio player
+    }
+	function changeImageOnHover(button, src) {
+    button.querySelector('img').src = src;
+  }
+
+  function resetImageOnHover(button, src) {
+    button.querySelector('img').src = src;
+  }
+  </script>
+</head>
+<body>
+  <img src="assets/bg.png" alt="Value Creation and Value Creation and" aria-hidden="true" class="background-image">
+  <div class="content">
+    <div class="title"><p tabindex="0">Neurodiversity</p></div><br><br>
+    <div class="info" role="list">
+      <div class="info-item" role="listitem">
+        <img class="info-time" src="assets/time.png" alt="Estimated time: 10 minutes">
+        <p tabindex="0">15 Mins</p>
+      </div>
+      <div class="info-item" role="listitem">
+        <img class="info-quiz" src="assets/quiz.png" alt="Contains 2 quiz items">
+        <p tabindex="0">2 Quiz Items</p>
+      </div>
+      <div class="info-item" role="listitem">
+        <img class="info-download" src="assets/download.png" alt="Includes downloadable resources">
+        <p tabindex="0">Downloadable<br>Resources</p>
+      </div>
+    </div>
+<br>
+    <div class="buttons">
+      <button  class="startbut" onclick="startCourse()" onmouseover="changeImageOnHover(this, 'assets/begin-hover.png')" 
+				  onmouseout="resetImageOnHover(this, 'assets/begin.png')">
+        <img class="startbut" src="assets/begin.png" alt="Begin Course">
+      </button>
+      <button class="audiobut" onclick="playAudio()"  onmouseover="changeImageOnHover(this, 'assets/audio-hover.png')" 
+				  onmouseout="resetImageOnHover(this, 'assets/audio.png')">
+        <img class="audiobut"  src="assets/audio.png" alt="Audio Version">
+      </button>
+    </div>
+  </div>
+
+</body>
+</html>
