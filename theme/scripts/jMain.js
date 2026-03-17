@@ -95,10 +95,10 @@ function TtoggleMenu() {
             elements.style.display = "none";
             menuIcon.style.display = "block";
             menuIcon1.style.display = "none";
-            menuIcon.style.marginTop = "6px";
+           // menuIcon.style.marginTop = "6px";
         } else {
             // Change the marginTop property
-            menuIcon.style.marginTop = "6px";
+            //menuIcon.style.marginTop = "6px";
             // Set the new source path
             if (!Tmenu) {
 
@@ -110,7 +110,7 @@ function TtoggleMenu() {
                 var sideBarController = angular.element(document.querySelector(".sideBar"));
                 sideBarController.scope().sb.tocClick('toc');
                // document.getElementById("TmenuIcon").focus();
-                menuIcon.style.marginTop = "1%";
+                //menuIcon.style.marginTop = "1%";
 				menuOpen();
 				setTimeout(callTmenuBool, 5);
 
@@ -129,7 +129,7 @@ function TtoggleMenu() {
     } else {
         {
             // Change the marginTop property
-            menuIcon.style.marginTop = "6px";
+           // menuIcon.style.marginTop = "6px";
 
             // Set the new source path
             if (!Tmenu) {                
@@ -140,7 +140,7 @@ function TtoggleMenu() {
                 var sideBarController = angular.element(document.querySelector(".sideBar"));
                 sideBarController.scope().sb.tocClick('toc');
            //     document.getElementById("TmenuIcon").focus();
-                menuIcon.style.marginTop = "1%";
+               // menuIcon.style.marginTop = "1%";
 				menuOpen();
 				setTimeout(callTmenuBool, 5);				
 

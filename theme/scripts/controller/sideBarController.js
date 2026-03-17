@@ -460,9 +460,9 @@ if (img) {
 			 case 'toggleMenu':
 			  var el = document.getElementById('clickableDiv');
 			  if (el && p.menuState === 'closed') {
-				el.setAttribute('role', 'button');
+				/*el.setAttribute('role', 'button');
 				el.setAttribute('tabindex', '0');
-				el.setAttribute('aria-label', 'Close menu');
+				el.setAttribute('aria-label', 'Close menu');*/
 
 				// Remove old event listeners to prevent duplicate triggers
 				el.onclick = null;
