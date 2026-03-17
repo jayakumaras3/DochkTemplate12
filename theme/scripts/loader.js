@@ -19,46 +19,44 @@ function onendofvideo() {
         if (temp == 2) {
             gotoCertainPage(Totalpage);
         } else {
-			//console.log("completed");
-			if(contentController.scope().cc.globalVariableService.getPageCounter()==Totalpage)
-				{
-					
-					getTracking(temp);
-				}
-				else{
-					PageCompleteNextFun();
-				}
+            //console.log("completed");
+            if (contentController.scope().cc.globalVariableService.getPageCounter() == Totalpage) {
+
+                getTracking(temp);
+            }
+            else {
+                PageCompleteNextFun();
+            }
         }
-		
+
         if (getvalueonend == true) {
-          //  console.log("temp:: ss")
+            //  console.log("temp:: ss")
             //audio Version added	
-            if (temp == 2) {} else {
+            if (temp == 2) { } else {
                 gotoNextBtnAuto();
             }
         } else {
             //console.log("temp:: added")
             //audio Version 	
-            if (temp == 2) {} else {
-				
-				//console.log(contentController.scope().cc.globalVariableService.getPageCounter());
-				//console.log(Totalpage);
-				//console.log(completed);
-				if(contentController.scope().cc.globalVariableService.getPageCounter()==Totalpage)
-				{
-					
-				}
-				/*else if(contentController.scope().cc.globalVariableService.getPageCounter()==)
-				{
-					
-				}*/
-				else{
-					nextHighlight();
-				}
-                
+            if (temp == 2) { } else {
+
+                //console.log(contentController.scope().cc.globalVariableService.getPageCounter());
+                //console.log(Totalpage);
+                //console.log(completed);
+                if (contentController.scope().cc.globalVariableService.getPageCounter() == Totalpage) {
+
+                }
+                /*else if(contentController.scope().cc.globalVariableService.getPageCounter()==)
+                {
+                	
+                }*/
+                else {
+                    nextHighlight();
+                }
+
             }
         }
-		
+
     } else {
         PageCompleteNextFun();
         if (getvalueonend == true) {
@@ -67,15 +65,13 @@ function onendofvideo() {
             /*if(temp==2)
             {
             }*/
-				if(contentController.scope().cc.globalVariableService.getPageCounter()==Totalpage)
-				{
-					
-					getTracking(temp);
-				}
-					else
-				{
-					gotoNextBtnAuto();
-				}
+            if (contentController.scope().cc.globalVariableService.getPageCounter() == Totalpage) {
+
+                getTracking(temp);
+            }
+            else {
+                gotoNextBtnAuto();
+            }
         } else {
             //console.log("temp::",temp)
             //audio Version removed	
@@ -83,13 +79,11 @@ function onendofvideo() {
             {
             }
             else*/
-			if(contentController.scope().cc.globalVariableService.getPageCounter()==Totalpage)
-				{
-					
-					getTracking(temp);
-				}
-					else
-            {
+            if (contentController.scope().cc.globalVariableService.getPageCounter() == Totalpage) {
+
+                getTracking(temp);
+            }
+            else {
 
                 nextHighlight();
             }
@@ -136,42 +130,49 @@ function pageSormTrack() {
         var elementToRemoveClass = document.getElementById(Tempst);
         var elementToRemoveClass1 = document.getElementById(Tempprevst);
         //console.log("pageArray:: " + Tempst);
-       // console.log("pageArray:: " + pageArray);
+        // console.log("pageArray:: " + pageArray);
         if (AudioVersionEnable && i == 1) {
-			
-		} else {
-				
+
+        } else {
+
             if (pageArray[i] == "1") {
-                //	console.log("i: "+i);
-                elementToRemoveClass1.style.visibility = 'visible';
+
+                if (elementToRemoveClass1) {
+                    elementToRemoveClass1.style.visibility = 'visible';
+                }
                 /*if (!elementToRemoveClass1.classList.contains('tickSymbol')) {
                 	
-                	//elementToRemoveClass1.classList.remove('tickSymbol');
+                    //elementToRemoveClass1.classList.remove('tickSymbol');
                 //	elementToRemoveClass1.classList.add('tickSymbol1');
                 	
                 	
                 }*/
-                if (elementToRemoveClass.classList.contains('disabledClass')) {
-                    elementToRemoveClass.classList.remove('disabledClass');
+                if (elementToRemoveClass) {
+                    if (elementToRemoveClass.classList.contains('disabledClass')) {
+                        elementToRemoveClass.classList.remove('disabledClass');
+                    }
                 }
                 //angular.element(sideBarController[i]).addClass("visitedTOC");
 
             } else {
-				elementToRemoveClass1.style.visibility = 'Hidden';
+                if (elementToRemoveClass1) {
+                    elementToRemoveClass1.style.visibility = 'Hidden';
+                }
                 /*if(i == 1)
                 {
-                	//console.log(pageArray[i]);
+                    //console.log(pageArray[i]);
                 }
                 else*/
                 {
+                    if (elementToRemoveClass) {
+                        if (elementToRemoveClass.classList.contains('disabledClass')) {
+                            elementToRemoveClass.classList.remove('disabledClass');
+                        }
+                        if (masterBool) {
 
-                    if (elementToRemoveClass.classList.contains('disabledClass')) {
-                        elementToRemoveClass.classList.remove('disabledClass');
-                    }
-                    if (masterBool) {
-
-                    } else {
-                        break;
+                        } else {
+                            break;
+                        }
                     }
                 }
 
@@ -182,84 +183,82 @@ function pageSormTrack() {
 }
 
 function PageCompleteNextFun() {
-	 var contentController = angular.element(document.querySelector(".contentArea"));
-	
-	var temp = contentController.scope().cc.globalVariableService.getPageCounter();
-	console.log("temp:: "+ contentController.scope().cc.globalVariableService.getPageCounter());
-    console.log("Totalpage:: "+Totalpage);
- if(contentController.scope().cc.globalVariableService.getPageCounter()==Totalpage) {
-    
-   
-    
+    var contentController = angular.element(document.querySelector(".contentArea"));
+
+    var temp = contentController.scope().cc.globalVariableService.getPageCounter();
+    console.log("temp:: " + contentController.scope().cc.globalVariableService.getPageCounter());
+    console.log("Totalpage:: " + Totalpage);
+    if (contentController.scope().cc.globalVariableService.getPageCounter() == Totalpage) {
 
 
-    if (AudioVersionEnable) {
-        var Tempst = 'Mitem' + (temp + 1);
-    } else {
-        var Tempst = 'Mitem' + (temp);
+
+
+
+        if (AudioVersionEnable) {
+            var Tempst = 'Mitem' + (temp + 1);
+        } else {
+            var Tempst = 'Mitem' + (temp);
+        }
+
+        var Tempprevst = 'Sitem' + (temp);
+        //console.log("temp::" +temp);
+
+        var elementToRemoveClass = document.getElementById(Tempst);
+
+        if (elementToRemoveClass && elementToRemoveClass.classList.contains('disabledClass') && !elementToRemoveClass.classList.contains('tickSymbol')) {
+            elementToRemoveClass.classList.remove('disabledClass');
+            var elementToRemoveClass1 = document.getElementById(Tempprevst);
+            //elementToRemoveClass.classList.add('visitedTOC');
+            elementToRemoveClass1.classList.add('tickSymbol');
+        }
+
+
+
+        getTracking(temp);
+
+
+        // console.log("Totalpage:"+Totalpage)
+        pageSormTrack();
+    }
+    else {
+
+        enablenextbtn();
+
+
+
+        if (AudioVersionEnable) {
+            var Tempst = 'Mitem' + (temp + 1);
+        } else {
+            var Tempst = 'Mitem' + (temp);
+        }
+
+        var Tempprevst = 'Sitem' + (temp);
+        //console.log("temp::" +temp);
+
+        var elementToRemoveClass = document.getElementById(Tempst);
+
+        if (elementToRemoveClass && elementToRemoveClass.classList.contains('disabledClass') && !elementToRemoveClass.classList.contains('tickSymbol')) {
+            elementToRemoveClass.classList.remove('disabledClass');
+            var elementToRemoveClass1 = document.getElementById(Tempprevst);
+            //elementToRemoveClass.classList.add('visitedTOC');
+            elementToRemoveClass1.classList.add('tickSymbol');
+        }
+
+
+
+        getTracking(temp);
+        nextHighlight();
+
+        // console.log("Totalpage:"+Totalpage)
+        pageSormTrack();
     }
 
-    var Tempprevst = 'Sitem' + (temp);
-    //console.log("temp::" +temp);
-
-    var elementToRemoveClass = document.getElementById(Tempst);
-
-    if (elementToRemoveClass && elementToRemoveClass.classList.contains('disabledClass') && !elementToRemoveClass.classList.contains('tickSymbol')) {
-        elementToRemoveClass.classList.remove('disabledClass');
-        var elementToRemoveClass1 = document.getElementById(Tempprevst);
-        //elementToRemoveClass.classList.add('visitedTOC');
-        elementToRemoveClass1.classList.add('tickSymbol');
-    }
-
-
-
-    getTracking(temp);
-   
-
-    // console.log("Totalpage:"+Totalpage)
-    pageSormTrack();
 }
-else
-{
-	
-	 enablenextbtn();
-    
+
+function LanguageTrackChange(val1, val2) {
 
 
-    if (AudioVersionEnable) {
-        var Tempst = 'Mitem' + (temp + 1);
-    } else {
-        var Tempst = 'Mitem' + (temp);
-    }
-
-    var Tempprevst = 'Sitem' + (temp);
-    //console.log("temp::" +temp);
-
-    var elementToRemoveClass = document.getElementById(Tempst);
-
-    if (elementToRemoveClass && elementToRemoveClass.classList.contains('disabledClass') && !elementToRemoveClass.classList.contains('tickSymbol')) {
-        elementToRemoveClass.classList.remove('disabledClass');
-        var elementToRemoveClass1 = document.getElementById(Tempprevst);
-        //elementToRemoveClass.classList.add('visitedTOC');
-        elementToRemoveClass1.classList.add('tickSymbol');
-    }
-
-
-
-    getTracking(temp);
-    nextHighlight();
-
-    // console.log("Totalpage:"+Totalpage)
-    pageSormTrack();
-}
-
-}
-
-function LanguageTrackChange(val1,val2)
-{
-	
-	
-	 let video = document.getElementById("vidArea");
+    let video = document.getElementById("vidArea");
 
     if (!video) {
         console.error("Video element not found!");
@@ -271,8 +270,8 @@ function LanguageTrackChange(val1,val2)
     }
 
     // Get new track attributes from the selected option
-   // let selectedOption = this.options[this.selectedIndex];
-  //  let newSrc = val1;
+    // let selectedOption = this.options[this.selectedIndex];
+    //  let newSrc = val1;
     let newLang = val1;
     let newLabel = val2;
 
@@ -292,12 +291,12 @@ function LanguageTrackChange(val1,val2)
     video.textTracks[0].mode = "showing";
 }
 function changeTrackSrc() {
-   var interval = setInterval(() => {
+    var interval = setInterval(() => {
         var video = document.getElementById('vidArea');
 
         // Check if the video is ready
         if (video && video.readyState >= 2) {
-			LanguageTrackChange(VttLanguage, VttLabel);
+            LanguageTrackChange(VttLanguage, VttLabel);
             clearInterval(interval); // Stop checking once the video is ready
 
             if (CurrentcontentType === "video") {
@@ -538,22 +537,21 @@ function scoreSubmit(result) {
 
     if (Number(result) >= PassScorevalue) {
         scorm.set("cmi.core.lesson_status", LMSpassed);
-		certificateDate=formatDate();
-		setSuspendString("str2", certificateDate);
-		if(!pretestSuccess)
-		{
-			
-			enableCertificateButton();
-		}
+        certificateDate = formatDate();
+        setSuspendString("str2", certificateDate);
+        if (!pretestSuccess) {
+
+            enableCertificateButton();
+        }
         //alert(result);
         //alert(PassScorevalue);
 
     } else {
         if (curAttempt == QuizAttemptLimit) {
             scorm.set("cmi.core.lesson_status", LMSfailed);
-			certificateDate=formatDate();
-			setSuspendString("str2", certificateDate);
-			//enableCertificateButton();
+            certificateDate = formatDate();
+            setSuspendString("str2", certificateDate);
+            //enableCertificateButton();
         }
         //alert(PassScorevalue);
         //alert("failed");
@@ -578,9 +576,9 @@ function scoreSubmit(result) {
     if (elementToRemoveClass1) {
         // Check if the class is not already present
         if (!elementToRemoveClass1.classList.contains('tickSymbol')) {
-           // elementToRemoveClass1.classList.add('tickSymbol');
-        } else {}
-    } else {}
+            // elementToRemoveClass1.classList.add('tickSymbol');
+        } else { }
+    } else { }
     getTracking(temp);
     var footerController = angular.element(document.querySelector(".footer"));
     footerController.scope().fb.changeFooterNavigation();
@@ -588,8 +586,8 @@ function scoreSubmit(result) {
     nextHighlightCongrats()
     angular.element(document.getElementById("exit")).addClass("exitHighlight");
     passScoreTOarticulate();
-	//set 2 added
-	pageSormTrack();
+    //set 2 added
+    pageSormTrack();
 
 }
 function scoreSubmit_PostQuiz(result) {
@@ -603,21 +601,20 @@ function scoreSubmit_PostQuiz(result) {
 
     if (Number(result) >= PassScorevalue) {
         scorm.set("cmi.core.lesson_status", LMSpassed);
-		certificateDate=formatDate();
-		setSuspendString("str2", certificateDate);
-		if(!pretestSuccess)
-		{
-			enableCertificateButton();
-		}
+        certificateDate = formatDate();
+        setSuspendString("str2", certificateDate);
+        if (!pretestSuccess) {
+            enableCertificateButton();
+        }
         //alert(result);
         //alert(PassScorevalue);
 
     } else {
         if (curAttempt == QuizAttemptLimit) {
             scorm.set("cmi.core.lesson_status", LMSfailed);
-			certificateDate=formatDate();
-			setSuspendString("str2", certificateDate);
-			//enableCertificateButton();
+            certificateDate = formatDate();
+            setSuspendString("str2", certificateDate);
+            //enableCertificateButton();
         }
         //alert(PassScorevalue);
         //alert("failed");
@@ -642,18 +639,18 @@ function scoreSubmit_PostQuiz(result) {
     if (elementToRemoveClass1) {
         // Check if the class is not already present
         if (!elementToRemoveClass1.classList.contains('tickSymbol')) {
-           // elementToRemoveClass1.classList.add('tickSymbol');
-        } else {}
-    } else {}
+            // elementToRemoveClass1.classList.add('tickSymbol');
+        } else { }
+    } else { }
     getTracking(temp);
-   /* var footerController = angular.element(document.querySelector(".footer"));
-    footerController.scope().fb.changeFooterNavigation();
-    //console.log("Submit");
-    nextHighlightCongrats()
-    angular.element(document.getElementById("exit")).addClass("exitHighlight");
-    passScoreTOarticulate();*/
-	//set 2 added
-	pageSormTrack();
+    /* var footerController = angular.element(document.querySelector(".footer"));
+     footerController.scope().fb.changeFooterNavigation();
+     //console.log("Submit");
+     nextHighlightCongrats()
+     angular.element(document.getElementById("exit")).addClass("exitHighlight");
+     passScoreTOarticulate();*/
+    //set 2 added
+    pageSormTrack();
 
 }
 
