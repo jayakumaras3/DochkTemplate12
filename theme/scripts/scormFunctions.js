@@ -238,7 +238,7 @@ function AfterTemaplateJson() {
 function waitForVideoAndChangeTrack(val1, val2) {
     let interval = setInterval(() => {
         let video = document.getElementById("vidArea");
-        if (video) {
+		if (video && (video.currentSrc || video.getAttribute("src"))) {
             clearInterval(interval); // Stop checking once found
             LanguageTrackChange(val1, val2);
         }

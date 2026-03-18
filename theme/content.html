@@ -83,8 +83,7 @@
        disablePictureInPicture 
        onchange="videochange"
        crossorigin="anonymous">
-    <!-- Caption track with default VTT file - will be dynamically updated by videoTrackInitializer.js -->
-    <track id="captionTrack" kind="captions" src="assets/vtt/En_en_2.vtt" srclang="en" label="English" default>
+    <!-- Caption tracks will be dynamically created by LanguageTrackChange() in loader.js -->
 </video>
             <iframe id="captivateFrame" style="" ng-if="cc.pageContentType == 'captivate'"
                     ng-src="{{cc.pageContent}}" onload="captivateIframeComplete()"></iframe>

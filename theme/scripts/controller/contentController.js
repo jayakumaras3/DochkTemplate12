@@ -116,16 +116,39 @@ var stage, preload, lib = {};
      */
     p.getTocData = function () {
 
-        document.getElementById("preloader").style.opacity = "1";
-        this.toc = this.globalVariableService.getTocData();
-		if(this.globalVariableService.toclevel==false){
-        this.modulenumber =this.globalVariableService.pagesmodcount[this.globalVariableService.getPageCounter()-1][0];
-        this.currentpagenumber = this.globalVariableService.pagesmodcount[this.globalVariableService.getPageCounter()-1][1];
-		this.header = this.toc[ this.modulenumber][this.currentpagenumber-1]['header'];
-		//console.log(":::P"+this.header);
+        var preloader = document.getElementById("preloader");
+        if (preloader) {
+            preloader.style.opacity = "1";
+        }
+
+        this.toc = this.globalVariableService.getTocData() || {};
+
+        var currentPage = this.globalVariableService.getPageCounter();
+        if (!currentPage || currentPage < 1) {
+            currentPage = 1;
+            this.globalVariableService.setPageCounter(1);
+        }
+
+		if (this.globalVariableService.toclevel == false) {
+            var pageMap = this.globalVariableService.pagesmodcount[currentPage - 1];
+            if (pageMap && this.toc[pageMap[0]] && this.toc[pageMap[0]][pageMap[1] - 1]) {
+                this.modulenumber = pageMap[0];
+                this.currentpagenumber = pageMap[1];
+                this.header = this.toc[this.modulenumber][this.currentpagenumber - 1]['header'];
+            } else if (this.toc[0] && this.toc[0][currentPage - 1]) {
+                this.header = this.toc[0][currentPage - 1].header;
+            } else {
+                this.header = "";
+            }
 		}
-		else{
-			this.header = this.toc[this.globalVariableService.getPageCounter() - 1].header;	
+		else {
+			if (this.toc[currentPage - 1] && this.toc[currentPage - 1].header) {
+				this.header = this.toc[currentPage - 1].header;
+			} else if (this.toc[0] && this.toc[0][currentPage - 1]) {
+				this.header = this.toc[0][currentPage - 1].header;
+			} else {
+				this.header = "";
+			}
 		}
         this.http({
             method: 'GET',
@@ -148,47 +171,57 @@ var stage, preload, lib = {};
      */
 	p.getPageJSON = function (response) {
 		try {
-			// Log the full response object to debug structure
-		//	console.log("Full Response Object:", response);
+            var responseData = response ? response.data : null;
+            var pages = [];
 
-			// Extract the relevant data from response
-			const responseData = response.data;
+            if (responseData && Array.isArray(responseData["0"])) {
+                pages = responseData["0"];
+            } else if (Array.isArray(responseData)) {
+                pages = responseData;
+            }
 
-			// Ensure responseData["0"] exists and is an array
-			if (responseData && responseData["0"] && Array.isArray(responseData["0"]) && responseData["0"].length > 0) {
-				
-				const firstPageSettings = responseData["0"][this.globalVariableService.getPageCounter()-1].settings;
+            if (!pages.length) {
+                console.error("Invalid or missing response data. Data structure:", responseData);
+                return;
+            }
 
-				// Log the settings for debugging
-				//console.log("Page Settings:", firstPageSettings);
+            var currentPageIndex = (this.globalVariableService.getPageCounter() || 1) - 1;
+            if (currentPageIndex < 0) {
+                currentPageIndex = 0;
+            }
+            if (currentPageIndex >= pages.length) {
+                currentPageIndex = pages.length - 1;
+                this.globalVariableService.setPageCounter(currentPageIndex + 1);
+            }
 
-				// Update response with settings
-				response = firstPageSettings;
+            var pageObj = pages[currentPageIndex] || {};
+            var firstPageSettings = pageObj.settings || null;
+            if (!firstPageSettings) {
+                console.error("Missing page settings for index:", currentPageIndex);
+                return;
+            }
 
-				// Reset captivateFrame if present
-				if (document.getElementById("captivateFrame")) {
-					document.getElementById("captivateFrame").contentWindow.cp = undefined;
-				}
+            if (document.getElementById("captivateFrame")) {
+                document.getElementById("captivateFrame").contentWindow.cp = undefined;
+            }
 
-				// Update the UI
-				document.body.style.display = "block";
-				document.getElementById("preloader").style.display = "block";
-				document.getElementById("preloader").style.opacity = "1";
+            document.body.style.display = "block";
+            var preloaderElem = document.getElementById("preloader");
+            if (preloaderElem) {
+                preloaderElem.style.display = "block";
+                preloaderElem.style.opacity = "1";
+            }
 
-				this.pageContentType = "";
-				this.pageContent = "";
+            this.pageContentType = "";
+            this.pageContent = "";
 
-				// Use self to preserve context in timeout
-				const self = this;
-				this.timeout(function () {
-					self.scope.$apply();
-					self.changeFooterBtnOnPage(firstPageSettings);
-				}, 10);
-			} else {
-				// Log an error if the response data is invalid
-				console.error("Invalid or missing response data. Data structure:", responseData);
-				return;
-			}
+            var self = this;
+            this.timeout(function () {
+                if (!self.scope.$$phase) {
+                    self.scope.$apply();
+                }
+                self.changeFooterBtnOnPage(firstPageSettings);
+            }, 10);
 		} catch (error) {
 			// Log unexpected errors
 			console.error("Error in getPageJSON:", error);

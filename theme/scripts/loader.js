@@ -19,46 +19,44 @@ function onendofvideo() {
         if (temp == 2) {
             gotoCertainPage(Totalpage);
         } else {
-			//console.log("completed");
-			if(contentController.scope().cc.globalVariableService.getPageCounter()==Totalpage)
-				{
-					
-					getTracking(temp);
-				}
-				else{
-					PageCompleteNextFun();
-				}
+            //console.log("completed");
+            if (contentController.scope().cc.globalVariableService.getPageCounter() == Totalpage) {
+
+                getTracking(temp);
+            }
+            else {
+                PageCompleteNextFun();
+            }
         }
-		
+
         if (getvalueonend == true) {
-          //  console.log("temp:: ss")
+            //  console.log("temp:: ss")
             //audio Version added	
-            if (temp == 2) {} else {
+            if (temp == 2) { } else {
                 gotoNextBtnAuto();
             }
         } else {
             //console.log("temp:: added")
             //audio Version 	
-            if (temp == 2) {} else {
-				
-				//console.log(contentController.scope().cc.globalVariableService.getPageCounter());
-				//console.log(Totalpage);
-				//console.log(completed);
-				if(contentController.scope().cc.globalVariableService.getPageCounter()==Totalpage)
-				{
-					
-				}
-				/*else if(contentController.scope().cc.globalVariableService.getPageCounter()==)
-				{
-					
-				}*/
-				else{
-					nextHighlight();
-				}
-                
+            if (temp == 2) { } else {
+
+                //console.log(contentController.scope().cc.globalVariableService.getPageCounter());
+                //console.log(Totalpage);
+                //console.log(completed);
+                if (contentController.scope().cc.globalVariableService.getPageCounter() == Totalpage) {
+
+                }
+                /*else if(contentController.scope().cc.globalVariableService.getPageCounter()==)
+                {
+                	
+                }*/
+                else {
+                    nextHighlight();
+                }
+
             }
         }
-		
+
     } else {
         PageCompleteNextFun();
         if (getvalueonend == true) {
@@ -67,15 +65,13 @@ function onendofvideo() {
             /*if(temp==2)
             {
             }*/
-				if(contentController.scope().cc.globalVariableService.getPageCounter()==Totalpage)
-				{
-					
-					getTracking(temp);
-				}
-					else
-				{
-					gotoNextBtnAuto();
-				}
+            if (contentController.scope().cc.globalVariableService.getPageCounter() == Totalpage) {
+
+                getTracking(temp);
+            }
+            else {
+                gotoNextBtnAuto();
+            }
         } else {
             //console.log("temp::",temp)
             //audio Version removed	
@@ -83,13 +79,11 @@ function onendofvideo() {
             {
             }
             else*/
-			if(contentController.scope().cc.globalVariableService.getPageCounter()==Totalpage)
-				{
-					
-					getTracking(temp);
-				}
-					else
-            {
+            if (contentController.scope().cc.globalVariableService.getPageCounter() == Totalpage) {
+
+                getTracking(temp);
+            }
+            else {
 
                 nextHighlight();
             }
@@ -136,24 +130,24 @@ function pageSormTrack() {
         var elementToRemoveClass = document.getElementById(Tempst);
         var elementToRemoveClass1 = document.getElementById(Tempprevst);
         //console.log("pageArray:: " + Tempst);
-       // console.log("pageArray:: " + pageArray);
+        // console.log("pageArray:: " + pageArray);
         if (AudioVersionEnable && i == 1) {
-			
-		} else {
-				
+
+        } else {
+
             if (pageArray[i] == "1") {
                 //	console.log("i: "+i);
                 if (elementToRemoveClass) {
-                elementToRemoveClass1.style.visibility = 'visible';
+                    elementToRemoveClass1.style.visibility = 'visible';
                 }
                 /*if (!elementToRemoveClass1.classList.contains('tickSymbol')) {
                 	
-                	//elementToRemoveClass1.classList.remove('tickSymbol');
+                    //elementToRemoveClass1.classList.remove('tickSymbol');
                 //	elementToRemoveClass1.classList.add('tickSymbol1');
                 	
                 	
                 }*/
-               if (elementToRemoveClass) {
+                if (elementToRemoveClass) {
                     if (elementToRemoveClass.classList.contains('disabledClass')) {
                         elementToRemoveClass.classList.remove('disabledClass');
                     }
@@ -163,11 +157,11 @@ function pageSormTrack() {
             } else {
 
                 if (elementToRemoveClass1) {
-				elementToRemoveClass1.style.visibility = 'Hidden';
+                    elementToRemoveClass1.style.visibility = 'Hidden';
                 }
                 /*if(i == 1)
                 {
-                	//console.log(pageArray[i]);
+                    //console.log(pageArray[i]);
                 }
                 else*/
                 {
@@ -189,186 +183,168 @@ function pageSormTrack() {
 }
 
 function PageCompleteNextFun() {
-	 var contentController = angular.element(document.querySelector(".contentArea"));
-	
-	var temp = contentController.scope().cc.globalVariableService.getPageCounter();
-	console.log("temp:: "+ contentController.scope().cc.globalVariableService.getPageCounter());
-    console.log("Totalpage:: "+Totalpage);
- if(contentController.scope().cc.globalVariableService.getPageCounter()==Totalpage) {
-    
-   
-    
+    var contentController = angular.element(document.querySelector(".contentArea"));
+
+    var temp = contentController.scope().cc.globalVariableService.getPageCounter();
+    //console.log("temp:: "+ contentController.scope().cc.globalVariableService.getPageCounter());
+    //  console.log("Totalpage:: "+Totalpage);
+    if (contentController.scope().cc.globalVariableService.getPageCounter() == Totalpage) {
 
 
-    if (AudioVersionEnable) {
-        var Tempst = 'Mitem' + (temp + 1);
-    } else {
-        var Tempst = 'Mitem' + (temp);
+
+
+
+        if (AudioVersionEnable) {
+            var Tempst = 'Mitem' + (temp + 1);
+        } else {
+            var Tempst = 'Mitem' + (temp);
+        }
+
+        var Tempprevst = 'Sitem' + (temp);
+        //console.log("temp::" +temp);
+
+        var elementToRemoveClass = document.getElementById(Tempst);
+
+        if (elementToRemoveClass && elementToRemoveClass.classList.contains('disabledClass') && !elementToRemoveClass.classList.contains('tickSymbol')) {
+            elementToRemoveClass.classList.remove('disabledClass');
+            var elementToRemoveClass1 = document.getElementById(Tempprevst);
+            //elementToRemoveClass.classList.add('visitedTOC');
+            elementToRemoveClass1.classList.add('tickSymbol');
+        }
+
+
+
+        getTracking(temp);
+
+
+        // console.log("Totalpage:"+Totalpage)
+        pageSormTrack();
+    }
+    else {
+
+        enablenextbtn();
+
+
+
+        if (AudioVersionEnable) {
+            var Tempst = 'Mitem' + (temp + 1);
+        } else {
+            var Tempst = 'Mitem' + (temp);
+        }
+
+        var Tempprevst = 'Sitem' + (temp);
+        //console.log("temp::" +temp);
+
+        var elementToRemoveClass = document.getElementById(Tempst);
+
+        if (elementToRemoveClass && elementToRemoveClass.classList.contains('disabledClass') && !elementToRemoveClass.classList.contains('tickSymbol')) {
+            elementToRemoveClass.classList.remove('disabledClass');
+            var elementToRemoveClass1 = document.getElementById(Tempprevst);
+            //elementToRemoveClass.classList.add('visitedTOC');
+            elementToRemoveClass1.classList.add('tickSymbol');
+        }
+
+
+
+        getTracking(temp);
+        nextHighlight();
+
+        // console.log("Totalpage:"+Totalpage)
+        pageSormTrack();
     }
 
-    var Tempprevst = 'Sitem' + (temp);
-    //console.log("temp::" +temp);
-
-    var elementToRemoveClass = document.getElementById(Tempst);
-
-    if (elementToRemoveClass && elementToRemoveClass.classList.contains('disabledClass') && !elementToRemoveClass.classList.contains('tickSymbol')) {
-        elementToRemoveClass.classList.remove('disabledClass');
-        var elementToRemoveClass1 = document.getElementById(Tempprevst);
-        //elementToRemoveClass.classList.add('visitedTOC');
-        elementToRemoveClass1.classList.add('tickSymbol');
-    }
-
-
-
-    getTracking(temp);
-   
-
-    // console.log("Totalpage:"+Totalpage)
-    pageSormTrack();
 }
-else
-{
-	
-	 enablenextbtn();
-    
 
+/**
+ * English-only caption track.
+ * NO fetch(), NO async, NO network pre-check.
+ * Just create the track element and let the browser handle it.
+ * If the VTT file is missing, the browser silently ignores it.
+ */
+function LanguageTrackChange() {
+    var video = document.getElementById("vidArea");
+    if (!video) return;
 
-    if (AudioVersionEnable) {
-        var Tempst = 'Mitem' + (temp + 1);
-    } else {
-        var Tempst = 'Mitem' + (temp);
+    // Step 1: Remove ALL old track elements
+    var oldTracks = video.querySelectorAll("track");
+    for (var i = 0; i < oldTracks.length; i++) {
+        oldTracks[i].parentNode.removeChild(oldTracks[i]);
     }
 
-    var Tempprevst = 'Sitem' + (temp);
-    //console.log("temp::" +temp);
-
-    var elementToRemoveClass = document.getElementById(Tempst);
-
-    if (elementToRemoveClass && elementToRemoveClass.classList.contains('disabledClass') && !elementToRemoveClass.classList.contains('tickSymbol')) {
-        elementToRemoveClass.classList.remove('disabledClass');
-        var elementToRemoveClass1 = document.getElementById(Tempprevst);
-        //elementToRemoveClass.classList.add('visitedTOC');
-        elementToRemoveClass1.classList.add('tickSymbol');
-    }
-
-
-
-    getTracking(temp);
-    nextHighlight();
-
-    // console.log("Totalpage:"+Totalpage)
-    pageSormTrack();
-}
-
-}
-
-function LanguageTrackChange(val1,val2)
-{
-	/**
-	 * CAPTIONS FIX: Updated to work with videoTrackInitializer.js
-	 * Now includes cache-busting and proper reinitialization
-	 */
-	
-	 let video = document.getElementById("vidArea");
-
-    if (!video) {
-        console.error("Video element not found!");
+    // Step 2: Get video name from the resolved src
+    var src = video.currentSrc || video.getAttribute("src");
+    if (!src) {
+        // Angular/ng-src can populate src after element creation; retry briefly.
+        LanguageTrackChange._retryCount = (LanguageTrackChange._retryCount || 0) + 1;
+        if (LanguageTrackChange._retryCount <= 20) {
+            setTimeout(LanguageTrackChange, 100);
+        }
         return;
     }
-    
-    // Cache-busting: Add version timestamp to prevent caching issues
-    var cacheVersion = '?v=' + (new Date().getTime() / 60000 | 0);
-    
-    let oldTrack = document.getElementById("captionTrack");
-    if (oldTrack) {
-        video.removeChild(oldTrack); // Remove the existing track
-    }
+    LanguageTrackChange._retryCount = 0;
 
-    // Get new track attributes from the selected option
-    let newLang = val1;
-    let newLabel = val2;
+    var videoName = src.split('/').pop().split('.')[0];
 
-    // Create a new track element
-    let newTrack = document.createElement("track");
-    newTrack.id = "captionTrack";
-    newTrack.kind = "captions";
-    newTrack.src = "assets/vtt/En_en_2.vtt" + cacheVersion;
-    newTrack.srclang = newLang;
-    newTrack.label = newLabel;
-    newTrack.default = true;
+    // Step 3: Create English caption track element and append it
+    var track = document.createElement("track");
+    track.id = "captionTrack";
+    track.kind = "captions";
+    track.label = "English";
+    track.srclang = "en";
+    track.src = "assets/vtt/En_" + videoName + ".vtt?v=" + Date.now();
+    track.setAttribute("default", "");
+    video.appendChild(track);
 
-    // Append the new track to the video element
-    video.appendChild(newTrack);
-
-    // CRITICAL FIX: Force reinitialize captions after track attachment
-    if (window.VideoTrackInitializer && window.VideoTrackInitializer.reinitialize) {
-        setTimeout(function() {
-            VideoTrackInitializer.reinitialize();
-        }, 50);
-    }
+    // Step 4: Force captions to show after browser processes the track
+    setTimeout(function () {
+        if (video.textTracks && video.textTracks.length > 0) {
+            video.textTracks[0].mode = "showing";
+        }
+    }, 300);
 }
+
+function bindVideoCaptionLifecycle() {
+    var video = document.getElementById("vidArea");
+    if (!video) return;
+
+    // Prevent duplicate listeners on the same video element.
+    if (video.dataset.enCaptionBound === "1") return;
+    video.dataset.enCaptionBound = "1";
+
+    video.addEventListener("loadedmetadata", function () {
+        LanguageTrackChange();
+    }, false);
+
+    video.addEventListener("loadeddata", function () {
+        LanguageTrackChange();
+    }, false);
+
+    // Attempt once immediately in case metadata is already available.
+    setTimeout(LanguageTrackChange, 50);
+}
+
+// Keep binding resilient for SPA/SCORM navigation where vidArea is recreated.
+setInterval(bindVideoCaptionLifecycle, 500);
 function changeTrackSrc() {
-    // Only process track changes for video content type
     if (CurrentcontentType !== "video") {
         return;
     }
 
-    var interval = setInterval(() => {
+    var interval = setInterval(function () {
         var video = document.getElementById('vidArea');
 
-        // Check if the video is ready
         if (video && video.readyState >= 2) {
-            LanguageTrackChange(VttLanguage, VttLabel);
-            clearInterval(interval); // Stop checking once the video is ready
+            clearInterval(interval);
 
-            var contentController = angular.element(document.querySelector(".contentArea"));
-            var temp = contentController.scope().cc.globalVariableService.pageCounter;
+            LanguageTrackChange();
 
-            // Get the video path
-            var videoPath = video.currentSrc;
-
-            // Get the video name without extension
-            var videoNameWithExtension = videoPath.split('/').pop(); // Splitting by '/' and getting the last part
-            var videoName = videoNameWithExtension.split('.')[0]; // Splitting by '.' and getting the first part (name without extension)
-
-            // CAPTIONS FIX: Add cache-busting to all track URLs
-            var cacheVersion = '?v=' + (new Date().getTime() / 60000 | 0);
-            
-            var enStr = "assets/vtt/En_" + videoName + ".vtt" + cacheVersion;
-            var spStr = "assets/vtt/Sp_" + videoName + ".vtt" + cacheVersion;
-            var tuStr = "assets/vtt/Tu_" + videoName + ".vtt" + cacheVersion;
-            var chStr = "assets/vtt/Ch_" + videoName + ".vtt" + cacheVersion;
-            
-            var englishTrack = document.getElementById('captionTrack');
-            var spanishTrack = document.getElementById('spanishTrack');
-            var chineseTrack = document.getElementById('chineseTrack');
-            var turkishTrack = document.getElementById('turkishTrack');
-
-            if (englishTrack) {
-                englishTrack.src = enStr;
-            }
-
-            if (spanishTrack) {
-                spanishTrack.src = spStr;
-            }
-            if (chineseTrack) {
-                chineseTrack.src = chStr;
-            }
-            if (turkishTrack) {
-                turkishTrack.src = tuStr;
-            }
-
-            // After changing the track, call your function to change to the current track
-            changeToCurrentTrack();
-            
-            // CRITICAL FIX: Reinitialize captions after track source change
             if (window.VideoTrackInitializer && window.VideoTrackInitializer.reinitialize) {
-                setTimeout(function() {
+                setTimeout(function () {
                     VideoTrackInitializer.reinitialize();
                 }, 100);
             }
         }
-    }, 200); // Check every 200 milliseconds
+    }, 200);
 }
 
 function pdfLoader() {
@@ -404,95 +380,31 @@ function getCurrentTrack(video) {
 //ch
 
 function changeToCurrentTrack() {
+    // English-only implementation: no language switching
     if (CurrentcontentType == "video") {
-        ResetTrack();
-        var contentController = angular.element(document.querySelector(".contentArea"));
-        var temp = contentController.scope().cc.globalVariableService.pageCounter;
-        var video = document.getElementById('vidArea');
+        const video = document.getElementById('vidArea');
+        if (!video) return;
 
-        // Get the video path
-        var videoPath = video.currentSrc;
-        //console.log("videoPath::" + videoPath);
-
-        // Get the video name without extension
-        var videoNameWithExtension = videoPath.split('/').pop(); // Splitting by '/' and getting the last part
-        var videoName = videoNameWithExtension.split('.')[0]; // Splitting by '.' and getting the first part (name without extension)
-
-        //console.log("Video Name: " + videoName);
-
-        // CAPTIONS FIX: Add cache-busting to track URLs
-        var cacheVersion = '?v=' + (new Date().getTime() / 60000 | 0);
+        const englishTrack = document.getElementById('captionTrack');
         
-        var tuStr = "";
-        var currTrack = "";
-        if (CurrentLanguage == "englishTrack" || CurrentLanguage == "captionTrack") {
-            currTrack = document.getElementById("captionTrack")
-            tuStr = "assets/vtt/En_" + videoName + ".vtt" + cacheVersion;
-        } else if (CurrentLanguage == "spanishTrack") {
-            currTrack = document.getElementById("spanishTrack")
-            tuStr = "assets/vtt/Sp_" + videoName + ".vtt" + cacheVersion;
-        } else if (CurrentLanguage == "chineseTrack") {
-            currTrack = document.getElementById("chineseTrack")
-            tuStr = "assets/vtt/Ch_" + videoName + ".vtt" + cacheVersion;
-        } else if (CurrentLanguage == "turkishTrack") {
-            currTrack = document.getElementById("turkishTrack")
-            tuStr = "assets/vtt/Tu_" + videoName + ".vtt" + cacheVersion;
-        }
-        //	console.log(CurrentLanguage);
-        //	console.log(tuStr);
-        if (currTrack) {
-            currTrack.src = tuStr;
-            currTrack.track.mode = "showing";
+        // Show English track if it exists
+        if (englishTrack && englishTrack.track) {
+            englishTrack.track.mode = "showing";
         }
     }
-
 }
 
 function ResetTrack() {
+    // English-only implementation: disable captions
     if (CurrentcontentType == "video") {
-        var contentController = angular.element(document.querySelector(".contentArea"));
-        var temp = contentController.scope().cc.globalVariableService.pageCounter;
-        var video = document.getElementById('vidArea');
+        const video = document.getElementById('vidArea');
+        if (!video) return;
 
-        // Get the video path
-        var videoPath = video.currentSrc;
-        //console.log("videoPath::" + videoPath);
-
-        // Get the video name without extension
-        var videoNameWithExtension = videoPath.split('/').pop(); // Splitting by '/' and getting the last part
-        var videoName = videoNameWithExtension.split('.')[0]; // Splitting by '.' and getting the first part (name without extension)
+        const englishTrack = document.getElementById('captionTrack');
         
-        // CAPTIONS FIX: Add cache-busting to track URLs
-        var cacheVersion = '?v=' + (new Date().getTime() / 60000 | 0);
-        
-        var enStr = "assets/vtt/En_" + videoName + ".vtt" + cacheVersion;
-        var spStr = "assets/vtt/Sp_" + videoName + ".vtt" + cacheVersion;
-        var tuStr = "assets/vtt/Tu_" + videoName + ".vtt" + cacheVersion;
-        var chStr = "assets/vtt/Ch_" + videoName + ".vtt" + cacheVersion;
-
-        var englishTrack = document.getElementById('captionTrack');
-        var spanishTrack = document.getElementById('spanishTrack');
-        var chineseTrack = document.getElementById('chineseTrack');
-        var turkishTrack = document.getElementById('turkishTrack');
-
-        if (englishTrack) {
-            englishTrack.src = enStr;
-            englishTrack.track.mode = "disabled"; // Show the English track
-        }
-
-        if (spanishTrack) {
-            spanishTrack.src = spStr;
-            spanishTrack.track.mode = "disabled"; // Disable the Spanish track
-        }
-
-        if (chineseTrack) {
-            chineseTrack.src = chStr;
-            chineseTrack.track.mode = "disabled"; // Disable the Chinese track
-        }
-
-        if (turkishTrack) {
-            turkishTrack.src = tuStr;
-            turkishTrack.track.mode = "disabled"; // Disable the Turkish track
+        // Disable English track if it exists
+        if (englishTrack && englishTrack.track) {
+            englishTrack.track.mode = "disabled";
         }
     }
 }
@@ -577,22 +489,21 @@ function scoreSubmit(result) {
 
     if (Number(result) >= PassScorevalue) {
         scorm.set("cmi.core.lesson_status", LMSpassed);
-		certificateDate=formatDate();
-		setSuspendString("str2", certificateDate);
-		if(!pretestSuccess)
-		{
-			
-			enableCertificateButton();
-		}
+        certificateDate = formatDate();
+        setSuspendString("str2", certificateDate);
+        if (!pretestSuccess) {
+
+            enableCertificateButton();
+        }
         //alert(result);
         //alert(PassScorevalue);
 
     } else {
         if (curAttempt == QuizAttemptLimit) {
             scorm.set("cmi.core.lesson_status", LMSfailed);
-			certificateDate=formatDate();
-			setSuspendString("str2", certificateDate);
-			//enableCertificateButton();
+            certificateDate = formatDate();
+            setSuspendString("str2", certificateDate);
+            //enableCertificateButton();
         }
         //alert(PassScorevalue);
         //alert("failed");
@@ -617,9 +528,9 @@ function scoreSubmit(result) {
     if (elementToRemoveClass1) {
         // Check if the class is not already present
         if (!elementToRemoveClass1.classList.contains('tickSymbol')) {
-           // elementToRemoveClass1.classList.add('tickSymbol');
-        } else {}
-    } else {}
+            // elementToRemoveClass1.classList.add('tickSymbol');
+        } else { }
+    } else { }
     getTracking(temp);
     var footerController = angular.element(document.querySelector(".footer"));
     footerController.scope().fb.changeFooterNavigation();
@@ -627,8 +538,8 @@ function scoreSubmit(result) {
     nextHighlightCongrats()
     angular.element(document.getElementById("exit")).addClass("exitHighlight");
     passScoreTOarticulate();
-	//set 2 added
-	pageSormTrack();
+    //set 2 added
+    pageSormTrack();
 
 }
 function scoreSubmit_PostQuiz(result) {
@@ -642,21 +553,20 @@ function scoreSubmit_PostQuiz(result) {
 
     if (Number(result) >= PassScorevalue) {
         scorm.set("cmi.core.lesson_status", LMSpassed);
-		certificateDate=formatDate();
-		setSuspendString("str2", certificateDate);
-		if(!pretestSuccess)
-		{
-			enableCertificateButton();
-		}
+        certificateDate = formatDate();
+        setSuspendString("str2", certificateDate);
+        if (!pretestSuccess) {
+            enableCertificateButton();
+        }
         //alert(result);
         //alert(PassScorevalue);
 
     } else {
         if (curAttempt == QuizAttemptLimit) {
             scorm.set("cmi.core.lesson_status", LMSfailed);
-			certificateDate=formatDate();
-			setSuspendString("str2", certificateDate);
-			//enableCertificateButton();
+            certificateDate = formatDate();
+            setSuspendString("str2", certificateDate);
+            //enableCertificateButton();
         }
         //alert(PassScorevalue);
         //alert("failed");
@@ -681,18 +591,18 @@ function scoreSubmit_PostQuiz(result) {
     if (elementToRemoveClass1) {
         // Check if the class is not already present
         if (!elementToRemoveClass1.classList.contains('tickSymbol')) {
-           // elementToRemoveClass1.classList.add('tickSymbol');
-        } else {}
-    } else {}
+            // elementToRemoveClass1.classList.add('tickSymbol');
+        } else { }
+    } else { }
     getTracking(temp);
-   /* var footerController = angular.element(document.querySelector(".footer"));
-    footerController.scope().fb.changeFooterNavigation();
-    //console.log("Submit");
-    nextHighlightCongrats()
-    angular.element(document.getElementById("exit")).addClass("exitHighlight");
-    passScoreTOarticulate();*/
-	//set 2 added
-	pageSormTrack();
+    /* var footerController = angular.element(document.querySelector(".footer"));
+     footerController.scope().fb.changeFooterNavigation();
+     //console.log("Submit");
+     nextHighlightCongrats()
+     angular.element(document.getElementById("exit")).addClass("exitHighlight");
+     passScoreTOarticulate();*/
+    //set 2 added
+    pageSormTrack();
 
 }
 
