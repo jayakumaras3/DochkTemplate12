@@ -255,90 +255,113 @@ function PageCompleteNextFun() {
 
 }
 
+/**
+ * DYNAMIC VIDEO CAPTION LOADING
+ * Extracts video filename and builds corresponding VTT path
+ * Handles timing issues with ng-src and video element readiness
+ */
 function LanguageTrackChange(val1, val2) {
-
-
-    let video = document.getElementById("vidArea");
-
+    var video = document.getElementById("vidArea");
+    
     if (!video) {
-        console.error("Video element not found!");
+        // Retry briefly if video element not ready
+        LanguageTrackChange._retryCount = (LanguageTrackChange._retryCount || 0) + 1;
+        if (LanguageTrackChange._retryCount <= 20) {
+            setTimeout(function() {
+                LanguageTrackChange(val1, val2);
+            }, 100);
+        }
         return;
     }
-    let oldTrack = document.getElementById("englishTrack");
-    if (oldTrack) {
-        video.removeChild(oldTrack); // Remove the existing track
+    LanguageTrackChange._retryCount = 0;
+
+    // Remove all old caption tracks
+    var oldTracks = video.querySelectorAll("track");
+    for (var i = 0; i < oldTracks.length; i++) {
+        oldTracks[i].parentNode.removeChild(oldTracks[i]);
     }
 
-    // Get new track attributes from the selected option
-    // let selectedOption = this.options[this.selectedIndex];
-    //  let newSrc = val1;
-    let newLang = val1;
-    let newLabel = val2;
-
-    // Create a new track element
-    let newTrack = document.createElement("track");
-    newTrack.id = "englishTrack";
-    newTrack.kind = "captions";
-    newTrack.src = "assets/vtt/En_en_1.vtt";
-    newTrack.srclang = newLang;
-    newTrack.label = newLabel;
-    newTrack.default = true;
-
-    // Append the new track to the video element
-    video.appendChild(newTrack);
-
-    // Reload subtitles
-    video.textTracks[0].mode = "showing";
-}
-function changeTrackSrc() {
-    var interval = setInterval(() => {
-        var video = document.getElementById('vidArea');
-
-        // Check if the video is ready
-        if (video && video.readyState >= 2) {
-            LanguageTrackChange(VttLanguage, VttLabel);
-            clearInterval(interval); // Stop checking once the video is ready
-
-            if (CurrentcontentType === "video") {
-                var contentController = angular.element(document.querySelector(".contentArea"));
-                var temp = contentController.scope().cc.globalVariableService.pageCounter;
-
-                // Get the video path
-                var videoPath = video.currentSrc;
-
-                // Get the video name without extension
-                var videoNameWithExtension = videoPath.split('/').pop(); // Splitting by '/' and getting the last part
-                var videoName = videoNameWithExtension.split('.')[0]; // Splitting by '.' and getting the first part (name without extension)
-
-                var enStr = "assets/vtt/En_" + videoName + ".vtt";
-                var spStr = "assets/vtt/Sp_" + videoName + ".vtt";
-                var tuStr = "assets/vtt/Tu_" + videoName + ".vtt";
-                var chStr = "assets/vtt/Ch_" + videoName + ".vtt";
-                var englishTrack = document.getElementById('englishTrack');
-                var spanishTrack = document.getElementById('spanishTrack');
-                var chineseTrack = document.getElementById('chineseTrack');
-                var turkishTrack = document.getElementById('turkishTrack');
-
-                if (englishTrack) {
-                    englishTrack.src = enStr;
-                }
-
-                if (spanishTrack) {
-                    spanishTrack.src = spStr;
-                }
-                if (chineseTrack) {
-                    chineseTrack.src = chStr;
-                }
-                if (turkishTrack) {
-                    turkishTrack.src = tuStr;
-                }
-
-                // After changing the track, call your function to change to the current track
-                changeToCurrentTrack();
-            }
+    // Get video source dynamically
+    var src = video.currentSrc || video.getAttribute("src");
+    if (!src) {
+        // ng-src may not be ready yet, retry
+        LanguageTrackChange._retryCount = (LanguageTrackChange._retryCount || 0) + 1;
+        if (LanguageTrackChange._retryCount <= 20) {
+            setTimeout(function() {
+                LanguageTrackChange(val1, val2);
+            }, 100);
         }
-    }, 200); // Check every 1000 milliseconds (1 second)
+        return;
+    }
+
+    // Extract video filename (e.g., "en_2.mp4" -> "en_2")
+    var videoName = src.split('/').pop().split('.')[0];
+    
+    // Build English VTT path dynamically
+    var vttPath = "assets/vtt/En_" + videoName + ".vtt?v=" + Date.now();
+    
+    // Create track element
+    var track = document.createElement("track");
+    track.id = "captionTrack";
+    track.kind = "captions";
+    track.label = val2 || "English";
+    track.srclang = val1 || "en";
+    track.src = vttPath;
+    track.setAttribute("default", "");
+    
+    video.appendChild(track);
+    
+    // Force track visibility after brief delay
+    setTimeout(function() {
+        if (video.textTracks && video.textTracks.length > 0) {
+            video.textTracks[0].mode = "showing";
+        }
+    }, 300);
 }
+
+// Backward-compatibility shim: some legacy controllers still call changeTrackSrc().
+// Keep it safe and route to the dynamic caption handler.
+function changeTrackSrc() {
+    LanguageTrackChange(VttLanguage || "en", VttLabel || "English");
+}
+
+/**
+ * LIFECYCLE-BASED CAPTION BINDING
+ * Attaches caption tracks when video element is recreated during SPA navigation
+ * Prevents duplicate binding with dataset flag
+ */
+function bindVideoCaptionLifecycle() {
+    var video = document.getElementById("vidArea");
+    
+    if (!video) return;
+    
+    // Prevent duplicate binding on same video element
+    if (video.dataset.enCaptionBound === "1") return;
+    video.dataset.enCaptionBound = "1";
+    
+    // Bind to metadata ready events
+    video.addEventListener("loadedmetadata", function() {
+        LanguageTrackChange("en", "English");
+    }, false);
+    
+    video.addEventListener("loadeddata", function() {
+        LanguageTrackChange("en", "English");
+    }, false);
+    
+    // Initial attachment attempt
+    setTimeout(function() {
+        LanguageTrackChange("en", "English");
+    }, 50);
+}
+
+/**
+ * CONTINUOUS VIDEO ELEMENT MONITORING
+ * Detects when video element is recreated (as in SPA/SCORM navigation) 
+ * Re-applies lifecycle binding to ensure captions always load
+ */
+setInterval(function() {
+    bindVideoCaptionLifecycle();
+}, 500);
 
 function pdfLoader() {
     window.open(TranscriptPath, "_blank");

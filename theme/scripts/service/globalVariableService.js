@@ -198,8 +198,15 @@ var aristoFramework = window.aristoFramework || {};
      * To set the page counter
      */
     p.setPageCounter = function (pageCounter) {
-        // console.log("update alert " + pageCounter)
-        this.pageCounter = pageCounter;
+        // Validate and clamp page counter to safe range [1, Totalpage]
+        var nextPage = parseInt(pageCounter, 10);
+        if (isNaN(nextPage) || nextPage < 1) {
+            nextPage = 1;
+        }
+        if (typeof Totalpage !== "undefined" && Totalpage > 0 && nextPage > Totalpage) {
+            nextPage = Totalpage;
+        }
+        this.pageCounter = nextPage;
     };
     /**
      * @ngdoc method

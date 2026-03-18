@@ -782,7 +782,6 @@ if (img) {
 			this.changeglossary();
 		}
 		this.$rootScope.$broadcast("changeFooterNavigation");
-		changeTrackSrc();
 	};
 
 	sideBarController.$inject = ['$scope', '$rootScope', '$http', 'globalSettingService', 'globalVariableService', '$sce', "$location"];

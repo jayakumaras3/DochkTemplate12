@@ -115,23 +115,41 @@ var stage, preload, lib = {};
      *
      */
     p.getTocData = function () {
-
-        // Show preloader using PreloadManager for smooth fade in
-        if (typeof PreloadManager !== 'undefined') {
-            PreloadManager.show();
-        } else {
-            document.getElementById("preloader").style.opacity = "1";
+        try {
+            // Show preloader using PreloadManager for smooth fade in
+            if (typeof PreloadManager !== 'undefined') {
+                PreloadManager.show();
+            } else {
+                var preloader = document.getElementById("preloader");
+                if (preloader) preloader.style.opacity = "1";
+            }
+            this.toc = this.globalVariableService.getTocData();
+            var currentPage = this.globalVariableService.getPageCounter();
+            
+            // Ensure page counter is valid
+            if (!currentPage || currentPage < 1) {
+                currentPage = 1;
+                this.globalVariableService.setPageCounter(1);
+            }
+            
+            if (this.globalVariableService.toclevel == false) {
+                // Safe access with bounds checking
+                var pageMap = this.globalVariableService.pagesmodcount[currentPage - 1];
+                if (pageMap && this.toc && this.toc[pageMap[0]] && this.toc[pageMap[0]][pageMap[1] - 1]) {
+                    this.modulenumber = pageMap[0];
+                    this.currentpagenumber = pageMap[1];
+                    this.header = this.toc[this.modulenumber][this.currentpagenumber - 1]['header'];
+                } else if (this.toc && this.toc[0] && this.toc[0][currentPage - 1]) {
+                    // Fallback to flat structure
+                    this.header = this.toc[0][currentPage - 1].header;
+                }
+            } else if (this.toc && this.toc[currentPage - 1]) {
+                // Safe flat access
+                this.header = this.toc[currentPage - 1].header;
+            }
+        } catch (error) {
+            console.error("Error in getTocData:", error);
         }
-        this.toc = this.globalVariableService.getTocData();
-		if(this.globalVariableService.toclevel==false){
-        this.modulenumber =this.globalVariableService.pagesmodcount[this.globalVariableService.getPageCounter()-1][0];
-        this.currentpagenumber = this.globalVariableService.pagesmodcount[this.globalVariableService.getPageCounter()-1][1];
-		this.header = this.toc[ this.modulenumber][this.currentpagenumber-1]['header'];
-		//console.log(":::P"+this.header);
-		}
-		else{
-			this.header = this.toc[this.globalVariableService.getPageCounter() - 1].header;	
-		}
         this.http({
             method: 'GET',
 			url: 'assets/json/toc.json'
@@ -153,16 +171,27 @@ var stage, preload, lib = {};
      */
 	p.getPageJSON = function (response) {
 		try {
-			// Log the full response object to debug structure
-		//	console.log("Full Response Object:", response);
-
-			// Extract the relevant data from response
-			const responseData = response.data;
+			// Extract and validate response data
+			var responseData = response.data;
+			var currentPageIndex = this.globalVariableService.getPageCounter() - 1;
+			
+			// Validate page index is in bounds
+			if (currentPageIndex < 0 || currentPageIndex >= (responseData && responseData["0"] ? responseData["0"].length : 0)) {
+				// Correct out-of-bounds index
+				currentPageIndex = 0;
+				this.globalVariableService.setPageCounter(1);
+			}
 
 			// Ensure responseData["0"] exists and is an array
-			if (responseData && responseData["0"] && Array.isArray(responseData["0"]) && responseData["0"].length > 0) {
+			if (responseData && responseData["0"] && Array.isArray(responseData["0"]) && responseData["0"].length > currentPageIndex) {
 				
-				const firstPageSettings = responseData["0"][this.globalVariableService.getPageCounter()-1].settings;
+				var pageData = responseData["0"][currentPageIndex];
+				var firstPageSettings = pageData && pageData.settings ? pageData.settings : null;
+
+				if (!firstPageSettings) {
+					console.warn("Page settings not found for index", currentPageIndex);
+					return;
+				}
 
 				// Log the settings for debugging
 				//console.log("Page Settings:", firstPageSettings);
@@ -177,16 +206,25 @@ var stage, preload, lib = {};
 
 				// Update the UI
 				document.body.style.display = "block";
-				document.getElementById("preloader").style.display = "block";
-				document.getElementById("preloader").style.opacity = "1";
+				var preloader = document.getElementById("preloader");
+				if (preloader) {
+					preloader.style.display = "block";
+					preloader.style.opacity = "1";
+				}
 
 				this.pageContentType = "";
 				this.pageContent = "";
 
 				// Use self to preserve context in timeout
-				const self = this;
+				var self = this;
 				this.timeout(function () {
-					self.scope.$apply();
+					if (self.scope && self.scope.$apply) {
+						try {
+							self.scope.$apply();
+						} catch (e) {
+							// Already in $apply/digest phase
+						}
+					}
 					self.changeFooterBtnOnPage(firstPageSettings);
 				}, 10);
 			} else {

@@ -122,10 +122,9 @@
             return 'assets/vtt/En_' + videoName + '.vtt';
         }
 
-        // Last resort: use default
-        const defaultPath = 'assets/vtt/En_en_1.vtt';
-       // console.log('[VideoTrackInit] Using default caption path:', defaultPath);
-        return defaultPath;
+        // Last resort: wait until video source is ready.
+        // Returning null avoids requesting a non-existent hardcoded VTT file.
+        return null;
     }
 
     /**

@@ -1,67 +1,58 @@
 ﻿WEBVTT
 
-00:00:00.500 --> 00:00:02.168
-Welcome to the course: Boosting
+00:00:00.160 --> 00:00:07.080
+Welcome to the course Conversational AI Concepts, Capabilities, and Use Cases.
 
-00:00:02.168 --> 00:00:04.460
-Efficiency With Microsoft Copilot
+00:00:08.320 --> 00:00:14.720
+Think about the last time you interacted with a chat bot at work or as a customer.
 
-00:00:07.120 --> 00:00:10.224
-This extensive course on Microsoft Copilot, your
+00:00:15.640 --> 00:00:19.551
+Maybe it answered a simple question right away,
 
-00:00:10.224 --> 00:00:13.032
-AI-driven assistant is aimed at boosting
+00:00:19.551 --> 00:00:26.152
+or maybe it sent you through a few fixed options and left you feeling stuck when
 
-00:00:13.032 --> 00:00:16.219
-productivity and creativity in professional settings,
+00:00:26.152 --> 00:00:28.760
+your question did not quite fit.
 
-00:00:17.040 --> 00:00:18.896
-It's structured to enable you to
+00:00:30.360 --> 00:00:33.440
+That difference in experience is not accidental.
 
-00:00:18.896 --> 00:00:21.688
-fully harness the capabilities of Copilot.
+00:00:33.840 --> 00:00:38.581
+It comes down to how the conversational system is designed,
 
-00:00:21.688 --> 00:00:23.448
-It offers an in-depth exploration
+00:00:38.581 --> 00:00:43.640
+what it is capable of understanding, and how it is implemented.
 
-00:00:23.448 --> 00:00:26.606
-of its features, functionalities, and practical
+00:00:44.640 --> 00:00:51.237
+It's This course focuses on helping you understand those differences so you can
 
-00:00:26.606 --> 00:00:30.070
-applications within Microsoft 365 tools.
+00:00:51.237 --> 00:00:57.917
+evaluate Conversational AI solutions with clarity and make better decisions in a
 
-00:00:30.070 --> 00:00:32.966
-From automating tedious tasks in Excel to
+00:00:57.917 --> 00:00:59.320
+business context.
 
-00:00:32.966 --> 00:00:37.038
-producing refined documents in Word, optimizing communication
+00:00:59.680 --> 00:01:04.327
+By the end of this course, you will be able to explain what
 
-00:00:37.038 --> 00:00:40.130
-Outlook, and fostering collaboration in Teams,
+00:01:04.327 --> 00:01:10.601
+conversational AI is and how it differs from traditional automation systems such
 
-00:00:41.030 --> 00:00:45.170
-Copilot is revolutionizing our work processes.
+00:01:10.601 --> 00:01:13.079
+as IVR and rule based chat bots.
 
-00:00:45.830 --> 00:00:48.654
-You will discover how its sophisticated features –
+00:01:13.760 --> 00:01:19.460
+Describe how conversational AI works, including the key technologies that
 
-00:00:48.654 --> 00:00:52.344
-such as natural language comprehension, content creation,
+00:01:19.460 --> 00:01:25.083
+enable it to understand input, interpret intent, and generate responses,
 
-00:00:52.344 --> 00:00:56.808
-and data analysis – can streamline intricate workflows,
+00:01:25.083 --> 00:01:29.935
+and differentiate between traditional chat bots, AI chat bots,
 
-00:00:56.808 --> 00:00:59.440
-minimize errors, and allow for more time
+00:01:29.935 --> 00:01:34.942
+and agentic AI chat bots, and evaluate implementation approaches
 
-00:00:59.440 --> 00:01:02.160
-dedicated to strategic planning.
-
-00:01:02.160 --> 00:01:05.752
-In this course, you will: Describe generative AI
-
-00:01:05.752 --> 00:01:09.368
-and Copilot State the key features of Copilot
-
-00:01:09.368 --> 00:01:12.600
-And explain the best practices for using Copilot
+00:01:34.942 --> 00:01:38.640
+based on organizational needs and capabilities.

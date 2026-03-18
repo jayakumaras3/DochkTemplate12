@@ -341,7 +341,6 @@ var pauseTimer;
 				   collapseReset();
                     this.globalVariableService.replaybtnvisible = false;
                     this.prevBtnClick();
-					changeTrackSrc();
 					menuEnDisble_fun_PREV();
                 }
                 break;
@@ -358,7 +357,6 @@ var pauseTimer;
 									collapseReset();
 									this.globalVariableService.replaybtnvisible = false;
 									this.nextBtnClick();
-									changeTrackSrc();
 					}
 					else{
 								//if (pageArray[temp-1]=="1")
@@ -367,7 +365,6 @@ var pauseTimer;
 									collapseReset();
 									this.globalVariableService.replaybtnvisible = false;
 									this.nextBtnClick();
-									changeTrackSrc();
 								}
 							}
 				}
