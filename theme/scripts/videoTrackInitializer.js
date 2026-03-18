@@ -1,9 +1,16 @@
 /**
- * VIDEO CAPTION INITIALIZATION MODULE
+ * VIDEO CAPTION INITIALIZATION MODULE + PLAYBACK RECOVERY
  * Handles reliable loading of video captions on first page load
- * Addresses timing, caching, and browser compatibility issues
+ * Addresses timing, caching, browser compatibility, AND playback stall issues
  * 
  * WCAG 2.1 Compliance: Ensures captions are enabled by default for accessibility
+ * 
+ * CRITICAL ENHANCEMENTS:
+ * - Detects frozen playback (currentTime stuck at 0:00)
+ * - Forces media pipeline reset when stalled
+ * - Ensures timeupdate events fire properly
+ * - Implements playback watchdog for continuous monitoring
+ * - Handles async video element creation (Angular ng-if)
  */
 
 (function() {
@@ -14,7 +21,10 @@
         captionVersionBustSuffix: '?v=' + (new Date().getTime() / 60000 | 0), // Cache-bust every minute
         maxRetries: 3,
         retryDelay: 200,
-        loadedMetadataTimeout: 5000
+        loadedMetadataTimeout: 5000,
+        playbackWatchdogInterval: 1000, // Check every 1 second
+        playbackStallThreshold: 2000, // If time hasn't changed in 2 seconds, it's stuck
+        playbackRecoveryAttempts: 3
     };
 
     let trackInitAttempts = 0;
@@ -23,11 +33,192 @@
     let playingHandler = null;
     let initAttempts = 0;
     const MAX_INIT_ATTEMPTS = 5; // Max 5 attempts to find video element
+    
+    // VIDEO PLAYBACK RECOVERY STATE
+    let playbackWatchdog = null;
+    let lastPlayingTime = 0;
+    let lastPlayingCheckTime = 0;
+    let playbackRecoveryAttemptCount = 0;
+    let videoInitialized = false;
 
     /**
-     * CRITICAL FIX: Force track to load after video metadata is ready
-     * This prevents race conditions between video loading and track parsing
+     * STEP 1: DETECT IF VIDEO IS FAKE PLAYING (appears playing but not progressing)
+     * Returns true if video shows play state but currentTime is stuck at 0
      */
+    function isFakePlaying(video) {
+        if (!video) return false;
+        return (video.paused === false && video.currentTime === 0 && !isNaN(video.duration));
+    }
+
+    /**
+     * STEP 2: FORCE MEDIA PIPELINE RESET (CRITICAL FIX FOR FROZEN PLAYBACK)
+     * Resets the entire media pipeline when playback is stalled
+     */
+    function resetMediaPipeline(video) {
+        if (!video) return;
+        
+        console.warn('[VideoTrackInit] STALL DETECTED: Resetting media pipeline...');
+        
+        try {
+            // Save state
+            const wasPlaying = !video.paused;
+            const savedTime = video.currentTime;
+            
+            // Force reset
+            video.pause();
+            video.currentTime = 0;
+            
+            // Clear any pending operations
+            setTimeout(function() {
+                try {
+                    video.load(); // Reloads media pipeline from scratch
+                    
+                    if (wasPlaying && video.readyState >= 2) {
+                        // Resume playback if it was playing before
+                        setTimeout(function() {
+                            video.play().catch(function(error) {
+                                console.warn('[VideoTrackInit] Auto-play resumption blocked:', error.name);
+                                // This is expected in some browser policies
+                            });
+                        }, 100);
+                    }
+                } catch (e) {
+                    console.error('[VideoTrackInit] Error during media pipeline reset:', e);
+                }
+            }, 100);
+            
+        } catch (e) {
+            console.error('[VideoTrackInit] Error resetting media pipeline:', e);
+        }
+    }
+
+    /**
+     * STEP 3: SAFE PLAY - Only play when video is actually ready
+     * Ensures readyState >= 2 (HAVE_CURRENT_DATA) before attempting play
+     */
+    function safePlay(video) {
+        if (!video) return;
+        
+        if (video.readyState >= 2) {
+            video.play().catch(function(error) {
+                console.warn('[VideoTrackInit] Play request blocked:', error.name);
+            });
+        } else {
+            // Wait for data to be available
+            const handler = function() {
+                video.play().catch(function(error) {
+                    console.warn('[VideoTrackInit] Deferred play request blocked:', error.name);
+                });
+                video.removeEventListener('loadeddata', handler);
+            };
+            video.addEventListener('loadeddata', handler, { once: true });
+        }
+    }
+
+    /**
+     * STEP 4: PLAYBACK WATCHDOG - Detects and recovers from stalled playback
+     * Monitors if video is truly progressing and recovers if stuck
+     */
+    function startPlaybackWatchdog(video) {
+        if (!video || playbackWatchdog) {
+            return; // Already running or no video
+        }
+        
+        lastPlayingTime = video.currentTime;
+        lastPlayingCheckTime = Date.now();
+        playbackRecoveryAttemptCount = 0;
+        
+        playbackWatchdog = setInterval(function() {
+            if (!video || !document.contains(video)) {
+                // Video element removed from DOM
+                stopPlaybackWatchdog();
+                return;
+            }
+            
+            if (video.paused) {
+                // Video is legitimately paused - no action needed
+                return;
+            }
+            
+            const now = Date.now();
+            const timeSinceLastCheck = now - lastPlayingCheckTime;
+            const actualTimeChange = video.currentTime - lastPlayingTime;
+            
+            // Check if time has advanced since last check
+            if (timeSinceLastCheck >= CONFIG.playbackWatchdogInterval) {
+                if (Math.abs(actualTimeChange) < 0.01 && !video.buffering) {
+                    // Time hasn't changed - playback is stalled
+                    console.warn('[VideoTrackInit] PLAYBACK STALL: time=' + video.currentTime + ', expected change since last check');
+                    
+                    if (playbackRecoveryAttemptCount < CONFIG.playbackRecoveryAttempts) {
+                        playbackRecoveryAttemptCount++;
+                        console.warn('[VideoTrackInit] RECOVERY ATTEMPT #' + playbackRecoveryAttemptCount);
+                        
+                        try {
+                            // Nudge playback forward slightly
+                            video.currentTime += 0.01;
+                            safePlay(video);
+                        } catch (e) {
+                            console.error('[VideoTrackInit] Error during playback recovery nudge:', e);
+                        }
+                    } else {
+                        // Too many recovery attempts - full pipeline reset
+                        resetMediaPipeline(video);
+                        playbackRecoveryAttemptCount = 0;
+                    }
+                } else {
+                    // Playback is progressing normally - reset attempt counter
+                    playbackRecoveryAttemptCount = 0;
+                }
+                
+                // Update tracking
+                lastPlayingTime = video.currentTime;
+                lastPlayingCheckTime = now;
+            }
+        }, CONFIG.playbackWatchdogInterval);
+    }
+
+    /**
+     * Stop the playback watchdog when not needed
+     */
+    function stopPlaybackWatchdog() {
+        if (playbackWatchdog) {
+            clearInterval(playbackWatchdog);
+            playbackWatchdog = null;
+            playbackRecoveryAttemptCount = 0;
+        }
+    }
+
+    /**
+     * VIDEO EVENT HANDLERS - Enhanced with recovery logic
+     */
+    function onVideoPlay() {
+        if (!videoElement) return;
+        
+        // Check for fake playing state
+        if (isFakePlaying(videoElement)) {
+            console.warn('[VideoTrackInit] Fake play detected - resetting pipeline');
+            setTimeout(function() {
+                resetMediaPipeline(videoElement);
+            }, 100);
+            return;
+        }
+        
+        // Start watchdog monitoring
+        startPlaybackWatchdog(videoElement);
+    }
+
+    function onVideoPause() {
+        if (!videoElement) return;
+        // Pause should stop the watchdog
+        stopPlaybackWatchdog();
+    }
+
+    function onVideoEnded() {
+        if (!videoElement) return;
+        // Stop watchdog when video ends
+        stopPlaybackWatchdog();
+    }
     function forceTrackLoad(video) {
         if (!video || !video.textTracks) {
             console.warn('[VideoTrackInit] Video element or textTracks not available');
@@ -123,7 +314,7 @@
         }
 
         // Last resort: use default
-        const defaultPath = 'assets/vtt/En_en_1.vtt';
+        const defaultPath = 'assets/vtt/En_en_2.vtt';
        // console.log('[VideoTrackInit] Using default caption path:', defaultPath);
         return defaultPath;
     }

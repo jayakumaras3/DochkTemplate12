@@ -292,7 +292,7 @@ function LanguageTrackChange(val1,val2)
     let newTrack = document.createElement("track");
     newTrack.id = "captionTrack";
     newTrack.kind = "captions";
-    newTrack.src = "assets/vtt/En_en_1.vtt" + cacheVersion;
+    newTrack.src = "assets/vtt/En_en_2.vtt" + cacheVersion;
     newTrack.srclang = newLang;
     newTrack.label = newLabel;
     newTrack.default = true;
