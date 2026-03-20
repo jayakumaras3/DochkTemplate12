@@ -153,6 +153,9 @@ var pauseTimer;
             existingBtn.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 99999 !important; pointer-events: auto !important; width: 46px !important; height: 46px !important; overflow: visible !important;';
         }
 
+        // Keep Steps at the end of the control stack: menu -> prev -> next -> learning -> page number -> steps
+        container.appendChild(existingBtn);
+
         // Debug: Log bounding rect to detect clipping/positioning issues
         var rect = existingBtn.getBoundingClientRect();
         console.log('[Steps@' + delay + 'ms] Button rect - width:', rect.width, 'height:', rect.height, 'top:', rect.top, 'left:', rect.left);

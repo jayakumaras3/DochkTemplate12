@@ -2465,6 +2465,10 @@ body {
     flex-shrink: 0 !important;
 }
 
+.wholeContainer.reels-wrapper .rightNavPanel .footer #stepsBtn {
+    order: 6 !important;
+}
+
 @media (orientation: landscape) and (max-height: 500px) {
     .wholeContainer.reels-wrapper .rightNavPanel {
         gap: 10px !important;
