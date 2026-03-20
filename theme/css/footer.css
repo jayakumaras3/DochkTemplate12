@@ -402,6 +402,13 @@ video::cue {
     height: 4px !important;
     border-radius: 999px !important;
     background: rgba(200, 200, 200, 0.45) !important;
+    cursor: pointer !important;
+    transition: height 0.15s ease, opacity 0.15s ease !important;
+}
+
+.step-progress-segment:hover {
+    height: 7px !important;
+    opacity: 0.9 !important;
 }
 
 .step-progress-segment.completed {

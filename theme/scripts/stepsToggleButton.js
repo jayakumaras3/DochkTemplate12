@@ -24,6 +24,22 @@
         videoElement: null,
         timeUpdateHandler: null,
 
+        getStepsData: function() {
+            return Array.isArray(this.currentSteps) ? this.currentSteps : [];
+        },
+
+        getStepLabelText: function() {
+            if (window.templateJsonData && window.templateJsonData.stepText) {
+                return window.templateJsonData.stepText;
+            }
+
+            if (window.stepText) {
+                return window.stepText;
+            }
+
+            return 'STEP';
+        },
+
         /**
          * Initialize steps toggle functionality
          * @param {Array} steps - Array of step objects from page settings
@@ -48,9 +64,9 @@
             }
 
             // Store steps reference
-            this.currentSteps = steps;
+            this.currentSteps = Array.isArray(steps) ? steps : [];
             this.currentStepIndex = -1;
-            console.log('[StepsToggleButton] Stored', steps.length, 'steps');
+            console.log('[StepsToggleButton] Stored', this.currentSteps.length, 'steps');
 
             // Create or show toggle button
             this.createToggleButton();
@@ -179,10 +195,13 @@
         },
 
         /**
-         * Render segment elements from current steps
+         * Render segment elements from current steps.
+         * Each segment is clickable — seeks video to the corresponding step time.
          */
         renderStepProgressSegments: function() {
-            if (!this.stepProgressElement || !this.currentSteps) {
+            var steps = this.getStepsData();
+
+            if (!this.stepProgressElement || steps.length === 0) {
                 return;
             }
 
@@ -191,11 +210,61 @@
                 return;
             }
 
+            var self = this;
             segmentsContainer.innerHTML = '';
-            for (var i = 0; i < this.currentSteps.length; i++) {
+
+            for (var i = 0; i < steps.length; i++) {
                 var seg = document.createElement('span');
                 seg.className = 'step-progress-segment upcoming';
                 seg.setAttribute('data-step-index', i);
+                seg.setAttribute('role', 'button');
+                seg.setAttribute('tabindex', '0');
+                seg.setAttribute('title', 'Go to ' + (this.getStepLabelText() || 'Step') + ' ' + (i + 1));
+                // Override parent overlay pointer-events:none so segments are clickable
+                seg.style.pointerEvents = 'all';
+
+                // Click-to-seek handler (IIFE to capture loop variable)
+                (function(stepIndex) {
+                    var handler = function() {
+                        var currentSteps = self.getStepsData();
+                        var step = currentSteps[stepIndex];
+                        if (!step) { return; }
+
+                        var seekTime = typeof step.time === 'number'
+                            ? step.time
+                            : parseFloat(step.time) || 0;
+
+                        // Update index immediately — prevents timeupdate from re-firing redundantly
+                        self.currentStepIndex = stepIndex;
+
+                        // Update progress bar and text immediately (no waiting for timeupdate)
+                        self.updateStepBar(stepIndex);
+                        self.updateStepInfo(stepIndex);
+
+                        // Seek video
+                        var video = self.videoElement || document.getElementById('vidArea');
+                        if (video) {
+                            video.currentTime = seekTime;
+                            // Resume playback if paused
+                            if (video.paused) {
+                                video.play();
+                            }
+                        }
+
+                        // Sync right-side steps panel active state
+                        self.updateActiveStep(seekTime);
+                    };
+
+                    seg.addEventListener('click', handler);
+                    // Keyboard accessibility: Enter / Space trigger seek
+                    seg.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handler();
+                        }
+                    });
+                })(i);
+
                 segmentsContainer.appendChild(seg);
             }
         },
@@ -204,14 +273,16 @@
          * Compute current step index from video time
          */
         getStepIndexForTime: function(currentTime) {
-            if (!this.currentSteps || this.currentSteps.length === 0) {
+            var steps = this.getStepsData();
+
+            if (steps.length === 0) {
                 return -1;
             }
 
             var index = 0;
-            for (var i = 0; i < this.currentSteps.length; i++) {
-                var step = this.currentSteps[i] || {};
-                var next = this.currentSteps[i + 1] || null;
+            for (var i = 0; i < steps.length; i++) {
+                var step = steps[i] || {};
+                var next = steps[i + 1] || null;
                 var start = typeof step.time === 'number' ? step.time : parseFloat(step.time) || 0;
                 var end = next ? ((typeof next.time === 'number' ? next.time : parseFloat(next.time)) || Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER;
 
@@ -232,7 +303,7 @@
          * Update top progress overlay and segment states
          */
         updateStepProgressByTime: function(currentTime) {
-            if (!this.currentSteps || this.currentSteps.length === 0) {
+            if (this.getStepsData().length === 0) {
                 return;
             }
 
@@ -277,19 +348,32 @@
          * Update STEP X OF Y and current step title
          */
         updateStepInfo: function(index) {
-            if (!this.stepProgressElement || !this.currentSteps || this.currentSteps.length === 0 || index < 0) {
+            var steps = this.getStepsData();
+
+            if (!this.stepProgressElement) {
                 return;
             }
 
             var meta = this.stepProgressElement.querySelector('.step-progress-meta');
             var title = this.stepProgressElement.querySelector('.step-progress-title');
-            var step = this.currentSteps[index] || {};
+            var step = steps[index] || null;
+            var stepLabelText = this.getStepLabelText();
+
+            if (steps.length === 0 || index < 0 || !step) {
+                if (meta) {
+                    meta.textContent = '';
+                }
+                if (title) {
+                    title.textContent = '';
+                }
+                return;
+            }
 
             if (meta) {
-                meta.textContent = 'STEP ' + (index + 1) + ' OF ' + this.currentSteps.length;
+                meta.textContent = stepLabelText + ' ' + (index + 1) + ' OF ' + steps.length;
             }
             if (title) {
-                title.textContent = step.title || ('Step ' + (index + 1));
+                title.textContent = step.title || '';
             }
         },
 
@@ -309,7 +393,9 @@
          * @param {HTMLElement} stepPanel - The step panel element
          */
         updateStepsContent: function(stepPanel) {
-            if (!this.currentSteps || this.currentSteps.length === 0) {
+            var steps = this.getStepsData();
+
+            if (steps.length === 0) {
                 return;
             }
 
@@ -322,7 +408,7 @@
             const self = this;
 
             // Build step items
-            this.currentSteps.forEach(function(step) {
+            steps.forEach(function(step) {
                 const stepItem = document.createElement('div');
                 stepItem.className = 'step-item';
                 stepItem.dataset.time = step.time || 0;
@@ -574,7 +660,7 @@
          * @param {number} currentTime - Current video time in seconds
          */
         updateActiveStep: function(currentTime) {
-            if (!this.currentSteps) {
+            if (this.getStepsData().length === 0) {
                 return;
             }
 

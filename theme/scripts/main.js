@@ -582,6 +582,9 @@ async function loadJsonvalue() {
 }
 
 function processMasterValue1(data) {
+
+  window.templateJsonData = data || {};
+
 	
   masterBool = data.master || false;
   AudioVersionEnable = data.AudioVersionEnable || false;
@@ -597,6 +600,7 @@ function processMasterValue1(data) {
   NextTitle = data.NextTitle || "";
   Prevtitle = data.Prevtitle || "";
   CourseName = data.CourseName || "";
+  window.stepText = data.stepText || "";
   PageLevelCourseComplete = data.PageLevelCourseComplete || false;
   VttLanguage = data.VttLanguage || "";
   VttLabel = data.VttLabel || "";
