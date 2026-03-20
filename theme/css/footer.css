@@ -381,6 +381,76 @@ video::cue {
     -webkit-box-decoration-break: clone !important;
 }
 
+/* Top step progress overlay for video pages */
+.step-progress-overlay {
+    position: absolute !important;
+    top: 10px !important;
+    left: 10px !important;
+    right: 10px !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+}
+
+.step-progress-segments {
+    display: flex !important;
+    gap: 6px !important;
+    margin-bottom: 8px !important;
+}
+
+.step-progress-segment {
+    flex: 1 1 0 !important;
+    height: 4px !important;
+    border-radius: 999px !important;
+    background: rgba(200, 200, 200, 0.45) !important;
+}
+
+.step-progress-segment.completed {
+    background: #b30019 !important;
+}
+
+.step-progress-segment.active {
+    background: #ff1e2d !important;
+}
+
+.step-progress-segment.upcoming {
+    background: rgba(170, 170, 170, 0.45) !important;
+}
+
+.step-progress-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+}
+
+.step-progress-meta {
+    color: #ff3040 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+.step-progress-title {
+    color: #ffffff !important;
+    font-size: 32px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.85) !important;
+    max-width: 90% !important;
+}
+
+@media (max-width: 768px) {
+    .step-progress-title {
+        font-size: 18px !important;
+        max-width: 96% !important;
+    }
+
+    .step-progress-meta {
+        font-size: 12px !important;
+    }
+}
+
 /* Hard-disable old floating button path. */
 #stepsToggleButton,
 .steps-toggle-btn {

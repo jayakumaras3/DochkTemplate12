@@ -18,7 +18,9 @@
         isEnabled: false,
         buttonElement: null,
         stepsPanelElement: null,
+        stepProgressElement: null,
         currentSteps: null,
+        currentStepIndex: -1,
         videoElement: null,
         timeUpdateHandler: null,
 
@@ -47,6 +49,7 @@
 
             // Store steps reference
             this.currentSteps = steps;
+            this.currentStepIndex = -1;
             console.log('[StepsToggleButton] Stored', steps.length, 'steps');
 
             // Create or show toggle button
@@ -54,6 +57,9 @@
 
             // Ensure step panel exists
             this.ensureStepPanelExists();
+
+            // Create top progress bar overlay
+            this.ensureStepProgressOverlayExists();
 
             // Set up video tracking if video content
             this.setupVideoTracking();
@@ -124,6 +130,178 @@
 
             this.updateStepsContent(stepPanel);
             console.log('[StepsToggleButton] Standalone steps panel created');
+        },
+
+        /**
+         * Ensure top step progress overlay exists in video frame
+         */
+        ensureStepProgressOverlayExists: function() {
+            if (!this.currentSteps || this.currentSteps.length === 0) {
+                this.removeStepProgressOverlay();
+                return;
+            }
+
+            var frame = document.querySelector('.shorts-video-frame') ||
+                document.querySelector('.contentArea.video-mode .pageContent') ||
+                document.querySelector('.pageContent');
+
+            if (!frame) {
+                return;
+            }
+
+            var overlay = frame.querySelector('.step-progress-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'step-progress-overlay';
+                overlay.setAttribute('aria-label', 'Step progress');
+
+                var segments = document.createElement('div');
+                segments.className = 'step-progress-segments';
+                overlay.appendChild(segments);
+
+                var info = document.createElement('div');
+                info.className = 'step-progress-info';
+
+                var meta = document.createElement('div');
+                meta.className = 'step-progress-meta';
+                info.appendChild(meta);
+
+                var title = document.createElement('div');
+                title.className = 'step-progress-title';
+                info.appendChild(title);
+
+                overlay.appendChild(info);
+                frame.appendChild(overlay);
+            }
+
+            this.stepProgressElement = overlay;
+            this.renderStepProgressSegments();
+        },
+
+        /**
+         * Render segment elements from current steps
+         */
+        renderStepProgressSegments: function() {
+            if (!this.stepProgressElement || !this.currentSteps) {
+                return;
+            }
+
+            var segmentsContainer = this.stepProgressElement.querySelector('.step-progress-segments');
+            if (!segmentsContainer) {
+                return;
+            }
+
+            segmentsContainer.innerHTML = '';
+            for (var i = 0; i < this.currentSteps.length; i++) {
+                var seg = document.createElement('span');
+                seg.className = 'step-progress-segment upcoming';
+                seg.setAttribute('data-step-index', i);
+                segmentsContainer.appendChild(seg);
+            }
+        },
+
+        /**
+         * Compute current step index from video time
+         */
+        getStepIndexForTime: function(currentTime) {
+            if (!this.currentSteps || this.currentSteps.length === 0) {
+                return -1;
+            }
+
+            var index = 0;
+            for (var i = 0; i < this.currentSteps.length; i++) {
+                var step = this.currentSteps[i] || {};
+                var next = this.currentSteps[i + 1] || null;
+                var start = typeof step.time === 'number' ? step.time : parseFloat(step.time) || 0;
+                var end = next ? ((typeof next.time === 'number' ? next.time : parseFloat(next.time)) || Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER;
+
+                if (currentTime >= start && currentTime < end) {
+                    index = i;
+                    break;
+                }
+
+                if (currentTime >= start) {
+                    index = i;
+                }
+            }
+
+            return index;
+        },
+
+        /**
+         * Update top progress overlay and segment states
+         */
+        updateStepProgressByTime: function(currentTime) {
+            if (!this.currentSteps || this.currentSteps.length === 0) {
+                return;
+            }
+
+            if (!this.stepProgressElement || !document.body.contains(this.stepProgressElement)) {
+                this.ensureStepProgressOverlayExists();
+            }
+
+            var nextIndex = this.getStepIndexForTime(currentTime);
+            if (nextIndex === this.currentStepIndex) {
+                return;
+            }
+
+            this.currentStepIndex = nextIndex;
+            this.updateStepBar(nextIndex);
+            this.updateStepInfo(nextIndex);
+        },
+
+        /**
+         * Update segment states: completed / active / upcoming
+         */
+        updateStepBar: function(index) {
+            if (!this.stepProgressElement) {
+                return;
+            }
+
+            var segments = this.stepProgressElement.querySelectorAll('.step-progress-segment');
+            for (var i = 0; i < segments.length; i++) {
+                var seg = segments[i];
+                seg.classList.remove('completed', 'active', 'upcoming');
+
+                if (i < index) {
+                    seg.classList.add('completed');
+                } else if (i === index) {
+                    seg.classList.add('active');
+                } else {
+                    seg.classList.add('upcoming');
+                }
+            }
+        },
+
+        /**
+         * Update STEP X OF Y and current step title
+         */
+        updateStepInfo: function(index) {
+            if (!this.stepProgressElement || !this.currentSteps || this.currentSteps.length === 0 || index < 0) {
+                return;
+            }
+
+            var meta = this.stepProgressElement.querySelector('.step-progress-meta');
+            var title = this.stepProgressElement.querySelector('.step-progress-title');
+            var step = this.currentSteps[index] || {};
+
+            if (meta) {
+                meta.textContent = 'STEP ' + (index + 1) + ' OF ' + this.currentSteps.length;
+            }
+            if (title) {
+                title.textContent = step.title || ('Step ' + (index + 1));
+            }
+        },
+
+        /**
+         * Remove top step progress overlay
+         */
+        removeStepProgressOverlay: function() {
+            if (this.stepProgressElement && this.stepProgressElement.parentNode) {
+                this.stepProgressElement.parentNode.removeChild(this.stepProgressElement);
+            }
+            this.stepProgressElement = null;
+            this.currentStepIndex = -1;
         },
 
         /**
@@ -257,11 +435,15 @@
 
                     // Create new time update handler
                     self.timeUpdateHandler = function() {
+                        self.updateStepProgressByTime(video.currentTime);
                         self.updateActiveStep(video.currentTime);
                     };
 
                     // Add event listener for video time updates
                     video.addEventListener('timeupdate', self.timeUpdateHandler);
+
+                    // Initial render
+                    self.updateStepProgressByTime(video.currentTime || 0);
 
                     console.log('[StepsToggleButton] Video tracking enabled');
                 } else if (attempt < 5) {
@@ -342,6 +524,8 @@
                 this.stepsPanelElement.style.display = 'none';
             }
 
+            this.removeStepProgressOverlay();
+
             this.isEnabled = false;
 
             // Remove video tracking
@@ -363,6 +547,7 @@
 
             this.isEnabled = false;
             this.currentSteps = null;
+            this.currentStepIndex = -1;
 
             if (this.stepsPanelElement) {
                 this.stepsPanelElement.classList.remove('open');
@@ -379,6 +564,8 @@
                 this.videoElement = null;
                 this.timeUpdateHandler = null;
             }
+
+            this.removeStepProgressOverlay();
         },
 
         /**
@@ -387,7 +574,7 @@
          * @param {number} currentTime - Current video time in seconds
          */
         updateActiveStep: function(currentTime) {
-            if (!this.isEnabled || !this.currentSteps) {
+            if (!this.currentSteps) {
                 return;
             }
 
