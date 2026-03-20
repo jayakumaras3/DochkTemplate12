@@ -261,9 +261,9 @@ body {
 }
 
 .contentArea.video-mode #vidArea::cue {
-    font-size: 20px;
-    line-height: 1.6;
-    padding: 8px 10px;
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+    background: rgba(0, 0, 0, 0.7) !important;
 }
 
 /* ── contentArea.video-mode footer: right-side flex column (matches reels-wrapper) ── */
@@ -329,7 +329,7 @@ body {
     transform: none !important;
     margin: 0 !important;
     padding: 0 !important;
-}}
+}
 
 .contentArea.video-mode + .footer #prev,
 .contentArea.video-mode + .footer .prevClass {
@@ -480,9 +480,9 @@ body {
 }
 
 .contentArea.video-mode #vidArea::cue {
-    font-size: 20px;
-    line-height: 1.7;
-    padding: 8px 10px;
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+    background: rgba(0, 0, 0, 0.7) !important;
 }
 
 .contentArea.video-mode .action-bar {
@@ -867,7 +867,8 @@ html, body {
 }
 
 .wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #toc_id,
-.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #trans_id {
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #trans_id,
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #steps_id {
     background-color: #fff !important;
     border: 1px solid transparent !important;
     border-bottom: 0 !important;
@@ -875,7 +876,8 @@ html, body {
 }
 
 .wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #toc_id span,
-.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #trans_id span {
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #trans_id span,
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #steps_id span {
     font-size: 18px !important;
 }
 
@@ -1252,7 +1254,6 @@ html, body {
     line-height: 1.4 !important;
     z-index: 1998 !important;
     transform: none !important;
-}
     pointer-events: none !important;
     backdrop-filter: blur(4px) !important;
     flex-shrink: 0 !important;
@@ -1886,11 +1887,9 @@ body {
     height: 100% !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   STEP 6 — REMOVE MOBILE-FRAME CONSTRAINTS inside HTML slides
-   assets/html/*/index.html uses .mobile-layout { max-width: 430px }
-   and similar phone-frame wrappers. Override them to fill the slide.
-   ═══════════════════════════════════════════════════════════════════════ */
+/* STEP 6 - REMOVE MOBILE-FRAME CONSTRAINTS inside HTML slides.
+    Content slide HTML pages use .mobile-layout { max-width: 430px }
+    and similar phone-frame wrappers. Override them to fill the slide. */
 
 /* ── All first-level wrappers inside the HTML slide fill the frame ── */
 .wholeContainer.reels-wrapper #htmlArea > *,
@@ -2365,8 +2364,8 @@ body {
     margin: 0 !important;
 }
 
-/* Keep only menu, nav buttons, and page number — hide everything else (navCircles etc) */
-.wholeContainer.reels-wrapper .rightNavPanel .footer > div:not(#clickableDiv):not(#prev):not(#next):not(#resource):not(#resource1):not(#pagenoHeader) {
+/* Keep only menu, nav buttons, page number, and steps button — hide everything else (navCircles etc) */
+.wholeContainer.reels-wrapper .rightNavPanel .footer > div:not(#clickableDiv):not(#prev):not(#next):not(#resource):not(#resource1):not(#pagenoHeader):not(#stepsBtn) {
     display: none !important;
 }
 
@@ -2377,7 +2376,8 @@ body {
 .wholeContainer.reels-wrapper .rightNavPanel .footer .nextClassHighlight,
 .wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
 .wholeContainer.reels-wrapper .rightNavPanel .footer #resource1,
-.wholeContainer.reels-wrapper .rightNavPanel .footer .resourceClass {
+.wholeContainer.reels-wrapper .rightNavPanel .footer .resourceClass,
+.wholeContainer.reels-wrapper .rightNavPanel .footer #stepsBtn {
     position: static !important;
     width: 4rem !important;
     height: 4rem !important;
@@ -2388,11 +2388,6 @@ body {
     background-color: transparent !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    background-size: contain !important;
-    box-shadow: none !important;
-    color: transparent !important;
-    font-size: 0 !important;
-    display: block !important;
     flex-shrink: 0 !important;
     top: auto !important;
     left: auto !important;

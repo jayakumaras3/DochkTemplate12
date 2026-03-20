@@ -14,18 +14,27 @@ var pauseTimer;
      * @param {Object} globalVariableService - A service which we store all global variables
      * @param {Object} radialIndicatorInstance - A service which is to display the completed percentage
      */
-    var footerBarController = function (scope, $rootScope, $http, globalSettingService, globalVariableService, radialIndicatorInstance) {
+    var footerBarController = function (scope, $rootScope, $http, globalSettingService, globalVariableService, radialIndicatorInstance, $timeout) {
         this.http = $http;
         this.scope = scope;
         this.rootScope = $rootScope;
         this.globalSettingService = globalSettingService;
         this.globalVariableService = globalVariableService;
+        this.$timeout = $timeout;
 
         this.scope.$on('initalizeController', assetLoader.proxy(this.globalSettingJson, this));
         this.scope.$on('showFooter', assetLoader.proxy(this.showFooterToggle, this, true));
         this.scope.$on('hideFooter', assetLoader.proxy(this.showFooterToggle, this, false));
         this.scope.$on('changeFooterNavigation', assetLoader.proxy(this.changeFooterNavigation, this));
         this.scope.$on('navigationPage', assetLoader.proxy(this.navigationPage, this));
+        
+        // Handle updateSteps event from contentController broadcast.
+        var self = this;
+        this.scope.$on('updateSteps', function(event, steps) {
+            self.updateStepsButtonVisibility(steps);
+            self.scope.$evalAsync();
+        });
+        
         this.showFooter = true;
         this.scope.indicatorOption = {
             radius: 15,
@@ -35,6 +44,9 @@ var pauseTimer;
         this.navCircle = [];
         this.scope.indicatorValue = 0;
         this.paused = false;
+        this.showStepsButton = false;
+        this.stepsEnabled = false;
+        this.currentSteps = [];
     };
 
 
@@ -51,6 +63,7 @@ var pauseTimer;
 		 
         this.paused = false;
         this.navCircle = this.globalVariableService.navCircle.slice();
+        this.updateStepsButtonVisibility(this.globalVariableService.currentPageSteps || []);
         if (this.navCircle.length > 15) {
             for (var i = this.navCircle.length; i > 15; i--) {
                 this.navCircle.splice(i, 1);
@@ -58,6 +71,102 @@ var pauseTimer;
         }
         angular.element(document.querySelectorAll(".navCircle")).removeClass("navCircleHighlight");
 
+    };
+
+    p.renderStepsButton = function (steps) {
+        var self = this;
+        console.log('[Steps] renderStepsButton called with steps:', steps);
+        
+        // First attempt at 80ms
+        this._injectStepsButton(steps, 80);
+        
+        // Retry at 500ms to catch Angular re-renders
+        setTimeout(function() {
+            self._injectStepsButton(steps, 500);
+        }, 500);
+    };
+
+    /**
+     * Internal method to inject and configure the Steps button
+     */
+    p._injectStepsButton = function (steps, delay) {
+        var self = this;
+        var hasSteps = !!(steps && steps.length > 0);
+        var container = document.querySelector('.rightNavPanel .footer');
+        
+        console.log('[Steps@' + delay + 'ms] Container found:', !!container);
+        
+        if (!container) {
+            console.warn('[Steps@' + delay + 'ms] Container not found: .rightNavPanel .footer');
+            return;
+        }
+
+        var existingBtn = document.getElementById('stepsBtn');
+        
+        console.log('[Steps@' + delay + 'ms] hasSteps:', hasSteps, 'existingBtn:', !!existingBtn);
+
+        if (!hasSteps) {
+            console.log('[Steps@' + delay + 'ms] No steps, removing button if exists');
+            if (existingBtn && existingBtn.parentNode) {
+                existingBtn.parentNode.removeChild(existingBtn);
+                console.log('[Steps@' + delay + 'ms] Button removed');
+            }
+            self.stepsEnabled = false;
+            return;
+        }
+
+        if (!existingBtn) {
+            console.log('[Steps@' + delay + 'ms] Creating new button');
+            existingBtn = document.createElement('div');
+            existingBtn.id = 'stepsBtn';
+            existingBtn.className = 'steps-control-btn';
+            existingBtn.setAttribute('role', 'button');
+            existingBtn.setAttribute('tabindex', '0');
+            existingBtn.setAttribute('title', 'Steps');
+            existingBtn.setAttribute('aria-label', 'Toggle Steps Panel');
+            
+            // AGGRESSIVE inline styles to force visibility
+            existingBtn.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 99999 !important; pointer-events: auto !important; width: 46px !important; height: 46px !important; overflow: visible !important;';
+            
+            existingBtn.innerHTML = '<img src="theme/images/footer-menu/Certificate.svg" alt="Steps" class="steps-control-icon" style="width: 22px; height: 22px; display: block;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'inline\';" /><span class="steps-control-fallback" style="display:none;font-size:22px;line-height:1;">📄</span>';
+
+            existingBtn.addEventListener('click', function (event) {
+                console.log('[Steps Button] Click detected');
+                event.preventDefault();
+                event.stopPropagation();
+                self.toggleStepsPanel();
+            });
+
+            existingBtn.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    self.toggleStepsPanel();
+                }
+            });
+
+            // Append as last child to avoid clipping by siblings
+            container.appendChild(existingBtn);
+            console.log('[Steps@' + delay + 'ms] Button created and appended to footer');
+        } else {
+            console.log('[Steps@' + delay + 'ms] Reusing existing button');
+            // Force visibility on existing button
+            existingBtn.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 99999 !important; pointer-events: auto !important; width: 46px !important; height: 46px !important; overflow: visible !important;';
+        }
+
+        // Debug: Log bounding rect to detect clipping/positioning issues
+        var rect = existingBtn.getBoundingClientRect();
+        console.log('[Steps@' + delay + 'ms] Button rect - width:', rect.width, 'height:', rect.height, 'top:', rect.top, 'left:', rect.left);
+        
+        if (rect.width === 0 || rect.height === 0) {
+            console.warn('[Steps@' + delay + 'ms] WARNING: Button has zero dimensions - CSS issue detected');
+        }
+        
+        if (rect.top < 0 || rect.left < 0) {
+            console.warn('[Steps@' + delay + 'ms] WARNING: Button positioned off-screen - layout issue detected');
+        }
+        
+        self.stepsEnabled = true;
+        console.log('[Steps@' + delay + 'ms] Button injection complete');
     };
     /**
      * @ngdoc method
@@ -652,12 +761,65 @@ var pauseTimer;
         this.pauseCaptivateFiles();
     };
 
+    /**
+     * @ngdoc method
+     * @name toggleStepsPanel
+     * @methodOf aristoFramework.controller:footerBarController
+     * @description
+     * Toggle standalone Steps panel
+     */
+    p.toggleStepsPanel = function () {
+        console.log('[FooterBar] toggleStepsPanel called, showStepsButton:', this.showStepsButton);
+        
+        if (!this.showStepsButton || typeof StepsToggleButton === 'undefined') {
+            console.warn('[FooterBar] toggleStepsPanel skipped: showStepsButton:', this.showStepsButton, 'StepsToggleButton defined:', typeof StepsToggleButton !== 'undefined');
+            return;
+        }
+
+        try {
+            // Ensure panel exists before toggling.
+            StepsToggleButton.ensureStepPanelExists();
+
+            if (StepsToggleButton.isEnabled) {
+                StepsToggleButton.disablePanel();
+                this.stepsEnabled = false;
+            } else {
+                StepsToggleButton.enablePanel();
+                this.stepsEnabled = true;
+            }
+
+            console.log('[FooterBar] Standalone Steps panel toggled. Enabled:', this.stepsEnabled);
+        } catch (err) {
+            console.error('[FooterBar] Error toggling steps:', err);
+        }
+    };
+
+    /**
+     * @ngdoc method
+     * @name updateStepsButtonVisibility
+     * @methodOf aristoFramework.controller:footerBarController
+     * @description
+     * Update the visibility of the steps button based on whether steps exist for current page
+     * @param {Array} steps - Array of steps for the current page
+     */
+    p.updateStepsButtonVisibility = function (steps) {
+        var effectiveSteps = steps;
+        if (!effectiveSteps || !effectiveSteps.length) {
+            effectiveSteps = this.globalVariableService.currentPageSteps || [];
+        }
+        this.currentSteps = effectiveSteps || [];
+        this.showStepsButton = !!(effectiveSteps && effectiveSteps.length > 0);
+        this.stepsEnabled = false;
+        this.renderStepsButton(this.currentSteps);
+        this.scope.$evalAsync();
+    };
+
 
 
 
 	
 	
 	
-    footerBarController.$inject = ['$scope', '$rootScope', '$http', 'globalSettingService', 'globalVariableService', 'radialIndicatorInstance'];
+    footerBarController.$inject = ['$scope', '$rootScope', '$http', 'globalSettingService', 'globalVariableService', 'radialIndicatorInstance', '$timeout'];
     aristoFramework.footerBarController = footerBarController;
 }());

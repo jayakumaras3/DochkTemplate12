@@ -575,3 +575,273 @@ body:has(#orientationMessage[style*="display:flex"]) {
     line-height: 1.5;
     letter-spacing: 0.3px;
 }
+
+/* ===== STEPS TOGGLE BUTTON & PANEL ===== */
+
+/* Floating Toggle Button */
+.steps-toggle-btn {
+    position: fixed !important;
+    right: 16px !important;
+    bottom: 80px !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background: rgba(50, 50, 50, 0.85) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    color: #ffffff !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+    padding: 0 !important;
+    outline: none !important;
+    visibility: visible !important;
+    margin: 0 !important;
+}
+
+.steps-toggle-btn:hover {
+    background: rgba(40, 40, 40, 0.95);
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.steps-toggle-btn:active {
+    transform: scale(0.96);
+}
+
+.steps-toggle-btn.active {
+    background: rgba(25, 118, 210, 0.9);
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.4);
+}
+
+.steps-toggle-btn.active:hover {
+    background: rgba(21, 101, 192, 0.95);
+    box-shadow: 0 6px 20px rgba(25, 118, 210, 0.5);
+}
+
+.steps-toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    line-height: 1;
+}
+
+/* Step Panel Container */
+.step-panel {
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 320px !important;
+    max-width: 90vw !important;
+    max-height: 500px !important;
+    background: rgba(245, 245, 245, 0.98) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    z-index: 99998 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    opacity: 0 !important;
+    transform: translate(-50%, calc(-50% + 20px)) !important;
+    pointer-events: none !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    margin: 0 !important;
+    visibility: hidden !important;
+}
+
+.step-panel.open {
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+}
+
+/* Step Panel Header */
+.step-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, rgba(245, 245, 245, 0.5), rgba(240, 240, 240, 0.5));
+    border-radius: 12px 12px 0 0;
+}
+
+.step-panel-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #212121;
+}
+
+.step-panel-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+    outline: none;
+}
+
+.step-panel-close:hover {
+    color: #212121;
+}
+
+/* Step Panel Content */
+.step-panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.step-panel-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.step-panel-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.step-panel-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.step-panel-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Step Item */
+.step-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.step-item:hover {
+    background: rgba(25, 118, 210, 0.08);
+    border-left-color: rgba(25, 118, 210, 0.3);
+}
+
+.step-item.active {
+    background: rgba(25, 118, 210, 0.15);
+    border-left-color: #1976d2;
+}
+
+.step-number {
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(25, 118, 210, 0.15);
+    color: #1976d2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.step-item.active .step-number {
+    background: #1976d2;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+}
+
+.step-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.step-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #212121;
+    margin-bottom: 4px;
+}
+
+.step-description {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.step-item.active .step-description {
+    color: #555;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .steps-toggle-btn {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        bottom: 75px;
+    }
+
+    .step-panel {
+        width: calc(100vw - 32px);
+        max-width: none;
+        left: 50%;
+        top: 50%;
+        right: auto;
+        bottom: auto;
+        max-height: calc(100vh - 200px);
+        margin: 0;
+    }
+
+    .step-item {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .step-number {
+        min-width: 32px;
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .step-title {
+        font-size: 12px;
+    }
+
+    .step-description {
+        font-size: 11px;
+    }
+}
+
+/* Disable legacy floating steps button path; integrated footer button is used instead. */
+#stepsToggleButton,
+.steps-toggle-btn {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}

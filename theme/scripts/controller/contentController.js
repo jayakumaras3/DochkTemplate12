@@ -301,6 +301,41 @@ var stage, preload, lib = {};
         this.globalVariableService.audscript = (response.cc) ? response.cc : [];
 		
         this.globalVariableService.modulenumber = response.module;
+
+        /**
+         * Initialize Steps Toggle Button
+         * Detect steps from response and initialize the toggle button feature
+         */
+        try {
+            var steps = response.steps || [];
+            this.globalVariableService.currentPageSteps = steps;
+
+            // Keep footer state in sync directly (robust against event timing).
+            var footerScope = angular.element(document.querySelector('.footer')).scope();
+            if (footerScope && footerScope.fb && typeof footerScope.fb.updateStepsButtonVisibility === 'function') {
+                footerScope.fb.updateStepsButtonVisibility(steps);
+                if (!footerScope.$$phase) {
+                    footerScope.$applyAsync();
+                }
+            }
+
+            // Also broadcast for compatibility with existing listeners.
+            this.$rootScope.$broadcast('updateSteps', steps);
+            
+            // Initialize StepsToggleButton module for panel management
+            if (typeof window.StepsToggleButton !== 'undefined') {
+                StepsToggleButton.reset(); // Reset state for new page
+                
+                if (steps && steps.length > 0) {
+                    StepsToggleButton.init(steps);
+                } else {
+                    StepsToggleButton.destroy(); // Hide button if no steps
+                }
+            }
+        } catch (err) {
+            console.error('[ContentController] Error initializing StepsToggleButton:', err);
+        }
+
         var nextElem = angular.element(document.getElementById("next"));
         var prevElem = angular.element(document.getElementById("prev"));
         var pauseElem = angular.element(document.getElementById("pause"));

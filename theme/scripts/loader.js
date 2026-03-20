@@ -260,6 +260,74 @@ function PageCompleteNextFun() {
  * Extracts video filename and builds corresponding VTT path
  * Handles timing issues with ng-src and video element readiness
  */
+function ensureCustomCaptionLayer(video) {
+    var frame = video.closest('.shorts-video-frame') || video.parentNode;
+    if (!frame) {
+        return null;
+    }
+
+    var layer = frame.querySelector('.custom-caption-layer');
+    if (!layer) {
+        layer = document.createElement('div');
+        layer.className = 'custom-caption-layer';
+        layer.setAttribute('aria-live', 'polite');
+        layer.setAttribute('aria-atomic', 'true');
+        frame.appendChild(layer);
+    }
+
+    return layer;
+}
+
+function renderCustomCaptions(video, textTrack) {
+    var layer = ensureCustomCaptionLayer(video);
+    if (!layer) {
+        return;
+    }
+
+    var activeCues = textTrack && textTrack.activeCues ? textTrack.activeCues : [];
+    var captionLines = [];
+    var index;
+
+    for (index = 0; index < activeCues.length; index++) {
+        if (activeCues[index] && activeCues[index].text) {
+            captionLines.push(activeCues[index].text);
+        }
+    }
+
+    if (captionLines.length > 0) {
+        layer.innerHTML = '<div class="custom-caption-text">' + captionLines.join('<br>') + '</div>';
+        layer.classList.add('is-visible');
+    } else {
+        layer.innerHTML = '';
+        layer.classList.remove('is-visible');
+    }
+}
+
+function bindCustomCaptionTrack(video, trackElement) {
+    if (!video || !trackElement || !trackElement.track) {
+        return;
+    }
+
+    var textTrack = trackElement.track;
+    var layer = ensureCustomCaptionLayer(video);
+    if (!layer) {
+        return;
+    }
+
+    if (video._customCaptionTrack && video._customCaptionCueHandler) {
+        video._customCaptionTrack.removeEventListener('cuechange', video._customCaptionCueHandler);
+    }
+
+    video._customCaptionCueHandler = function() {
+        renderCustomCaptions(video, textTrack);
+    };
+
+    video._customCaptionTrack = textTrack;
+    textTrack.mode = 'hidden';
+    textTrack.addEventListener('cuechange', video._customCaptionCueHandler);
+    renderCustomCaptions(video, textTrack);
+}
+
 function LanguageTrackChange(val1, val2) {
     var video = document.getElementById("vidArea");
     
@@ -279,6 +347,18 @@ function LanguageTrackChange(val1, val2) {
     var oldTracks = video.querySelectorAll("track");
     for (var i = 0; i < oldTracks.length; i++) {
         oldTracks[i].parentNode.removeChild(oldTracks[i]);
+    }
+
+    if (video._customCaptionTrack && video._customCaptionCueHandler) {
+        video._customCaptionTrack.removeEventListener('cuechange', video._customCaptionCueHandler);
+        video._customCaptionTrack = null;
+        video._customCaptionCueHandler = null;
+    }
+
+    var existingCaptionLayer = ensureCustomCaptionLayer(video);
+    if (existingCaptionLayer) {
+        existingCaptionLayer.innerHTML = '';
+        existingCaptionLayer.classList.remove('is-visible');
     }
 
     // Get video source dynamically
@@ -310,12 +390,14 @@ function LanguageTrackChange(val1, val2) {
     track.setAttribute("default", "");
     
     video.appendChild(track);
-    
-    // Force track visibility after brief delay
+
+    track.addEventListener('load', function() {
+        bindCustomCaptionTrack(video, track);
+    });
+
+    // Fallback bind in case load event already fired or browser delays it.
     setTimeout(function() {
-        if (video.textTracks && video.textTracks.length > 0) {
-            video.textTracks[0].mode = "showing";
-        }
+        bindCustomCaptionTrack(video, track);
     }, 300);
 }
 

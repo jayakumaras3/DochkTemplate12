@@ -434,10 +434,10 @@ if (img) {
 				$("#toc_id").addClass('tocclickedclscss');
 				$("#trans_id").removeClass('tocclickedclscss');
 				$("#glossary_id").removeClass('tocclickedclscss');
-				this.sideBarData = this.$sce.trustAsHtml(this.tocContent);
-				var self = this;
-				this.transcriptClicked = false;
-				this.glossaryClicked = false;
+			this.sideBarData = this.$sce.trustAsHtml(this.tocContent);
+			var self = this;
+			this.transcriptClicked = false;
+			this.glossaryClicked = false;
 				this.globalVariableService.replaybtnvisible = true;
 				setTimeout(function() {
 					self.changeTocColorChange(self.globalVariableService.getPageCounter() - 1)
