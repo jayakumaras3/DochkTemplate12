@@ -182,9 +182,9 @@
                 meta.className = 'step-progress-meta';
                 info.appendChild(meta);
 
-                var title = document.createElement('div');
+               /* var title = document.createElement('div');
                 title.className = 'step-progress-title';
-                info.appendChild(title);
+                info.appendChild(title);*/
 
                 overlay.appendChild(info);
                 frame.appendChild(overlay);
