@@ -556,7 +556,7 @@ function disableNextPrevMenu()
 }
 function EnabledNextPrevMenu()
 {
-	
+	document.getElementById('clickableDiv').classList.remove('disabledClass');
 }
 async function loadJsonvalue() {
   try {

@@ -970,8 +970,10 @@ function SetScoreEachQuestion() {
 				}
 				var tempdata=percentage.toFixed(0);
 				parent.parent.enablePrevbtn();
+				parent.parent.EnabledNextPrevMenu();
 				parent.parent.QuizpageVistedList();
 				parent.parent.scoreSubmit(tempdata);
+				
 				
 				
 		}
