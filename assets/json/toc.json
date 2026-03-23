@@ -1,7 +1,7 @@
 {
     "0": [
         {
-            "name": "30133",
+            "name": "2239",
             "title": "Welcome",
             "header": "Welcome",
             "transcript": " ",
@@ -14,7 +14,7 @@
                 "module": 0,
                 "preloader": [
                     {
-                        "src": "assets/html/30133/Screen_01.html",
+                        "src": "assets/html/2239/index.html",
                         "id": "Screen_01.html"
                     },
                     {
@@ -25,14 +25,14 @@
                 "content": [
                     {
                         "type": "captivate",
-                        "path": "assets/html/30133/Screen_01.html",
+                        "path": "assets/html/2239/index.html",
                         "functionName": "captivate"
                     }
                 ]
             }
         },
         {
-            "name": "30134",
+            "name": "1997",
             "title": "Audio Version",
             "header": "Audio Version",
             "transcript": " ",
@@ -63,10 +63,10 @@
             }
         },
         {
-            "name": "30135",
+            "name": "1996",
             "title": "Introduction",
             "header": "Introduction",
-            "transcript": "<p>Welcome to the course:<strong> Conversational AI: Concepts, Capabilities, and Use Cases.</strong></p>\r\n\r\n<p>Think about the last time you interacted with a chatbot at work or as a customer.</p>\r\n\r\n<p>Maybe it answered a simple question right away. Or maybe it sent you through a few fixed options and left you feeling stuck when your question did not quite fit.</p>\r\n\r\n<p>That difference in experience is not accidental. It comes down to how the conversational system is designed, what it is capable of understanding, and how it is implemented.</p>\r\n\r\n<p>This course focuses on helping you understand those differences, so you can evaluate conversational AI solutions with clarity and make better decisions in a business context.</p>\r\n\r\n<p><strong>By the end of this course, you will be able to:</strong></p>\r\n\r\n<ul>\r\n\t<li>Explain what conversational AI is and how it differs from traditional automation systems such as IVR and rule-based chatbots.</li>\r\n\t<li>Describe how conversational AI works, including the key technologies that enable it to understand input, interpret intent, and generate responses.</li>\r\n\t<li>Differentiate between traditional chatbots, AI chatbots, and agentic AI chatbots, and evaluate implementation approaches based on organizational needs and capabilities.</li>\r\n</ul>\r\n",
+            "transcript": "<p>Welcome to the course: Boosting Efficiency With Microsoft Copilot.</p>\r\n\r\n<p>This extensive course on Microsoft Copilot, your AI-driven assistant is aimed at boosting productivity and creativity in professional settings, is structured to enable you to fully harness the capabilities of Copilot. It offers an in-depth exploration of its features, functionalities, and practical applications within Microsoft 365 tools.</p>\r\n\r\n<p>From automating tedious tasks in Excel to producing refined documents in Word, optimizing communication in Outlook, and fostering collaboration in Teams, Copilot is revolutionizing our work processes.</p>\r\n\r\n<p>You will discover how its sophisticated features &ndash; such as natural language comprehension, content creation, and data analysis &ndash; can streamline intricate workflows, minimize errors, and allow for more time dedicated to strategic planning.</p>\r\n\r\n<p>In this course, you will:</p>\r\n\r\n<ul>\r\n\t<li>Describe generative AI and Copilot</li>\r\n\t<li>State the key features of Copilot, and</li>\r\n\t<li>Explain the best practices for using Copilot&nbsp;</li>\r\n</ul>\r\n",
             "settings": {
                 "sidebar": true,
                 "header": true,
@@ -90,118 +90,14 @@
                         "path": "assets/video/en_3.mp4",
                         "onendnextscrn": "false"
                     }
-                ],
-                "steps": [
-                    {
-                        "step": 1,
-                        "title": "Remove screens",
-                        "description": "Remove the inner and outer screens.",
-                        "time": 0
-                    },
-                    {
-                        "step": 2,
-                        "title": "Clean blades",
-                        "description": "Clean impeller blades and screens.",
-                        "time": 10
-                    },
-                    {
-                        "step": 3,
-                        "title": "Inspect impeller",
-                        "description": "Check for damage or looseness.",
-                        "time": 26
-                    },
-                    {
-                        "step": 4,
-                        "title": "Check clearance",
-                        "description": "Verify centering and clearance.",
-                        "time": 35
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 5,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    },
-                    {
-                        "step": 10,
-                        "title": "Procedure Complete",
-                        "description": "Inspection completed successfully.",
-                        "time": 50
-                    }
                 ]
             }
         },
         {
-            "name": "30136",
-            "title": "What Is Conversational AI and How Is It Different?",
-            "header": "What Is Conversational AI and How Is It Different?",
-            "transcript": "<p>Before we talk about how conversational AI works or where it is used, we need to start with something more basic. We need to understand what makes an interaction a true conversation, and why this kind of AI is different from the systems that came before it.</p>\r\n\r\n<p>Most of us have interacted with some form of automation. But not all automated systems are conversational. This distinction matters, because it shapes how people experience technology in real life.</p>\r\n\r\n<p>Let us begin with a simple scenario.</p>\r\n\r\n<p>Meet<strong> Emily.</strong></p>\r\n\r\n<p>Emily needs help with a recent bank transaction. She calls customer support and is greeted by an automated system.</p>\r\n\r\n<p>The voice asks her to press 1 for account details, press 2 for card services, and press 3 for recent transactions. Emily listens carefully, presses a number, and waits. A new menu begins to play. She presses another option and waits again. After a few more steps, she realizes the option she needs is not listed at all.</p>\r\n\r\n<p>She hangs up, slightly frustrated<u> </u>without any solution.</p>\r\n\r\n<p>Later that day, Emily opens the bank&rsquo;s website and starts a chat instead. This time, she types, &ldquo;I need help with a transaction that looks wrong.&rdquo; The system responds with a follow-up question and asks for more details. The conversation continues, step by step, until Emily gets the information she needs.</p>\r\n\r\n<p>Both interactions involved automation. But only one of them felt like a conversation.</p>\r\n\r\n<p>This difference helps us understand what conversational AI really is.</p>\r\n\r\n<p>Conversational AI refers to systems that can engage in dialogue with users in an organic and flexible way. These interactions can take place through written text, voice conversations, or web-based chat interfaces.</p>\r\n\r\n<p><strong>Unlike older systems, conversational AI is not limited to rigid menus or predefined paths.</strong> It is designed to understand what users are trying to communicate, even when the wording is informal or imperfect. As a result, interactions feel more responsive and more human.</p>\r\n\r\n<p>Traditional systems such as IVR (or Interactive Voice Response) were built around fixed options. They work well for simple, predictable requests but struggle when users need to explain context or ask questions in unexpected ways. Once a user steps outside the predefined flow, these systems cannot easily adapt.</p>\r\n\r\n<p>Conversational AI allows users to speak or type naturally. The system interprets intent and responds in a way that keeps the interaction moving forward. Instead of forcing users to follow rigid steps, the technology adapts to them. This is what separates basic automation from true conversational experiences.</p>\r\n\r\n<p>One of the earliest examples was <strong>ELIZA,</strong> created in 1964 by Joseph Weizenbaum. ELIZA simulated conversation by matching patterns in user input, creating the illusion of understanding even though it followed simple rules. Later, <strong>ALICE,</strong> developed by Richard Wallace, expanded on this approach using structured pattern matching and scripted responses. Cleverbot took another step forward by learning from past conversations with real users, allowing it to generate more varied and less predictable replies.</p>\r\n\r\n<p>Modern assistants such as<strong> Siri, Google Assistant, and Cortana</strong> represent a major leap forward. Advances in language processing and computing power now allow these systems to understand context, manage longer conversations, and respond more accurately over time.</p>\r\n\r\n<p>Today, conversational AI plays a real role in how customers find information, get support, and interact with businesses. Understanding how it differs from older systems sets the foundation for everything else in this course. In the next section, we will explore how conversational AI works behind the scenes.</p>\r\n",
+            "name": "1998",
+            "title": "Introduction to Generative AI and Copilot",
+            "header": "Introduction to Generative AI and Copilot",
+            "transcript": "<p>Traditional AI has been enhancing our lives for decades, from voice assistants like Siri and Alexa to recommendation systems on Netflix and Amazon.</p>\r\n\r\n<p>Generative AI, or Gen AI, however, takes this a step further by crafting entirely new content, whether writing a haiku, simplifying complex concepts, or analyzing data.</p>\r\n\r\n<p>Gen AI is truly a revolutionary frontier in artificial intelligence.</p>\r\n\r\n<p>Think of it as the smartest, most resourceful person you know, who is always ready to assist and teach you, without ever losing patience! Sound too good to be true, doesn&rsquo;t it? Well, like any human, it isn&rsquo;t infallible and can definitely make mistakes.</p>\r\n\r\n<p>Gen AI relies on Large Language Models (or LLMs) and foundation models. These are neural networks trained on vast amounts of data. These model predict and generate content word by word, making them capable of mimicking human creativity.</p>\r\n\r\n<p>While immensely capable, these systems are also responsibly guided by human filters, so they&rsquo;ll assist with productivity rather than, say, bank heists!</p>\r\n\r\n<p>Enter Microsoft Copilot, a tool that brings Gen AI into the workplace. Copilot is integrated directly into Microsoft 365 apps like Word, Excel, PowerPoint, Outlook, and Teams, turning these familiar tools into powerhouses of creativity and productivity.</p>\r\n\r\n<p>It works alongside you, helping draft documents, create compelling presentations, analyze complex datasets, and even craft thoughtful emails.</p>\r\n\r\n<p>However, Copilot doesn&rsquo;t stop there. Its Business Chat feature connects data across apps &ndash; like emails, calendars, and chats &ndash; allowing you to give natural language prompts such as, &ldquo;Summarize today&rsquo;s meetings and prepare a status update.&rdquo; It retrieves relevant information and generates clear, actionable responses.</p>\r\n\r\n<p>Importantly, Copilot keeps you in control. It suggests ideas and content, but you decide what to keep, modify, or discard. In the subsequent sections, we&rsquo;ll learn more about the capabilities of Copilot, and how it can help you streamline your work.</p>\r\n",
             "settings": {
                 "sidebar": true,
                 "header": true,
@@ -229,9 +125,9 @@
             }
         },
         {
-            "name": "30137",
-            "title": "Knowledge Check 1",
-            "header": "Knowledge Check 1",
+            "name": "1999",
+            "title": "Check Your Understanding 1",
+            "header": "Check Your Understanding 1",
             "transcript": " ",
             "settings": {
                 "sidebar": true,
@@ -242,7 +138,7 @@
                 "module": 0,
                 "preloader": [
                     {
-                        "src": "assets/Quiz/30137/index.html",
+                        "src": "assets/Quiz/1999/index.html",
                         "id": "Screen_01.html"
                     },
                     {
@@ -253,17 +149,17 @@
                 "content": [
                     {
                         "type": "captivate",
-                        "path": "assets/Quiz/30137/index.html",
+                        "path": "assets/Quiz/1999/index.html",
                         "functionName": "captivate"
                     }
                 ]
             }
         },
         {
-            "name": "30138",
-            "title": "How Conversational AI Works",
-            "header": "How Conversational AI Works",
-            "transcript": "<p>With a clear understanding of what conversational AI is, the next logical question that follows is how it actually works.</p>\r\n\r\n<p>While interacting with conversational AI can feel simple, a lot is happening behind the scenes. Each message goes through a series of steps that work together to capture input, understand meaning, and generate an appropriate response. These steps happen in real time and are designed to make interactions feel natural and efficient.</p>\r\n\r\n<p>At a high level, conversational AI follows a clear process. It begins by<strong> capturing the user&rsquo;s input</strong>, whether that input is text or voice. Voice interactions rely on ASR (or <strong>Automatic Speech Recognition)</strong>, which converts spoken language into text the system can process.</p>\r\n\r\n<p>Next, the system analyzes the language itself using <strong>NLP (or Natural Language Processing</strong>). This helps break the input into structured components that can be interpreted more accurately.</p>\r\n\r\n<p>Once the language is processed, <strong>NLU (or Natural Language Understanding) </strong>comes into play. This is where the system determines intent and context, focusing on what the user is trying to achieve rather than the exact words used.</p>\r\n\r\n<p>With intent understood, the system decides how to respond. It may retrieve information, generate a reply, or ask a follow-up question to move the interaction forward.</p>\r\n\r\n<p>Finally, conversational AI systems improve over time by learning from interactions. Feedback, usage patterns, and outcomes help refine future responses and make conversations more effective.</p>\r\n\r\n<p>Modern conversational AI also benefits from enhancements such as <strong>speech synthesis, retrieval-augmented generation, vector databases, and real-time translation.</strong> These technologies further improve accuracy, responsiveness, and scalability.</p>\r\n\r\n<p>Together, these components explain how conversational AI moves from a simple input to a meaningful response. In the next section, we will explore how these capabilities appear in different types of conversational AI systems used in practice.</p>\r\n",
+            "name": "2000",
+            "title": "Key Features of Copilot",
+            "header": "Key Features of Copilot",
+            "transcript": "<p>...</p>",
             "settings": {
                 "sidebar": true,
                 "header": true,
@@ -287,45 +183,46 @@
                         "path": "assets/video/en_6.mp4",
                         "onendnextscrn": "false"
                     }
-                ]
-            }
-        },
-        {
-            "name": "30139",
-            "title": "Knowledge Check 2",
-            "header": "Knowledge Check 2",
-            "transcript": " ",
-            "settings": {
-                "sidebar": true,
-                "header": true,
-                "footer": true,
-                "fullScreen": false,
-                "pageNumber": "Page 1/11",
-                "module": 0,
-                "preloader": [
+                ],
+                "steps": [
                     {
-                        "src": "assets/Quiz/30139/index.html",
-                        "id": "Screen_01.html"
+                        "step": 1,
+                        "title": "Introduction to NLP",
+                        "description": "Understanding natural language processing.",
+                        "time": 0
                     },
                     {
-                        "src": "theme/scripts/Screen_01.js",
-                        "id": "Screen_01"
-                    }
-                ],
-                "content": [
+                        "step": 2,
+                        "title": "Using Prompts",
+                        "description": "Examples of how to use prompts effectively.",
+                        "time": 10
+                    },
                     {
-                        "type": "captivate",
-                        "path": "assets/Quiz/30139/index.html",
-                        "functionName": "captivate"
+                        "step": 3,
+                        "title": "Word Features",
+                        "description": "Drafting and summarizing documents.",
+                        "time": 25
+                    },
+                    {
+                        "step": 4,
+                        "title": "Excel Features",
+                        "description": "Analyzing data and generating insights.",
+                        "time": 45
+                    },
+                    {
+                        "step": 5,
+                        "title": "PowerPoint & Teams",
+                        "description": "Creating presentations and collaboration.",
+                        "time": 65
                     }
                 ]
             }
         },
         {
-            "name": "30140",
-            "title": "Conversational AI in Practice",
-            "header": "Conversational AI in Practice",
-            "transcript": "<p>So far, we have explored what conversational AI is and how it works behind the scenes. The next step is understanding how these capabilities are applied in real organizations.</p>\r\n\r\n<p>In practice, not all conversational AI systems are built the same. They differ in how much they can understand, how flexible they are, and how much responsibility they can take on. These differences matter, because choosing the right type of system has a direct impact on cost, risk, and business outcomes.</p>\r\n\r\n<p>To make sense of this, conversational AI can be grouped into three broad categories.<strong> Traditional Chatbots, AI Chatbots, and Agentic AI Chatbots. </strong></p>\r\n\r\n<p><strong>Traditional chatbots</strong> are the simplest form of conversational systems. They rely on predefined rules and keyword-based logic. Conversations follow scripted paths, often built using decision trees. A user asks a question, and the chatbot matches it to a known pattern before delivering a fixed response.</p>\r\n\r\n<p>Because of this design, traditional chatbots are usually limited to <strong>single-turn interactions</strong>. They work best for predictable and repetitive tasks, such as FAQs or basic information requests. However, they struggle when users phrase questions differently or need to provide additional context.</p>\r\n\r\n<p><strong>AI Chatbots </strong>use language models to understand nuance, synonyms, and varied phrasing. Instead of relying on rigid scripts, they generate responses dynamically based on intent and context. Conversations can span multiple turns, allowing users to ask follow-up questions or refine their requests naturally.</p>\r\n\r\n<p>AI chatbots are well suited for handling a broader range of simple to moderately complex interactions. Over time, they also improve by learning from conversation patterns and user feedback.</p>\r\n\r\n<p><strong>Agentic AI Chatbots </strong>are advanced systems, that go beyond understanding and responding. They are designed to take action. Agentic AI chatbots can use additional inputs such as conversation history, user context, or uploaded information. They can trigger workflows, make decisions, and complete tasks from start to finish.</p>\r\n\r\n<p>Instead of stopping at an answer, these systems focus on outcomes. They adapt their behavior based on results and learn from the actions they take, allowing them to operate with a higher level of autonomy.</p>\r\n\r\n<p>Understanding the different types of conversational AI is only part of the picture. In real organizations, the next challenge is deciding <strong>how to implement these systems effectively</strong>. Some organizations choose to build conversational AI systems <strong>entirely on their own.</strong> This approach offers maximum control and customization, but it also requires strong engineering capability, ongoing maintenance, and long-term investment. It is best suited for organizations with a proven track record of building complex internal platforms.</p>\r\n\r\n<p>Another approach is to build solutions using <strong>frameworks provided by large cloud platforms.</strong> This reduces development effort and integrates more easily with existing enterprise systems. However, it also creates dependency on a specific technology stack and still requires specialized skills to customize and support the solution.</p>\r\n\r\n<p>Alternatively, many organizations choose to work with <strong>conversational AI specialists.</strong> This approach accelerates deployment and reduces the need for in-house expertise. In some cases, industry-specific models can further reduce time and cost. The trade-off is reduced control over the solution.</p>\r\n\r\n<p><strong>There is no single right approach to conversational AI.</strong></p>\r\n\r\n<p>The most successful implementations align with how an organization already works. Companies that thrive on internal development may succeed by building in-house. Others perform better by partnering with specialists.</p>\r\n\r\n<p>For corporate teams, the real value lies in understanding the options, recognizing trade-offs, and choosing an approach that fits their organization&rsquo;s capabilities and business goals.</p>\r\n",
+            "name": "2001",
+            "title": "Best Practices for Using Copilot",
+            "header": "Best Practices for Using Copilot",
+            "transcript": "<p>To fully harness the potential of Microsoft 365 Copilot, users should adopt best practices that ensure effective, secure, and ethical interactions with the AI.</p>\r\n\r\n<p>The quality of Copilot&rsquo;s output depends heavily on the clarity and structure of your prompts.</p>\r\n\r\n<p>So, be Specific: The more detailed your prompt, the better Copilot can meet your needs. For example, instead of saying, &ldquo;Explain this document,&rdquo; a more effective prompt would be, &ldquo;Summarize this technical document in three bullet points suitable for a non-technical audience.&rdquo;</p>\r\n\r\n<p>Iterate and Refine: Copilot thrives on user feedback. If the response isn&rsquo;t quite right, rephrase or add more details to your prompt. For instance, if you&rsquo;re unsatisfied with a report draft, you can guide Copilot with commands like, &ldquo;Rewrite this section to emphasize cost efficiency.&rdquo;</p>\r\n\r\n<p>Experiment with Creativity: Beyond structured tasks, Copilot is a powerful tool for brainstorming and generating innovative ideas. Ask it for alternative headlines, creative slide titles, or new ways to present data.</p>\r\n\r\n<p>As with any AI tool, maintaining data privacy is paramount. Use Copilot within trusted, organization-approved platforms to ensure compliance with data security protocols.</p>\r\n\r\n<p>Avoid sharing unnecessary personal or sensitive information and ensure that any shared data is encrypted and anonymized when possible. For example, instead of uploading raw customer details, work with summarized or generalized datasets.</p>\r\n\r\n<p>Familiarize yourself with how Copilot accesses your organization&#39;s data (emails, documents, etc.), ensuring it&rsquo;s in line with your company&rsquo;s privacy policies.</p>\r\n\r\n<p>And most importantly, always review and verify AI outputs to ensure they align with your intentions and ethical standards.&nbsp;</p>\r\n\r\n<p>AI models can inadvertently reflect biases in their training data. Be vigilant in identifying and correcting any biases in Copilot&rsquo;s responses, especially when generating content or making decisions that could impact others.</p>\r\n\r\n<p>And when presenting Copilot-generated outputs to stakeholders, be clear about its role. Transparency builds trust and sets realistic expectations about AI&rsquo;s capabilities and limitations.</p>\r\n\r\n<p>By following these practices, users can maximize Copilot&rsquo;s potential while upholding privacy, security, and responsibility.&nbsp;</p>\r\n",
             "settings": {
                 "sidebar": true,
                 "header": true,
@@ -335,8 +232,8 @@
                 "module": 0,
                 "preloader": [
                     {
-                        "src": "assets/video/en_8.mp4",
-                        "id": "en_8.mp4"
+                        "src": "assets/video/en_7.mp4",
+                        "id": "en_7.mp4"
                     },
                     {
                         "src": "theme/scripts/Screen_01.js",
@@ -346,16 +243,16 @@
                 "content": [
                     {
                         "type": "video",
-                        "path": "assets/video/en_8.mp4",
+                        "path": "assets/video/en_7.mp4",
                         "onendnextscrn": "false"
                     }
                 ]
             }
         },
         {
-            "name": "30141",
-            "title": "Knowledge Check 3",
-            "header": "Knowledge Check 3",
+            "name": "2002",
+            "title": "Check Your Understanding 2",
+            "header": "Check Your Understanding 2",
             "transcript": " ",
             "settings": {
                 "sidebar": true,
@@ -366,7 +263,7 @@
                 "module": 0,
                 "preloader": [
                     {
-                        "src": "assets/Quiz/30141/index.html",
+                        "src": "assets/Quiz/2002/index.html",
                         "id": "Screen_01.html"
                     },
                     {
@@ -377,17 +274,17 @@
                 "content": [
                     {
                         "type": "captivate",
-                        "path": "assets/Quiz/30141/index.html",
+                        "path": "assets/Quiz/2002/index.html",
                         "functionName": "captivate"
                     }
                 ]
             }
         },
         {
-            "name": "30142",
+            "name": "2003",
             "title": "Summary",
             "header": "Summary",
-            "transcript": "<p><strong>Congratulations! </strong></p>\r\n\r\n<p>You have successfully completed the course:<strong> Conversational AI: Concepts, Capabilities, and Use Cases.</strong></p>\r\n\r\n<p><strong>In this course, you learned that:</strong></p>\r\n\r\n<ul>\r\n\t<li>Conversational AI enables more natural, flexible interactions than traditional automation by understanding intent, context, and varied user input.</li>\r\n\t<li>Conversational AI works through a series of coordinated steps, including input capture, language processing, intent understanding, response generation, and continuous learning.</li>\r\n\t<li>Different types of conversational AI systems serve different business needs, and choosing the right approach requires balancing capabilities, risk, and organizational readiness.</li>\r\n</ul>\r\n",
+            "transcript": "<p>Congratulations! You have completed the course: Boosting Efficiency With Microsoft Copilot.</p>\r\n\r\n<p>In this course, you have learned that:</p>\r\n\r\n<ul>\r\n\t<li>Gen AI relies on Large Language Models (or LLMs) and foundation models. These are neural networks trained on vast amounts of data and can predict and generate content word by word.</li>\r\n\t<li>You learned that Microsoft 365 Copilot is integrated directly into Microsoft 365 apps like Word, Excel, PowerPoint, Outlook, and Teams, turning these tools into powerhouses of creativity and productivity.</li>\r\n\t<li>You also learned the quality of Copilot&rsquo;s output depends heavily on the clarity and structure of it&rsquo;s prompts.</li>\r\n\t<li>And finally, you learned that maintaining data privacy is paramount. Ensure Copilot is integrated into secure, organization-approved environments. Always review and verify AI outputs to ensure they align with your intentions and ethical standards.</li>\r\n</ul>\r\n\r\n<p>&nbsp;</p>\r\n",
             "settings": {
                 "sidebar": true,
                 "header": true,
@@ -397,8 +294,8 @@
                 "module": 0,
                 "preloader": [
                     {
-                        "src": "assets/video/en_10.mp4",
-                        "id": "en_10.mp4"
+                        "src": "assets/video/en_9.mp4",
+                        "id": "en_9.mp4"
                     },
                     {
                         "src": "theme/scripts/Screen_01.js",
@@ -408,14 +305,14 @@
                 "content": [
                     {
                         "type": "video",
-                        "path": "assets/video/en_10.mp4",
+                        "path": "assets/video/en_9.mp4",
                         "onendnextscrn": "false"
                     }
                 ]
             }
         },
         {
-            "name": "30143",
+            "name": "2004",
             "title": "Quiz",
             "header": "Quiz",
             "transcript": " ",
@@ -428,7 +325,7 @@
                 "module": 0,
                 "preloader": [
                     {
-                        "src": "assets/Quiz/30143/index.html",
+                        "src": "assets/Quiz/2004/index.html",
                         "id": "Screen_01.html"
                     },
                     {
@@ -439,7 +336,7 @@
                 "content": [
                     {
                         "type": "captivate",
-                        "path": "assets/Quiz/30143/index.html",
+                        "path": "assets/Quiz/2004/index.html",
                         "functionName": "captivate"
                     }
                 ]
