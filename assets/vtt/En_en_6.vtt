@@ -1,0 +1,112 @@
+﻿WEBVTT
+
+00:00:05.080 --> 00:00:08.500
+With a clear understanding of what conversational AI is,
+
+00:00:08.500 --> 00:00:12.400
+the next logical question that follows is how it actually works.
+
+00:00:12.880 --> 00:00:16.689
+While interacting with conversational AI can feel simple,
+
+00:00:16.689 --> 00:00:19.120
+a lot is happening behind the scenes.
+
+00:00:19.440 --> 00:00:24.614
+Each message goes through a series of steps that work together to capture input,
+
+00:00:24.614 --> 00:00:28.320
+understand meaning, and generate an appropriate response.
+
+00:00:28.520 --> 00:00:33.282
+These steps happen in real time and are designed to make interactions feel
+
+00:00:33.282 --> 00:00:34.680
+natural and efficient.
+
+00:00:35.240 --> 00:00:39.504
+At a high level, conversational a I follows a clear
+
+00:00:39.504 --> 00:00:40.160
+process.
+
+00:00:40.560 --> 00:00:46.560
+It begins by capturing the user 's input, whether that input is text or voice.
+
+00:00:46.680 --> 00:00:51.640
+Voice interactions rely on ASR, or automatic speech recognition,
+
+00:00:51.640 --> 00:00:56.600
+which converts spoken language into text the system can process.
+
+00:00:57.280 --> 00:01:00.980
+Next, the system analyzes the language itself
+
+00:01:00.980 --> 00:01:04.360
+using NLP, or natural language processing.
+
+00:01:04.920 --> 00:01:08.936
+This helps break the input into structured components that can be
+
+00:01:08.936 --> 00:01:10.640
+interpreted more accurately.
+
+00:01:11.720 --> 00:01:17.250
+Once the language is processed, NLU, or natural Language Understanding,
+
+00:01:17.250 --> 00:01:18.480
+comes into play.
+
+00:01:18.600 --> 00:01:22.720
+This is where the system determines intent and context,
+
+00:01:22.720 --> 00:01:28.680
+focusing on what the user is trying to achieve rather than the exact words used.
+
+00:01:30.000 --> 00:01:34.400
+With intent understood, the system decides how to respond.
+
+00:01:34.920 --> 00:01:37.914
+It may retrieve information, generate a reply,
+
+00:01:37.914 --> 00:01:41.800
+or ask a follow up question to move the interaction forward.
+
+00:01:42.440 --> 00:01:46.511
+Finally, conversational AI systems improve over
+
+00:01:46.511 --> 00:01:49.480
+time by learning from interactions.
+
+00:01:50.120 --> 00:01:56.974
+Feedback, usage patterns, and outcomes help refine future responses
+
+00:01:56.999 --> 00:01:59.160
+and make conversations more effective.
+
+00:01:59.920 --> 00:02:05.560
+Modern conversational AI also benefits from enhancements such as speech
+
+00:02:05.560 --> 00:02:10.351
+synthesis, retrieval, augmented generation, vector databases,
+
+00:02:10.351 --> 00:02:12.360
+and real time translation.
+
+00:02:13.080 --> 00:02:19.040
+These technologies further improve accuracy, responsiveness, and scalability.
+
+00:02:19.560 --> 00:02:22.622
+Together, these components explain how
+
+00:02:22.622 --> 00:02:28.120
+conversational AI moves from a simple input to a meaningful response.
+
+00:02:28.560 --> 00:02:31.780
+In the next section, we will explore how these capabilities
+
+00:02:31.780 --> 00:02:35.530
+appear in different types of conversational AI systems used in
+
+00:02:35.530 --> 00:02:36.040
+practice.
