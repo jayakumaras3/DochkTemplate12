@@ -1,0 +1,652 @@
+﻿WEBVTT
+
+00:00:00.107 --> 00:00:01.493
+Welcome to the course:
+
+00:00:01.640 --> 00:00:07.120
+Conversational AI concepts, capabilities, and use cases.
+
+00:00:08.360 --> 00:00:14.800
+Think about the last time you interacted with a chat bot at work or as a customer.
+
+00:00:15.680 --> 00:00:18.213
+Maybe it answered a simple question right away,
+
+00:00:18.213 --> 00:00:25.314
+or maybe it sent you through a few fixed options and left you feeling stuck
+
+00:00:25.314 --> 00:00:28.840
+when your question did not quite fit.
+
+00:00:30.400 --> 00:00:33.520
+That difference in experience is not accidental.
+
+00:00:33.880 --> 00:00:38.027
+It comes down to how the conversational system is designed,
+
+00:00:38.394 --> 00:00:43.680
+what it is capable of understanding, and how it is implemented.
+
+00:00:44.920 --> 00:00:50.687
+This course focuses on helping you understand those differences
+
+00:00:50.687 --> 00:00:55.293
+so you can evaluate conversational AI solutions with clarity
+
+00:00:55.293 --> 00:00:58.400
+and make better decisions in a business context.
+
+00:00:58.800 --> 00:01:02.587
+By the end of this course, you will be able to explain what
+
+00:01:02.587 --> 00:01:08.225
+Conversational AI is and how it differs from traditional automation systems
+
+00:01:08.225 --> 00:01:12.160
+such as IVR and rule based chat bots.
+
+00:01:12.880 --> 00:01:18.193
+Describe how Conversational AI works, including the key technologies
+
+00:01:18.193 --> 00:01:23.893
+that enable it to understand input, interpret intent, and generate responses,
+
+00:01:23.893 --> 00:01:29.032
+and differentiate between traditional chat bots, AI chat bots,
+
+00:01:29.032 --> 00:01:34.293
+and a gentic AI chat bots, and evaluate implementation approaches
+
+00:01:34.318 --> 00:01:37.760
+based on organizational needs and capabilities.
+
+00:01:38.880 --> 00:01:42.120
+What is conversational AI and how is it different?
+
+00:01:42.480 --> 00:01:47.777
+Before we talk about how conversational AI works or where it is used,
+
+00:01:47.802 --> 00:01:50.040
+we need to start with something more basic.
+
+00:01:50.175 --> 00:01:53.807
+We need to understand what makes an interaction a true conversation
+
+00:01:53.807 --> 00:01:57.720
+and why this kind of AI is different from the systems that came before it.
+
+00:01:58.606 --> 00:02:02.347
+Most of us have interacted with some form of automation,
+
+00:02:02.347 --> 00:02:05.600
+but not all automated systems are conversational.
+
+00:02:05.886 --> 00:02:11.595
+This distinction matters because it shapes how people experience technology
+
+00:02:11.595 --> 00:02:12.560
+in real life.
+
+00:02:13.320 --> 00:02:15.840
+Let us begin with a simple scenario.
+
+00:02:16.720 --> 00:02:18.000
+Meet Emily.
+
+00:02:18.640 --> 00:02:21.520
+Emily needs help with a recent bank transaction.
+
+00:02:21.600 --> 00:02:26.040
+She calls customer support and is greeted by an automated system.
+
+00:02:26.440 --> 00:02:30.004
+The voice asks her to press one for account details,
+
+00:02:30.197 --> 00:02:35.280
+press 2 for card services, and press 3 for recent transactions.
+
+00:02:35.800 --> 00:02:39.560
+Emily listens carefully, presses a number, and waits.
+
+00:02:40.000 --> 00:02:41.800
+A new menu begins to play.
+
+00:02:42.100 --> 00:02:44.720
+She presses another option and waits again.
+
+00:02:45.240 --> 00:02:49.493
+After a few more steps, she realizes the option she needs is not
+
+00:02:49.493 --> 00:02:50.560
+listed at all.
+
+00:02:51.040 --> 00:02:54.880
+She hangs up, slightly frustrated, without any solution.
+
+00:02:55.480 --> 00:02:58.707
+Later that day, Emily opens the bank's website and
+
+00:02:58.707 --> 00:03:00.600
+starts a chat instead.
+
+00:03:01.000 --> 00:03:05.720
+This time she types I need help with a transaction that looks wrong.
+
+00:03:06.160 --> 00:03:10.800
+The system responds with a follow up question and asks for more details.
+
+00:03:10.920 --> 00:03:14.093
+The conversation continues step by step
+
+00:03:14.093 --> 00:03:17.120
+until Emily gets the information she needs.
+
+00:03:17.600 --> 00:03:20.588
+Both interactions involved automation,
+
+00:03:20.588 --> 00:03:23.840
+but only one of them felt like a conversation.
+
+00:03:24.280 --> 00:03:29.560
+This difference helps us understand what conversational AI really is.
+
+00:03:29.560 --> 00:03:34.993
+Conversational AI refers to systems that can engage in dialogue with users
+
+00:03:34.993 --> 00:03:37.120
+in an organic and flexible way.
+
+00:03:37.440 --> 00:03:42.292
+These interactions can take place through written text, voice conversations,
+
+00:03:42.320 --> 00:03:44.560
+or web based chat interfaces.
+
+00:03:45.000 --> 00:03:49.287
+Unlike older systems, conversational AI is not limited
+
+00:03:49.287 --> 00:03:52.360
+to rigid menus or predefined paths.
+
+00:03:52.760 --> 00:03:56.807
+It is designed to understand what users are trying to communicate,
+
+00:03:56.807 --> 00:04:00.160
+even when the wording is informal or imperfect.
+
+00:04:00.320 --> 00:04:03.887
+As a result, interactions feel more responsive
+
+00:04:03.887 --> 00:04:04.960
+and more human.
+
+00:04:05.920 --> 00:04:11.299
+Traditional systems such as IVR or interactive Voice response,
+
+00:04:11.486 --> 00:04:13.600
+were built around fixed options.
+
+00:04:14.160 --> 00:04:17.313
+They work well for simple, predictable requests,
+
+00:04:17.313 --> 00:04:22.293
+but struggle when users need to explain context or ask questions
+
+00:04:22.293 --> 00:04:23.799
+in unexpected ways.
+
+00:04:24.520 --> 00:04:30.440
+Once a user steps outside the predefined flow, these systems cannot easily adapt.
+
+00:04:31.200 --> 00:04:35.680
+Conversational AI allows users to speak or type naturally.
+
+00:04:36.120 --> 00:04:41.320
+The system interprets intent and responds in a way that keeps the interaction
+
+00:04:41.320 --> 00:04:42.320
+moving forward.
+
+00:04:42.880 --> 00:04:48.640
+Instead of forcing users to follow rigid steps, the technology adapts to them.
+
+00:04:49.280 --> 00:04:55.280
+This is what separates basic automation from true conversational experiences.
+
+00:04:56.440 --> 00:05:03.760
+One of the earliest examples was Eliza, created in 1964 by Joseph Weizenbaum.
+
+00:05:04.280 --> 00:05:09.298
+Eliza simulated conversation by matching patterns in user input,
+
+00:05:09.491 --> 00:05:14.560
+creating the illusion of understanding even though it followed simple rules.
+
+00:05:15.200 --> 00:05:18.504
+Later, Alice, developed by Richard Wallace,
+
+00:05:18.572 --> 00:05:23.416
+expanded on this approach using structured pattern matching and scripted
+
+00:05:23.416 --> 00:05:24.199
+responses.
+
+00:05:24.600 --> 00:05:28.993
+Cleverbot took another step forward by learning from past conversations with
+
+00:05:29.018 --> 00:05:32.491
+real users, allowing it to generate more varied
+
+00:05:32.491 --> 00:05:35.080
+and less predictable replies.
+
+00:05:36.320 --> 00:05:40.216
+Modern assistance such as Siri, Google Assistant,
+
+00:05:40.241 --> 00:05:43.960
+and Cortana represent a major leap forward.
+
+00:05:45.040 --> 00:05:50.016
+Advances in language processing and computing power now allow these systems
+
+00:05:50.016 --> 00:05:54.323
+to understand context, manage longer conversations,
+
+00:05:54.323 --> 00:05:57.080
+and respond more accurately over time.
+
+00:05:57.680 --> 00:06:00.793
+Today, conversational AI plays a real role in
+
+00:06:00.793 --> 00:06:05.280
+in how customers find information, get support, and interact with businesses.
+
+00:06:05.720 --> 00:06:09.998
+Understanding how it differs from older systems sets the foundation for
+
+00:06:09.998 --> 00:06:11.840
+everything else in this course.
+
+00:06:12.706 --> 00:06:16.911
+In the next section, we will explore how conversational AI
+
+00:06:16.911 --> 00:06:18.600
+works behind the scenes.
+
+00:06:19.793 --> 00:06:22.106
+How Conversational AI Works.
+
+00:06:22.106 --> 00:06:25.073
+With a clear understanding of what conversational AI
+
+00:06:25.097 --> 00:06:27.996
+is, the next logical question that follows
+
+00:06:28.021 --> 00:06:29.600
+is how it actually works.
+
+00:06:30.080 --> 00:06:33.889
+While interacting with conversational AI can feel simple,
+
+00:06:33.889 --> 00:06:36.320
+a lot is happening behind the scenes.
+
+00:06:36.720 --> 00:06:41.384
+Each message goes through a series of steps that work together to capture input,
+
+00:06:41.622 --> 00:06:45.560
+understand meaning, and generate an appropriate response.
+
+00:06:45.695 --> 00:06:49.942
+These steps happen in real time and are designed to make interactions
+
+00:06:49.942 --> 00:06:51.960
+feel natural and efficient.
+
+00:06:52.520 --> 00:06:57.200
+At a high level, conversational AI follows a clear process.
+
+00:06:57.840 --> 00:07:03.800
+It begins by capturing the user's input, whether that input is text or voice.
+
+00:07:03.880 --> 00:07:09.333
+Voice interactions rely on ASR or automatic speech recognition,
+
+00:07:09.599 --> 00:07:13.800
+which converts spoken language into text the system can process.
+
+00:07:14.480 --> 00:07:18.020
+Next, the system analyzes the language itself
+
+00:07:18.045 --> 00:07:21.560
+using NLP, or natural language processing.
+
+00:07:22.160 --> 00:07:26.176
+This helps break the input into structured components that can be
+
+00:07:26.176 --> 00:07:27.880
+interpreted more accurately.
+
+00:07:29.000 --> 00:07:34.469
+Once the language is processed, NLU or Natural Language Understanding
+
+00:07:34.469 --> 00:07:35.720
+comes into play.
+
+00:07:35.840 --> 00:07:39.976
+This is where the system determines intent and context,
+
+00:07:39.976 --> 00:07:45.960
+focusing on what the user is trying to achieve rather than the exact words used.
+
+00:07:47.280 --> 00:07:51.760
+With intent understood, the system decides how to respond.
+
+00:07:52.160 --> 00:07:55.400
+It may retrieve information, generate a reply,
+
+00:07:55.500 --> 00:07:59.040
+or ask a follow up question to move the interaction forward.
+
+00:07:59.680 --> 00:08:04.011
+Finally, conversational AI systems improve over
+
+00:08:04.036 --> 00:08:06.760
+time by learning from interactions.
+
+00:08:07.360 --> 00:08:14.185
+Feedback, usage patterns, and outcomes help refine future responses
+
+00:08:14.210 --> 00:08:16.440
+and make conversations more effective.
+
+00:08:17.135 --> 00:08:22.228
+Modern conversational AI also benefits from enhancements such as
+
+00:08:22.228 --> 00:08:27.624
+speech synthesis, retrieval, augmented generation, vector databases,
+
+00:08:27.624 --> 00:08:29.639
+and real time translation.
+
+00:08:30.320 --> 00:08:36.320
+These technologies further improve accuracy, responsiveness, and scalability.
+
+00:08:36.840 --> 00:08:39.521
+Together, these components explain how
+
+00:08:39.546 --> 00:08:45.360
+conversational AI moves from a simple input to a meaningful response.
+
+00:08:45.800 --> 00:08:48.807
+In the next section, we will explore how these capabilities
+
+00:08:48.807 --> 00:08:52.100
+appear in different types of conversational AI systems
+
+00:08:52.100 --> 00:08:53.359
+used in practice.
+
+00:08:58.675 --> 00:09:01.787
+Conversational AI in Practice.
+
+00:09:01.787 --> 00:09:05.740
+So far, we have explored what conversational
+
+00:09:05.740 --> 00:09:09.480
+AI is and how it works behind the scenes.
+
+00:09:10.415 --> 00:09:15.420
+The next step is understanding how these capabilities are applied in real
+
+00:09:15.445 --> 00:09:16.600
+organizations.
+
+00:09:17.360 --> 00:09:21.628
+In practice, not all conversational AI systems are
+
+00:09:21.653 --> 00:09:22.665
+built the same.
+
+00:09:22.840 --> 00:09:27.182
+They differ in how much they can understand, how flexible they are,
+
+00:09:27.182 --> 00:09:30.120
+and how much responsibility they can take on.
+
+00:09:30.480 --> 00:09:34.500
+These differences matter because choosing the right type of system
+
+00:09:34.500 --> 00:09:39.160
+has a direct impact on cost, risk, and business outcomes.
+
+00:09:39.880 --> 00:09:44.131
+To make sense of this, conversational AI can be grouped into 3
+
+00:09:44.131 --> 00:09:52.280
+broad categories, Traditional chat bots, AI chat bots, and a gentic AI chat bots.
+
+00:09:52.440 --> 00:09:56.800
+Traditional chat bots are the simplest form of conversational systems.
+
+00:09:57.240 --> 00:10:01.080
+They rely on predefined rules and keyword based logic.
+
+00:10:01.480 --> 00:10:06.640
+Conversations follow scripted paths, often built using decision trees.
+
+00:10:07.040 --> 00:10:12.437
+A user asks a question and the chat bot matches it to a known pattern before
+
+00:10:12.437 --> 00:10:14.400
+delivering a fixed response.
+
+00:10:15.080 --> 00:10:19.382
+Because of this design, traditional chat bots are usually limited
+
+00:10:19.407 --> 00:10:21.360
+to single turn interactions.
+
+00:10:21.840 --> 00:10:28.303
+They work best for predictable and repetitive tasks such as FAQs or basic
+
+00:10:28.328 --> 00:10:29.665
+information requests.
+
+00:10:29.840 --> 00:10:33.080
+However, they struggle when users phrase questions
+
+00:10:33.080 --> 00:10:36.320
+differently or need to provide additional context.
+
+00:10:36.800 --> 00:10:42.208
+AI Chat bots use language models to understand nuance, synonyms,
+
+00:10:42.233 --> 00:10:43.560
+and varied phrasing.
+
+00:10:43.655 --> 00:10:46.100
+Instead of relying on rigid scripts,
+
+00:10:46.100 --> 00:10:49.493
+they generate responses dynamically based on intent
+
+00:10:49.493 --> 00:10:50.680
+and context.
+
+00:10:51.200 --> 00:10:57.068
+Conversations can span multiple turns, allowing users to ask follow up questions
+
+00:10:57.068 --> 00:10:58.880
+or refine their requests.
+
+00:10:58.880 --> 00:11:02.287
+Naturally, AI chat bots are well suited for handling
+
+00:11:02.287 --> 00:11:06.440
+a broader range of simple to moderately complex interactions.
+
+00:11:06.800 --> 00:11:09.687
+Over time, they also improve by learning from
+
+00:11:09.687 --> 00:11:12.560
+conversation patterns and user feedback.
+
+00:11:13.006 --> 00:11:18.417
+Agentic AI chat bots are advanced systems that go beyond understanding and
+
+00:11:18.417 --> 00:11:19.200
+responding.
+
+00:11:19.320 --> 00:11:21.440
+They are designed to take action.
+
+00:11:22.000 --> 00:11:27.207
+Agentic AI chat bots can use additional inputs such as conversation history,
+
+00:11:27.207 --> 00:11:30.520
+user context, or uploaded information.
+
+00:11:30.960 --> 00:11:34.000
+They can trigger workflows, make decisions,
+
+00:11:34.025 --> 00:11:36.920
+and complete tasks from start to finish.
+
+00:11:37.640 --> 00:11:42.240
+Instead of stopping at an answer, these systems focus on outcomes.
+
+00:11:42.760 --> 00:11:47.580
+They adapt their behavior based on results and learn from the actions they
+
+00:11:47.580 --> 00:11:50.907
+take, allowing them to operate with a higher
+
+00:11:50.907 --> 00:11:52.200
+level of autonomy.
+
+00:11:52.240 --> 00:11:56.087
+Understanding the different types of conversational AI
+
+00:11:56.087 --> 00:12:01.120
+is only part of the picture in real organizations.
+
+00:12:01.360 --> 00:12:06.320
+The next challenge is deciding how to implement these systems effectively.
+
+00:12:06.800 --> 00:12:11.580
+Some organizations choose to build conversational AI systems
+
+00:12:11.580 --> 00:12:13.720
+entirely on their own.
+
+00:12:14.080 --> 00:12:18.080
+This approach offers maximum control and customization,
+
+00:12:18.080 --> 00:12:23.495
+but it also requires strong engineering capability, ongoing maintenance,
+
+00:12:23.520 --> 00:12:25.080
+and long term investment.
+
+00:12:25.800 --> 00:12:31.593
+It is best suited for organizations with a proven track record of building complex
+
+00:12:31.593 --> 00:12:32.920
+internal platforms.
+
+00:12:33.720 --> 00:12:39.093
+Another approach is to build solutions using frameworks provided by large cloud
+
+00:12:39.118 --> 00:12:40.080
+platforms.
+
+00:12:40.200 --> 00:12:45.059
+This reduces development effort and integrates more easily with existing
+
+00:12:45.084 --> 00:12:46.400
+enterprise systems.
+
+00:12:46.613 --> 00:12:49.433
+However, it also creates dependency on a specific
+
+00:12:49.433 --> 00:12:53.385
+technology stack and still requires specialized skills to customize and
+
+00:12:53.385 --> 00:12:54.480
+support the solution.
+
+00:12:54.920 --> 00:12:58.489
+Alternatively, many organizations choose to work with
+
+00:12:58.489 --> 00:13:01.000
+conversational AI specialists.
+
+00:13:01.520 --> 00:13:07.120
+This approach accelerates deployment and reduces the need for in house expertise.
+
+00:13:08.040 --> 00:13:11.320
+In some cases, industry specific models
+
+00:13:11.320 --> 00:13:13.680
+can further reduce time and cost.
+
+00:13:14.220 --> 00:13:17.620
+The trade off is reduced control over the solution.
+
+00:13:18.120 --> 00:13:22.360
+There is no single right approach to conversational AI.
+
+00:13:22.960 --> 00:13:28.960
+The most successful implementations align with how an organization already works.
+
+00:13:29.560 --> 00:13:32.219
+Companies that thrive on internal development
+
+00:13:32.219 --> 00:13:34.920
+may succeed by building in house.
+
+00:13:35.480 --> 00:13:38.800
+Others perform better by partnering with specialists.
+
+00:13:39.400 --> 00:13:44.498
+For corporate teams, the real value lies in understanding the options,
+
+00:13:44.498 --> 00:13:49.250
+recognizing trade offs, and choosing an approach that fits their
+
+00:13:49.250 --> 00:13:52.800
+organization's capabilities and business goals.
+
+00:13:54.040 --> 00:13:57.547
+Congratulations, you have successfully completed the
+
+00:13:57.547 --> 00:14:03.400
+course Conversational AI: Concepts, Capabilities, and Use Cases.
+
+00:14:03.880 --> 00:14:07.994
+In this course, you learned that conversational AI
+
+00:14:07.994 --> 00:14:12.401
+enables more natural, flexible interactions than traditional
+
+00:14:12.401 --> 00:14:18.400
+automation by understanding intent, context, and varied user input.
+
+00:14:18.520 --> 00:14:23.588
+Conversational AI works through a series of coordinated steps,
+
+00:14:23.588 --> 00:14:29.059
+including input capture, language processing, intent understanding,
+
+00:14:29.059 --> 00:14:32.760
+response generation, and continuous learning.
+
+00:14:32.920 --> 00:14:38.112
+And different types of conversational AI systems serve different business needs,
+
+00:14:38.225 --> 00:14:43.165
+and choosing the right approach requires balancing capabilities, risk,
+
+00:14:43.165 --> 00:14:45.120
+and organizational readiness.
