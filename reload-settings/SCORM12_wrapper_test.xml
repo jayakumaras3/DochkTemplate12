@@ -17,10 +17,10 @@
       <min />
       <max />
     </score>
-    <total_time>00:34:34</total_time>
+    <total_time>00:36:17</total_time>
     <lesson_mode>normal</lesson_mode>
     <exit />
-    <session_time>0000:00:00.00</session_time>
+    <session_time>0000:00:01.00</session_time>
   </core>
   <suspend_data>str1=1,1,1,1,0,1,0,0,0,0,1,0;str2=;str3=;str4=</suspend_data>
   <launch_data />
