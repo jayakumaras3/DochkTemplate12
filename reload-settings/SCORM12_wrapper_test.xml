@@ -9,20 +9,20 @@
     <student_name>User, Reload</student_name>
     <lesson_location>13</lesson_location>
     <credit>credit</credit>
-    <lesson_status>passed</lesson_status>
+    <lesson_status>incomplete</lesson_status>
     <entry>ab-initio</entry>
     <score>
       <_children>raw,min,max</_children>
-      <raw>67</raw>
+      <raw>0</raw>
       <min />
       <max />
     </score>
-    <total_time>00:01:02</total_time>
+    <total_time>00:34:34</total_time>
     <lesson_mode>normal</lesson_mode>
     <exit />
-    <session_time>0000:00:38.00</session_time>
+    <session_time>0000:00:00.00</session_time>
   </core>
-  <suspend_data>str1=1,1,0,0,0,0,0,0,0,0,1,0;str2=24.03.2026;str3=;str4=</suspend_data>
+  <suspend_data>str1=1,1,1,1,0,1,0,0,0,0,1,0;str2=;str3=;str4=</suspend_data>
   <launch_data />
   <comments />
   <comments_from_lms />

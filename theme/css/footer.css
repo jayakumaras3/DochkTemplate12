@@ -401,7 +401,7 @@ video::cue {
     flex: 1 1 0 !important;
     height: 4px !important;
     border-radius: 999px !important;
-    background: rgba(200, 200, 200, 0.45) !important;
+    background: rgba(255, 255, 255, 0.45) !important;
     cursor: pointer !important;
     transition: height 0.15s ease, opacity 0.15s ease !important;
 }
@@ -412,15 +412,15 @@ video::cue {
 }
 
 .step-progress-segment.completed {
-    background: #b30019 !important;
+    background: #ffffff !important;
 }
 
 .step-progress-segment.active {
-    background: #ff1e2d !important;
+    background: #ffffff !important;
 }
 
 .step-progress-segment.upcoming {
-    background: rgba(170, 170, 170, 0.45) !important;
+    background: rgba(255, 255, 255, 0.45) !important;
 }
 
 .step-progress-info {
@@ -430,7 +430,7 @@ video::cue {
 }
 
 .step-progress-meta {
-    color: #ff3040 !important;
+    color: #ffffff !important;
     font-size: 13px !important;
     font-weight: 700 !important;
     letter-spacing: 0.8px !important;

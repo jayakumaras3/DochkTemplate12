@@ -369,20 +369,17 @@ var pauseTimer;
             resourceElem.removeClass("resourceHighlight");
             if (this.globalVariableService.getPageCounter() > 1) {
                 prevElem.removeClass("disabledClass");
-                prevElem.attr("title", Prevtitle);
             }			
 			
             if (this.globalVariableService.nextBtnDisabled == true) {
                 if (!this.globalVariableService.checkCompletedPage(this.globalVariableService.getPageCounter())) {
                     nextElem.addClass("disabledClass");
-                    nextElem.removeAttr("title")
                 } else {
 					if (this.globalVariableService.getPageCounter() == 1) {
 					}
 					else{
 						
                     nextElem.removeClass("disabledClass");
-                    nextElem.attr("title", NextTitle)
 					}
                 }
             }
@@ -426,7 +423,6 @@ var pauseTimer;
         } else {
             this.navigationBtn = response.footer.navigation;
         }
-        $("#prev").attr('title', 'Previous');
     };
     /**
      * @ngdoc method
@@ -678,7 +674,6 @@ var pauseTimer;
         var pageCounter = this.globalVariableService.getPageCounter();
         var prevElem = angular.element(document.getElementById("prev"));
         prevElem.removeClass("disabledClass");
-        prevElem.attr("title", Prevtitle);
         this.commonForNaviagation();
         this.globalVariableService.addCompletePage(pageCounter + 1);
         this.globalVariableService.setPageCounter(pageCounter + 1);

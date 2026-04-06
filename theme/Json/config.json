@@ -3,7 +3,7 @@
     "navigation": {
       "prev": {
         "id": "prev",
-        "name": "",
+        "name": "Previous",
         "display": "yes",
         "class": "prevClass",
         "callback": "customizeFn",
@@ -14,7 +14,7 @@
       },
       "next": {
         "id": "next",
-        "name": "",
+        "name": "Next",
         "display": "yes",
         "class": "nextClass",
         "callback": "customizeFn",

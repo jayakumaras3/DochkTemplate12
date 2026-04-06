@@ -475,14 +475,12 @@ function enablenextbtn()
 { 
 	var nextElem = angular.element(document.getElementById("next"));
 		nextElem.removeClass("disabledClass");
-	nextElem.attr("title",NextTitle);
 	NexPrevAcessiblity_Check()
 }
 function enablePrevbtn()
 { 
 	var PrevElem = angular.element(document.getElementById("prev"));
 	PrevElem.removeClass("disabledClass");
-	PrevElem.attr("title",Prevtitle);
 	NexPrevAcessiblity_Check()
 }
 function disablenextbtn()

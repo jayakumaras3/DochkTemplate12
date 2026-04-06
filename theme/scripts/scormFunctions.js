@@ -110,7 +110,7 @@ function init() {
         
         if (prevButton) {
             // Dynamically add or update accessibility attributes
-            prevButton.setAttribute('aria-label', 'Previous Button2');
+            prevButton.setAttribute('aria-label', 'Previous');
             prevButton.setAttribute('aria-disabled', 'false'); // Assuming it's not disabled
             prevButton.setAttribute('tabindex', '0');  // Ensure it's focusable
             // Add keyboard event listener for the 'Enter' or 'Space' key
@@ -128,7 +128,7 @@ function init() {
         
         if (nextButton) {
             // Dynamically add or update accessibility attributes
-           nextButton.setAttribute('aria-label', 'Next Button1');
+           nextButton.setAttribute('aria-label', 'Next');
             nextButton.setAttribute('aria-disabled', 'false'); // Assuming it's not disabled
             nextButton.setAttribute('tabindex', '0');  // Ensure it's focusable
 
@@ -222,14 +222,14 @@ function AfterTemaplateJson() {
     const menuIcon1 = document.getElementById("TmenuIcon1");
     if (menuIcon1) menuIcon1.title = Menutitle;
 
+    const nextBtn = document.getElementById("next");
+    if (nextBtn) nextBtn.title = NextTitle;
+
     const prevBtn = document.getElementById("prev");
-    if (prevBtn) prevBtn.title = NextTitle;
-	
+    if (prevBtn) prevBtn.title = Prevtitle;
+
     const resource1Btn = document.getElementById("resource1");
     if (resource1Btn) resource1Btn.title = LearningAidsTitle;
-
-    const nextBtn = document.getElementById("next");
-    if (nextBtn) nextBtn.title = Prevtitle;
 
     // Language Change
     waitForVideoAndChangeTrack?.(VttLanguage, VttLabel);

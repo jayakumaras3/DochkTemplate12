@@ -259,7 +259,8 @@ var stage, preload, lib = {};
 		//console.log("TotalPageNo1:: "+Totalpage)
        // document.getElementById("pageNo").innerHTML = ""+currentPageNo+"/"+TotalPageNo;
         if(hidePageNumberForAudioIntro){
-        document.getElementById("pagenoHeader").innerHTML = "";
+        document.getElementById("pagenoHeader").textContent = "";
+        document.getElementById("pagenoHeader").setAttribute("aria-label", "");
         pagenumberEna_DIsable(false);
         }
         else if(AudioVersionEnable){
@@ -267,12 +268,14 @@ var stage, preload, lib = {};
 			var curcurrentPageNo=currentPageNo-1;
 			var curTotalPageNo=TotalPageNo-1;
 			//console.log("curcurrentPageNo "+curcurrentPageNo);
-	    document.getElementById("pagenoHeader").innerHTML = ""+curcurrentPageNo+"/"+curTotalPageNo;
+	    document.getElementById("pagenoHeader").textContent = ""+curcurrentPageNo+"/"+curTotalPageNo;
+	    document.getElementById("pagenoHeader").setAttribute("aria-label", "Page "+curcurrentPageNo+" of "+curTotalPageNo);
         pagenumberEna_DIsable(true);
 		}
 		else{
 		//	console.log("currentPageNo22  "+currentPageNo);
-			document.getElementById("pagenoHeader").innerHTML = ""+currentPageNo+"/"+TotalPageNo;
+			document.getElementById("pagenoHeader").textContent = ""+currentPageNo+"/"+TotalPageNo;
+			document.getElementById("pagenoHeader").setAttribute("aria-label", "Page "+currentPageNo+" of "+TotalPageNo);
             pagenumberEna_DIsable(true);
 		}
 
@@ -374,10 +377,8 @@ var stage, preload, lib = {};
 
         if (response.nextBtnDisabled === true) {
             nextElem.addClass("disabledClass");
-            nextElem.removeAttr("title");
         } else {
             nextElem.removeClass("disabledClass");
-           nextElem.attr("title", NextTitle);
         }
 
         this.$rootScope.$broadcast("navigationPage");
@@ -385,7 +386,6 @@ var stage, preload, lib = {};
         if (this.globalVariableService.getPageCounter() === 1) {
 			//prevElem.setAttribute('aria-disabled', 'true'); 
             prevElem.addClass("disabledClass");
-            prevElem.removeAttr("title");
 			// Assuming it's disabled
 			
         } 
@@ -403,19 +403,15 @@ var stage, preload, lib = {};
 		 else if (this.globalVariableService.getPageCounter() >=1) {
           
 		    nextElem.addClass("disabledClass");
-			nextElem.removeAttr("title", NextTitle)
         }	
 		}
 		if (this.globalVariableService.getPageCounter()== Totalpage) {
          nextElem.addClass("disabledClass");
-      
-			nextElem.removeAttr("title", NextTitle);
          }
 		 if(AudioVersionEnable){
 				 if(this.globalVariableService.getPageCounter()==1)
 				 {
 					nextElem.addClass("disabledClass");
-					nextElem.removeAttr("title", NextTitle)
 					if(TogglemenuControl)
 					{
 						
@@ -430,7 +426,6 @@ var stage, preload, lib = {};
 				 {
 						menuEnDisble_fun(true);
 					    nextElem.addClass("disabledClass");
-						nextElem.removeAttr("title", NextTitle);
 					 
 				 }else
 				 {
