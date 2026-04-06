@@ -675,7 +675,7 @@ function generateResourceList(data) {
         ${resources.length > 0 
           ? resources.map(resource => `
             <li style="margin-bottom: 5px;">
-              <a style="color:#9E0A07" target="_blank" href="${resource.URL}">
+              <a style="color:#870D0D" target="_blank" href="${resource.URL}">
                 ${resource.Title}
               </a>
             </li>

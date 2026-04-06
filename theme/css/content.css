@@ -265,7 +265,7 @@ video::cue {
     width: 40px;
     height: 40px;
     border: 3px solid rgba(180, 180, 180, 0.3);
-    border-top-color: #fa601e;
+    border-top-color: #870D0D;
     border-radius: 50%;
     animation: spinnerRotate 0.85s linear infinite;
     flex-shrink: 0;

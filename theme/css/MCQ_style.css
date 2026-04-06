@@ -89,7 +89,7 @@ body {
 
 .redtext,
 .instext {
-    color: #b45309;
+    color: #870D0D;
     font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
     font-style: italic;
     line-height: 1.45;
@@ -172,7 +172,7 @@ input.checkbox,
     appearance: none;
     border: none;
     border-radius: 12px;
-    background: #E5241D !important;
+    background: #870D0D !important;
     color: #fff;
     font-family: 'Open Sans', Arial, sans-serif;
     font-size: 1.05rem;
@@ -191,7 +191,7 @@ input.checkbox,
 
 #submitBtn:hover,
 .btn:hover {
-    background: #C41810 !important;
+    background: #A50909 !important;
     box-shadow: 0 12px 24px rgba(229, 36, 29, 0.34);
 }
 

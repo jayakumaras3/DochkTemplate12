@@ -377,12 +377,12 @@ body {
 }
 
 .activeTocItem {
-    color: #9E0A07 !important;
+    color: #870D0D !important;
     font-weight: bold !important;
 }
 
 #tocData li span.activeTocItem {
-    color: #9E0A07 !important;
+    color: #870D0D !important;
     font-weight: bold !important;
 }
 

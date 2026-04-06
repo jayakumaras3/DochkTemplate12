@@ -1,29 +1,29 @@
 /* sidebar CSS *//* custom CSS  MCQ SCQ Quiz  _CR means only used for Color class  need to add in the PHP Also*/ 
 .selectedToc {
-    color: #9E0A07 !important;
+    color: #870D0D !important;
     font-weight: bold !important;
 }
 
 #tocData li span.selectedToc {
-    color: #9E0A07 !important;
+    color: #870D0D !important;
     font-weight: bold !important;
 }
 
 #tocData li span.activeTocItem {
-    color: #9E0A07 !important;
+    color: #870D0D !important;
     font-weight: bold !important;
 }
 
 .ID_ColorSet_CR {
-    color: #9E0A07;
+    color: #870D0D;
 }
 /* custom CSS  _CR means only used for Color class  need to add in the PHP Also*/ 
 .ColorSet_CR{	
-    background-color: #9E0A07;
+    background-color: #870D0D;
 }
 .instext
 {
-	color: #9E0A07;
+	color: #870D0D;
 	/*color: #df7e00;*/
 }
 .Incorrect_CR
