@@ -128,7 +128,7 @@ var pauseTimer;
             // AGGRESSIVE inline styles to force visibility
             existingBtn.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 99999 !important; pointer-events: auto !important; width: 46px !important; height: 46px !important; overflow: visible !important;';
             
-            existingBtn.innerHTML = '<img src="theme/images/footer-menu/Certificate.svg" alt="Steps" class="steps-control-icon" style="width: 22px; height: 22px; display: block;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'inline\';" /><span class="steps-control-fallback" style="display:none;font-size:22px;line-height:1;">📄</span>';
+            existingBtn.innerHTML = '<img src="theme/images/footer-menu/steps%20icon.png" alt="Steps" class="steps-control-icon" style="width: 22px; height: 22px; display: block;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'inline\';" /><span class="steps-control-fallback" style="display:none;font-size:22px;line-height:1;">📄</span>';
 
             existingBtn.addEventListener('click', function (event) {
                 console.log('[Steps Button] Click detected');
