@@ -1630,43 +1630,8 @@ html, body {
     transform: none !important;
 }
 
-/* Style footer #stepsBtn as circular button below resource */
-.wholeContainer.reels-wrapper .footer #stepsBtn {
-    position: static !important;
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 50% !important;
-    border: none !important;
-    background-image: url("../images/footer-menu/steps%20icon.png") !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-size: contain !important;
-    background-color: transparent !important;
-    cursor: pointer !important;
-    transition: transform 0.15s ease !important;
-    color: transparent !important;
-    font-size: 0 !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    transform: none !important;
-    display: block !important;
-    flex-shrink: 0 !important;
-    order: 4 !important;           /* Below resource button (order: 3) */
-}
-
-/* Hover state for Steps button */
-.wholeContainer.reels-wrapper .footer #stepsBtn:hover {
-    transform: scale(1.1) !important;
-}
-
-/* Active state for Steps button */
-.wholeContainer.reels-wrapper .footer #stepsBtn:active {
-    transform: scale(0.95) !important;
-}
-
-/* Hide all other non-nav footer children (prev, next, resource, steps, menu are exceptions) */
-.wholeContainer.reels-wrapper .footer > div:not([id='prev']):not([id='next']):not(.prevClass):not(.nextClass):not(.nextClassHighlight):not(.resourceClass):not(#stepsBtn):not(#clickableDiv) {
+/* Hide all other non-nav footer children (prev, next, resource, menu are exceptions) */
+.wholeContainer.reels-wrapper .footer > div:not([id='prev']):not([id='next']):not(.prevClass):not(.nextClass):not(.nextClassHighlight):not(.resourceClass):not(#clickableDiv) {
     display: none !important;
 }
 
