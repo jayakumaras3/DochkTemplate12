@@ -139,8 +139,11 @@ document.addEventListener("DOMContentLoaded", function() {
 			const valueAttr = option.value || option.text; // define inside each block
 			if (questionData.type === 'single') {
 				return `
-                   <div id="Opt${idx}" class="answer FSize20"  onkeydown="handleKeydown(event, ${idx}, '${questionData.type}')" onclick="selectOption(${idx}, '${questionData.type}')" role="radio" aria-checked="false" tabindex="0" aria-labelledby="answer${idx}-label">
-					<input class="radioBut clicken" type="radio" id="answer${idx}" name="answer" value="${valueAttr}" data-correct="${option.correct}" tabindex="-1">
+                   <!-- Custom radio button wrapper. Native input is hidden from screen readers to avoid duplicate announcements.
+                        Removed aria-labelledby to prevent VoiceOver from reading the label twice on iOS.
+                        Parent div manages the accessible name through its role="radio" and label content. -->
+                   <div id="Opt${idx}" class="answer FSize20"  onkeydown="handleKeydown(event, ${idx}, '${questionData.type}')" onclick="selectOption(${idx}, '${questionData.type}')" role="radio" aria-checked="false" tabindex="0">
+					<input class="radioBut clicken" type="radio" id="answer${idx}" name="answer" value="${valueAttr}" data-correct="${option.correct}" tabindex="-1" aria-hidden="true">
 						<label class="clicken" for="answer${idx}" id="answer${idx}-label">${option.text}</label>
 					</div>
                 `;
@@ -148,8 +151,11 @@ document.addEventListener("DOMContentLoaded", function() {
 			} else if (questionData.type === 'multiple') {
 				const valueAttr = option.value || option.text; // define inside each block
 				return `
-				  <div id="Opt${idx}" class="answer FSize20"  onkeydown="handleKeydown(event, ${idx}, '${questionData.type}')" onclick="selectOption(${idx}, '${questionData.type}')" role="checkbox" aria-checked="false" tabindex="0" aria-labelledby="answer${idx}-label">
-					<input class="checkbox" type="checkbox" id="answer${idx}" name="answer" value="${valueAttr}" data-correct="${option.correct}" tabindex="-1">
+				  <!-- Custom checkbox wrapper. Native input is hidden from screen readers to avoid duplicate announcements.
+                       Removed aria-labelledby to prevent VoiceOver from reading the label twice on iOS.
+                       Parent div manages the accessible name through its role="checkbox" and label content. -->
+				  <div id="Opt${idx}" class="answer FSize20"  onkeydown="handleKeydown(event, ${idx}, '${questionData.type}')" onclick="selectOption(${idx}, '${questionData.type}')" role="checkbox" aria-checked="false" tabindex="0">
+					<input class="checkbox" type="checkbox" id="answer${idx}" name="answer" value="${valueAttr}" data-correct="${option.correct}" tabindex="-1" aria-hidden="true">
 					<label class="clicken" for="answer${idx}" id="answer${idx}-label" onclick="event.stopPropagation();">${option.text}</label>
 				</div>
 

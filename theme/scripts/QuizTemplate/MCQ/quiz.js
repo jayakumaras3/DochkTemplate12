@@ -19,12 +19,13 @@ const optionsHtml = questionData.options.map((option, index) => {
         >
             <span id="Opttick${index}" class="tickSymbol"></span>
             
+            <!-- Native checkbox hidden from screen readers; parent div (role="checkbox") provides the accessible name -->
+            <!-- Removed aria-labelledby and aria-checked from input to prevent duplicate announcements -->
             <input class="checkbox" tabindex="-1" type="checkbox" 
                    id="answer${index}" name="answer" value="${option.value}" 
                    data-correct="${option.correct}" 
                    onchange="handleOptionSelection(this)" 
-                   aria-labelledby="lb${index}" 
-                   aria-checked="false" 	
+                   aria-hidden="true"
             >
             <label id="lb${index}" class="clicken" for="answer${index}">${option.text}</label>
         </div>

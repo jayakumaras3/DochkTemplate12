@@ -20,10 +20,13 @@ document.addEventListener("DOMContentLoaded", function() {
 		
   <span id="Opttick${index}" class="tickSymbol"></span>
 
-  <input aria-labelledby="lb${index}"  aria-checked="false" tabindex="-1" class="radioBut clicken" type="radio"
+  <!-- Native radio hidden from screen readers; parent div (role="radio") provides the accessible name.
+       Removed aria-labelledby and aria-checked from input to prevent duplicate announcements on iOS VoiceOver -->
+  <input tabindex="-1" class="radioBut clicken" type="radio"
          id="answer${index}" name="answer"
          value="${option.value}" data-correct="${option.correct}"
          onchange="handleOptionSelection(this)"
+         aria-hidden="true"
           >
 
   <label id="lb${index}" class="clicken" for="answer${index}">${option.text}</label>
