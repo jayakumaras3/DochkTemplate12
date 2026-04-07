@@ -203,39 +203,6 @@
 	border:2px solid #00677f !important;
 }
 
-/* Steps Control Button - Integrated into vertical control stack */
-.steps-control-btn {
-    width: 46px !important;
-    height: 46px !important;
-    border-radius: 50% !important;
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 2px solid rgba(255, 255, 255, 0.3) !important;
-    color: #fff !important;
-    font-size: 24px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15) !important;
-    backdrop-filter: blur(4px) !important;
-    -webkit-backdrop-filter: blur(4px) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    user-select: none !important;
-    position: relative !important;
-    right: auto !important;
-    bottom: auto !important;
-    z-index: 99999 !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    overflow: visible !important;
-    pointer-events: auto !important;
-    min-width: 46px !important;
-    min-height: 46px !important;
-    max-width: 46px !important;
-    max-height: 46px !important;
-}
 
 #stepsControlBtn.ng-hide,
 #stepsBtn.ng-hide {
@@ -267,35 +234,7 @@
     line-height: 1;
 }
 
-#stepsBtn {
-    /* Circular icon-only button matching nav buttons (prev/next/resource) */
-    position: static !important;
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 50% !important;
-    border: none !important;
-    background-image: url("../images/footer-menu/steps%20icon.png") !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-size: contain !important;
-    background-color: transparent !important;
-    cursor: pointer !important;
-    transition: transform 0.2s ease, opacity 0.2s ease !important;
-    color: transparent !important;
-    font-size: 0 !important;
-    display: block !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    z-index: 99999 !important;
-    flex-shrink: 0 !important;
-    order: 3 !important;
-}
+
 
 /* Hide <img> and <span> elements inside #stepsBtn */
 #stepsBtn img,
