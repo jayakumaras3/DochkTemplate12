@@ -105,45 +105,87 @@ function init() {
 		
 	}, 300);
 	setTimeout(function() {
+
+		function ensureNativeNavButton(buttonId, labelText) {
+			var buttonElem = document.getElementById(buttonId);
+			if (!buttonElem) {
+				return null;
+			}
+
+			if (buttonElem.tagName === 'DIV' && buttonElem.parentNode) {
+				var nativeButton = document.createElement('button');
+				nativeButton.type = 'button';
+				nativeButton.id = buttonElem.id;
+				nativeButton.className = buttonElem.className;
+				nativeButton.innerHTML = buttonElem.innerHTML;
+				nativeButton.style.cssText = buttonElem.style.cssText;
+				buttonElem.parentNode.replaceChild(nativeButton, buttonElem);
+				buttonElem = nativeButton;
+
+				buttonElem.addEventListener('click', function (event) {
+					event.preventDefault();
+					var footerController = angular.element(document.querySelector(".footer"));
+					footerController.scope().fb.navigationBtnClick({ id: buttonId });
+				});
+
+				buttonElem.addEventListener('keydown', function (event) {
+					if (event.key === 'Enter' || event.key === ' ') {
+						event.preventDefault();
+						var footerController = angular.element(document.querySelector(".footer"));
+						footerController.scope().fb.navigationBtnClick({ id: buttonId });
+					}
+				});
+			}
+
+			buttonElem.setAttribute('aria-label', labelText);
+			buttonElem.setAttribute('aria-disabled', 'false');
+			buttonElem.setAttribute('tabindex', '0');
+			buttonElem.removeAttribute('title');
+			return buttonElem;
+		}
 		
-		 var prevButton = document.getElementById('prev');
+		 var prevButton = ensureNativeNavButton('prev', Prevtitle || 'Previous');
         
         if (prevButton) {
             // Dynamically add or update accessibility attributes
-            prevButton.setAttribute('aria-label', 'Previous');
+            prevButton.setAttribute('aria-label', Prevtitle || 'Previous');
             prevButton.setAttribute('aria-disabled', 'false'); // Assuming it's not disabled
             prevButton.setAttribute('tabindex', '0');  // Ensure it's focusable
             // Add keyboard event listener for the 'Enter' or 'Space' key
-            prevButton.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();  // Prevent default action (e.g., form submission)
-                   // handleButtonClick(prevButton); // Trigger the click function
-					var footerController = angular.element(document.querySelector(".footer"));
-					footerController.scope().fb.navigationBtnClick(prevButton);
-					
-                }
-            });
+			if (prevButton.tagName !== 'BUTTON') {
+				prevButton.addEventListener('keydown', function(event) {
+					if (event.key === 'Enter' || event.key === ' ') {
+						event.preventDefault();  // Prevent default action (e.g., form submission)
+					   // handleButtonClick(prevButton); // Trigger the click function
+						var footerController = angular.element(document.querySelector(".footer"));
+						footerController.scope().fb.navigationBtnClick(prevButton);
+						
+					}
+				});
+			}
         }
-		var nextButton = document.getElementById('next');
+		var nextButton = ensureNativeNavButton('next', NextTitle || 'Next');
         
         if (nextButton) {
             // Dynamically add or update accessibility attributes
-           nextButton.setAttribute('aria-label', 'Next');
+		   nextButton.setAttribute('aria-label', NextTitle || 'Next');
             nextButton.setAttribute('aria-disabled', 'false'); // Assuming it's not disabled
             nextButton.setAttribute('tabindex', '0');  // Ensure it's focusable
 
             // Optionally, you can modify the class for visual feedback
 
             // Add keyboard event listener for the 'Enter' or 'Space' key
-            nextButton.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();  // Prevent default action (e.g., form submission)
-                   // handleButtonClick(prevButton); // Trigger the click function
-					var footerController = angular.element(document.querySelector(".footer"));
-					footerController.scope().fb.navigationBtnClick(nextButton);
-					
-                }
-            });
+			if (nextButton.tagName !== 'BUTTON') {
+				nextButton.addEventListener('keydown', function(event) {
+					if (event.key === 'Enter' || event.key === ' ') {
+						event.preventDefault();  // Prevent default action (e.g., form submission)
+					   // handleButtonClick(prevButton); // Trigger the click function
+						var footerController = angular.element(document.querySelector(".footer"));
+						footerController.scope().fb.navigationBtnClick(nextButton);
+						
+					}
+				});
+			}
         }
 		var transButton = document.getElementById('resource1');
         

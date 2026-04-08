@@ -51,6 +51,36 @@ var pauseTimer;
 
 
     var p = footerBarController.prototype;
+
+    p.getButtonLabel = function (btn) {
+        if (!btn) {
+            return 'Button';
+        }
+
+        if (btn.name) {
+            return btn.name;
+        }
+
+        var labelMap = {
+            'resource': (typeof LearningAidsTitle !== 'undefined' && LearningAidsTitle) ? LearningAidsTitle : 'Learning Aid',
+            'resource1': (typeof LearningAidsTitle !== 'undefined' && LearningAidsTitle) ? LearningAidsTitle : 'Learning Aid',
+            'prev': (typeof Prevtitle !== 'undefined' && Prevtitle) ? Prevtitle : 'Previous',
+            'next': (typeof NextTitle !== 'undefined' && NextTitle) ? NextTitle : 'Next',
+            'play': 'Play',
+            'pause': 'Pause'
+        };
+
+        return labelMap[btn.id] || btn.id || 'Button';
+    };
+
+    p.isButtonDisabled = function (btnId) {
+        var btn = document.getElementById(btnId);
+        if (!btn) {
+            return false;
+        }
+        return angular.element(btn).hasClass('disabledClass');
+    };
+
     /**
      * @ngdoc method
      * @name navigationPage

@@ -56,7 +56,7 @@ function NextAcessibility(en)
         nextButton.setAttribute('tabindex', '0');
         nextButton.style.pointerEvents = 'auto'; // enable click
     } else {
-		nextButton.setAttribute('aria-label', '');
+		nextButton.setAttribute('aria-label', NextTitle);
         nextButton.setAttribute('aria-disabled', 'true');
         nextButton.setAttribute('tabindex', '-1'); // remove from tab order
         nextButton.style.pointerEvents = 'none'; // disable click
@@ -73,7 +73,7 @@ function PrevAcessibility(en) {
         prevButton.setAttribute('tabindex', '0');
         prevButton.style.pointerEvents = 'auto'; // enable click
     } else {
-		prevButton.setAttribute('aria-label', '');
+		prevButton.setAttribute('aria-label', Prevtitle);
         prevButton.setAttribute('aria-disabled', 'true');
         prevButton.setAttribute('tabindex', '-1'); // remove from tab order
         prevButton.style.pointerEvents = 'none'; // disable click

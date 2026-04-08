@@ -80,20 +80,20 @@
   tabindex="0"
   aria-label="Menu"
   title="Menu"
-  style="cursor: pointer;">
+  style="cursor: pointer; width: 24px; height: 24px; object-fit: contain;">
 		 <img title="Menu"  style="display:none;" id="TmenuIcon1" ng-click="sb.tocClick('toggleMenu')"  alt="image"></div>
-<div
+<button
     ng-repeat="btn in fb.navigationBtn"
     id="{{btn.id}}"
     ng-click="fb.navigationBtnClick(btn)"
     ng-class="(btn.display == 'yes') ? btn.class : btn.class + ' hideContent'"
-    role="button"
-    tabindex="0"
-    aria-label="{{btn.name}}"
-    title="{{btn.tooltip}}"
+    type="button"
+    ng-attr-aria-label="{{fb.getButtonLabel(btn)}}"
+    ng-attr-aria-disabled="{{fb.isButtonDisabled(btn.id) ? 'true' : 'false'}}"
+    ng-disabled="fb.isButtonDisabled(btn.id)"
 >
     <span aria-hidden="true">{{btn.name}}</span>
-</div>
+</button>
 
     <!-- Navigation Circles -->
     <div

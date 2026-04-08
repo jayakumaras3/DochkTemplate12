@@ -292,7 +292,7 @@ body {
     pointer-events: auto !important;
 }
 
-.contentArea.video-mode + .footer > div {
+.contentArea.video-mode + .footer > * {
     float: none !important;
     position: static !important;
     margin: 0 !important;
@@ -1631,7 +1631,7 @@ html, body {
 }
 
 /* Hide all other non-nav footer children (prev, next, resource, menu are exceptions) */
-.wholeContainer.reels-wrapper .footer > div:not([id='prev']):not([id='next']):not(.prevClass):not(.nextClass):not(.nextClassHighlight):not(.resourceClass):not(#clickableDiv) {
+.wholeContainer.reels-wrapper .footer > *:not([id='prev']):not([id='next']):not(.prevClass):not(.nextClass):not(.nextClassHighlight):not(.resourceClass):not(#clickableDiv) {
     display: none !important;
 }
 
@@ -2358,14 +2358,14 @@ body {
     pointer-events: auto !important;
 }
 
-.wholeContainer.reels-wrapper .rightNavPanel .footer > div {
+.wholeContainer.reels-wrapper .rightNavPanel .footer > * {
     position: static !important;
     float: none !important;
     margin: 0 !important;
 }
 
 /* Keep only menu, nav buttons, page number, and steps button — hide everything else (navCircles etc) */
-.wholeContainer.reels-wrapper .rightNavPanel .footer > div:not(#clickableDiv):not(#prev):not(#next):not(#resource):not(#resource1):not(#pagenoHeader):not(#stepsBtn) {
+.wholeContainer.reels-wrapper .rightNavPanel .footer > *:not(#clickableDiv):not(#prev):not(#next):not(#resource):not(#resource1):not(#pagenoHeader):not(#stepsBtn) {
     display: none !important;
 }
 
