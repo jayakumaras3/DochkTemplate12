@@ -46,17 +46,11 @@ document.addEventListener("DOMContentLoaded", function() {
 			</button>
 			<div class="feedback"  ><p tabindex="0" id="feedback"> </p></div>
 			</div>
-			<img class="Qmark" src="../../../images/Bulb.svg" alt="Question mark symbol for quiz" aria-hidden="true">
 			`;
 
 
 
-const parentquestionHtml = `
-  <img class="Bulb" src="../../../images/Bulb.svg" alt="Bulb Icon representing a hint or idea" />
-`;
-
-
-		parentquizContainer.innerHTML = parentquestionHtml;
+        parentquizContainer.innerHTML = "";
         quizContainer.innerHTML = questionHtml;
         document.getElementById('submitBtn').addEventListener('click', checkAnswer);
     }
@@ -129,6 +123,7 @@ window.handleKeydown=function(event, idx) {
 
         const isCorrect = selectedAnswer.dataset.correct === 'true';
 		feedback.style.display = 'block';
+		feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         if (isCorrect) {
             feedback.textContent = questionData.feedback.correct;
             feedback.classList.add('correct');

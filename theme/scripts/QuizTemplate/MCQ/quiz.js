@@ -47,12 +47,8 @@ const optionsHtml = questionData.options.map((option, index) => {
                                 <button class="btn ColorSet_CR FSize20" id="submitBtn">${parent.mainData.quizButton}</button>
                                 <div class="feedback"  ><p tabindex="0" id="feedback"> </p></div>
                             </div>
-							<img class="Qmark" src="../../../images/Bulb.svg" alt="Q">
                         `;
-const parentquestionHtml = `
-		 
-		 	<img class="Bulb" src="../../../images/Bulb.svg" alt="Bulb"/>`;
-		parentquizContainer.innerHTML = parentquestionHtml;
+		parentquizContainer.innerHTML = "";
                         quizContainer.innerHTML = questionHtml;
                         document.getElementById('submitBtn').addEventListener('click', checkAnswer);
             }
@@ -158,6 +154,7 @@ window.selectOption1 = function(idx) {
                     }
                 });
 				feedback.style.display = 'block';
+				feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 if (allCorrect && selectedAnswers.length === questionData.options.filter(option => option.correct).length) {
                     feedback.textContent = questionData.feedback.correct;
 					feedback.classList.remove('incorrect');
