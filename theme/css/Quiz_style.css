@@ -386,13 +386,19 @@ body {
     background: #ffffff;
     color: #2f2524;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 #parentquizContainer {
-    padding: 18px 0 28px;
+    position: static;
+    padding: 0;
     box-sizing: border-box;
-    left: 0;
     width: 100%;
+    flex-shrink: 0;
 }
 
 #quizContainer {
@@ -401,10 +407,22 @@ body {
     border-radius: 28px;
     box-shadow: 0 8px 22px rgba(41, 28, 28, 0.05);
     box-sizing: border-box;
-    margin-left: 0;
-    margin-right: 0;
-    padding: 70px clamp(18px, 3vw, 34px) 30px;
-    width: 100%;
+    flex: 1;
+    margin: 0 !important;
+    overflow-y: auto;
+    padding: clamp(18px, 3vw, 34px);
+    width: 100% !important;
+}
+
+#quizContainer.quiz-start-view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: clamp(20px, 3vw, 40px);
 }
 
 .parentquestion {
@@ -420,6 +438,7 @@ body {
     border-radius: 0;
     color: var(--quiz-accent);
     padding: 0;
+    margin-top: 12px;
     line-height: 1.45;
 }
 
@@ -429,6 +448,42 @@ body {
     border-radius: 24px;
     box-shadow: 0 10px 24px rgba(41, 28, 28, 0.04);
     padding: 20px;
+}
+
+#Startpageid {
+    background: #ffffff;
+    border: 1px solid #efe4e0;
+    border-radius: 22px;
+    box-shadow: 0 10px 24px rgba(47, 28, 28, 0.05);
+    box-sizing: border-box;
+    max-width: 760px;
+    margin-inline: auto;
+    padding: clamp(22px, 3.2vw, 34px);
+}
+
+.Startpage {
+    margin-top: -16px;
+}
+
+.headerAss {
+    color: #2e2322;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.Startpage_sub {
+    width: 100%;
+    line-height: 1.45;
+    color: #3f3534;
+}
+
+.Startpage_sub p {
+    margin: 0 0 10px;
+}
+
+.Startpage_sub p:last-child {
+    margin-bottom: 0;
 }
 
 .question {
@@ -550,7 +605,7 @@ input.checkbox {
     box-sizing: border-box;
     box-shadow: 0 10px 24px rgba(41, 28, 28, 0.05);
     padding: 26px;
-    max-width: 100%;
+    max-width: 920px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -583,8 +638,8 @@ input.checkbox {
     }
 
     #quizContainer {
-        margin-left: 0;
-        width: 100%;
+        margin: 0 !important;
+        width: 100% !important;
         padding: 18px;
     }
 

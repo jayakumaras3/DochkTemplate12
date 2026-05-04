@@ -29,9 +29,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		parent.parent.QuizAttemptLimit = parent.QuizAttempt;
 		QuizMode = parent.QuizMode;
 		PostAttemptType = parent.PostAttemptType;
-		let newMargin = "6%"; // Example dynamic value
-		document.getElementById("quizContainer").style.marginLeft = newMargin;
-		document.getElementById("quizContainer").style.width = "94%";
+		quizContainer.classList.add('quiz-start-view');
+		parentquizContainer.style.display = 'none';
 
 	}
 
@@ -128,9 +127,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	function loadQuestion(index) {
 
-		let newMargin = "7%"; // Example dynamic value
-		document.getElementById("quizContainer").style.marginLeft = newMargin;
-		document.getElementById("quizContainer").style.width = "89%";
+		quizContainer.classList.remove('quiz-start-view');
+		quizContainer.style.marginLeft = '';
+		quizContainer.style.width = '';
+		parentquizContainer.style.display = '';
 
 		const questionData = questionsData[index];
 
