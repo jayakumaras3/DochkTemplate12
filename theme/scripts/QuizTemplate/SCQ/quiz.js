@@ -126,6 +126,8 @@ window.handleKeydown=function(event, idx) {
 		feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         if (isCorrect) {
             feedback.textContent = questionData.feedback.correct;
+            feedback.classList.remove('incorrect');
+            feedback.classList.remove('Incorrect_CR');
             feedback.classList.add('correct');
 			feedback.classList.add('FSize20');
 			feedback.classList.add('Correct_CR');

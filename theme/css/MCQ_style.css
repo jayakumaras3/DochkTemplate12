@@ -476,7 +476,7 @@ input.checkbox {
 }
 
 .correct {
-    background: linear-gradient(180deg, #23845d 0%, #166345 100%);
+    background: #01600C;
 }
 
 .incorrect {
