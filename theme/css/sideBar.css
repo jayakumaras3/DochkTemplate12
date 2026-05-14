@@ -83,7 +83,7 @@
     float: left;
     /* margin-bottom: 17px; */
     /* padding-bottom: 38px; */
-    padding-left: 16px 
+    padding-left: 16px;
     text-align: left;
     font-size: 19px;
     height: 35px;
@@ -143,12 +143,13 @@
     padding-left: 12px;
     margin-bottom: 2px;
 }
-.sideBar li span{
-	max-width: 6ch;
+.sideBar li span {
+    max-width: none;
     overflow-wrap: break-word;
+    word-break: normal;
 }
 
-.sideBar li span::not(".disabledClass"):hover {
+.sideBar li span:hover {
     color: #5097ab;
 }
 
@@ -187,18 +188,16 @@
 
 
 body {
-    position: absolute;
-    left: 0;
+    position: relative;
+    left: auto;
     font-family: 'tahoma';
-    top: 0;
-    width: 1366px !important;
-    height: 768px !important;
+    top: auto;
+    width: 100%;
+    height: 100%;
     background-color: #e6e6e6;
     display: none;
     overflow: hidden;
-    -ms-overflow-style :none;
-	
-
+    -ms-overflow-style: none;
 }
 
 .wholeContainer {

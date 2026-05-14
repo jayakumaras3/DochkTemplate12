@@ -75,6 +75,7 @@
 		 */
 		this.transcriptClicked = false;
 		this.glossaryClicked = false;
+		this.tocTypeClassMap = {};
 		this.scope.$on('initalizeController', assetLoader.proxy(this.globalSettingJson, this));
 		this.scope.$on('showSideBar', assetLoader.proxy(this.showSideBarToggle, this, true));
 		this.scope.$on('hideSideBar', assetLoader.proxy(this.showSideBarToggle, this, false));
@@ -116,6 +117,10 @@
 	 */
 	p.showSideBarToggle = function(e, toggleValue) {
 		this.showSideBar = toggleValue;
+		if (!toggleValue && typeof menuClose === 'function' && window.Tmenu) {
+			menuClose();
+			p.menuState = 'closed';
+		}
 
 	};
 	/**
@@ -149,6 +154,7 @@
 	 * Callback function when the TOC.json loaded
 	 */
 	p.setTocConfig = function(response) {
+		this.tocTypeClassMap = {};
 		if (response.data.toc == undefined) {
 			this.tocData = response.data;
 			var countpage = 0;
@@ -166,6 +172,7 @@
 					this.globalVariableService.pagesmodcount.push([y, (i + 1)]);
 					var data = this.looptocData[i].title;
 					var disabledClass = this.looptocData[i].disabled;
+					this.cacheTopicTypeClass(Totalpage, this.looptocData[i]);
 					if (data != undefined) {
 						var st = '' + "Mitem" + Totalpage.toString() + '"';
 						var st1 = '="' + "LSitem" + Totalpage.toString() + '"';
@@ -309,6 +316,7 @@
 			for (var i = 1; i < this.tocData.length; i++) {
 				var data = this.tocData[i].title;
 				var disabledClass = this.tocData[i].disabled;
+				this.cacheTopicTypeClass(i, this.tocData[i]);
 				if (data != undefined) {
 					if (AudioVersionEnable) {
 						//Audio version added
@@ -391,6 +399,7 @@
 		var self = this;
 		setTimeout(function() {
 			self.changeTocColorChange(self.globalVariableService.getPageCounter() - 1);
+			self.applyTopicTypeClasses();
 			//alert($("#header0").attr('checked'));
 		}, 100);
 
@@ -440,6 +449,7 @@ if (img) {
 				this.glossaryClicked = false;
 				this.globalVariableService.replaybtnvisible = true;
 				setTimeout(function() {
+					self.applyTopicTypeClasses();
 					self.changeTocColorChange(self.globalVariableService.getPageCounter() - 1)
 					pageSormTrack();
 
@@ -458,45 +468,13 @@ if (img) {
 				break;
 			
 			 case 'toggleMenu':
-			  var el = document.getElementById('clickableDiv');
-			  if (el && p.menuState === 'closed') {
-				el.setAttribute('role', 'button');
-				el.setAttribute('tabindex', '0');
-				el.setAttribute('aria-label', 'Close menu');
-
-				// Remove old event listeners to prevent duplicate triggers
-				el.onclick = null;
-				el.onkeydown = null;
-		setTimeout(function() {
-						// Add the event listener for closing the menu (toggleMenuclose)
-						el.onclick = function () {
-						  p.tocClick('toggleMenuclose');
-						};
-						el.onkeydown = function (event) {
-						  p.handleKeydown(event, 'toggleMenuclose');
-						};
-		 }, 300);
-				// Mark the menu as opened
-				p.menuState = 'open';
-			  }
-
-			  TtoggleMenu();  // Your menu toggle logic
+			  TtoggleMenu();
+			  p.menuState = !!window.Tmenu ? 'open' : 'closed';
 			  break;
 
 			case 'toggleMenuclose':
 			  // Close the menu here (you can call your menuClose function)
 			  menuClose();
-
-			  // Remove accessibility attributes and event listeners when menu is closed
-			  var el = document.getElementById('clickableDiv');
-			  if (el) {
-				el.removeAttribute('role');
-				el.removeAttribute('tabindex');
-				el.removeAttribute('aria-label');
-
-				el.onclick = null;  // Remove the click handler
-				el.onkeydown = null; // Remove the keydown handler
-			  }
 
 			  // Mark the menu as closed
 			  p.menuState = 'closed';
@@ -523,6 +501,163 @@ if (img) {
 				this.glossaryClicked = true;
 
 				break;
+		}
+	};
+
+	p.cacheTopicTypeClass = function(pageIndex, tocItem) {
+		if (!pageIndex || !tocItem) {
+			return;
+		}
+		this.tocTypeClassMap[pageIndex] = this.getTopicIconClass(tocItem);
+	};
+
+	p.getTopicIconClass = function(tocItem) {
+		var title = (tocItem.title || '').toLowerCase().trim();
+
+		if (title.indexOf('welcome') > -1) { return 'ic-welcome'; }
+		if (title.indexOf('introduction') > -1) { return 'ic-intro'; }
+		if (title.indexOf('accommodation') > -1) { return 'ic-accommodations'; }
+		if (title.indexOf('advantage') > -1) { return 'ic-advantages'; }
+		if (title.indexOf('workforce') > -1 || (title.indexOf('neurodiversity') > -1 && title.indexOf('in the') > -1)) { return 'ic-workforce'; }
+		if (title.indexOf('summary') > -1) { return 'ic-summary'; }
+		if (title.indexOf('knowledge check') > -1) {
+			return (title.indexOf('2') > -1) ? 'ic-kc2' : 'ic-kc1';
+		}
+		if (title === 'quiz' || (title.indexOf('quiz') > -1 && title.indexOf('knowledge') === -1)) { return 'ic-quiz'; }
+
+		var type = '';
+		if (tocItem.settings && tocItem.settings.content && tocItem.settings.content.length) {
+			type = (tocItem.settings.content[0].type || '').toLowerCase();
+		}
+		if (type === 'video') { return 'ic-video'; }
+		return 'ic-lesson';
+	};
+
+	p.getTocItemIconSVG = function(iconClass) {
+		var icons = {
+			'ic-welcome':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<path d="M18 11V6a2 2 0 0 0-4 0v5"/>' +
+				'<path d="M14 10V4a2 2 0 0 0-4 0v2"/>' +
+				'<path d="M10 10.5V6a2 2 0 0 0-4 0v8"/>' +
+				'<path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>' +
+				'</svg>',
+			'ic-intro':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>' +
+				'<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>' +
+				'</svg>',
+			'ic-workforce':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>' +
+				'<circle cx="9" cy="7" r="4"/>' +
+				'<path d="M23 21v-2a4 4 0 0 0-3-3.87"/>' +
+				'<path d="M16 3.13a4 4 0 0 1 0 7.75"/>' +
+				'</svg>',
+			'ic-advantages':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<line x1="9" y1="18" x2="15" y2="18"/>' +
+				'<line x1="10" y1="22" x2="14" y2="22"/>' +
+				'<path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>' +
+				'</svg>',
+			'ic-kc1':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>' +
+				'<rect x="9" y="3" width="6" height="4" rx="2"/>' +
+				'<path d="m9 12 2 2 4-4"/>' +
+				'</svg>',
+			'ic-accommodations':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<circle cx="16" cy="4" r="1"/>' +
+				'<path d="m18 19 1-7-6 1"/>' +
+				'<path d="m5 8 3-3 5.5 3-2.36 3.5"/>' +
+				'<path d="M4.24 14.5a5 5 0 0 0 6.88 6"/>' +
+				'<path d="M13.76 17.5a5 5 0 0 0-6.88-6"/>' +
+				'</svg>',
+			'ic-kc2':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' +
+				'<path d="m9 12 2 2 4-4"/>' +
+				'</svg>',
+			'ic-summary':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<path d="m3 17 2 2 4-4"/>' +
+				'<path d="m3 7 2 2 4-4"/>' +
+				'<line x1="13" y1="8" x2="21" y2="8"/>' +
+				'<line x1="13" y1="16" x2="21" y2="16"/>' +
+				'</svg>',
+			'ic-quiz':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>' +
+				'<rect x="9" y="3" width="6" height="4" rx="2"/>' +
+				'<line x1="9" y1="12" x2="15" y2="12"/>' +
+				'<line x1="9" y1="16" x2="15" y2="16"/>' +
+				'</svg>',
+			'ic-video':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<polygon points="23 7 16 12 23 17 23 7"/>' +
+				'<rect x="1" y="5" width="15" height="14" rx="2"/>' +
+				'</svg>',
+			'ic-lesson':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>' +
+				'<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' +
+				'</svg>'
+		};
+		return icons[iconClass] || icons['ic-lesson'];
+	};
+
+	p.applyTopicTypeClasses = function() {
+		var labelsByOrder = document.querySelectorAll('#tocData li > span[role="button"]');
+		var orderedKeys = Object.keys(this.tocTypeClassMap).sort(function(a, b) {
+			return Number(a) - Number(b);
+		});
+
+		for (var idx = 0; idx < orderedKeys.length; idx++) {
+			var key = orderedKeys[idx];
+			if (!this.tocTypeClassMap.hasOwnProperty(key)) { continue; }
+
+			var label = document.getElementById('LSitem' + key) || labelsByOrder[idx];
+			if (!label) { continue; }
+			if (label.getAttribute('data-icon-injected') === '1') { continue; }
+			if (!label.id) {
+				label.id = 'LSitem' + key;
+			}
+
+			var iconClass = this.tocTypeClassMap[key];
+			var svgHtml = this.getTocItemIconSVG(iconClass);
+
+			var textContent = label.textContent || label.innerText || '';
+			var normalizedText = (textContent || '').trim();
+
+			var listItem = label.parentElement;
+			var rowWrapper = listItem ? listItem.parentElement : null;
+			if (listItem) {
+				listItem.classList.add('toc-list-item');
+			}
+			if (rowWrapper) {
+				rowWrapper.classList.add('toc-list-row');
+			}
+
+			var iconSpan = document.createElement('span');
+			iconSpan.className = 'toc-item-icon';
+			iconSpan.setAttribute('aria-hidden', 'true');
+			iconSpan.innerHTML = svgHtml;
+
+			var textSpan = document.createElement('span');
+			textSpan.className = 'toc-item-text';
+			textSpan.textContent = textContent;
+
+			label.innerHTML = '';
+			label.appendChild(iconSpan);
+			label.appendChild(textSpan);
+			label.classList.add('toc-row-item');
+			label.setAttribute('data-icon-injected', '1');
+			label.setAttribute('data-icon-type', iconClass);
+			label.setAttribute('aria-label', normalizedText || textContent);
+			if (normalizedText) {
+				label.setAttribute('title', normalizedText);
+			}
 		}
 	};
 	/**
@@ -559,6 +694,9 @@ if (img) {
 			document.getElementById("captivateFrame").src = "about:blank";
 		}
 		this.changeTocColorChange(data, "yes")
+		if (window.matchMedia('(max-width: 1024px)').matches && window.Tmenu) {
+			this.tocClick('toggleMenuclose');
+		}
 		//changeTrackSrc();
 
 	};
@@ -573,13 +711,12 @@ if (img) {
 	p.changeTocColorChange = function(data, clicked) {
 
 		var count = this.globalVariableService.getStartingPointTocCount();
-		var sideBarController = angular.element(document.querySelectorAll("#tocData li span"));
+		var sideBarController = angular.element(document.querySelectorAll("#tocData li > span[role='button']"));
 
 
 		for (var prop in sideBarController) {
 
 			if (sideBarController.hasOwnProperty(prop)) {
-
 				if ($(sideBarController[prop]).attr('role') !== undefined) {
 					count++;
 
@@ -722,12 +859,13 @@ if (img) {
 	 *
 	 */
 	p.updateTOCColor = function() {
+		this.applyTopicTypeClasses();
 
 		var totalCompletedToc = this.globalVariableService.getCompletedPage();
 		var currentTOC = this.globalVariableService.getPageCounter();
 		//console.log("currentTOC::"+currentTOC);
 		totalCompletedToc.sort();
-		var sideBarController = angular.element(document.querySelectorAll("#tocData li span"));
+		var sideBarController = angular.element(document.querySelectorAll("#tocData li > span[role='button']"));
 		for (var i = 0; i < totalCompletedToc.length; i++) {
 			var count = this.globalVariableService.getStartingPointTocCount();
 			for (var prop in sideBarController) {

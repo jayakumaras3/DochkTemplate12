@@ -2,57 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title></title>
-    <link rel="stylesheet" href="assets/style.css">
- 
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neurodiversity</title>
+  <link rel="stylesheet" href="assets/style.css">
   <script>
     function startCourse() {
-      parent.beginButCall(); // Calls LMS or SCORM wrapper
+      parent.beginButCall();
     }
 
     function playAudio() {
-      parent.audioButCall(); // Calls audio player
+      parent.audioButCall();
     }
-	function changeImageOnHover(button, src) {
-    button.querySelector('img').src = src;
-  }
-
-  function resetImageOnHover(button, src) {
-    button.querySelector('img').src = src;
-  }
   </script>
 </head>
 <body>
-  <img src="assets/bg.png" alt="Value Creation and Value Creation and" aria-hidden="true" class="background-image">
-  <div class="content">
-    <div class="title"><p tabindex="0">Neurodiversity</p></div><br><br>
-    <div class="info" role="list">
-      <div class="info-item" role="listitem">
-        <img class="info-time" src="assets/time.png" alt="Estimated time: 10 minutes">
-        <p tabindex="0">15 Mins</p>
-      </div>
-      <div class="info-item" role="listitem">
-        <img class="info-quiz" src="assets/quiz.png" alt="Contains 2 quiz items">
-        <p tabindex="0">2 Quiz Items</p>
-      </div>
-      <div class="info-item" role="listitem">
-        <img class="info-download" src="assets/download.png" alt="Includes downloadable resources">
-        <p tabindex="0">Downloadable<br>Resources</p>
-      </div>
-    </div>
-<br>
-    <div class="buttons">
-      <button  class="startbut" onclick="startCourse()" onmouseover="changeImageOnHover(this, 'assets/begin-hover.png')" 
-				  onmouseout="resetImageOnHover(this, 'assets/begin.png')">
-        <img class="startbut" src="assets/begin.png" alt="Begin Course">
-      </button>
-      <button class="audiobut" onclick="playAudio()"  onmouseover="changeImageOnHover(this, 'assets/audio-hover.png')" 
-				  onmouseout="resetImageOnHover(this, 'assets/audio.png')">
-        <img class="audiobut"  src="assets/audio.png" alt="Audio Version">
-      </button>
-    </div>
-  </div>
+  <main class="welcome-card" aria-labelledby="welcome-title">
+    <section class="welcome-copy">
+      <p class="eyebrow">GETTING STARTED</p>
+      <h1 id="welcome-title">Neurodiversity</h1>
+      <p class="intro">
+        Begin your journey into understanding neurodiversity. This module covers
+        essential concepts for modern education and society.
+      </p>
 
+      <div class="info-grid" role="list" aria-label="Course details">
+        <article class="info-card" role="listitem">
+          <svg aria-hidden="true" class="info-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="8"></circle>
+            <path d="M12 8v5l3 2"></path>
+            <path d="M12 2v3"></path>
+          </svg>
+          <span>Duration</span>
+          <strong>15 Mins</strong>
+        </article>
+
+        <article class="info-card" role="listitem">
+          <svg aria-hidden="true" class="info-icon" viewBox="0 0 24 24">
+            <path d="M9 11l2 2 4-5"></path>
+            <path d="M5 5h11v14H5z"></path>
+            <path d="M17 8h2v13H8v-2"></path>
+          </svg>
+          <span>Assessment</span>
+          <strong>2 Quiz Items</strong>
+        </article>
+
+        <article class="info-card" role="listitem">
+          <svg aria-hidden="true" class="info-icon" viewBox="0 0 24 24">
+            <path d="M12 3v11"></path>
+            <path d="M8 10l4 4 4-4"></path>
+            <path d="M5 19h14"></path>
+          </svg>
+          <span>Materials</span>
+          <strong>Resources</strong>
+        </article>
+      </div>
+
+      <div class="actions">
+        <button class="primary-action" type="button" onclick="startCourse()">
+          <span>BEGIN COURSE</span>
+          <span aria-hidden="true" class="arrow">&rarr;</span>
+        </button>
+        <button class="secondary-action" type="button" onclick="playAudio()">
+          <svg aria-hidden="true" class="button-icon" viewBox="0 0 24 24">
+            <path d="M4 10v4h4l5 4V6L8 10H4z"></path>
+            <path d="M16 9a4 4 0 0 1 0 6"></path>
+          </svg>
+          <span>Audio Version</span>
+        </button>
+      </div>
+    </section>
+
+    <figure class="welcome-visual">
+      <img src="assets/bg.png" alt="Colorful puzzle pieces representing neurodiversity">
+    </figure>
+  </main>
 </body>
 </html>
