@@ -508,65 +508,111 @@ if (img) {
 		if (!pageIndex || !tocItem) {
 			return;
 		}
-		this.tocTypeClassMap[pageIndex] = this.getTopicIconClass(tocItem);
+		this.tocTypeClassMap[pageIndex] = this.getMenuIcon(tocItem);
 	};
 
-	p.getTopicIconClass = function(tocItem) {
+	p.getMenuIconMap = function() {
+		return {
+			'home': 'home',
+			'book-open': 'book-open',
+			'brain': 'brain',
+			'lightbulb': 'lightbulb',
+			'clipboard-check': 'clipboard-check',
+			'accessibility': 'accessibility',
+			'badge-check': 'badge-check',
+			'check-circle': 'check-circle',
+			'clipboard-list': 'clipboard-list',
+			'video': 'video',
+			'quiz': 'quiz'
+		};
+	};
+
+	p.normalizeIconKey = function(iconValue) {
+		return (iconValue || '')
+			.toString()
+			.toLowerCase()
+			.trim()
+			.replace(/_/g, '-')
+			.replace(/\s+/g, '-');
+	};
+
+	p.getAutoMenuIcon = function(tocItem) {
 		var title = (tocItem.title || '').toLowerCase().trim();
+		var contentNode = (tocItem.settings && tocItem.settings.content && tocItem.settings.content.length) ? tocItem.settings.content[0] : {};
+		var type = (contentNode.type || '').toLowerCase();
+		var path = (contentNode.path || '').toLowerCase();
 
-		if (title.indexOf('welcome') > -1) { return 'ic-welcome'; }
-		if (title.indexOf('introduction') > -1) { return 'ic-intro'; }
-		if (title.indexOf('accommodation') > -1) { return 'ic-accommodations'; }
-		if (title.indexOf('advantage') > -1) { return 'ic-advantages'; }
-		if (title.indexOf('workforce') > -1 || (title.indexOf('neurodiversity') > -1 && title.indexOf('in the') > -1)) { return 'ic-workforce'; }
-		if (title.indexOf('summary') > -1) { return 'ic-summary'; }
+		if (title.indexOf('summary') > -1) { return 'check-circle'; }
+		if (type === 'video') { return 'video'; }
+		if (path.indexOf('assets/quiz/') > -1 || title.indexOf('quiz') > -1) { return 'quiz'; }
 		if (title.indexOf('knowledge check') > -1) {
-			return (title.indexOf('2') > -1) ? 'ic-kc2' : 'ic-kc1';
+			return (title.indexOf('2') > -1) ? 'badge-check' : 'clipboard-check';
 		}
-		if (title === 'quiz' || (title.indexOf('quiz') > -1 && title.indexOf('knowledge') === -1)) { return 'ic-quiz'; }
+		if (title.indexOf('welcome') > -1) { return 'home'; }
+		if (title.indexOf('introduction') > -1) { return 'book-open'; }
+		if (title.indexOf('accommodation') > -1) { return 'accessibility'; }
+		if (title.indexOf('advantage') > -1) { return 'lightbulb'; }
+		if (title.indexOf('workforce') > -1 || (title.indexOf('neurodiversity') > -1 && title.indexOf('in the') > -1)) { return 'brain'; }
 
-		var type = '';
-		if (tocItem.settings && tocItem.settings.content && tocItem.settings.content.length) {
-			type = (tocItem.settings.content[0].type || '').toLowerCase();
-		}
-		if (type === 'video') { return 'ic-video'; }
-		return 'ic-lesson';
+		return 'book-open';
 	};
 
-	p.getTocItemIconSVG = function(iconClass) {
+	p.getMenuIcon = function(tocItem) {
+		var masterIconEnabled = tocItem && (
+			tocItem.masterIcon === true ||
+			tocItem.masterIcon === 'true' ||
+			tocItem.masterIcon === 1 ||
+			tocItem.masterIcon === '1'
+		);
+
+		if (!masterIconEnabled) {
+			return null;
+		}
+
+		var iconMap = this.getMenuIconMap();
+		var requestedIcon = this.normalizeIconKey(tocItem.icon);
+
+		if (requestedIcon && iconMap[requestedIcon]) {
+			return requestedIcon;
+		}
+
+		var autoIcon = this.normalizeIconKey(this.getAutoMenuIcon(tocItem));
+		return iconMap[autoIcon] ? autoIcon : 'book-open';
+	};
+
+	p.getTocItemIconSVG = function(iconKey) {
 		var icons = {
-			'ic-welcome':
+			'home':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-				'<path d="M18 11V6a2 2 0 0 0-4 0v5"/>' +
-				'<path d="M14 10V4a2 2 0 0 0-4 0v2"/>' +
-				'<path d="M10 10.5V6a2 2 0 0 0-4 0v8"/>' +
-				'<path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>' +
+				'<path d="m3 9 9-7 9 7"/>' +
+				'<path d="M9 22V12h6v10"/>' +
+				'<path d="M21 22H3"/>' +
 				'</svg>',
-			'ic-intro':
+			'book-open':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
 				'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>' +
 				'<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>' +
 				'</svg>',
-			'ic-workforce':
+			'brain':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-				'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>' +
-				'<circle cx="9" cy="7" r="4"/>' +
-				'<path d="M23 21v-2a4 4 0 0 0-3-3.87"/>' +
-				'<path d="M16 3.13a4 4 0 0 1 0 7.75"/>' +
+				'<path d="M9.5 2a3.5 3.5 0 0 0-3.5 3.5V8a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2v1.5A3.5 3.5 0 0 0 9.5 18H10v4"/>' +
+				'<path d="M14.5 2A3.5 3.5 0 0 1 18 5.5V8a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2v1.5A3.5 3.5 0 0 1 14.5 18H14v4"/>' +
+				'<path d="M10 8h4"/>' +
+				'<path d="M10 13h4"/>' +
 				'</svg>',
-			'ic-advantages':
+			'lightbulb':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
 				'<line x1="9" y1="18" x2="15" y2="18"/>' +
 				'<line x1="10" y1="22" x2="14" y2="22"/>' +
 				'<path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>' +
 				'</svg>',
-			'ic-kc1':
+			'clipboard-check':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
 				'<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>' +
 				'<rect x="9" y="3" width="6" height="4" rx="2"/>' +
 				'<path d="m9 12 2 2 4-4"/>' +
 				'</svg>',
-			'ic-accommodations':
+			'accessibility':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
 				'<circle cx="16" cy="4" r="1"/>' +
 				'<path d="m18 19 1-7-6 1"/>' +
@@ -574,37 +620,42 @@ if (img) {
 				'<path d="M4.24 14.5a5 5 0 0 0 6.88 6"/>' +
 				'<path d="M13.76 17.5a5 5 0 0 0-6.88-6"/>' +
 				'</svg>',
-			'ic-kc2':
+			'badge-check':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
 				'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' +
 				'<path d="m9 12 2 2 4-4"/>' +
 				'</svg>',
-			'ic-summary':
+			'check-circle':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-				'<path d="m3 17 2 2 4-4"/>' +
-				'<path d="m3 7 2 2 4-4"/>' +
-				'<line x1="13" y1="8" x2="21" y2="8"/>' +
-				'<line x1="13" y1="16" x2="21" y2="16"/>' +
+				'<circle cx="12" cy="12" r="10"/>' +
+				'<path d="m9 12 2 2 4-4"/>' +
 				'</svg>',
-			'ic-quiz':
+			'clipboard-list':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
 				'<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>' +
 				'<rect x="9" y="3" width="6" height="4" rx="2"/>' +
 				'<line x1="9" y1="12" x2="15" y2="12"/>' +
 				'<line x1="9" y1="16" x2="15" y2="16"/>' +
 				'</svg>',
-			'ic-video':
+			'video':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
 				'<polygon points="23 7 16 12 23 17 23 7"/>' +
 				'<rect x="1" y="5" width="15" height="14" rx="2"/>' +
 				'</svg>',
-			'ic-lesson':
+			'quiz':
+				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+				'<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>' +
+				'<rect x="9" y="3" width="6" height="4" rx="2"/>' +
+				'<path d="M12 11v5"/>' +
+				'<path d="M12 8h.01"/>' +
+				'</svg>',
+			'lesson':
 				'<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
 				'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>' +
 				'<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' +
 				'</svg>'
 		};
-		return icons[iconClass] || icons['ic-lesson'];
+		return icons[iconKey] || icons['lesson'];
 	};
 
 	p.applyTopicTypeClasses = function() {
@@ -624,8 +675,11 @@ if (img) {
 				label.id = 'LSitem' + key;
 			}
 
-			var iconClass = this.tocTypeClassMap[key];
-			var svgHtml = this.getTocItemIconSVG(iconClass);
+			var iconKey = this.tocTypeClassMap[key];
+			if (!iconKey) {
+				continue;
+			}
+			var svgHtml = this.getTocItemIconSVG(iconKey);
 
 			var textContent = label.textContent || label.innerText || '';
 			var normalizedText = (textContent || '').trim();
@@ -653,7 +707,7 @@ if (img) {
 			label.appendChild(textSpan);
 			label.classList.add('toc-row-item');
 			label.setAttribute('data-icon-injected', '1');
-			label.setAttribute('data-icon-type', iconClass);
+			label.setAttribute('data-icon-type', iconKey);
 			label.setAttribute('aria-label', normalizedText || textContent);
 			if (normalizedText) {
 				label.setAttribute('title', normalizedText);

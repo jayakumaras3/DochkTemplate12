@@ -1205,7 +1205,7 @@ body,
     background: transparent !important;
 }
 
-#tocData > span > li > span {
+#tocData > span > li > span.toc-row-item {
     display: flex;
     align-items: flex-start;
     gap: 12px;
@@ -1223,7 +1223,7 @@ body,
 }
 
 /* Disable legacy pseudo-element */
-#tocData > span > li > span::before {
+#tocData > span > li > span.toc-row-item::before {
     display: none !important;
 }
 
@@ -1256,45 +1256,45 @@ body,
     word-break: break-word;
 }
 
-#tocData > span > li > span:hover {
+#tocData > span > li > span.toc-row-item:hover {
     background: #f5f8ff;
     color: #1f3d7a;
     transform: translateX(1px);
 }
 
-#tocData > span > li > span:hover .toc-item-icon {
+#tocData > span > li > span.toc-row-item:hover .toc-item-icon {
     opacity: 1;
 }
 
-#tocData > span > li > span:focus {
+#tocData > span > li > span.toc-row-item:focus {
     outline: none;
 }
 
-#tocData > span > li > span:focus-visible {
+#tocData > span > li > span.toc-row-item:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px #3B82F6;
 }
 
-#tocData > span > li > span.selectedToc {
+#tocData > span > li > span.toc-row-item.selectedToc {
     background: #eef3ff;
     color: #1f4fd3;
     font-weight: 700;
 }
 
-#tocData > span > li > span.selectedToc .toc-item-icon {
+#tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
     opacity: 1;
 }
 
-#tocData > span > li > span.visitedTOC {
+#tocData > span > li > span.toc-row-item.visitedTOC {
     color: #475569;
 }
 
-#tocData > span > li > span.visitedTOC .toc-item-icon {
+#tocData > span > li > span.toc-row-item.visitedTOC .toc-item-icon {
     opacity: 0.65;
 }
 
-#tocData > span > li > span.selectedToc .toc-item-text,
-#tocData > span > li > span.selectedToc .toc-item-icon {
+#tocData > span > li > span.toc-row-item.selectedToc .toc-item-text,
+#tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
     color: inherit;
 }
 
@@ -1311,7 +1311,7 @@ body,
     grid-template-columns: 1fr;
 }
 
-.sideBar.collapsed #tocData > span > li > span {
+.sideBar.collapsed #tocData > span > li > span.toc-row-item {
     justify-content: center;
     gap: 0;
 }
@@ -1349,7 +1349,7 @@ body,
         column-gap: 10px;
     }
 
-    #tocData > span > li > span {
+    #tocData > span > li > span.toc-row-item {
         min-height: 36px;
         padding: 8px;
         gap: 10px;
