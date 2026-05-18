@@ -583,8 +583,8 @@ video::cue {
 #clickNextId {
     position: absolute;
     z-index: 1005;
-    right: 32px;
-    bottom: 86px;
+    right: 8px;
+    bottom: 70px;
     top: auto;
     color: var(--surface);
     text-align: right;
