@@ -35,6 +35,8 @@ function updateMenuVisualState(isOpen) {
     if (wholeContainer) {
         wholeContainer.classList.toggle("menu-open", isOpen);
     }
+    document.body.classList.toggle("menu-open-body", isOpen);
+    document.documentElement.classList.toggle("menu-open-body", isOpen);
     if (clickDiv) {
         clickDiv.classList.remove("headingcloser");
         clickDiv.classList.add("headingArea1");
@@ -50,11 +52,14 @@ function updateMenuVisualState(isOpen) {
             overlay.setAttribute("aria-hidden", "true");
             overlay.style.cssText =
                 "position:fixed;top:0;left:0;right:0;bottom:0;" +
-                "z-index:1004;background:transparent;cursor:pointer;display:block;";
+                "z-index:1004;background:rgba(8,15,30,0.2);cursor:pointer;display:block;" +
+                "width:100vw;height:100dvh;";
             overlay.addEventListener("click", function() { menuClose(); });
             document.body.appendChild(overlay);
         } else {
             overlay.style.display = "block";
+            overlay.style.width = "100vw";
+            overlay.style.height = "100dvh";
         }
     } else {
         if (overlay) { overlay.style.display = "none"; }
