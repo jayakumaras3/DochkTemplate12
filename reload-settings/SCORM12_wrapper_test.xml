@@ -7,7 +7,7 @@
     <_children>student_id,student_name,lesson_location,credit,lesson_status,entry,score,total_time,lesson_mode,exit,session_time</_children>
     <student_id>Reload-001</student_id>
     <student_name>User, Reload</student_name>
-    <lesson_location>06</lesson_location>
+    <lesson_location>03</lesson_location>
     <credit>credit</credit>
     <lesson_status>incomplete</lesson_status>
     <entry>ab-initio</entry>
@@ -17,12 +17,12 @@
       <min />
       <max />
     </score>
-    <total_time>01:02:22</total_time>
+    <total_time>01:05:51</total_time>
     <lesson_mode>normal</lesson_mode>
     <exit />
-    <session_time>0000:44:04.00</session_time>
+    <session_time>0000:02:02.00</session_time>
   </core>
-  <suspend_data>str1=1,1,0,0,0,0,0,0,0,0;str2=;str3=;str4=</suspend_data>
+  <suspend_data>str1=1,1,1,0,0,0,0,0,0,0,0;str2=;str3=;str4=</suspend_data>
   <launch_data />
   <comments />
   <comments_from_lms />

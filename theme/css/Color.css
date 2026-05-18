@@ -471,12 +471,12 @@ video::cue {
     margin: 0;
     padding: 0 !important;
     color: var(--text-soft);
-    background: var(--surface);
-    border: 1px solid var(--line);
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: 999px;
     font-size: 16px;
     line-height: 22px;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0;
     cursor: pointer;
     transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
@@ -494,16 +494,23 @@ video::cue {
 }
 
 #toc_id:hover,
-#trans_id:hover,
-.tocclickedclscss:hover {
+#trans_id:hover {
     color: var(--brand);
     background: #f5f7ff;
     border-color: #c7d2fe;
 }
 
 .tocclickedclscss {
+    color: var(--text) !important;
+    background: var(--surface) !important;
+    border-color: var(--line) !important;
+    font-weight: 700 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.tocclickedclscss:hover {
     color: var(--brand) !important;
-    background: #eef2ff !important;
+    background: #f5f7ff !important;
     border-color: #c7d2fe !important;
 }
 
@@ -584,15 +591,15 @@ video::cue {
 }
 
 #spanCliContinue {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-block;
     padding: 10px 16px;
     color: var(--surface);
     background: rgba(7, 20, 42, 0.9);
     border-radius: 999px;
     box-shadow: 0 12px 30px rgba(17, 24, 39, 0.18);
     font-size: 14px;
+    vertical-align: middle;
+    line-height: 1.4;
 }
 
 .preloaderDisplay {
