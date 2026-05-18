@@ -17,32 +17,48 @@
 .resume_content_container{
     background-color:#fff; 
     border-radius: 5px;   
-    width: 400px;    
-    height: 167px;  
+    width: 480px;
+    max-width: 95vw;
+    min-width: 280px;
+    height: auto;  
     border-radius: 10px;  
     z-index: 10003;    
-    position: absolute;left:0;right:0;top:0;bottom:0;margin:auto;padding: 3%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .resume_content_header{
-    position: absolute;    
-    left: 0px; 
-    height: 35px; 
-    border-radius: 10px 10px 0px 0px; 
-    padding: 5px;  top: 0px;    
+    position: static;    
+    width: 100%;
+    min-height: 44px;
+    border-radius: 0; 
+    padding: 10px 16px;
     color: #fff;    
     font-weight: bold;    
    /* font-size: 18px;   */ 
-    text-align: center;    
-    width: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .resume_content_text{
     font-weight:bold;
     text-align: center; 
-    margin-top: 25px; 
+    margin-top: 16px; 
    /* font-size:17px; */
-    margin-bottom: 10px;
+    margin-bottom: 14px;
+    padding: 0 16px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 .yes-btn{
@@ -53,4 +69,45 @@
 .no-btn{
     color:white; 
     border: none;
+}
+
+/* neutralise Bootstrap h-100 inside the modal so it doesn't stretch */
+#resumeArea > .h-100 {
+    height: auto !important;
+}
+
+/* keep resume buttons fully inside the popup on all screens */
+#resumeArea > .row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+    margin: 6px 0 0;
+    padding: 0 16px 24px;
+}
+
+#resumeArea > .row > .col-xs-6 {
+    float: none;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#resumeArea .yes-btn,
+#resumeArea .no-btn {
+    min-width: 54px;
+    padding: 7px 16px;
+    line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+    .resume_content_container {
+        width: 70vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .resume_content_container {
+        width: 90vw;
+    }
 }
