@@ -34,6 +34,16 @@
         <div class="tocData" ng-bind-html="sb.sideBarData" style="line-height:1.5;overflow-y:auto !important;"></div>
         <div class="line"><hr></div>
     </div>
+        <img
+            id="sideBarCloseBtn"
+            src="theme/images/footer-menu/MenuClose_icon.svg"
+            alt="Close Menu"
+            title="Close Menu"
+            role="button"
+            tabindex="0"
+            onclick="menuClose()"
+            onkeydown="if(event.key==='Enter'||event.key===' ')menuClose()"
+            style="cursor:pointer;display:none;position:fixed;">
     <div class="contentArea" ng-controller="contentController as cc" ng-class="cc.fullScreen == true ? 'fullContentArea' : ''">
 	
 	<div  class="FSize20" id="clickNextId">

@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const optionsHtml = questionData.options.map((option, index) => {
             TotalQuestions = index + 1; // Update TotalQuestions
-            return `<div class="answer FSize20" id="Opt${index}"
+            return `<div class="answer FSize16" id="Opt${index}"
      tabindex="0" aria-checked="false" role="radio"
      onclick="selectOption('answer${index}')"
      onkeydown="handleKeydown(event, ${index})">
@@ -33,18 +33,18 @@ document.addEventListener("DOMContentLoaded", function() {
 		const questionHtml = `
 			<div class="questionContainer">
 			<!-- Question Section with aria-labelledby pointing to a valid ID -->
-			<div class="question FSize20">
+            <div class="question FSize16">
 			<span id="question-text" tabindex="0">${questionData.question}</span>
 
-			<div class="redtext instext FSize20">
+            <div class="redtext instext FSize16">
 			<span id="instruction-text" tabindex="0">${parent.mainData.Questiontext}</span>
 			</div>
 			</div>
 			<div class="options" >${optionsHtml}</div>
-			<button aria-label="Submit quiz" role="button" class="btn ColorSet_CR FSize20" id="submitBtn" tabindex="0">
+            <button aria-label="Submit quiz" role="button" class="btn ColorSet_CR FSize16" id="submitBtn" tabindex="0">
 			${parent.mainData.quizButton}
 			</button>
-			<div class="feedback"  ><p tabindex="0" id="feedback"> </p></div>
+			<div class="feedback"><p tabindex="-1" id="feedback" role="status" aria-live="assertive" aria-atomic="true"></p></div>
 			</div>
 			`;
 
@@ -53,6 +53,21 @@ document.addEventListener("DOMContentLoaded", function() {
         parentquizContainer.innerHTML = "";
         quizContainer.innerHTML = questionHtml;
         document.getElementById('submitBtn').addEventListener('click', checkAnswer);
+    }
+
+    function announceFeedback(message) {
+        const feedback = document.getElementById('feedback');
+        if (!feedback) {
+            return;
+        }
+
+        feedback.style.display = 'block';
+        feedback.textContent = '';
+        requestAnimationFrame(() => {
+            feedback.textContent = message;
+            feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            feedback.focus({ preventScroll: true });
+        });
     }
 
  window.handleOptionSelection = function(selectedRadio) {
@@ -122,14 +137,12 @@ window.handleKeydown=function(event, idx) {
         }
 
         const isCorrect = selectedAnswer.dataset.correct === 'true';
-		feedback.style.display = 'block';
-		feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         if (isCorrect) {
-            feedback.textContent = questionData.feedback.correct;
+            announceFeedback(questionData.feedback.correct);
             feedback.classList.remove('incorrect');
             feedback.classList.remove('Incorrect_CR');
             feedback.classList.add('correct');
-			feedback.classList.add('FSize20');
+            feedback.classList.add('FSize16');
 			feedback.classList.add('Correct_CR');
             document.getElementById('submitBtn').disabled = true;
             SubmtBool = true;
@@ -142,8 +155,8 @@ window.handleKeydown=function(event, idx) {
             attemptsLeft--;
 
             if (attemptsLeft > 0) {
-                feedback.textContent = questionData.feedback.incorrect;
-				feedback.classList.add('FSize20');
+                announceFeedback(questionData.feedback.incorrect);
+                feedback.classList.add('FSize16');
                 feedback.classList.add('incorrect');
                 feedback.classList.add('Incorrect_CR');
                 document.getElementById('submitBtn').disabled = true;
@@ -152,8 +165,8 @@ window.handleKeydown=function(event, idx) {
 				document.getElementById('submitBtn').classList.add('no-select');
                 optionReset();
             } else {
-                feedback.textContent = questionData.feedback.noAttempts;
-				feedback.classList.add('FSize20');
+                announceFeedback(questionData.feedback.noAttempts);
+                feedback.classList.add('FSize16');
                 feedback.classList.add('incorrect');
                 feedback.classList.add('Incorrect_CR');
                 SubmtBool = true;

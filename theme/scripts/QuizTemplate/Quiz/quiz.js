@@ -125,6 +125,29 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	}
 
+	function ensureSubmitSection() {
+		const questionContainer = quizContainer.querySelector('.questionContainer');
+		const submitBtn = quizContainer.querySelector('#submitBtn');
+
+		if (!questionContainer || !submitBtn) {
+			return;
+		}
+
+		let submitSection = questionContainer.querySelector('.submit-section');
+		if (!submitSection) {
+			submitSection = document.createElement('div');
+			submitSection.className = 'submit-section';
+			const optionsSection = questionContainer.querySelector('.options, .options1, .contentWrapper');
+			if (optionsSection && optionsSection.parentNode === questionContainer) {
+				optionsSection.insertAdjacentElement('afterend', submitSection);
+			} else {
+				questionContainer.appendChild(submitSection);
+			}
+		}
+
+		submitSection.appendChild(submitBtn);
+	}
+
 	function loadQuestion(index) {
 
 		quizContainer.classList.remove('quiz-start-view');
@@ -164,14 +187,14 @@ document.addEventListener("DOMContentLoaded", function() {
 				questionHtml = `
 			
 					<div class="questionContainer">
-					<div tabindex="0" class="question FSize20" id="question-header" >
+					<div tabindex="0" class="question FSize16" id="question-header" >
 						${questionData.question}
-						<div class="redtext instext FSize20" aria-live="polite">${parent.Questiontext}</div>
+						<div class="redtext instext FSize16" aria-live="polite">${parent.Questiontext}</div>
 					</div>
 					<div class="options" aria-labelledby="question-header">
 						${optionsHtml}
 					</div>
-					<button class="btn btn1 ColorSet_CR FSize20" id="submitBtn" tabindex="0" disabled aria-label="${parent.quizButton}">
+					<button class="btn btn1 ColorSet_CR FSize16" id="submitBtn" tabindex="0" disabled aria-label="${parent.quizButton}">
 						${parent.quizButton}
 					</button>
 					<div class="feedback" tabindex="0" id="feedback" aria-live="polite"></div>
@@ -181,13 +204,13 @@ document.addEventListener("DOMContentLoaded", function() {
 			} else if (questionData.images != null && questionData.video == null) {
 					questionHtml = `
 					<div class="questionContainer">
-					  <div tabindex="0" class="question FSize20">
+					  <div tabindex="0" class="question FSize16">
 						${questionData.question}
-						<div class="redtext instext FSize20">${parent.QuestionMcQtext}</div>
+						<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div>
 					  </div>
 					  
 					  <div class="contentWrapper">
-						<div class="options1">${optionsHtml}<button tabindex="0"  class="btn ColorSet_CR FSize20" id="submitBtn" disabled>${parent.quizButton}</button></div>
+						<div class="options1">${optionsHtml}<button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn" disabled>${parent.quizButton}</button></div>
 						<div><img  tabindex="0" class="ImageQuestion zoomable" id="zoomableImage" src="${questionData.images}" alt="image"></img><br><div  tabindex="0" class="redtext1 instext">${parent.ImageZoomText}</div></div>
 						 
 					  </div>					 
@@ -211,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function() {
 						<video id="myvideoQuiz" class="VideoQuestion" src="${questionData.video}" controls controlsList="nodownload noremoteplayback" disablePictureInPicture allowfullscreen>
 </video>
 					  </div>
-					<button tabindex="0"  class="btn btn1 ColorSet_CR FSize20" id="submitBtn" disabled>${parent.quizButton}</button>
+					<button tabindex="0"  class="btn btn1 ColorSet_CR FSize16" id="submitBtn" disabled>${parent.quizButton}</button>
 					<div class="feedback" id="feedback"></div>
 				</div>
 				
@@ -224,9 +247,9 @@ document.addEventListener("DOMContentLoaded", function() {
 			
 					<div class="questionContainer" >
 						
-						<div tabindex="0" class="question FSize20">${questionData.question}<div class="redtext instext FSize20">${parent.QuestionMcQtext}</div></div>
+						<div tabindex="0" class="question FSize16">${questionData.question}<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div></div>
 						<div class="options">${optionsHtml}</div>
-						<button tabindex="0"  class="btn btn1 ColorSet_CR FSize20" id="submitBtn" disabled>${parent.quizButton}</button>
+						<button tabindex="0"  class="btn btn1 ColorSet_CR FSize16" id="submitBtn" disabled>${parent.quizButton}</button>
 						<div class="feedback" id="feedback"></div>
 					</div>
 					
@@ -241,11 +264,11 @@ document.addEventListener("DOMContentLoaded", function() {
 						 <div class="contentWrapper">
 							<div class="options1">
 							  ${optionsHtml}
-							  <button tabindex="0"  class="btn ColorSet_CR FSize20" id="submitBtn" disabled>${parent.quizButton}</button>
+							  <button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn" disabled>${parent.quizButton}</button>
 							</div>
 							<div class="imageContainer">
 							  <img  tabindex="0" class="ImageQuestion zoomable" id="zoomableImage" src="${questionData.images}" alt="Image">
-							  <div  tabindex="0" class="redtext1 instext FSize20">${parent.ImageZoomText}</div>
+							  <div  tabindex="0" class="redtext1 instext FSize16">${parent.ImageZoomText}</div>
 							</div>
 						  </div>
 					 
@@ -266,9 +289,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		
 					<div class="questionContainer" >
 						
-						<div tabindex="0" class="question FSize20">${questionData.question}<div class="redtext instext FSize20">${parent.QuestionMcQtext}</div></div>
+						<div tabindex="0" class="question FSize16">${questionData.question}<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div></div>
 						<div class="contentWrapper">
-						<div class="options1">${optionsHtml} <button tabindex="0"  class="btn ColorSet_CR FSize20" id="submitBtn" disabled>${parent.quizButton}</button></div>
+						<div class="options1">${optionsHtml} <button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn" disabled>${parent.quizButton}</button></div>
 						<video id="myvideoQuiz" class="VideoQuestion" src="${questionData.video}" controls controlsList="nodownload noremoteplayback" disablePictureInPicture allowfullscreen>
 </video>
 					  </div>
@@ -294,6 +317,7 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
 		parentquizContainer.innerHTML = parentquestionHtml;
 		quizContainer.innerHTML = questionHtml;
+		ensureSubmitSection();
 		timerElement = document.getElementById("timer");
 		document.getElementById('submitBtn').addEventListener('click', checkAnswer);
 		// Add click event listener to checkboxes

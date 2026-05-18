@@ -308,8 +308,8 @@ video::cue {
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    min-width: 42px;
-    min-height: 42px;
+    min-width: 25px;
+    min-height: 25px;
     margin: 0 !important;
     padding: 0;
     background-color: transparent;
@@ -896,7 +896,7 @@ body,
     width: clamp(19px, 1.6vw, 24px) !important;
     height: clamp(19px, 1.6vw, 24px) !important;
     padding: 6px;
-    border-radius: 999px;
+   /* border-radius: 999px;*/
     transition: all 0.3s ease;
 }
 
@@ -1165,9 +1165,9 @@ body,
     display: block !important;
     margin: 0 !important;
     transform: none !important;
-    width: 34px !important;
-    height: 34px !important;
-    padding: 2px !important;
+    width: 28px !important;
+    height: 28px !important;
+   /*padding: 2px !important;*/
     object-fit: contain !important;
     opacity: 1 !important;
     filter: none !important;
