@@ -986,9 +986,7 @@ html.menu-open-body {
 .sideBar > .tocData {
     flex: 1 1 auto;
     min-height: 0;
-    height: auto;
-    max-height: none;
-    padding-right: 4px;
+    padding: 0 4px 48px 0;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     scrollbar-width: thin;
@@ -1285,10 +1283,6 @@ html.menu-open-body {
 }
 
 /* Reference-style topic list layout */
-.sideBar > .tocData {
-    padding-right: 4px !important;
-    padding-bottom: 52px;
-}
 
 #tocData {
     margin: 0 !important;

@@ -13,6 +13,81 @@
     function playAudio() {
       parent.audioButCall();
     }
+
+    // Load JSON configuration
+    let welcomePageConfig = {};
+
+    function initializeWelcomePage(config) {
+      welcomePageConfig = config.welcomePage;
+
+      // Update badge
+      const eyebrow = document.querySelector('.eyebrow');
+      if (eyebrow) {
+        eyebrow.textContent = welcomePageConfig.badge.text;
+      }
+
+      // Update title
+      const title = document.querySelector('h1#welcome-title');
+      if (title) {
+        title.textContent = welcomePageConfig.title.text;
+      }
+
+      // Update description
+      const intro = document.querySelector('p.intro');
+      if (intro) {
+        intro.textContent = welcomePageConfig.description.text;
+      }
+
+      // Update primary button
+      const primaryBtn = document.querySelector('.primary-action');
+      if (primaryBtn) {
+        const btnText = primaryBtn.querySelector('span:first-child');
+        if (btnText) {
+          btnText.textContent = welcomePageConfig.buttons.primary.text;
+        }
+      }
+
+      // Update secondary button
+      const secondaryBtn = document.querySelector('.secondary-action');
+      if (secondaryBtn) {
+        const btnText = secondaryBtn.querySelector('span:last-child');
+        if (btnText) {
+          btnText.textContent = welcomePageConfig.buttons.secondary.text;
+        }
+      }
+
+      // Update info cards
+      const infoCards = document.querySelectorAll('.info-card');
+      welcomePageConfig.cards.forEach((cardData, index) => {
+        if (infoCards[index]) {
+          const card = infoCards[index];
+          const spanEl = card.querySelector('span');
+          const strongEl = card.querySelector('strong');
+          if (spanEl) spanEl.textContent = cardData.label;
+          if (strongEl) strongEl.textContent = cardData.value;
+        }
+      });
+
+      console.log('Welcome page initialized from JSON', welcomePageConfig);
+    }
+
+    // Fetch and load JSON on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('./welcome-page.json')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to load JSON: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          initializeWelcomePage(data);
+        })
+        .catch(error => {
+          console.warn('Could not load JSON configuration, using defaults:', error);
+          // Page will render with hardcoded HTML as fallback
+        });
+    });
   </script>
 </head>
 <body>
