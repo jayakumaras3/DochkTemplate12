@@ -82,8 +82,8 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/video/en_3.mp4",
-            "id": "en_3.mp4"
+            "src": "assets/html/customHTML/index.html",
+            "id": "index.html"
           },
           {
             "src": "theme/scripts/Screen_01.js",
@@ -92,8 +92,8 @@
         ],
         "content": [
           {
-            "type": "video",
-            "path": "assets/video/en_3.mp4",
+            "type": "captivate",
+            "path": "assets/html/customHTML/index.html",
             "onendnextscrn": "false"
           }
         ]

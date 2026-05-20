@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "pageId": "page_001",
+    "version": "1.0.0",
+    "title": "The Future of Modular eLearning",
+    "description": "Introduction to modular eLearning architecture"
+  },
+  "theme": {
+    "primaryColor": "#1A56DB",
+    "primaryColorDark": "#1341B0",
+    "primaryColorLight": "#EBF2FF",
+    "accentColor": "#06B6D4",
+    "textPrimary": "#111827",
+    "textSecondary": "#4B5563",
+    "textMuted": "#9CA3AF",
+    "bgPage": "#F9FAFB",
+    "bgCard": "#FFFFFF",
+    "bgCardHover": "#F0F6FF",
+    "borderColor": "#E5E7EB",
+    "borderRadius": "12px",
+    "borderRadiusSm": "8px",
+    "borderRadiusLg": "16px",
+    "fontFamily": "'DM Sans', 'Segoe UI', system-ui, sans-serif",
+    "fontFamilyHeading": "'Manrope', 'DM Sans', sans-serif",
+    "shadowSm": "0 1px 3px rgba(0,0,0,0.08)",
+    "shadowMd": "0 4px 16px rgba(26,86,219,0.10)",
+    "shadowLg": "0 8px 32px rgba(26,86,219,0.14)"
+  },
+  "layout": {
+    "type": "image-left",
+    "flexDirection": "row",
+    "mediaRatio": "45%",
+    "contentRatio": "55%",
+    "gap": "48px",
+    "padding": "48px",
+    "maxWidth": "1100px"
+  },
+  "header": {
+    "visible": true,
+    "title": "The Future of Modular eLearning",
+    "titleAlignment": "left",
+    "accentBar": true,
+    "subtitle": "asdasdd asdasd "
+  },
+  "media": {
+    "visible": true,
+    "type": "image",
+    "src": "assets/hero.jpg",
+    "alt": "Modern futuristic eLearning conference room with blue geometric ceiling lights and a large display screen",
+    "caption": "",
+    "objectFit": "cover",
+    "borderRadius": "12px",
+    "aspectRatio": "4/3"
+  },
+  "content": {
+    "visible": true,
+    "heading": "Dynamic Layouts Driven by Data",
+    "headingTag": "h2",
+    "body": "<p>This page demonstrates a fully modular architecture. Instead of hardcoding HTML templates, the entire structure is dictated by a single JSON configuration. The container automatically adapts to responsive screens.</p>",
+    "components": [
+      {
+        "type": "feature-list",
+        "items": [
+          {
+            "icon": "flexibility",
+            "title": "Flexibility",
+            "description": "Change layouts instantly (image-left, top-image) using CSS flex-direction without altering HTML structure."
+          },
+          {
+            "icon": "code",
+            "title": "Maintainability",
+            "description": "A single responsive container handles all content variations safely. Easy for AI to generate."
+          },
+          {
+            "icon": "scalability",
+            "title": "Scalability",
+            "description": "Ready to drop in videos, SCQs, MCQs, drag-and-drop interactions, and interactive tab components."
+          },
+          {
+            "icon": "Modularity",
+            "title": "Scalability",
+            "description": "Ready to drop in videos, SCQs, MCQs, drag-and-drop interactions, and interactive tab components."
+          },
+          {
+            "icon": "scalability",
+            "title": "Scalability",
+            "description": "Ready to drop in videos, SCQs, MCQs, drag-and-drop interactions, and interactive tab components."
+          }
+        ]
+      }
+    ]
+  },
+  "navigation": {
+    "visible": false,
+    "nextLabel": "Continue to Next Module",
+    "nextHref": "../page_002/index.html",
+    "prevLabel": "",
+    "prevHref": "",
+    "showProgress": false,
+    "currentPage": 1,
+    "totalPages": 5
+  }
+}

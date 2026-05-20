@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Modular eLearning page — architecture driven by JSON configuration" />
+
+  <!-- Preconnect for fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Page title (updated dynamically by JS) -->
+  <title>eLearning Module</title>
+
+  <!-- Page stylesheet -->
+  <link rel="stylesheet" href="page.css" />
+</head>
+<body>
+
+  <!-- ── Accessibility: Skip to content ──────────────────── -->
+  <a href="#page-main" class="skip-link">Skip to content</a>
+
+  <!-- ── Screen reader live region ───────────────────────── -->
+  <div id="sr-announcer" role="status" aria-live="polite" aria-atomic="true"
+       style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;"></div>
+
+  <!-- ── Loading overlay ──────────────────────────────────── -->
+  <div id="page-loading" role="status" aria-label="Loading page content">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- ── Page wrapper ─────────────────────────────────────── -->
+  <div id="page-wrapper">
+
+    <!-- ── Header: page title ─────────────────────────────── -->
+    <header id="page-header" role="banner">
+      <h1 id="page-title" class="page-title"><!-- Injected by JS --></h1>
+      <div id="title-accent-bar" class="title-accent-bar" aria-hidden="true"></div>
+    </header>
+
+    <!-- ── Main content ───────────────────────────────────── -->
+    <main id="page-main" role="main">
+
+      <!-- ── Layout container ─────────────────────────────── -->
+      <!--
+        flex-direction is set by CSS variable --layout-flex-dir
+        which is injected from JSON by renderLayout()
+        Layouts:
+          image-left    → row
+          image-right   → row-reverse
+          top-image     → column
+          bottom-image  → column-reverse
+          full-content  → column (no media panel)
+      -->
+      <div class="layout-container" id="layout-container">
+
+        <!-- ── Media panel ────────────────────────────────── -->
+        <aside id="media-panel" class="media-panel" aria-label="Module media">
+          <!-- Injected by renderMedia() -->
+        </aside>
+
+        <!-- ── Content panel ──────────────────────────────── -->
+        <section id="content-panel" class="content-panel" aria-label="Module content">
+          <!-- Injected by renderContent() -->
+        </section>
+
+      </div><!-- /.layout-container -->
+
+    </main><!-- /#page-main -->
+
+    <!-- ── Footer: navigation ────────────────────────────── -->
+    <footer id="page-footer" role="contentinfo" aria-label="Module navigation">
+      <!-- Injected by renderNavigation() -->
+    </footer>
+
+  </div><!-- /#page-wrapper -->
+
+  <!-- Page script (deferred to after HTML parse) -->
+  <script src="page.js" defer></script>
+
+</body>
+</html>

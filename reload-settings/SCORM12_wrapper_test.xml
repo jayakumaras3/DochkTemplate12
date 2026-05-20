@@ -17,12 +17,12 @@
       <min />
       <max />
     </score>
-    <total_time>01:05:51</total_time>
+    <total_time>00:01:02</total_time>
     <lesson_mode>normal</lesson_mode>
     <exit />
-    <session_time>0000:02:02.00</session_time>
+    <session_time>0000:00:02.00</session_time>
   </core>
-  <suspend_data>str1=1,1,1,0,0,0,0,0,0,0,0;str2=;str3=;str4=</suspend_data>
+  <suspend_data>str1=0,0,0,0,0,0,0,0,0,0,0;str2=;str3=;str4=</suspend_data>
   <launch_data />
   <comments />
   <comments_from_lms />

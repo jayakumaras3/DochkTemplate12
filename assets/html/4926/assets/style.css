@@ -60,8 +60,8 @@ body {
   min-height: 100dvh;
   padding: var(--space-page);
   background-image: url('bg.jpg');
-  background-size: cover;
-  background-position: center;
+  background-size: 100% 50%;
+  background-position: center top;
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: var(--text);
