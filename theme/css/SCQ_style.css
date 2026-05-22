@@ -529,4 +529,28 @@ input.checkbox {
     }
 }
 
+/* iPhone/mobile: allow vertical scroll inside SCQ frame when content is tall */
+@media (max-width: 900px) {
+    html,
+    body {
+        height: 100% !important;
+        min-height: 100% !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+    }
+
+    #quizContainer {
+        height: auto !important;
+        min-height: 100% !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 24px;
+    }
+
+    .questionContainer {
+        overflow: visible;
+    }
+}
+
 

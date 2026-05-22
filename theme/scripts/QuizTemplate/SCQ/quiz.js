@@ -5,6 +5,31 @@ document.addEventListener("DOMContentLoaded", function() {
     let questionData;
     let SubmtBool = false;
     let TotalQuestions = 0;
+
+    function applyMobileScrollFix() {
+        if (window.innerWidth > 900) {
+            return;
+        }
+
+        // Force vertical scrolling in mobile view even if parent theme CSS sets overflow hidden.
+        document.documentElement.style.setProperty('height', '100%', 'important');
+        document.documentElement.style.setProperty('overflow-y', 'auto', 'important');
+        document.documentElement.style.setProperty('-webkit-overflow-scrolling', 'touch');
+
+        document.body.style.setProperty('height', '100%', 'important');
+        document.body.style.setProperty('min-height', '100%', 'important');
+        document.body.style.setProperty('overflow-y', 'auto', 'important');
+        document.body.style.setProperty('-webkit-overflow-scrolling', 'touch');
+        document.body.style.setProperty('touch-action', 'pan-y', 'important');
+
+        if (quizContainer) {
+            quizContainer.style.setProperty('height', 'auto', 'important');
+            quizContainer.style.setProperty('min-height', '100%', 'important');
+            quizContainer.style.setProperty('overflow-y', 'auto', 'important');
+            quizContainer.style.setProperty('-webkit-overflow-scrolling', 'touch');
+            quizContainer.style.setProperty('padding-bottom', '24px', 'important');
+        }
+    }
     function loadQuestion() {
 		console.log(" "+parent.mainData.quizButton);
         questionData = parent.mainData.question;
@@ -255,4 +280,7 @@ window.handleRadioKey = function(event, index) {
 
 
     loadQuestion();
+    applyMobileScrollFix();
+    window.addEventListener('resize', applyMobileScrollFix);
+    window.addEventListener('orientationchange', applyMobileScrollFix);
 });
