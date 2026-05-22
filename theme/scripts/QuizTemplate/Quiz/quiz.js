@@ -22,6 +22,31 @@ document.addEventListener("DOMContentLoaded", function() {
 	var quiztype = "";
 	var QuestionHead="";
 	var selectedOptions="";
+
+	function applyMobileScrollFix() {
+		if (window.innerWidth > 900) {
+			return;
+		}
+
+		// Keep quiz pages scrollable on mobile when host template constrains height.
+		document.documentElement.style.setProperty('height', '100%', 'important');
+		document.documentElement.style.setProperty('overflow-y', 'auto', 'important');
+		document.documentElement.style.setProperty('-webkit-overflow-scrolling', 'touch');
+
+		document.body.style.setProperty('height', '100%', 'important');
+		document.body.style.setProperty('min-height', '100%', 'important');
+		document.body.style.setProperty('overflow-y', 'auto', 'important');
+		document.body.style.setProperty('-webkit-overflow-scrolling', 'touch');
+		document.body.style.setProperty('touch-action', 'pan-y', 'important');
+
+		if (quizContainer) {
+			quizContainer.style.setProperty('height', 'auto', 'important');
+			quizContainer.style.setProperty('min-height', '100%', 'important');
+			quizContainer.style.setProperty('overflow-y', 'auto', 'important');
+			quizContainer.style.setProperty('-webkit-overflow-scrolling', 'touch');
+			quizContainer.style.setProperty('padding-bottom', '24px', 'important');
+		}
+	}
 	function loadQuestions() {
 		questionsData = parent.mainData; // From questions.json
 		AnswerData = parent.AnsData; // From answers.json
@@ -31,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		PostAttemptType = parent.PostAttemptType;
 		quizContainer.classList.add('quiz-start-view');
 		parentquizContainer.style.display = 'none';
+		applyMobileScrollFix();
 
 	}
 
@@ -106,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		`;
 
 		quizContainer.innerHTML = resultsHtml;
+		applyMobileScrollFix();
 		document.getElementById('Startpage').addEventListener('click', startBut);
 		if (parseInt(parent.duration) == 0) {
 
@@ -317,6 +344,7 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
 		parentquizContainer.innerHTML = parentquestionHtml;
 		quizContainer.innerHTML = questionHtml;
+		applyMobileScrollFix();
 		ensureSubmitSection();
 		timerElement = document.getElementById("timer");
 		document.getElementById('submitBtn').addEventListener('click', checkAnswer);
@@ -934,6 +962,7 @@ function SetScoreEachQuestion() {
 					}
 				}
 				quizContainer.innerHTML = resultsHtml;
+				applyMobileScrollFix();
 				
 		if(QuizMode =="PreTest")
 		{
@@ -1084,6 +1113,7 @@ function SetScoreEachQuestion() {
 `;
 		/* ${!passed ? '<button class="retrybtn" id="retryBtn">Retry</button>' : '<button class="retrybtn" id="retryBtn">Retry</button>'}*/
 		quizContainer.innerHTML = resultsHtml;
+		applyMobileScrollFix();
 		/*document.getElementById('retryBtn').addEventListener('click', retryQuiz);
 		if (!passed) {
 			document.getElementById('retryBtn').addEventListener('click', retryQuiz);
@@ -1134,6 +1164,7 @@ function SetScoreEachQuestion() {
 		currentQuestionIndex = 0;
 		selectedAnswers = [];
 		loadQuestion(currentQuestionIndex);
+		applyMobileScrollFix();
 		document.getElementById('parentquizContainer').style.display = 'block';
 		// document.body.style.backgroundImage = "url('images/BG.png')";
 
@@ -1162,6 +1193,9 @@ function SetScoreEachQuestion() {
 	
 
 	loadQuestions();
+	applyMobileScrollFix();
+	window.addEventListener('resize', applyMobileScrollFix);
+	window.addEventListener('orientationchange', applyMobileScrollFix);
 	parent.parent.passScoreTOarticulate();
 	parent.parent.pretestCompleteCHeck=parent.parent.getSuspendString("str3");
 	/* console.log("i am here");
