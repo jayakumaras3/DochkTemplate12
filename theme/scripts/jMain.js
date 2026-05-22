@@ -109,6 +109,7 @@ function NexPrevAcessiblity_Check()
 function MainmenuAcessibility()
 {
 	var TmenuIcon = document.getElementById('TmenuIcon');
+    var clickDiv = document.getElementById('clickableDiv');
 
 	var pointerEvents = window.getComputedStyle(TmenuIcon).getPropertyValue('pointer-events');
 
@@ -117,12 +118,20 @@ function MainmenuAcessibility()
         TmenuIcon.setAttribute('aria-disabled', 'true');
         TmenuIcon.setAttribute('tabindex', '-1'); // remove from tab order
         TmenuIcon.style.pointerEvents = 'none'; 
+        TmenuIcon.style.cursor = 'default';
+        if (clickDiv) {
+            clickDiv.style.cursor = 'default';
+        }
 		//console.log('TmenuIcon is not interactive (pointer-events: none)');
 	} else {
 		TmenuIcon.setAttribute('aria-label', Menutitle);
         TmenuIcon.setAttribute('aria-disabled', 'false');
         TmenuIcon.setAttribute('tabindex', '0');
         TmenuIcon.style.pointerEvents = 'auto';
+        TmenuIcon.style.cursor = 'pointer';
+        if (clickDiv) {
+            clickDiv.style.cursor = 'pointer';
+        }
 		//console.log('TmenuIcon is interactive (pointer-events: ' + pointerEvents + ')');
 	}
 		
@@ -274,9 +283,14 @@ function menuEnDisble_fun(bool) {
         if (temp == 2) {
             headingArea.style.display = 'block';
 
-            // Change the src attribute to the new image path
-            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.svg');
+            // Keep the new menu icon and visually indicate disabled state
+            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+            img.setAttribute('aria-disabled', 'true');
+            img.setAttribute('tabindex', '-1');
             img.style.pointerEvents = 'none';
+            img.style.cursor = 'default';
+            img.style.opacity = '0.35';
+            img.style.filter = 'grayscale(100%)';
 
             TtoggleMenu();
             document.getElementById("pageNo").innerHTML = "Audio";
@@ -284,15 +298,23 @@ function menuEnDisble_fun(bool) {
 
         } else {
             img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+            img.setAttribute('aria-disabled', 'false');
+            img.setAttribute('tabindex', '0');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
+            img.style.opacity = '';
+            img.style.filter = '';
         }
 
     } else {
 
         img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+        img.setAttribute('aria-disabled', 'false');
+        img.setAttribute('tabindex', '0');
         img.style.pointerEvents = 'auto';
         img.style.cursor = 'pointer';
+        img.style.opacity = '';
+        img.style.filter = '';
 
 
     }
@@ -309,6 +331,8 @@ function menuEnDisble_fun(bool) {
             headingArea.style.display = 'none';
         }
     }
+
+    MainmenuAcessibility();
 }
 //Content Foryou
 function menuEnable_fun_firstpage() {
@@ -321,8 +345,12 @@ function menuEnable_fun_firstpage() {
      {
        {
             img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+            img.setAttribute('aria-disabled', 'false');
+            img.setAttribute('tabindex', '0');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
+            img.style.opacity = '';
+            img.style.filter = '';
            
             
 
@@ -356,12 +384,19 @@ function menuEnDisble_fun_firstpage() {
      {
        {
             headingArea.style.display = 'block';
-            // Change the src attribute to the new image path
-            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.svg');
+            // Keep the new menu icon and visually indicate disabled state
+            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+            img.setAttribute('aria-disabled', 'true');
+            img.setAttribute('tabindex', '-1');
             img.style.pointerEvents = 'none';
+            img.style.cursor = 'default';
+            img.style.opacity = '0.35';
+            img.style.filter = 'grayscale(100%)';
         }
 
     }  
+
+    MainmenuAcessibility();
 }
 
 
@@ -377,9 +412,14 @@ function menuEnDisble_fun_PREV() {
         if (temp == 2) {
             headingArea.style.display = 'block';
 
-            // Change the src attribute to the new image path
-            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.svg');
+            // Keep the new menu icon and visually indicate disabled state
+            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+            img.setAttribute('aria-disabled', 'true');
+            img.setAttribute('tabindex', '-1');
             img.style.pointerEvents = 'none';
+            img.style.cursor = 'default';
+            img.style.opacity = '0.35';
+            img.style.filter = 'grayscale(100%)';
 
             TtoggleMenu();
             document.getElementById("pageNo").innerHTML = "Audio";
@@ -387,18 +427,28 @@ function menuEnDisble_fun_PREV() {
 
         } else {
             img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+            img.setAttribute('aria-disabled', 'false');
+            img.setAttribute('tabindex', '0');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
+            img.style.opacity = '';
+            img.style.filter = '';
         }
 
     } else {
 
         img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
+        img.setAttribute('aria-disabled', 'false');
+        img.setAttribute('tabindex', '0');
         img.style.pointerEvents = 'auto';
         img.style.cursor = 'pointer';
+        img.style.opacity = '';
+        img.style.filter = '';
 
 
     }
+
+    MainmenuAcessibility();
 
 }
 

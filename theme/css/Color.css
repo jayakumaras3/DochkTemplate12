@@ -126,6 +126,13 @@ body {
     filter: contrast(1.1) brightness(0.4);
 }
 
+#TmenuIcon[aria-disabled="true"] {
+    opacity: 0.32 !important;
+    filter: grayscale(100%) brightness(1.2) !important;
+    cursor: default !important;
+    pointer-events: none !important;
+}
+
 #TmenuIcon:focus-visible {
     outline: 2px solid #2456d6;
     outline-offset: 3px;

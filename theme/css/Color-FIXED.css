@@ -129,6 +129,13 @@ body {
     opacity: 1;
 }
 
+#TmenuIcon[aria-disabled="true"] {
+    opacity: 0.32 !important;
+    filter: grayscale(100%) brightness(1.2) !important;
+    cursor: default !important;
+    pointer-events: none !important;
+}
+
 #TmenuIcon1 {
     display: none !important;
 }

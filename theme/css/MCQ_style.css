@@ -161,7 +161,7 @@ label {
     padding-left: 20px;
     padding-right: 20px;
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: 0;
    /* font-size: 20px;*/
 	font-family: "tahoma";
     /* transition: background-color 0.3s ease; */
@@ -347,7 +347,7 @@ body {
 #quizContainer {
     background: #ffffff;
     border: 1px solid #efe7e4;
-    border-radius: 28px;
+    border-radius: 0;
     box-shadow: 0 8px 22px rgba(41, 28, 28, 0.05);
     box-sizing: border-box;
     margin-left: 0;
@@ -359,7 +359,7 @@ body {
 
 .parentquestion {
     padding: 14px 18px;
-    border-radius: 24px 24px 16px 16px;
+    border-radius: 0;
     background: #ffffff;
     box-shadow: none;
     letter-spacing: 0.01em;
@@ -377,7 +377,7 @@ body {
 .questionContainer {
     background: #ffffff;
     border: 1px solid #f3e8e4;
-    border-radius: 24px;
+    border-radius: 0;
     box-shadow: 0 10px 24px rgba(41, 28, 28, 0.04);
     padding: 20px;
 }
@@ -410,7 +410,7 @@ body {
     padding: 11px 16px;
     margin-bottom: 0;
     border: 1px solid #e7e1de;
-    border-radius: 18px;
+    border-radius: 0;
     background: #ffffff;
     box-shadow: none;
     transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
@@ -454,7 +454,7 @@ input.checkbox {
 .correct,
 .incorrect {
     width: 100%;
-    border-radius: 18px;
+    border-radius: 0;
     border: 1px solid transparent;
     box-shadow: none;
     padding: 11px 16px;
@@ -488,7 +488,7 @@ input.checkbox {
 .retrybtn {
     background: linear-gradient(180deg, #9d1d1d 0%, var(--quiz-accent) 55%, var(--quiz-accent-dark) 100%);
     border: 1px solid rgba(95, 9, 9, 0.95);
-    border-radius: 14px;
+    border-radius: 0;
     box-shadow: 0 10px 24px rgba(135, 13, 13, 0.16);
     min-height: 44px;
     margin-top: 16px;
