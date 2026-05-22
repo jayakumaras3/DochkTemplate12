@@ -878,4 +878,72 @@ input.checkbox {
     }
 }
 
+/* Mobile quiz readability fix: avoid compressed option rows and nested clipping */
+@media (max-width: 900px) {
+    #quizContainer {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding: 8px 10px 14px;
+    }
+
+    #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer {
+        max-height: none !important;
+        overflow: visible !important;
+        padding: 14px 12px;
+    }
+
+    #quizContainer:not(.quiz-start-view):not(:has(.results)) .options,
+    #quizContainer:not(.quiz-start-view):not(:has(.results)) .options1 {
+        max-height: none !important;
+        overflow: visible !important;
+        padding-right: 0;
+        gap: 8px;
+    }
+
+    #quizContainer:not(.quiz-start-view):not(:has(.results)) .submit-section {
+        position: static;
+        background: #ffffff;
+        padding-top: 10px;
+    }
+
+    .answer {
+        align-items: flex-start;
+        min-height: 44px;
+        padding: 10px 10px;
+        gap: 8px;
+    }
+
+    .answer input[type="checkbox"],
+    .answer input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+    }
+
+    .answer label {
+        font-size: 15px;
+        line-height: 1.35;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+}
+
+@media (max-width: 600px) {
+    .question {
+        font-size: 15px;
+        line-height: 1.35;
+    }
+
+    .redtext,
+    .redtext1 {
+        font-size: 13px;
+    }
+
+    #quizContainer:not(.quiz-start-view):not(:has(.results)) #submitBtn {
+        min-height: 42px;
+        padding: 9px 20px;
+        font-size: 15px;
+    }
+}
+
 
