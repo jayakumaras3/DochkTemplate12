@@ -23,6 +23,14 @@ document.addEventListener("DOMContentLoaded", function() {
 	var QuestionHead="";
 	var selectedOptions="";
 
+	function ensureMenuCopyrightVisible() {
+		return;
+	}
+
+	function restoreFooterCopyright() {
+		return;
+	}
+
 	function applyMobileScrollFix() {
 		if (window.innerWidth > 900) {
 			return;
@@ -57,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		quizContainer.classList.add('quiz-start-view');
 		parentquizContainer.style.display = 'none';
 		applyMobileScrollFix();
+		ensureMenuCopyrightVisible();
 
 	}
 
@@ -345,6 +354,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		parentquizContainer.innerHTML = parentquestionHtml;
 		quizContainer.innerHTML = questionHtml;
 		applyMobileScrollFix();
+		ensureMenuCopyrightVisible();
 		ensureSubmitSection();
 		timerElement = document.getElementById("timer");
 		document.getElementById('submitBtn').addEventListener('click', checkAnswer);
@@ -963,6 +973,7 @@ function SetScoreEachQuestion() {
 				}
 				quizContainer.innerHTML = resultsHtml;
 				applyMobileScrollFix();
+				ensureMenuCopyrightVisible();
 				
 		if(QuizMode =="PreTest")
 		{
@@ -1114,6 +1125,7 @@ function SetScoreEachQuestion() {
 		/* ${!passed ? '<button class="retrybtn" id="retryBtn">Retry</button>' : '<button class="retrybtn" id="retryBtn">Retry</button>'}*/
 		quizContainer.innerHTML = resultsHtml;
 		applyMobileScrollFix();
+		ensureMenuCopyrightVisible();
 		/*document.getElementById('retryBtn').addEventListener('click', retryQuiz);
 		if (!passed) {
 			document.getElementById('retryBtn').addEventListener('click', retryQuiz);
@@ -1165,6 +1177,7 @@ function SetScoreEachQuestion() {
 		selectedAnswers = [];
 		loadQuestion(currentQuestionIndex);
 		applyMobileScrollFix();
+		ensureMenuCopyrightVisible();
 		document.getElementById('parentquizContainer').style.display = 'block';
 		// document.body.style.backgroundImage = "url('images/BG.png')";
 
@@ -1194,8 +1207,13 @@ function SetScoreEachQuestion() {
 
 	loadQuestions();
 	applyMobileScrollFix();
+	ensureMenuCopyrightVisible();
 	window.addEventListener('resize', applyMobileScrollFix);
+	window.addEventListener('resize', ensureMenuCopyrightVisible);
 	window.addEventListener('orientationchange', applyMobileScrollFix);
+	window.addEventListener('orientationchange', ensureMenuCopyrightVisible);
+	window.addEventListener('beforeunload', restoreFooterCopyright);
+	window.addEventListener('pagehide', restoreFooterCopyright);
 	parent.parent.passScoreTOarticulate();
 	parent.parent.pretestCompleteCHeck=parent.parent.getSuspendString("str3");
 	/* console.log("i am here");

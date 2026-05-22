@@ -32,6 +32,7 @@
             <!--div id="glossary_id" ><span role="button"  ng-click="sb.tocClick('glossary')">Glossary</span></div-->
         </div>
         <div class="tocData" ng-bind-html="sb.sideBarData" style="line-height:1.5;overflow-y:auto !important;"></div>
+        <div class="copyright">&copy; 2026 Touchstone Learning</div>
         <div class="line"><hr></div>
     </div>
         <img
@@ -101,8 +102,7 @@
         </div>
 		
     </div>
-  <div ng-controller="footerBar as fb" class="footer" ng-show="fb.showFooter">
- <div class="footerCopyright">&copy; 2026 Touchstone Learning</div>
+    <div ng-controller="footerBar as fb" class="footer" ng-show="fb.showFooter">
  <!-- <img src="theme/images/logo.svg" class="footer-logo" alt="Logo" role="img">-->
 <div
     ng-repeat="btn in fb.navigationBtn"
