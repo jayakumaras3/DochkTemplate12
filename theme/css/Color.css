@@ -877,8 +877,9 @@ body,
 
 html,
 body {
-    overflow-y: auto;
-    scrollbar-gutter: stable;
+    overflow-y: hidden !important;
+    scrollbar-gutter: auto !important;
+    padding-right: 0 !important;
 }
 
 body.menu-open-body,
@@ -1194,6 +1195,30 @@ html.menu-open-body {
         right: 16px;
         bottom: calc(var(--player-footer-height) + 10px);
     }
+}
+
+/* Final layout guard: prevent residual right-side strip in quiz screens */
+#mainPage,
+.wholeContainer,
+.contentArea,
+.contentArea.fullContentArea,
+.pageContent,
+.pageContent.fullContentArea {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    right: 0 !important;
+}
+
+html,
+body,
+#mainPage,
+.wholeContainer {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 100vw !important;
+    margin-right: 0 !important;
+    overflow-x: hidden !important;
 }
 
 /* Mobile */
