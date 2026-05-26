@@ -34,10 +34,15 @@
             return;
         }
 
-        // Force all tracks to show (accessible default)
+        // Force all tracks to load while preserving explicit user OFF state.
         for (let i = 0; i < video.textTracks.length; i++) {
             const track = video.textTracks[i];
             if (track.kind === 'captions' || track.kind === 'subtitles') {
+                // If native controls already switched captions off, persist that choice.
+                if (track.mode === 'disabled') {
+                    window.captionsEnabled = false;
+                }
+
                 // Add cache-buster to track src if not already present
                 if (track.src && !track.src.includes('?v=')) {
                     const cacheVersion = '?v=' + (new Date().getTime() / 60000 | 0);
@@ -45,11 +50,12 @@
                    // console.log('[VideoTrackInit] Added cache-buster to track:', track.src);
                 }
                 
-                // Set to hidden first to trigger browser reload
-                track.mode = 'hidden';
-                // Then set to showing for WCAG compliance
-                track.mode = 'showing';
-                ///console.log('[VideoTrackInit] Track ' + i + ' mode set to showing. Ready state:', track.readyState, 'Cues:', track.cues ? track.cues.length : 0);
+                if (window.captionsEnabled === false) {
+                    track.mode = 'disabled';
+                } else {
+                    track.mode = 'showing';
+                }
+                ///console.log('[VideoTrackInit] Track ' + i + ' mode set. Ready state:', track.readyState, 'Cues:', track.cues ? track.cues.length : 0);
             }
         }
     }
@@ -171,11 +177,26 @@
         if (videoElement.textTracks && videoElement.textTracks.length > 0) {
             const track = videoElement.textTracks[0];
          //   console.log('[VideoTrackInit] Playing check - Track mode:', track.mode, 'Ready state:', track.readyState, 'Cues:', track.cues ? track.cues.length : 0);
+
+            // Native controls set mode to 'disabled' when user selects Captions Off.
+            // Persist this to avoid forcing captions back on during playback.
+            if (track.mode === 'disabled' || track.mode === 'hidden') {
+                window.captionsEnabled = false;
+            } else if (track.mode === 'showing') {
+                window.captionsEnabled = true;
+            }
             
-            // If track is hidden or off, force it to show
-            if (track.mode !== 'showing') {
-              //  console.warn('[VideoTrackInit] Track mode is ' + track.mode + ', forcing to showing');
-                track.mode = 'showing';
+            // Restore track to the correct state based on the user's CC preference.
+            if (window.captionsEnabled === false) {
+                // User turned captions off — keep the track disabled.
+                if (track.mode !== 'disabled') {
+                    track.mode = 'disabled';
+                }
+            } else {
+                // Captions are on — ensure showing mode.
+                if (track.mode !== 'showing') {
+                    track.mode = 'showing';
+                }
             }
         }
     }

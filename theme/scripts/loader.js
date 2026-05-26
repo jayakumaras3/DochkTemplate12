@@ -284,6 +284,12 @@ function renderCustomCaptions(video, textTrack) {
         return;
     }
 
+    if (window.captionsEnabled === false || !textTrack || textTrack.mode !== 'showing') {
+        layer.innerHTML = '';
+        layer.classList.remove('is-visible');
+        return;
+    }
+
     var activeCues = textTrack && textTrack.activeCues ? textTrack.activeCues : [];
     var captionLines = [];
     var index;
@@ -314,18 +320,71 @@ function bindCustomCaptionTrack(video, trackElement) {
         return;
     }
 
+    // --- Clean up previous listeners ---
     if (video._customCaptionTrack && video._customCaptionCueHandler) {
         video._customCaptionTrack.removeEventListener('cuechange', video._customCaptionCueHandler);
     }
+    if (video._customCaptionTrack && video._customCaptionModeHandler) {
+        video._customCaptionTrack.removeEventListener('modechange', video._customCaptionModeHandler);
+    }
+    if (video._customCaptionTimeUpdateHandler) {
+        video.removeEventListener('timeupdate', video._customCaptionTimeUpdateHandler);
+    }
 
+    // --- Cue-change handler: only render when captions are enabled ---
     video._customCaptionCueHandler = function() {
+        if (window.captionsEnabled !== false && textTrack.mode === 'showing') {
+            renderCustomCaptions(video, textTrack);
+        }
+    };
+
+    // --- Mode-change handler: sync custom overlay with native CC toggle ---
+    // Uses a guard flag to prevent the mode re-assignment from re-triggering itself.
+    var _settingMode = false;
+    video._customCaptionModeHandler = function() {
+        if (_settingMode) { return; }
+
+        if (textTrack.mode === 'disabled') {
+            // User clicked "Captions Off" in native controls.
+            window.captionsEnabled = false;
+            layer.innerHTML = '';
+            layer.classList.remove('is-visible');
+
+        } else if (textTrack.mode === 'showing') {
+            // User clicked "Captions On" in native controls.
+            window.captionsEnabled = true;
+            renderCustomCaptions(video, textTrack);
+        } else if (textTrack.mode === 'hidden') {
+            // Treat hidden as OFF in this player's behavior model.
+            window.captionsEnabled = false;
+            layer.innerHTML = '';
+            layer.classList.remove('is-visible');
+        }
+    };
+
+    // Runtime guard for browsers that do not fire modechange consistently from native controls.
+    video._customCaptionTimeUpdateHandler = function() {
+        if (window.captionsEnabled === false || textTrack.mode !== 'showing') {
+            layer.innerHTML = '';
+            layer.classList.remove('is-visible');
+            return;
+        }
+
         renderCustomCaptions(video, textTrack);
     };
 
     video._customCaptionTrack = textTrack;
-    textTrack.mode = 'hidden';
+
+    // Set initial mode: 'showing' when captions are on, 'disabled' when off.
+    textTrack.mode = (window.captionsEnabled === false) ? 'disabled' : 'showing';
+
     textTrack.addEventListener('cuechange', video._customCaptionCueHandler);
-    renderCustomCaptions(video, textTrack);
+    textTrack.addEventListener('modechange', video._customCaptionModeHandler);
+    video.addEventListener('timeupdate', video._customCaptionTimeUpdateHandler);
+
+    if (window.captionsEnabled !== false) {
+        renderCustomCaptions(video, textTrack);
+    }
 }
 
 function LanguageTrackChange(val1, val2) {
@@ -353,6 +412,14 @@ function LanguageTrackChange(val1, val2) {
         video._customCaptionTrack.removeEventListener('cuechange', video._customCaptionCueHandler);
         video._customCaptionTrack = null;
         video._customCaptionCueHandler = null;
+    }
+    if (video._customCaptionTrack && video._customCaptionModeHandler) {
+        video._customCaptionTrack.removeEventListener('modechange', video._customCaptionModeHandler);
+        video._customCaptionModeHandler = null;
+    }
+    if (video._customCaptionTimeUpdateHandler) {
+        video.removeEventListener('timeupdate', video._customCaptionTimeUpdateHandler);
+        video._customCaptionTimeUpdateHandler = null;
     }
 
     var existingCaptionLayer = ensureCustomCaptionLayer(video);
