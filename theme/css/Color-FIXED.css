@@ -546,13 +546,49 @@ video::cue {
 }
 
 #clickNextId {
-    position: absolute;
-    z-index: 1005;
-    right: 32px;
-    bottom: 86px;
+    position: relative;
+    z-index: 1;
+    right: auto;
+    bottom: auto;
     top: auto;
     color: var(--surface);
     text-align: right;
+    margin: 0 0 0 10px !important;
+    min-width: auto !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    filter: none !important;
+    background: transparent !important;
+}
+
+.footer > #clickNextId {
+    display: none;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    z-index: 1;
+    order: 5;
+    margin: 0 10px 0 0 !important;
+    max-width: min(42vw, 320px);
+    flex: 0 1 auto;
+}
+
+.footer > #clickNextId:hover {
+    background: transparent !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+.footer > #clickNextId > #spanCliContinue {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #spanCliContinue {

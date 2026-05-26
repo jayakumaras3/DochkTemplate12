@@ -45,11 +45,8 @@
             onclick="menuClose()"
             onkeydown="if(event.key==='Enter'||event.key===' ')menuClose()"
             style="cursor:pointer;display:none;position:fixed;">
-    <div class="contentArea" ng-controller="contentController as cc" ng-class="cc.fullScreen == true ? 'fullContentArea' : ''">
+        <div class="contentArea" ng-controller="contentController as cc" ng-class="cc.fullScreen == true ? 'fullContentArea' : ''">
 	
-	<div  class="FSize20" id="clickNextId">
-  <span tabindex="0" id="spanCliContinue">Click here to continue</span>
-</div>
 		<div
   id="clickableDiv"
   class="headingArea1"
@@ -141,6 +138,10 @@
         data-radial-indicator-model="indicatorValue"
         style="margin-top:10px"
     ></div>
+
+    <div class="FSize20" id="clickNextId">
+        <span tabindex="0" id="spanCliContinue">Click here to continue</span>
+    </div>
 
     </div>
 
