@@ -201,8 +201,15 @@ function AfterTemaplateJson() {
     const TspanElement = document.querySelector('#trans_id span');
     if (TspanElement) TspanElement.textContent = TranscriptName;
 
-    const spanCli = document.getElementById("spanCliContinue");
-    if (spanCli) spanCli.innerHTML = spanCliContinue;
+	const spanCli = document.getElementById("spanCliContinue");
+	if (spanCli) {
+		// Preserve visible spacing around inline bold tags from JSON content.
+		let clickContinueLabel = spanCliContinue || "";
+		clickContinueLabel = clickContinueLabel.replace(/<b>/gi, " <b>").replace(/<\/b>/gi, "</b> ");
+		clickContinueLabel = clickContinueLabel.replace(/\s{2,}/g, " ").trim();
+		clickContinueLabel = clickContinueLabel.replace(/ <b>/gi, "&nbsp;<b>").replace(/<\/b> /gi, "</b>&nbsp;");
+		spanCli.innerHTML = clickContinueLabel;
+	}
 
     const resumeHeading = document.getElementById("Resumeheading");
     if (resumeHeading) resumeHeading.innerHTML = ResumeTitle;
