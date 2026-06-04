@@ -265,18 +265,6 @@
     position: relative !important;
 }
 
-/* Video subtitle positioning to not cover controls */
-video::-webkit-media-text-track-display {
-    left: 0 !important;
-    width: 100% !important;
-    bottom: 60px !important;
-    text-align: center !important;
-    background: rgba(0, 0, 0, 0.7) !important;
-    padding: 4px 8px !important;
-    border-radius: 4px !important;
-    opacity: 0 !important;
-}
-
 .contentArea.video-mode .shorts-video-frame,
 .wholeContainer.reels-wrapper .shorts-video-frame,
 .contentArea.video-mode #vidArea,
@@ -284,77 +272,6 @@ video::-webkit-media-text-track-display {
 .contentArea.video-mode video,
 .wholeContainer.reels-wrapper video {
     position: relative !important;
-}
-
-.contentArea.video-mode #vidArea::cue,
-.contentArea.video-mode video::cue,
-.wholeContainer.reels-wrapper #vidArea::cue,
-.wholeContainer.reels-wrapper video::cue,
-video::cue {
-    font-size: 16px !important;
-    line-height: 1.4 !important;
-    color: #fff !important;
-    background: rgba(0, 0, 0, 0.7) !important;
-}
-
-.custom-caption-layer {
-    position: absolute !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 60px !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding: 0 16px !important;
-    pointer-events: none !important;
-    z-index: 2005 !important;
-    opacity: 0 !important;
-    transition: opacity 0.15s ease !important;
-}
-
-.custom-caption-layer.is-visible {
-    opacity: 1 !important;
-}
-
-.custom-caption-layer {
-    color: #fff !important;
-    font-size: 16px !important;
-    line-height: 1.4 !important;
-    text-align: center !important;
-}
-
-.custom-caption-layer.is-visible {
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
-}
-
-.custom-caption-layer.is-visible::before {
-    content: '';
-}
-
-.custom-caption-layer.is-visible {
-    white-space: normal !important;
-}
-
-.custom-caption-layer.is-visible {
-    word-break: break-word !important;
-}
-
-.custom-caption-layer.is-visible {
-    overflow-wrap: anywhere !important;
-}
-
-.custom-caption-layer.is-visible {
-    max-width: 100% !important;
-}
-
-.custom-caption-text {
-    display: inline-block !important;
-    max-width: min(92%, 640px) !important;
-    background: rgba(0, 0, 0, 0.72) !important;
-    padding: 4px 8px !important;
-    border-radius: 4px !important;
-    box-decoration-break: clone !important;
-    -webkit-box-decoration-break: clone !important;
 }
 
 /* Top step progress overlay for video pages */

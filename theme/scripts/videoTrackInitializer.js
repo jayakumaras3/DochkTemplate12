@@ -38,11 +38,6 @@
         for (let i = 0; i < video.textTracks.length; i++) {
             const track = video.textTracks[i];
             if (track.kind === 'captions' || track.kind === 'subtitles') {
-                // If native controls already switched captions off, persist that choice.
-                if (track.mode === 'disabled') {
-                    window.captionsEnabled = false;
-                }
-
                 // Add cache-buster to track src if not already present
                 if (track.src && !track.src.includes('?v=')) {
                     const cacheVersion = '?v=' + (new Date().getTime() / 60000 | 0);
@@ -51,7 +46,7 @@
                 }
                 
                 if (window.captionsEnabled === false) {
-                    track.mode = 'disabled';
+                    track.mode = 'hidden';
                 } else {
                     track.mode = 'showing';
                 }
@@ -101,6 +96,12 @@
             // Force load after reattachment
             setTimeout(function() {
                 forceTrackLoad(video);
+                if (typeof window.bindCustomCaptionTrack === 'function') {
+                    window.bindCustomCaptionTrack(video, newTrack);
+                }
+                if (typeof window.loadParsedCaptionCues === 'function') {
+                    window.loadParsedCaptionCues(video, newTrack.src);
+                }
             }, 50);
 
         } catch (error) {
@@ -178,19 +179,20 @@
             const track = videoElement.textTracks[0];
          //   console.log('[VideoTrackInit] Playing check - Track mode:', track.mode, 'Ready state:', track.readyState, 'Cues:', track.cues ? track.cues.length : 0);
 
-            // Native controls set mode to 'disabled' when user selects Captions Off.
-            // Persist this to avoid forcing captions back on during playback.
-            if (track.mode === 'disabled' || track.mode === 'hidden') {
+            // Native controls can set mode to 'disabled' on CC off.
+            // Keep internal state in sync and normalize to hidden.
+            if (track.mode === 'disabled' && window.captionsEnabled === false) {
                 window.captionsEnabled = false;
+                track.mode = 'hidden';
             } else if (track.mode === 'showing') {
                 window.captionsEnabled = true;
             }
             
             // Restore track to the correct state based on the user's CC preference.
             if (window.captionsEnabled === false) {
-                // User turned captions off — keep the track disabled.
-                if (track.mode !== 'disabled') {
-                    track.mode = 'disabled';
+                // User turned captions off — keep the track hidden so cue timing remains live.
+                if (track.mode !== 'hidden') {
+                    track.mode = 'hidden';
                 }
             } else {
                 // Captions are on — ensure showing mode.

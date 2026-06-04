@@ -260,11 +260,6 @@ body {
     padding: 0 !important;
 }
 
-.contentArea.video-mode #vidArea::cue {
-    font-size: 16px !important;
-    line-height: 1.4 !important;
-    background: rgba(0, 0, 0, 0.7) !important;
-}
 
 /* ── contentArea.video-mode footer: right-side flex column (matches reels-wrapper) ── */
 .contentArea.video-mode + .footer {
@@ -479,11 +474,6 @@ body {
     max-height: 100% !important;
 }
 
-.contentArea.video-mode #vidArea::cue {
-    font-size: 16px !important;
-    line-height: 1.4 !important;
-    background: rgba(0, 0, 0, 0.7) !important;
-}
 
 .contentArea.video-mode .action-bar {
     display: none !important;

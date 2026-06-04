@@ -261,131 +261,263 @@ function PageCompleteNextFun() {
  * Handles timing issues with ng-src and video element readiness
  */
 function ensureCustomCaptionLayer(video) {
-    var frame = video.closest('.shorts-video-frame') || video.parentNode;
-    if (!frame) {
-        return null;
-    }
-
-    var layer = frame.querySelector('.custom-caption-layer');
-    if (!layer) {
-        layer = document.createElement('div');
-        layer.className = 'custom-caption-layer';
-        layer.setAttribute('aria-live', 'polite');
-        layer.setAttribute('aria-atomic', 'true');
-        frame.appendChild(layer);
-    }
-
-    return layer;
+    // Native captions are rendered by the browser; no custom overlay container.
+    return null;
 }
 
-function renderCustomCaptions(video, textTrack) {
-    var layer = ensureCustomCaptionLayer(video);
-    if (!layer) {
-        return;
+function escapeCaptionHtml(value) {
+    return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function parseVttTimestamp(value) {
+    var parts = String(value || '').trim().split(':');
+    var seconds;
+
+    if (parts.length === 3) {
+        seconds = (parseFloat(parts[0]) * 3600) +
+            (parseFloat(parts[1]) * 60) +
+            parseFloat(parts[2]);
+    } else if (parts.length === 2) {
+        seconds = (parseFloat(parts[0]) * 60) + parseFloat(parts[1]);
+    } else {
+        seconds = parseFloat(parts[0]);
     }
 
-    if (window.captionsEnabled === false || !textTrack || textTrack.mode !== 'showing') {
-        layer.innerHTML = '';
-        layer.classList.remove('is-visible');
-        return;
-    }
+    return isNaN(seconds) ? 0 : seconds;
+}
 
-    var activeCues = textTrack && textTrack.activeCues ? textTrack.activeCues : [];
-    var captionLines = [];
+function stripVttCueSettings(value) {
+    return String(value || '').trim().split(/\s+/)[0];
+}
+
+function parseVttCues(vttText) {
+    var normalized = String(vttText || '').replace(/\r/g, '');
+    var blocks = normalized.split(/\n\n+/);
+    var cues = [];
     var index;
 
-    for (index = 0; index < activeCues.length; index++) {
-        if (activeCues[index] && activeCues[index].text) {
-            captionLines.push(activeCues[index].text);
+    for (index = 0; index < blocks.length; index++) {
+        var lines = blocks[index].split('\n').filter(function(line) {
+            return line.trim() !== '' && line.trim() !== 'WEBVTT';
+        });
+        var timingIndex = -1;
+        var lineIndex;
+
+        for (lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+            if (lines[lineIndex].indexOf('-->') !== -1) {
+                timingIndex = lineIndex;
+                break;
+            }
+        }
+
+        if (timingIndex === -1) {
+            continue;
+        }
+
+        var timingParts = lines[timingIndex].split('-->');
+        var text = lines.slice(timingIndex + 1).join('\n').trim();
+
+        if (!text) {
+            continue;
+        }
+
+        cues.push({
+            startTime: parseVttTimestamp(stripVttCueSettings(timingParts[0])),
+            endTime: parseVttTimestamp(stripVttCueSettings(timingParts[1])),
+            text: text
+        });
+    }
+
+    return cues;
+}
+
+function loadParsedCaptionCues(video, vttPath) {
+    // Native TextTrack rendering path; manual cue parsing is no longer required.
+    if (video) {
+        video._customCaptionParsedPath = vttPath || '';
+    }
+}
+
+function resolveCaptionTrack(video, textTrack) {
+    var tracks;
+    var index;
+    var firstCaptionTrack = null;
+    var providedTrackFound = false;
+
+    if (!video || !video.textTracks) {
+        return textTrack || null;
+    }
+
+    tracks = video.textTracks;
+
+    if (textTrack) {
+        for (index = 0; index < tracks.length; index++) {
+            if (tracks[index] === textTrack) {
+                providedTrackFound = true;
+                break;
+            }
+        }
+
+        if (providedTrackFound) {
+            return textTrack;
         }
     }
 
-    if (captionLines.length > 0) {
-        layer.innerHTML = '<div class="custom-caption-text">' + captionLines.join('<br>') + '</div>';
-        layer.classList.add('is-visible');
-    } else {
-        layer.innerHTML = '';
-        layer.classList.remove('is-visible');
+    for (index = 0; index < tracks.length; index++) {
+        if (tracks[index] && (tracks[index].kind === 'captions' || tracks[index].kind === 'subtitles')) {
+            if (!firstCaptionTrack) {
+                firstCaptionTrack = tracks[index];
+            }
+            if (tracks[index].mode === 'showing') {
+                return tracks[index];
+            }
+        }
     }
+
+    return firstCaptionTrack;
+}
+
+function syncCaptions(video, textTrack, reason) {
+    var activeTrack = resolveCaptionTrack(video, textTrack);
+
+    if (!video || !activeTrack) {
+        return;
+    }
+
+    if (window.captionsEnabled === false) {
+        if (activeTrack.mode !== 'hidden') {
+            activeTrack.mode = 'hidden';
+        }
+    } else {
+        if (activeTrack.mode !== 'showing') {
+            activeTrack.mode = 'showing';
+        }
+    }
+
+    console.log('CC Toggle:', window.captionsEnabled);
+    console.log('Current Time:', video.currentTime);
+    console.log('Track Mode:', activeTrack.mode);
+    console.log('Cue Count:', activeTrack.cues ? activeTrack.cues.length : 0);
+    console.log('Active Cues:', activeTrack.activeCues ? activeTrack.activeCues.length : 0);
+}
+
+function refreshCaptionImmediately(video, textTrack, reason) {
+    syncCaptions(video, textTrack, reason || 'refresh');
+}
+
+function forceCaptionSync(video, textTrack, reason) {
+    syncCaptions(video, textTrack, reason || 'sync');
+}
+
+function renderCustomCaptions(video, textTrack) {
+    syncCaptions(video, textTrack, 'render');
 }
 
 function bindCustomCaptionTrack(video, trackElement) {
+    var textTrack;
+
     if (!video || !trackElement || !trackElement.track) {
         return;
     }
 
-    var textTrack = trackElement.track;
-    var layer = ensureCustomCaptionLayer(video);
-    if (!layer) {
-        return;
-    }
+    textTrack = trackElement.track;
 
-    // --- Clean up previous listeners ---
-    if (video._customCaptionTrack && video._customCaptionCueHandler) {
-        video._customCaptionTrack.removeEventListener('cuechange', video._customCaptionCueHandler);
-    }
     if (video._customCaptionTrack && video._customCaptionModeHandler) {
         video._customCaptionTrack.removeEventListener('modechange', video._customCaptionModeHandler);
     }
-    if (video._customCaptionTimeUpdateHandler) {
-        video.removeEventListener('timeupdate', video._customCaptionTimeUpdateHandler);
+    if (video.textTracks && video._customCaptionTrackListHandler) {
+        video.textTracks.removeEventListener('change', video._customCaptionTrackListHandler);
+    }
+    if (video._customCaptionToggleClickHandler && video._customCaptionToggleButton) {
+        video._customCaptionToggleButton.removeEventListener('click', video._customCaptionToggleClickHandler);
+        video._customCaptionToggleClickHandler = null;
+        video._customCaptionToggleButton = null;
     }
 
-    // --- Cue-change handler: only render when captions are enabled ---
-    video._customCaptionCueHandler = function() {
-        if (window.captionsEnabled !== false && textTrack.mode === 'showing') {
-            renderCustomCaptions(video, textTrack);
-        }
-    };
-
-    // --- Mode-change handler: sync custom overlay with native CC toggle ---
-    // Uses a guard flag to prevent the mode re-assignment from re-triggering itself.
-    var _settingMode = false;
     video._customCaptionModeHandler = function() {
-        if (_settingMode) { return; }
+        var activeTrack = resolveCaptionTrack(video, textTrack);
 
-        if (textTrack.mode === 'disabled') {
-            // User clicked "Captions Off" in native controls.
-            window.captionsEnabled = false;
-            layer.innerHTML = '';
-            layer.classList.remove('is-visible');
-
-        } else if (textTrack.mode === 'showing') {
-            // User clicked "Captions On" in native controls.
-            window.captionsEnabled = true;
-            renderCustomCaptions(video, textTrack);
-        } else if (textTrack.mode === 'hidden') {
-            // Treat hidden as OFF in this player's behavior model.
-            window.captionsEnabled = false;
-            layer.innerHTML = '';
-            layer.classList.remove('is-visible');
-        }
-    };
-
-    // Runtime guard for browsers that do not fire modechange consistently from native controls.
-    video._customCaptionTimeUpdateHandler = function() {
-        if (window.captionsEnabled === false || textTrack.mode !== 'showing') {
-            layer.innerHTML = '';
-            layer.classList.remove('is-visible');
+        if (!activeTrack) {
             return;
         }
 
-        renderCustomCaptions(video, textTrack);
+        if (activeTrack.mode === 'showing') {
+            window.captionsEnabled = true;
+            return;
+        }
+
+        if (activeTrack.mode === 'disabled') {
+            activeTrack.mode = 'hidden';
+        }
+
+        if (activeTrack.mode === 'hidden') {
+            window.captionsEnabled = false;
+        }
+    };
+
+    video._customCaptionTrackListHandler = function() {
+        var activeTrack = resolveCaptionTrack(video, textTrack);
+        if (!activeTrack) {
+            return;
+        }
+
+        if (activeTrack.mode === 'showing') {
+            window.captionsEnabled = true;
+        } else {
+            if (activeTrack.mode === 'disabled') {
+                activeTrack.mode = 'hidden';
+            }
+            window.captionsEnabled = false;
+        }
     };
 
     video._customCaptionTrack = textTrack;
+    textTrack.mode = (window.captionsEnabled === false) ? 'hidden' : 'showing';
 
-    // Set initial mode: 'showing' when captions are on, 'disabled' when off.
-    textTrack.mode = (window.captionsEnabled === false) ? 'disabled' : 'showing';
-
-    textTrack.addEventListener('cuechange', video._customCaptionCueHandler);
     textTrack.addEventListener('modechange', video._customCaptionModeHandler);
-    video.addEventListener('timeupdate', video._customCaptionTimeUpdateHandler);
-
-    if (window.captionsEnabled !== false) {
-        renderCustomCaptions(video, textTrack);
+    if (video.textTracks && video.textTracks.addEventListener) {
+        video.textTracks.addEventListener('change', video._customCaptionTrackListHandler);
     }
+
+    // Keep existing custom CC button, but apply native track mode only.
+    video._customCaptionToggleButton = document.querySelector('[data-cc-toggle], .cc-toggle, #ccToggleButton, .caption-toggle');
+    if (video._customCaptionToggleButton) {
+        video._customCaptionToggleClickHandler = function() {
+            var activeTrack = resolveCaptionTrack(video, textTrack);
+
+            setTimeout(function() {
+                if (!activeTrack) {
+                    activeTrack = resolveCaptionTrack(video, textTrack);
+                }
+                if (!activeTrack) {
+                    return;
+                }
+
+                if (window.captionsEnabled === false) {
+                    activeTrack.mode = 'hidden';
+                } else {
+                    activeTrack.mode = 'showing';
+                }
+
+                syncCaptions(video, activeTrack, 'toggle-click');
+            }, 0);
+        };
+        video._customCaptionToggleButton.addEventListener('click', video._customCaptionToggleClickHandler);
+    }
+
+    syncCaptions(video, textTrack, 'bind');
 }
+
+window.bindCustomCaptionTrack = bindCustomCaptionTrack;
+window.loadParsedCaptionCues = loadParsedCaptionCues;
+window.refreshCaptionImmediately = refreshCaptionImmediately;
+window.forceCaptionSync = forceCaptionSync;
+window.syncCaptions = syncCaptions;
 
 function LanguageTrackChange(val1, val2) {
     var video = document.getElementById("vidArea");
@@ -408,18 +540,46 @@ function LanguageTrackChange(val1, val2) {
         oldTracks[i].parentNode.removeChild(oldTracks[i]);
     }
 
-    if (video._customCaptionTrack && video._customCaptionCueHandler) {
-        video._customCaptionTrack.removeEventListener('cuechange', video._customCaptionCueHandler);
-        video._customCaptionTrack = null;
-        video._customCaptionCueHandler = null;
-    }
     if (video._customCaptionTrack && video._customCaptionModeHandler) {
         video._customCaptionTrack.removeEventListener('modechange', video._customCaptionModeHandler);
         video._customCaptionModeHandler = null;
     }
+    if (video._customCaptionTrack && video._customCaptionCueHandler) {
+        video._customCaptionTrack.removeEventListener('cuechange', video._customCaptionCueHandler);
+        video._customCaptionCueHandler = null;
+    }
+    video._customCaptionTrack = null;
     if (video._customCaptionTimeUpdateHandler) {
         video.removeEventListener('timeupdate', video._customCaptionTimeUpdateHandler);
         video._customCaptionTimeUpdateHandler = null;
+    }
+    if (video._customCaptionSeekedHandler) {
+        video.removeEventListener('seeked', video._customCaptionSeekedHandler);
+        video._customCaptionSeekedHandler = null;
+    }
+    if (video.textTracks && video._customCaptionTrackListHandler) {
+        video.textTracks.removeEventListener('change', video._customCaptionTrackListHandler);
+        video._customCaptionTrackListHandler = null;
+    }
+    if (video._customCaptionMediaStateHandler) {
+        video.removeEventListener('play', video._customCaptionMediaStateHandler);
+        video.removeEventListener('pause', video._customCaptionMediaStateHandler);
+        video.removeEventListener('loadedmetadata', video._customCaptionMediaStateHandler);
+        video.removeEventListener('loadeddata', video._customCaptionMediaStateHandler);
+        video._customCaptionMediaStateHandler = null;
+    }
+    if (video._customCaptionDurationHandler) {
+        video.removeEventListener('durationchange', video._customCaptionDurationHandler);
+        video._customCaptionDurationHandler = null;
+    }
+    if (video._customCaptionToggleClickHandler && video._customCaptionToggleButton) {
+        video._customCaptionToggleButton.removeEventListener('click', video._customCaptionToggleClickHandler);
+        video._customCaptionToggleButton = null;
+        video._customCaptionToggleClickHandler = null;
+    }
+    if (video._customCaptionModePoll) {
+        clearInterval(video._customCaptionModePoll);
+        video._customCaptionModePoll = null;
     }
 
     var existingCaptionLayer = ensureCustomCaptionLayer(video);
@@ -446,6 +606,7 @@ function LanguageTrackChange(val1, val2) {
     
     // Build English VTT path dynamically
     var vttPath = "assets/vtt/En_" + videoName + ".vtt?v=" + Date.now();
+    loadParsedCaptionCues(video, vttPath);
     
     // Create track element
     var track = document.createElement("track");
@@ -609,22 +770,22 @@ function ResetTrack() {
 
         if (englishTrack) {
             englishTrack.src = enStr;
-            englishTrack.track.mode = "disabled"; // Show the English track
+            englishTrack.track.mode = "hidden";
         }
 
         if (spanishTrack) {
             spanishTrack.src = spStr;
-            spanishTrack.track.mode = "disabled"; // Disable the Spanish track
+            spanishTrack.track.mode = "hidden";
         }
 
         if (chineseTrack) {
             chineseTrack.src = chStr;
-            chineseTrack.track.mode = "disabled"; // Disable the Chinese track
+            chineseTrack.track.mode = "hidden";
         }
 
         if (turkishTrack) {
             turkishTrack.src = tuStr;
-            turkishTrack.track.mode = "disabled"; // Disable the Turkish track
+            turkishTrack.track.mode = "hidden";
         }
     }
 }
