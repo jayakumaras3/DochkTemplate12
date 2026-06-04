@@ -1,0 +1,92 @@
+{
+  "course": {
+    "badge": "GETTING STARTED",
+    "title": "Neurodiversity",
+    "description": "Begin your journey into understanding neurodiversity. This module covers essential concepts for modern education and society.",
+    "duration": "15 Mins",
+    "assessment": "2 Quiz Items",
+    "resources": "Resources"
+  },
+  "menu": [
+    {
+      "id": "welcome",
+      "title": "Welcome",
+      "icon": "home",
+      "active": true,
+      "page": "pages/4926/Screen_01.html",
+      "type": "leaf"
+    },
+    {
+      "id": "audio-version",
+      "title": "Audio Version",
+      "icon": "video",
+      "page": "pages/video/audio-version.html",
+      "type": "leaf"
+    },
+    {
+      "id": "introduction",
+      "title": "Introduction",
+      "icon": "book-open",
+      "page": "pages/customHTML/index.html",
+      "type": "leaf"
+    },
+    {
+      "id": "neurodiversity-workforce",
+      "title": "Neurodiversity in the Workforce",
+      "icon": "brain",
+      "page": "pages/video/workforce.html",
+      "type": "leaf"
+    },
+    {
+      "id": "advantages",
+      "title": "Advantages of Neurodiversity at the Workplace",
+      "icon": "lightbulb",
+      "page": "pages/video/advantages.html",
+      "type": "leaf"
+    },
+    {
+      "id": "knowledge-check-1",
+      "title": "Knowledge Check 1",
+      "icon": "clipboard-check",
+      "page": "pages/Quiz/5002/index.html",
+      "type": "leaf"
+    },
+    {
+      "id": "accommodations",
+      "title": "Accommodations for Neurodivergent Employees",
+      "icon": "accessibility",
+      "page": "pages/video/accommodations.html",
+      "type": "leaf"
+    },
+    {
+      "id": "knowledge-check-2",
+      "title": "Knowledge Check 2",
+      "icon": "badge-check",
+      "page": "pages/Quiz/5007/index.html",
+      "type": "leaf"
+    },
+    {
+      "id": "best-practices",
+      "title": "Best Practices Checklist",
+      "icon": "check-circle",
+      "page": "pages/video/best-practices.html",
+      "type": "leaf"
+    },
+    {
+      "id": "knowledge-check-3",
+      "title": "Knowledge Check 3",
+      "icon": "clipboard-list",
+      "page": "pages/Quiz/5011/index.html",
+      "type": "leaf"
+    }
+  ],
+  "transcript": {
+    "heading": "Transcript",
+    "entries": [
+      "Welcome to Neurodiversity. This course introduces practical principles for building inclusive learning and work environments.",
+      "In this module, you will explore terminology, strengths-based framing, and common accommodations for neurodivergent professionals.",
+      "Use the menu to navigate topics. Your progress can be tracked through knowledge checks and resource activities.",
+      "At any time, you can switch back to the Menu tab and continue the learning sequence."
+    ]
+  }
+}

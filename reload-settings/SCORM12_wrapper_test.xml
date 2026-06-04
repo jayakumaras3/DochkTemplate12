@@ -7,22 +7,22 @@
     <_children>student_id,student_name,lesson_location,credit,lesson_status,entry,score,total_time,lesson_mode,exit,session_time</_children>
     <student_id>Reload-001</student_id>
     <student_name>User, Reload</student_name>
-    <lesson_location>19</lesson_location>
+    <lesson_location>03</lesson_location>
     <credit>credit</credit>
     <lesson_status>incomplete</lesson_status>
     <entry>ab-initio</entry>
     <score>
       <_children>raw,min,max</_children>
-      <raw>0</raw>
+      <raw />
       <min />
       <max />
     </score>
-    <total_time>01:04:12</total_time>
+    <total_time>00:00:09</total_time>
     <lesson_mode>normal</lesson_mode>
     <exit />
-    <session_time>0000:00:13.00</session_time>
+    <session_time>0000:00:09.00</session_time>
   </core>
-  <suspend_data>str1=0,0,0,0,0,0,0,0,1,1,0;str2=;str3=;str4=</suspend_data>
+  <suspend_data>str1=1,1,0,0,0,0,0,0,0,0;str2=;str3=;str4=</suspend_data>
   <launch_data />
   <comments />
   <comments_from_lms />
@@ -45,43 +45,7 @@
   </student_preference>
   <interactions>
     <_children>id,objectives,time,type,correct_responses,weighting,student_response,result,latency</_children>
-    <_count>2</_count>
-    <interaction index="0">
-      <id>Scene2_Slide1_single_0_0</id>
-      <objectives>
-        <_count>1</_count>
-        <objective index="0">
-          <id>1</id>
-        </objective>
-      </objectives>
-      <time />
-      <type>choice</type>
-      <correct_responses>
-        <_count>0</_count>
-      </correct_responses>
-      <weighting />
-      <student_response />
-      <result>correct</result>
-      <latency />
-    </interaction>
-    <interaction index="1">
-      <id>Scene2_Slide2_multiple_0_0</id>
-      <objectives>
-        <_count>1</_count>
-        <objective index="0">
-          <id>1</id>
-        </objective>
-      </objectives>
-      <time />
-      <type>choice</type>
-      <correct_responses>
-        <_count>0</_count>
-      </correct_responses>
-      <weighting />
-      <student_response />
-      <result>correct</result>
-      <latency />
-    </interaction>
+    <_count>0</_count>
   </interactions>
 </cmi>
 

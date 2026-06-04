@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Player</title>
+  <link rel="stylesheet" href="course-player.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="player-shell" id="playerShell">
+    <aside class="sidebar" id="sidebar" aria-label="Course navigation">
+      <div class="sidebar-header">
+        <img class="brand-logo" src="icons/logo.svg" alt="Company logo">
+      </div>
+
+      <div class="sidebar-tabs" role="tablist" aria-label="Sidebar tabs">
+        <button class="tab-button is-active" id="menuTab" role="tab" aria-selected="true" aria-controls="menuPanel">Menu</button>
+        <button class="tab-button" id="transcriptTab" role="tab" aria-selected="false" aria-controls="transcriptPanel">Transcript</button>
+      </div>
+
+      <section class="sidebar-panel menu-panel is-visible" id="menuPanel" role="tabpanel" aria-labelledby="menuTab">
+        <nav class="menu-scroll" aria-label="Course menu">
+          <ul class="menu-tree" id="menuTree" role="tree"></ul>
+        </nav>
+      </section>
+
+      <section class="sidebar-panel transcript-panel" id="transcriptPanel" role="tabpanel" aria-labelledby="transcriptTab" aria-hidden="true">
+        <div class="transcript-scroll" id="transcriptContent"></div>
+      </section>
+
+      <footer class="sidebar-footer">
+        <p class="copyright">© 2026 Touchstone Learning</p>
+      </footer>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" hidden></div>
+
+    <div class="main-shell">
+      <header class="topbar">
+        <button class="hamburger" id="sidebarToggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="sidebar">
+          <img src="icons/Menuopen.svg" alt="" aria-hidden="true">
+        </button>
+        <div class="topbar-divider" aria-hidden="true"></div>
+        <p class="breadcrumb"><span id="currentMenuTitle">Welcome</span></p>
+        <p class="page-counter" id="pageCounter">1/10</p>
+      </header>
+
+      <main class="main-content" id="main-content" tabindex="-1">
+        <section class="hero-banner reveal">
+          <img src="../html/4926/assets/bg.jpg" alt="" aria-hidden="true">
+        </section>
+
+        <section class="dashboard reveal reveal-delay-1" aria-labelledby="courseTitle">
+          <div class="dashboard-grid">
+            <div class="dashboard-copy">
+              <p class="badge" id="courseBadge">GETTING STARTED</p>
+              <h1 id="courseTitle">Neurodiversity</h1>
+              <p class="description" id="courseDescription">Begin your journey into understanding neurodiversity. This module covers essential concepts for modern education and society.</p>
+
+              <div class="action-row">
+                <button class="btn btn-primary" type="button" id="startCourseBtn" aria-label="Start Course">
+                  <span>Start Course</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </button>
+                <button class="btn btn-secondary" type="button" id="audioBtn" aria-label="Play Audio Version">
+                  <img src="icons/audio.png" alt="" aria-hidden="true">
+                  <span>Audio Version</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="dashboard-cards" role="list" aria-label="Course details">
+              <article class="info-card" role="listitem">
+                <img class="card-icon" src="icons/time.png" alt="" aria-hidden="true">
+                <p class="card-label">Duration</p>
+                <p class="card-value" id="durationValue">15 Mins</p>
+              </article>
+
+              <article class="info-card" role="listitem">
+                <img class="card-icon" src="icons/quiz.png" alt="" aria-hidden="true">
+                <p class="card-label">Assessment</p>
+                <p class="card-value" id="assessmentValue">2 Quiz Items</p>
+              </article>
+
+              <article class="info-card" role="listitem">
+                <img class="card-icon" src="icons/download.png" alt="" aria-hidden="true">
+                <p class="card-label">Materials</p>
+                <p class="card-value" id="resourcesValue">Resources</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-frame-wrap" id="contentFrameWrap" hidden>
+          <iframe id="contentFrame" title="Course content frame" loading="lazy"></iframe>
+        </section>
+      </main>
+
+      <footer class="footer-nav reveal reveal-delay-2" aria-label="Page controls">
+        <div class="footer-controls">
+          <button class="footer-btn" type="button" aria-label="Download resources">
+            <img src="icons/resource.svg" alt="" aria-hidden="true">
+          </button>
+          <div class="footer-divider" aria-hidden="true"></div>
+          <button class="footer-btn" type="button" aria-label="Previous page">
+            <img src="icons/previous.svg" alt="" aria-hidden="true">
+          </button>
+          <button class="footer-btn" type="button" aria-label="Next page">
+            <img src="icons/next.svg" alt="" aria-hidden="true">
+          </button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="course-player.js"></script>
+</body>
+</html>
