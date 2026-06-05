@@ -465,7 +465,7 @@ function bindCustomCaptionTrack(video, trackElement) {
         if (!activeTrack) {
             return;
         }
-
+ 
         if (activeTrack.mode === 'showing') {
             window.captionsEnabled = true;
         } else {
@@ -533,6 +533,9 @@ function LanguageTrackChange(val1, val2) {
         return;
     }
     LanguageTrackChange._retryCount = 0;
+
+    // New video navigation should default captions ON.
+    window.captionsEnabled = true;
 
     // Remove all old caption tracks
     var oldTracks = video.querySelectorAll("track");
@@ -648,18 +651,24 @@ function bindVideoCaptionLifecycle() {
     // Prevent duplicate binding on same video element
     if (video.dataset.enCaptionBound === "1") return;
     video.dataset.enCaptionBound = "1";
+
+    // Each video page should start with captions enabled by default.
+    window.captionsEnabled = true;
     
     // Bind to metadata ready events
     video.addEventListener("loadedmetadata", function() {
+        window.captionsEnabled = true;
         LanguageTrackChange("en", "English");
     }, false);
     
     video.addEventListener("loadeddata", function() {
+        window.captionsEnabled = true;
         LanguageTrackChange("en", "English");
     }, false);
     
     // Initial attachment attempt
     setTimeout(function() {
+        window.captionsEnabled = true;
         LanguageTrackChange("en", "English");
     }, 50);
 }

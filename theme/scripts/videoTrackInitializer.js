@@ -218,6 +218,9 @@
 
         videoElement = document.getElementById('vidArea');
 
+        // Every video page load should start with captions enabled by default.
+        window.captionsEnabled = true;
+
         if (!videoElement) {
             // Don't retry endlessly - max 5 attempts
             initAttempts++;
@@ -304,6 +307,7 @@
     window.reinitializeCaptions = function() {
         //console.log('[VideoTrackInit] Manual reinitialization requested');
         if (videoElement) {
+            window.captionsEnabled = true;
             trackInitAttempts = 0;
             reattachTracks(videoElement);
             setTimeout(function() {
