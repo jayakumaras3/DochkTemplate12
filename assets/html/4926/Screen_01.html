@@ -103,44 +103,53 @@
       <div class="info-grid" role="list" aria-label="Course details">
         <article class="info-card" role="listitem">
           <svg aria-hidden="true" class="info-icon" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="8"></circle>
-            <path d="M12 8v5l3 2"></path>
-            <path d="M12 2v3"></path>
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 7v5l3.5 2"></path>
           </svg>
-          <span>Duration</span>
-          <strong>15 Mins</strong>
+          <div class="info-card-text">
+            <span>Duration</span>
+            <strong>15 Mins</strong>
+          </div>
         </article>
 
         <article class="info-card" role="listitem">
           <svg aria-hidden="true" class="info-icon" viewBox="0 0 24 24">
-            <path d="M9 11l2 2 4-5"></path>
-            <path d="M5 5h11v14H5z"></path>
-            <path d="M17 8h2v13H8v-2"></path>
+            <rect x="5" y="3" width="11" height="15" rx="1"></rect>
+            <path d="M17 6h2a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-2"></path>
+            <path d="M9 10l2 2 4-4"></path>
           </svg>
-          <span>Assessment</span>
-          <strong>2 Quiz Items</strong>
+          <div class="info-card-text">
+            <span>Assessment</span>
+            <strong>2 Quiz Items</strong>
+          </div>
         </article>
 
         <article class="info-card" role="listitem">
           <svg aria-hidden="true" class="info-icon" viewBox="0 0 24 24">
-            <path d="M12 3v11"></path>
-            <path d="M8 10l4 4 4-4"></path>
-            <path d="M5 19h14"></path>
+            <path d="M12 3v13"></path>
+            <path d="M7 11l5 5 5-5"></path>
+            <path d="M4 20h16"></path>
           </svg>
-          <span>Materials</span>
-          <strong>Resources</strong>
+          <div class="info-card-text">
+            <span>Materials</span>
+            <strong>Resources</strong>
+          </div>
         </article>
       </div>
 
       <div class="actions">
         <button class="primary-action" type="button" onclick="startCourse()">
           <span>BEGIN COURSE</span>
-          <span aria-hidden="true" class="arrow">&rarr;</span>
+          <svg aria-hidden="true" class="btn-circle-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M10 8l4 4-4 4"></path>
+          </svg>
         </button>
         <button class="secondary-action" type="button" onclick="playAudio()">
-          <svg aria-hidden="true" class="button-icon" viewBox="0 0 24 24">
-            <path d="M4 10v4h4l5 4V6L8 10H4z"></path>
-            <path d="M16 9a4 4 0 0 1 0 6"></path>
+          <svg aria-hidden="true" class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
           </svg>
           <span>Audio Version</span>
         </button>
