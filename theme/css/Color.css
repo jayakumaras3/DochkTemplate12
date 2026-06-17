@@ -415,17 +415,18 @@ video::cue {
 .sideBar {
     position: absolute !important;
     top: 72px !important;
-    left: 24px !important;
+    left: 0 !important;
     z-index: 1005 !important;
     display: none;
-    width: 330px !important;
-    height: calc(100% - 160px) !important;
-    padding: 24px 22px !important;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.98) !important;
-    border: 1px solid var(--line);
-    border-radius: 12px !important;
-    box-shadow: var(--shadow-soft);
+    width: 240px !important;
+    height: calc(100% - 72px) !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #FFFFFF !important;
+    border: none !important;
+    border-right: 1px solid #D9D9D9 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 
 .headingcloser {
@@ -446,8 +447,9 @@ video::cue {
 .logo {
     display: block;
     width: auto;
-    max-width: 176px;
-    margin: 0 auto 8px;
+    max-width: 135px;
+    margin: 18px auto 12px !important;
+    padding: 0 !important;
 }
 
 .sideBarHeader1 {
@@ -458,35 +460,64 @@ video::cue {
 }
 
 .sideBar #sideBarHeader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
-    height: auto;
-    padding-bottom: 10px;
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    width: 100% !important;
+    height: 24px !important;
+    padding: 0 !important;
+    background: #005E80 !important;
 }
 
 #toc_id,
 #trans_id {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: calc(50% - 6px) !important;
-    min-width: 0;
-    height: 38px;
-    margin: 0;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 50% !important;
+    min-width: 0 !important;
+    height: 24px !important;
+    margin: 0 !important;
     padding: 0 !important;
-    color: var(--text-soft);
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 999px;
-    font-size: 16px;
-    line-height: 22px;
-    font-weight: 600;
-    letter-spacing: 0;
+    color: #FFFFFF !important;
+    background: #005E80 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    font-size: 11px !important;
+    line-height: 24px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
     cursor: pointer;
-    transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+    float: none !important;
+    text-align: center !important;
+    transition: background-color 0.15s ease;
+}
+
+#trans_id {
+    border-left: 6px solid #ffffff !important;
+}
+
+/* High-specificity override beats any #sideBarHeader div rule in mobile.css */
+.sideBar #sideBarHeader > #toc_id,
+.sideBar #sideBarHeader > #trans_id {
+    height: 24px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    line-height: 24px !important;
+    color: #FFFFFF !important;
+    background: #005E80 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    text-align: center !important;
+    width: 50% !important;
+}
+
+/* Re-apply separator — must come after the combined rule above (same specificity, last wins) */
+.sideBar #sideBarHeader > #trans_id {
+    border-left: 6px solid #ffffff !important;
 }
 
 #toc_id > span,
@@ -497,59 +528,59 @@ video::cue {
     width: 100%;
     min-width: 0;
     font-size: inherit;
-    line-height: 22px;
+    line-height: 24px;
 }
 
 #toc_id:hover,
 #trans_id:hover {
-    color: var(--brand);
-    background: #f5f7ff;
-    border-color: #c7d2fe;
+    color: #FFFFFF !important;
+    background: #004d6a !important;
 }
 
 .tocclickedclscss {
-    color: var(--text) !important;
-    background: var(--surface) !important;
-    border-color: var(--line) !important;
+    color: #FFFFFF !important;
+    background: #004d6a !important;
+    border-color: transparent !important;
     font-weight: 700 !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    box-shadow: none !important;
+    border-bottom: 2px solid rgba(255,255,255,0.7) !important;
 }
 
 .tocclickedclscss:hover {
-    color: var(--brand) !important;
-    background: #f5f7ff !important;
-    border-color: #c7d2fe !important;
+    color: #FFFFFF !important;
+    background: #004d6a !important;
+    border-color: transparent !important;
 }
 
 .sideBar > .tocData {
     position: relative;
     float: none;
     width: 100%;
-    height: calc(100% - 168px);
-    margin-top: 0;
-    padding-right: 10px;
+    height: calc(100% - 120px);
+    margin-top: 6px;
+    padding: 0 !important;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
     background: transparent;
-    font-size: 16px;
-    line-height: 22px;
+    font-size: 11px;
+    line-height: 1.3;
 }
 
 #tocData li {
     position: relative;
     right: auto;
     width: 100%;
-    margin: 0 0 6px;
-    padding: 11px 12px;
-    color: var(--text-soft);
-    border-radius: 8px;
+    margin: 0 0 2px;
+    padding: 0;
+    color: #5F6670;
+    border-radius: 0;
     list-style: none;
-    font-size: 16px;
-    line-height: 22px;
-    font-weight: 700;
+    font-size: 11px;
+    line-height: 1.3;
+    font-weight: 600;
     min-width: 0;
     word-break: break-word;
     overflow-wrap: anywhere;
-    transition: background-color 0.18s ease, color 0.18s ease;
 }
 
 #tocData li:hover {
@@ -569,7 +600,7 @@ video::cue {
 
 .tickSymbol::before,
 .tickSymbol1::before {
-    content: "\2713";
+    content: "\2714";
 }
 
 .tickSymbol1::before {
@@ -890,7 +921,7 @@ video::cue {
    Player Layout Stabilization Layer (SCORM-safe)
    ============================================================ */
 :root {
-    --player-sidebar-width: 25vw;
+    --player-sidebar-width: 20vw;
     --player-header-height: clamp(52px, 4.8vh, 60px);
     --player-footer-height: clamp(54px, 5.3vh, 70px);
     --player-main-pad-x: clamp(10px, 1.5vw, 24px);
@@ -1009,8 +1040,8 @@ html.menu-open-body {
     left: 0 !important;
     bottom: 0 !important;
     width: var(--player-sidebar-width) !important;
-    min-width: 280px;
-    max-width: 420px;
+    min-width: 240px;
+    max-width: 380px;
     height: 100dvh !important;
     max-height: 100dvh !important;
     min-height: 0 !important;
@@ -1113,7 +1144,7 @@ html.menu-open-body {
 /* High-density desktop */
 @media (min-width: 1920px) {
     :root {
-        --player-sidebar-width: 25vw;
+        --player-sidebar-width: 20vw;
         --player-main-pad-x: 26px;
     }
 
@@ -1125,14 +1156,14 @@ html.menu-open-body {
 /* Standard desktop */
 @media (max-width: 1440px) {
     :root {
-        --player-sidebar-width: 25vw;
+        --player-sidebar-width: 20vw;
     }
 }
 
 /* Laptop */
 @media (max-width: 1280px) {
     :root {
-        --player-sidebar-width: 25vw;
+        --player-sidebar-width: 20vw;
         --player-main-pad-x: 14px;
     }
 
@@ -1145,7 +1176,7 @@ html.menu-open-body {
 @media (max-width: 1024px) {
     :root {
         --player-footer-height: 58px;
-        --player-sidebar-width: 30vw;
+        --player-sidebar-width: 25vw;
     }
 
     .wholeContainer.menu-open::after {
@@ -1157,8 +1188,8 @@ html.menu-open-body {
         left: 0 !important;
         bottom: 0 !important;
         width: var(--player-sidebar-width) !important;
-        min-width: 280px;
-        max-width: 420px;
+        min-width: 240px;
+        max-width: 380px;
         height: 100dvh !important;
         max-height: 100dvh !important;
         margin: 0 !important;
@@ -1181,7 +1212,7 @@ html.menu-open-body {
         --player-footer-height: 54px;
         --player-main-pad-x: 10px;
         --player-main-pad-y: 8px;
-        --player-sidebar-width: 30vw;
+        --player-sidebar-width: 25vw;
     }
 
     .headingArea {
@@ -1210,8 +1241,8 @@ html.menu-open-body {
         left: 0 !important;
         bottom: 0 !important;
         width: var(--player-sidebar-width) !important;
-        min-width: 280px;
-        max-width: 420px;
+        min-width: 240px;
+        max-width: 380px;
         height: 100dvh !important;
         max-height: 100dvh !important;
         margin: 0 !important;
@@ -1363,11 +1394,13 @@ body,
 
 #tocData > span {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 24px;
+    grid-template-columns: minmax(0, 1fr) 12px;
     align-items: center;
-    column-gap: 12px;
+    column-gap: 4px;
     width: 100%;
-    margin: 2px 0;
+    margin: 1px 0;
+    padding: 0 8px 0 0;
+    box-sizing: border-box;
 }
 
 #tocData > span > li {
@@ -1379,22 +1412,23 @@ body,
 
 #tocData > span > li > span.toc-row-item {
     display: flex;
-    align-items: flex-start;
-    gap: 12px;
+    align-items: center;
+    gap: 6px;
     width: 100%;
-    min-height: 44px;
-    padding: 10px 16px;
-    color: #334155;
-    border-radius: 10px;
-    font-size: 16px;
+    min-height: 26px;
+    padding: 0 0 0 8px;
+    color: #5F6670;
+    border-radius: 0;
+    font-size: 11px;
     font-weight: 600;
-    line-height: 1.5;
+    line-height: 1.3;
     text-align: left;
-    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    transition: background 0.15s ease;
     box-sizing: border-box;
     min-width: 0;
     word-break: break-word;
     overflow-wrap: anywhere;
+    position: relative;
 }
 
 /* Disable legacy pseudo-element */
@@ -1405,20 +1439,19 @@ body,
 /* Icon container */
 .toc-item-icon {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    min-width: 22px;
+    width: 11px;
+    height: 11px;
+    min-width: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: inherit;
-    opacity: 0.75;
-    transition: opacity 0.2s ease;
+    color: #9CA3AF;
+    opacity: 1;
 }
 
 .toc-item-icon svg {
-    width: 22px;
-    height: 22px;
+    width: 11px;
+    height: 11px;
     display: block;
     flex-shrink: 0;
 }
@@ -1427,17 +1460,16 @@ body,
 .toc-item-text {
     flex: 1;
     min-width: 0;
-    font-size: 16px;
-    line-height: 1.5;
+    font-size: 11px;
+    line-height: 1.3;
     text-align: left;
     word-break: break-word;
     overflow-wrap: anywhere;
 }
 
 #tocData > span > li > span.toc-row-item:hover {
-    background: #f5f8ff;
-    color: #1f3d7a;
-    transform: translateX(1px);
+    background: #EEF7FA;
+    color: #005E80;
 }
 
 #tocData > span > li > span.toc-row-item:hover .toc-item-icon {
@@ -1454,12 +1486,29 @@ body,
 }
 
 #tocData > span > li > span.toc-row-item.selectedToc {
-    background: #eef3ff;
-    color: #1f4fd3;
+    background: #D8E9F0;
+    color: #005E80;
     font-weight: 700;
+    border-left: 3px solid #005E80;
+    border-radius: 0;
+    padding-left: 5px;
+    position: relative;
+}
+
+#tocData > span > li > span.toc-row-item.selectedToc::after {
+  
+    position: absolute;
+    left: auto;
+    right: 24px;
+    top: 50%;
+    width: 48px;
+    height: 2px;
+    background: #D8E9F0;
+    transform: translateY(-50%);
 }
 
 #tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
+    color: #005E80;
     opacity: 1;
 }
 
@@ -1501,26 +1550,33 @@ body,
 #tocData > span > p.tickSymbol,
 #tocData > span > p.tickSymbol1 {
     margin: 0;
-    width: 22px;
-    height: 22px;
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #0f7a3a;
-    font-size: 18px;
+    color: #FFFFFF;
+    font-size: 8px;
+    font-weight: 700;
     line-height: 1;
     vertical-align: middle;
+    background: #00A3D7;
+    border-radius: 50%;
+    align-self: center;
 }
 
 .sideBar .copyright {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 8px;
-    margin: 0 auto;
-    padding: 6px 0 4px;
-    font-size: 12px;
-    background: linear-gradient(to top, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0));
+    bottom: 12px;
+    margin: 0;
+    padding: 0;
+    font-size: 10px !important;
+    color: #7A7A7A !important;
+    text-align: center;
+    background: transparent;
 }
 
 @media (max-width: 768px) {
