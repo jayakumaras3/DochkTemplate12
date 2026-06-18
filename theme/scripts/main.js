@@ -649,26 +649,43 @@ function generateResourceList(data) {
 
   // Generate the resource list
   resourceContent.innerHTML = `
-	<div class="Navigation_cls_main" onclick="backToMainPage()" 
-		 role="button" 
-		 tabindex="0" 
-		 aria-label="Back to Main Page"
-		 onkeydown="handleKeydown_Close(event)">
-	  <img id="ResourceClose" src="theme/images/footer-menu/Navclose.png" alt="Close navigation menu" role="presentation">
-	</div>
-    <div class="leftResourceArea" style="font-size:34px;">
-      <ul style="list-style-type: none; padding: 0;">
-        ${resources.length > 0 
-          ? resources.map(resource => `
-            <li style="margin-bottom: 5px;">
-              <a style="color:#9E0A07" target="_blank" href="${resource.URL}">
-                ${resource.Title}
-              </a>
-            </li>
-          `).join('')
-          : "<li>No resources available</li>"
-        }
-      </ul>
+    <div class="resource-modal-header">
+      <div class="resource-modal-title" id="resourceModalTitle">
+        <svg class="resource-modal-icon-brand" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        Learning Aids
+      </div>
+      <button class="resource-modal-close" onclick="backToMainPage()" aria-label="Close" tabindex="0" onkeydown="handleKeydown_Close(event)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="resource-modal-body">
+      ${resources.length > 0
+        ? resources.map(resource => `
+          <a class="resource-modal-item" target="_blank" href="${resource.URL}" rel="noopener noreferrer">
+            <div class="resource-item-icon-wrap" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <span class="resource-item-label">${resource.Title}</span>
+            <svg class="resource-item-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        `).join('')
+        : '<p style="color:#637083;text-align:center;padding:20px 0;font-size:14px;">No resources available</p>'
+      }
     </div>
   `;
 }
