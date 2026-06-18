@@ -418,7 +418,7 @@ video::cue {
     left: 0 !important;
     z-index: 1005 !important;
     display: none;
-    width: 240px !important;
+    width: 300px !important;
     height: calc(100% - 72px) !important;
     padding: 0 !important;
     overflow: visible !important;
@@ -447,7 +447,7 @@ video::cue {
 .logo {
     display: block;
     width: auto;
-    max-width: 135px;
+    max-width: 180px;
     margin: 18px auto 12px !important;
     padding: 0 !important;
 }
@@ -477,15 +477,15 @@ video::cue {
     justify-content: center !important;
     width: 50% !important;
     min-width: 0 !important;
-    height: 24px !important;
+    height: 32px !important;
     margin: 0 !important;
     padding: 0 !important;
     color: #FFFFFF !important;
     background: #005E80 !important;
     border: none !important;
     border-radius: 0 !important;
-    font-size: 11px !important;
-    line-height: 24px !important;
+    font-size: 14px !important;
+    line-height: 32px !important;
     font-weight: 600 !important;
     letter-spacing: 0 !important;
     cursor: pointer;
@@ -501,10 +501,10 @@ video::cue {
 /* High-specificity override beats any #sideBarHeader div rule in mobile.css */
 .sideBar #sideBarHeader > #toc_id,
 .sideBar #sideBarHeader > #trans_id {
-    height: 24px !important;
-    font-size: 11px !important;
+    height: 32px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
-    line-height: 24px !important;
+    line-height: 32px !important;
     color: #FFFFFF !important;
     background: #005E80 !important;
     border: none !important;
@@ -1389,7 +1389,7 @@ body,
 
 #tocData {
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 10px 0 0 0 !important;
 }
 
 #tocData > span {
@@ -1415,11 +1415,11 @@ body,
     align-items: center;
     gap: 6px;
     width: 100%;
-    min-height: 36px;
-    padding: 4px 0 4px 8px;
+    min-height: 42px;
+    padding: 6px 0 6px 8px;
     color: #5F6670;
     border-radius: 0;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 1.3;
     text-align: left;
@@ -1439,9 +1439,9 @@ body,
 /* Icon container */
 .toc-item-icon {
     flex-shrink: 0;
-    width: 11px;
-    height: 11px;
-    min-width: 11px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1450,8 +1450,8 @@ body,
 }
 
 .toc-item-icon svg {
-    width: 11px;
-    height: 11px;
+    width: 18px;
+    height: 18px;
     display: block;
     flex-shrink: 0;
 }
@@ -1460,7 +1460,7 @@ body,
 .toc-item-text {
     flex: 1;
     min-width: 0;
-    font-size: 11px;
+    font-size: 14px;
     line-height: 1.3;
     text-align: left;
     word-break: break-word;
