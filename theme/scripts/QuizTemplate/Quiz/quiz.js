@@ -864,7 +864,7 @@ function SetScoreEachQuestion() {
 
 							  ${!passed ? `
 								<button tabindex="0"
-								  class="retrybtn ColorSet_CR FSize20" 
+								  class="retrybtn FSize20" 
 								  id="retryBtn" 
 								  type="button" 
 								  aria-label="Retry the quiz. ${parent.retryButton}">
@@ -931,7 +931,7 @@ function SetScoreEachQuestion() {
 								
 								<p tabindex="0">${parent.resutscorecontent} ${percentage.toFixed(0)}%</p>
 								<p tabindex="0">${passed ? parent.Resutpassed : parent.Resutfailed}</p>
-								${!passed ? `<button tabindex="0" class="retrybtn ColorSet_CR FSize20" id="retryBtn">${parent.retryButton}</button>` : ''}
+								${!passed ? `<button tabindex="0" class="retrybtn  FSize20" id="retryBtn">${parent.retryButton}</button>` : ''}
 							</div>
 						`;
 						
@@ -964,7 +964,7 @@ function SetScoreEachQuestion() {
 								<p id="resultsHeading" role="text" tabindex="0" >${parent.Resulttitle}</p>
 								<p tabindex="0">${parent.resutscorecontent} ${percentage.toFixed(0)}%</p>
 								<p tabindex="0">${passed ? parent.Resutpassed : parent.Resutfailed}</p>
-								${!passed ? `<button tabindex="0" class="retrybtn ColorSet_CR FSize20" id="retryBtn">${parent.retryButton}</button>` : ''}
+								${!passed ? `<button tabindex="0" class="retrybtn  FSize20" id="retryBtn">${parent.retryButton}</button>` : ''}
 							</div>
 						`;
 						

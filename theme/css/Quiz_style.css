@@ -375,8 +375,8 @@ label {
 }
 
 :root {
-    --quiz-accent: #870D0D;
-    --quiz-accent-dark: #5f0909;
+    --quiz-accent: #005E80;
+    --quiz-accent-dark: #005E80;
     --quiz-accent-soft: #f8e6e2;
     --quiz-surface: rgba(255, 255, 255, 0.97);
     --quiz-shadow: 0 18px 40px rgba(135, 13, 13, 0.12);
@@ -720,10 +720,20 @@ input.checkbox {
 }
 
 .btn,
-.Startpagebtn,
+.Startpagebtn {
+    background: #005E80;
+    border-radius: 0;
+    box-shadow: 0 10px 24px rgba(135, 13, 13, 0.16);
+    min-height: 44px;
+    font-size: 16px !important;
+    margin-top: 20px;
+    letter-spacing: 0.02em;
+    padding: 10px 26px;
+    text-transform: none;
+}
 .retrybtn {
-    background: linear-gradient(180deg, #9d1d1d 0%, var(--quiz-accent) 55%, var(--quiz-accent-dark) 100%);
-    border: 1px solid rgba(95, 9, 9, 0.95);
+    background: #870D0D;
+   
     border-radius: 0;
     box-shadow: 0 10px 24px rgba(135, 13, 13, 0.16);
     min-height: 44px;
@@ -735,9 +745,12 @@ input.checkbox {
 }
 
 .btn:hover,
-.Startpagebtn:hover,
+.Startpagebtn:hover {
+    background: #096F95;
+    box-shadow: 0 12px 28px rgba(135, 13, 13, 0.18);
+}
 .retrybtn:hover {
-    background: linear-gradient(180deg, #b32525 0%, #971414 100%);
+    background:#970f0f;
     box-shadow: 0 12px 28px rgba(135, 13, 13, 0.18);
 }
 

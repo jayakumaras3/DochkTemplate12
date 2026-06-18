@@ -480,14 +480,13 @@ input.checkbox {
 }
 
 .incorrect {
-    background: linear-gradient(180deg, #a72424 0%, var(--quiz-accent) 100%);
+    background: #870D0D;
 }
 
 .btn,
 .Startpagebtn,
 .retrybtn {
-    background: linear-gradient(180deg, #9d1d1d 0%, var(--quiz-accent) 55%, var(--quiz-accent-dark) 100%);
-    border: 1px solid rgba(95, 9, 9, 0.95);
+    background: #005E80;
     border-radius: 0;
     box-shadow: 0 10px 24px rgba(135, 13, 13, 0.16);
     min-height: 44px;
@@ -500,7 +499,7 @@ input.checkbox {
 .btn:hover,
 .Startpagebtn:hover,
 .retrybtn:hover {
-    background: linear-gradient(180deg, #b32525 0%, #971414 100%);
+    background: #096F95;
     box-shadow: 0 12px 28px rgba(135, 13, 13, 0.18);
 }
 

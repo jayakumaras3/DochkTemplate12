@@ -102,6 +102,24 @@ function init() {
 				skipPage = 0;
 			}
 		//AfterTemaplateJson();
+		// Wait for the 2-second minimum, then reveal content and hide loader.
+		var elapsed = Date.now() - window._courseLoaderStart;
+		var remaining = Math.max(0, 2000 - elapsed);
+		setTimeout(function () {
+			if (lessonloc) {
+				// Show resume dialog as normal — user chooses Yes/No.
+				document.getElementById("mainPage").style.display = "none";
+				$("#resumemainContainer").css("display", "block");
+				$(".preloaderDisplayresume").attr('tabindex', '0').focus();
+			} else {
+				$("#resumemainContainer").css("display", "none");
+				// First launch: skip Welcome, go straight to Introduction.
+				if (typeof autoStartCourse === 'function') {
+					autoStartCourse();
+				}
+			}
+			hideCourseLoader();
+		}, remaining);
 		
 	}, 300);
 	setTimeout(function() {
@@ -299,8 +317,24 @@ function end() {
 	window.close();
 	window.parent.close();
 }
+function showCourseLoader() {
+	var loader = document.getElementById("courseLoader");
+	if (!loader) return;
+	loader.classList.remove("loader-hide");
+	loader.style.opacity = "1";
+	loader.style.display = "flex";
+}
 
+function hideCourseLoader() {
+	var loader = document.getElementById("courseLoader");
+	if (!loader) return;
+	loader.classList.add("loader-hide");
+	setTimeout(function () {
+		loader.style.display = "none";
+	}, 500);
+}
 function yesBtnClick() {
+	showCourseLoader();
 	var lesson_status1 = scorm.get("cmi.core.lesson_status");
 	var lesson_status2 = scorm.get("cmi.success_status");
 	document.getElementById("mainPage").style.display = "block";
@@ -438,9 +472,11 @@ function yesBtnClick() {
 	getPageCompleted()
 	var footerController = angular.element(document.querySelector(".footer"));
 	footerController.scope().fb.changeFooterNavigation();
+	setTimeout(hideCourseLoader, 100);
 }
 
 function noBtnClick() {
+	showCourseLoader();
 	document.getElementById("mainPage").style.display = "block";
 	if (AudioVersionEnable) {
 		for (var i = 0; i < Totalpage; i++) {
@@ -451,16 +487,17 @@ function noBtnClick() {
 			var elementToRemoveClass = document.getElementById(Tempst);
 			var elementToRemoveClass1 = document.getElementById(Tempprevst);
 
-		//	elementToRemoveClass1.classList.remove('tickSymbol');
+			//	elementToRemoveClass1.classList.remove('tickSymbol');
 
 			if (masterBool) {
 
 			} else {
-				
-				if(i!=1)
-				{
-					
-					elementToRemoveClass.classList.add('disabledClass');
+
+				if (i != 1) {
+					if (elementToRemoveClass != null) {
+						elementToRemoveClass.classList.add('disabledClass');
+					}
+
 				}
 			}
 
@@ -476,7 +513,7 @@ function noBtnClick() {
 
 
 
-		//	elementToRemoveClass1.classList.remove('tickSymbol');
+			//	elementToRemoveClass1.classList.remove('tickSymbol');
 			if (masterBool) {
 
 			} else {
@@ -487,31 +524,34 @@ function noBtnClick() {
 	}
 	var trimstring = scorm.get("cmi.core.lesson_location");
 
-		// lessonloc = scorm.get("cmi.core.lesson_location");
-		lessonloc = trimstring.slice(1, 3);
-		if (lessonloc != "") {
-			curAttempt = trimstring.slice(0, 1);
-			lessonloc = 0;
-			//console.log(curAttempt);
-			//console.log(lessonloc);
-			getPageCompleted();
-			$("#resumemainContainer").css("display", "block")
-			Resume_Bool = true;
-			retake = true
-		}
+	// lessonloc = scorm.get("cmi.core.lesson_location");
 	var page_arr = pageArray.toString();
 	setSuspendString("str1", page_arr);
-//	scorm.set("cmi.suspend_data", page_arr)
-	//scorm.save();
+	scorm.set("cmi.suspend_data", page_arr)
+	scorm.save();
+	lessonloc = trimstring.slice(1, 3);
+	if (lessonloc != "") {
+		curAttempt = trimstring.slice(0, 1);
+		lessonloc = 0;
+		//console.log(curAttempt);
+		//console.log(lessonloc);
+		getPageCompleted();
+		$("#resumemainContainer").css("display", "block")
+		Resume_Bool = true;
+		retake = true
+	}
+	console.log("lessonloc:: " + pageArray);
+	
 	// getPageCompleted()
 	completed = 0;
 	//	scorm.set("cmi.core.lesson_status", "incomplete")
 	//scorm.set("cmi.core.score.raw",0);
 	//	scorm.save();
-	gotoCertainPage(1);
+	gotoCertainPage(3);
 	Resume_Bool = false;
 	$("#resumemainContainer").css("display", "none");
 	pageSormTrack();
+	setTimeout(hideCourseLoader, 100);
 
 }
 //Str1=Suspended Pagearray; Str2= Date; str3=attempt;

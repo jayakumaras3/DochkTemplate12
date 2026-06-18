@@ -1,4 +1,4 @@
-.resume_container {
+﻿.resume_container {
     position: absolute;
     width:100%; 
     height:100%;
@@ -7,7 +7,7 @@
 .preloaderDisplayresume {
     width: 100%;
     height: 100%;
-    background-color: rgb(0, 0, 0);
+    background-color: #f5f5f5;
     position: absolute;
     opacity: 1;
     z-index: 10001;

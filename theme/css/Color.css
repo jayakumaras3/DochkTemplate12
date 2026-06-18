@@ -7,7 +7,7 @@
     --muted: #637083;
     --line: #d9dee7;
     --line-soft: #e8ebf1;
-    --brand: #2456d6;
+    --brand: #005E80;
     --brand-hover: #1d48bd;
     --accent: #7b2ff2;
     --shadow-soft: 0 18px 50px rgba(17, 24, 39, 0.08);
@@ -668,7 +668,7 @@ video::cue {
     display: inline-block;
     padding: 10px 16px;
     color: var(--surface);
-    background: rgba(7, 20, 42, 0.9);
+    background:#005E80;
     border-radius: 999px;
     box-shadow: 0 12px 30px rgba(17, 24, 39, 0.18);
     font-size: 14px;
@@ -790,7 +790,7 @@ video::cue {
 }
 
 .ColorSet_CR {
-    background-color: var(--brand);
+    background-color:#005E80;
 }
 
 .instext {
