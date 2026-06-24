@@ -1,5 +1,22 @@
 // scormFunctions.js
 
+function showCourseLoader() {
+	var loader = document.getElementById("courseLoader");
+	if (!loader) return;
+	loader.classList.remove("loader-hide");
+	loader.style.opacity = "1";
+	loader.style.display = "flex";
+}
+
+function hideCourseLoader() {
+	var loader = document.getElementById("courseLoader");
+	if (!loader) return;
+	loader.classList.add("loader-hide");
+	setTimeout(function () {
+		loader.style.display = "none";
+	}, 500);
+}
+
 var scorm = pipwerks.SCORM;
 var lessonstat = "";
 var lessonloc = "";
@@ -54,6 +71,7 @@ var g_dtmInitialized;
 function init() {
 
 	//console.log("init");
+	window._courseLoaderStart = Date.now();
 	scorm.version = "1.2";
 	scorm.init();
 //	res = scorm.get("cmi.core.suspend_data");
@@ -68,7 +86,7 @@ function init() {
 	lessonloc = trimstring.slice(1, 3);
 
 	setTimeout(function() {
-	
+
 		var lesson_status1 = scorm.get("cmi.core.lesson_status");
 		var lesson_status2 = scorm.get("cmi.success_status");
 		pretestCompleteCHeck=getSuspendString("str3");
@@ -102,7 +120,13 @@ function init() {
 				skipPage = 0;
 			}
 		//AfterTemaplateJson();
-		
+
+		var elapsed = Date.now() - window._courseLoaderStart;
+		var remaining = Math.max(0, 2000 - elapsed);
+		setTimeout(function () {
+			hideCourseLoader();
+		}, remaining);
+
 	}, 300);
 	setTimeout(function() {
 		
@@ -294,6 +318,7 @@ function end() {
 }
 
 function yesBtnClick() {
+	showCourseLoader();
 	var lesson_status1 = scorm.get("cmi.core.lesson_status");
 	var lesson_status2 = scorm.get("cmi.success_status");
 	document.getElementById("mainPage").style.display = "block";
@@ -431,9 +456,11 @@ function yesBtnClick() {
 	getPageCompleted()
 	var footerController = angular.element(document.querySelector(".footer"));
 	footerController.scope().fb.changeFooterNavigation();
+	setTimeout(hideCourseLoader, 100);
 }
 
 function noBtnClick() {
+	showCourseLoader();
 	document.getElementById("mainPage").style.display = "block";
 	if (AudioVersionEnable) {
 		for (var i = 0; i < Totalpage; i++) {
@@ -505,7 +532,7 @@ function noBtnClick() {
 	Resume_Bool = false;
 	$("#resumemainContainer").css("display", "none");
 	pageSormTrack();
-
+	setTimeout(hideCourseLoader, 100);
 }
 //Str1=Suspended Pagearray; Str2= Date; str3=attempt;
 // Utility: Parse suspend_data string to object

@@ -12,6 +12,93 @@
 	 <link href="theme/css/mobile.css" rel="stylesheet">
 	 <link href="theme/css/toc.css" rel="stylesheet">
 	 <link href="theme/css/Color.css" rel="stylesheet">
+    <style>
+        /* ── Overlay ── */
+        #courseLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+        }
+        /* ── Fade-out ── */
+        .loader-hide {
+            opacity: 0;
+            transition: opacity .5s ease;
+            pointer-events: none;
+        }
+        /* ── Vertical stack: logo + card ── */
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /* ── Logo ── */
+        .loader-logo {
+            width: 300px;
+            height: auto;
+            margin-bottom: 0;
+        }
+        /* ── Card ── */
+        .loader-card {
+            width: 380px;
+            min-height: 300px;
+            border: 4px solid #ACD2DF;
+            border-radius: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            background: #ffffff;
+        }
+        /* ── SVG Spinner ── */
+        .touchstone-spinner {
+            width: 72px;
+            height: 72px;
+            animation: touchstoneSpin 1.2s linear infinite;
+            flex-shrink: 0;
+        }
+        .touchstone-spinner .track {
+            stroke: #83B4C5;
+        }
+        .touchstone-spinner .arc {
+            stroke: #0088BB;
+            stroke-dasharray: 94 32;
+            stroke-linecap: round;
+        }
+        @keyframes touchstoneSpin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        /* ── Loading text ── */
+        .loader-text {
+            font-size: 17px;
+            color: #0088BB;
+            font-weight: 400;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        /* ── Tablet ── */
+        @media (max-width: 900px) {
+            .loader-logo          { width: 240px; }
+            .loader-card          { width: 320px; min-height: 240px; gap: 22px; }
+            .touchstone-spinner   { width: 58px; height: 58px; }
+            .loader-text          { font-size: 15px; }
+        }
+        /* ── Mobile ── */
+        @media (max-width: 520px) {
+            .loader-logo          { width: 180px; }
+            .loader-card          { width: 82vw; min-height: 200px; border-radius: 18px; gap: 18px; }
+            .touchstone-spinner   { width: 48px; height: 48px; }
+            .loader-text          { font-size: 14px; }
+        }
+    </style>
     <script src="theme/lib/angular-1.5.8/angular.min.js"></script>
     <script src="theme/lib/angular-1.5.8/angular-route.min.js"></script>
     <script src="theme/lib/angular-1.5.8/angular-sanitize.min.js"></script>
@@ -50,6 +137,19 @@
 
 </script>
 <body ng-app="aristoFramework">
+<div id="courseLoader">
+    <div class="loader-container">
+        <img src="theme/images/logo.svg" alt="Touchstone" class="loader-logo">
+        <div class="loader-card">
+            <svg class="touchstone-spinner" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <circle class="track" cx="25" cy="25" r="20" fill="none" stroke-width="5"/>
+                <circle class="arc"   cx="25" cy="25" r="20" fill="none" stroke-width="5"
+                        transform="rotate(-90 25 25)"/>
+            </svg>
+            <div class="loader-text">Loading...</div>
+        </div>
+    </div>
+</div>
 <div id="mainPage" ng-view="">
 
 </div>
