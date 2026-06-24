@@ -66,13 +66,18 @@
 
         /* ── Spinner ── */
         .touchstone-spinner {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            border: 7px solid #83B4C5;
-            border-top-color: #0088BB;
-            border-right-color: #0088BB;
+            width: 72px;
+            height: 72px;
             animation: touchstoneSpin 1.2s linear infinite;
+            flex-shrink: 0;
+        }
+        .touchstone-spinner .track {
+            stroke: #83B4C5;
+        }
+        .touchstone-spinner .arc {
+            stroke: #0088BB;
+            stroke-dasharray: 94 32;
+            stroke-linecap: round;
         }
 
         @keyframes touchstoneSpin {
@@ -150,7 +155,11 @@
     <div class="loader-container">
         <img src="theme/images/logo.svg" alt="Touchstone" class="loader-logo">
         <div class="loader-card">
-            <div class="touchstone-spinner"></div>
+            <svg class="touchstone-spinner" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                <circle class="track" cx="25" cy="25" r="20" fill="none" stroke-width="5"/>
+                <circle class="arc"   cx="25" cy="25" r="20" fill="none" stroke-width="5"
+                        transform="rotate(-90 25 25)"/>
+            </svg>
             <div class="loader-text">Loading...</div>
         </div>
     </div>
