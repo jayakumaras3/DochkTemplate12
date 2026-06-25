@@ -54,6 +54,7 @@ var g_dtmInitialized;
 function init() {
 
 	//console.log("init");
+	window._courseLoaderStart = Date.now();
 	scorm.version = "1.2";
 	scorm.init();
 //	res = scorm.get("cmi.core.suspend_data");
@@ -547,7 +548,7 @@ function noBtnClick() {
 	//	scorm.set("cmi.core.lesson_status", "incomplete")
 	//scorm.set("cmi.core.score.raw",0);
 	//	scorm.save();
-	gotoCertainPage(3);
+	gotoCertainPage(1);
 	Resume_Bool = false;
 	$("#resumemainContainer").css("display", "none");
 	pageSormTrack();
