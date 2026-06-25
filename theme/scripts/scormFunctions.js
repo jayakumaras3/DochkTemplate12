@@ -328,39 +328,42 @@ function showCourseLoader() {
 
 function hideCourseLoader() {
 	var loader = document.getElementById("courseLoader");
-	if (!loader) return;
+	if (!loader || loader.style.display === 'none' || loader.classList.contains('loader-hide')) return;
 	loader.classList.add("loader-hide");
-	setTimeout(function () {
+	var finished = false;
+	function finish() {
+		if (finished) return;
+		finished = true;
+		loader.removeEventListener('transitionend', onTransition);
 		loader.style.display = "none";
-	}, 500);
+	}
+	function onTransition(e) {
+		if (e.propertyName === 'opacity' && e.target === loader) finish();
+	}
+	loader.addEventListener('transitionend', onTransition);
+	setTimeout(finish, 600); // fallback if transitionend never fires
 }
 
 // ── Per-page navigation loader ──────────────────────────────────────────────
-// Reuses showCourseLoader/hideCourseLoader with a 400ms minimum display time
-// and a nav-lock that blocks double-navigation while a page is loading.
-var _navLocked = false;
-var _navLoaderStart = 0;
+// Event-based: loader hides when the page signals it is fully ready.
+// No fixed minimum — the CSS 0.5s fade-out itself provides visual smoothness.
+var isPageLoading = false;
 
 function showNavLoader() {
-	if (_navLocked) return false;
-	_navLocked = true;
-	_navLoaderStart = Date.now();
+	if (isPageLoading) return false;
+	isPageLoading = true;
 	showCourseLoader();
-	// Safety release after 5s in case hideNavLoader is never called (e.g. error)
+	// Safety release after 8s to prevent a permanent lock if a ready event is missed
 	setTimeout(function() {
-		if (_navLocked) { _navLocked = false; hideCourseLoader(); }
-	}, 5000);
+		if (isPageLoading) { isPageLoading = false; hideCourseLoader(); }
+	}, 8000);
 	return true;
 }
 
 function hideNavLoader() {
-	if (!_navLocked) return;
-	var elapsed = Date.now() - _navLoaderStart;
-	var remaining = Math.max(0, 400 - elapsed);
-	setTimeout(function() {
-		_navLocked = false;
-		hideCourseLoader();
-	}, remaining);
+	if (!isPageLoading) return;
+	isPageLoading = false;
+	hideCourseLoader();
 }
 function yesBtnClick() {
 	showCourseLoader();

@@ -82,12 +82,32 @@ var stage, preload, lib = {};
 
         document.getElementById("preloader").className = "preloaderteempcls";
         currentContentValue = "";
+        var self = this;
         this.scope.$on('initalizeController', assetLoader.proxy(this.globalSettingJson, this));
         this.scope.$on('getTocData', assetLoader.proxy(this.getTocData, this));
         this.scope.$on('showHeader', assetLoader.proxy(this.showHeaderFunc, this));
-        // Hide nav loader once ng-include (html/flash pages) finishes loading
+        // Hide nav loader after ng-include content is in the DOM and all images are loaded.
+        // Flash pages are excluded here — finishLoading() fires after the canvas is ready.
         this.scope.$on('$includeContentLoaded', function() {
-            if (typeof hideNavLoader === 'function') hideNavLoader();
+            if (self.pageContentType === 'flash') return;
+            var area = document.getElementById('htmlArea');
+            var imgs = area ? area.querySelectorAll('img') : [];
+            if (!imgs.length) {
+                if (typeof hideNavLoader === 'function') hideNavLoader();
+                return;
+            }
+            var loaded = 0, total = imgs.length, done = false;
+            function onImgDone() {
+                if (done) return;
+                if (++loaded >= total) { done = true; if (typeof hideNavLoader === 'function') hideNavLoader(); }
+            }
+            for (var i = 0; i < imgs.length; i++) {
+                if (imgs[i].complete) { onImgDone(); }
+                else {
+                    imgs[i].addEventListener('load', onImgDone);
+                    imgs[i].addEventListener('error', onImgDone);
+                }
+            }
         });
 
     };
@@ -523,14 +543,24 @@ var stage, preload, lib = {};
 				this.timeout(function () {
                     self.scope.$apply();
 				var vid = document.getElementById("vidArea");
-				if (document.getElementById("vidArea")) {
+				if (vid) {
 					vid.play();
-
+					vid.oncontextmenu = function(event) { event.preventDefault(); };
+					// Hide loader when the browser has buffered the first frame
+					var vidFired = false;
+					function onVidReady() {
+						if (vidFired) return;
+						vidFired = true;
+						vid.removeEventListener('loadeddata', onVidReady);
+						vid.removeEventListener('error', onVidReady);
+						if (typeof hideNavLoader === 'function') hideNavLoader();
+					}
+					vid.addEventListener('loadeddata', onVidReady);
+					vid.addEventListener('error', onVidReady);
+					if (vid.readyState >= 2) onVidReady(); // already cached
+				} else {
+					if (typeof hideNavLoader === 'function') hideNavLoader();
 				}
-				vid.oncontextmenu = function(event) {
-					event.preventDefault();
-				};
-				if (typeof hideNavLoader === 'function') hideNavLoader();
                 }, 10);
 
                 break;
@@ -539,9 +569,9 @@ var stage, preload, lib = {};
                 this.pageContent = this.contentData[contentCounter].path;
                highlightNavCircle("s")
                 this.pageContentType = this.contentData[contentCounter].type;
+                // Loader is hidden by captivateIframeComplete() when the iframe fires onload
                 this.timeout(function () {
                     self.scope.$apply();
-                    if (typeof hideNavLoader === 'function') hideNavLoader();
                 }, 10);
 
                 break;
@@ -586,6 +616,7 @@ var stage, preload, lib = {};
         createjs.Ticker.setFPS(24);
         createjs.Ticker.addEventListener("tick", stage);
         currentFrame = 0;
+        if (typeof hideNavLoader === 'function') hideNavLoader();
     };
 
 
