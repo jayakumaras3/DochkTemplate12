@@ -608,9 +608,9 @@ video::cue {
 }
 
 .copyright {
-    position: absolute;
-    left: 0;
-    bottom: 16px;
+    position: static;
+    left: auto;
+    bottom: auto;
     width: 100%;
     height: auto;
     color: var(--muted);
@@ -1189,10 +1189,10 @@ html.menu-open-body {
 .sideBar > .tocData {
     flex: 1 1 auto;
     min-height: 0;
-    padding: 0 4px 48px 0;
+    padding: 0 4px 48px 0 !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    scrollbar-width: thin;
+   /* scrollbar-width: thin;*/
 }
 
 .sideBar .logo,
@@ -1217,6 +1217,8 @@ html.menu-open-body {
 
 .sideBar > .tocData::-webkit-scrollbar-track {
     background: transparent;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #sideBarHeader {
@@ -1694,16 +1696,21 @@ body,
 }
 
 .sideBar .copyright {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 12px;
-    margin: 0;
-    padding: 0;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    margin: 0 !important;
+    padding: 7px 14px !important;
     font-size: 10px !important;
-    color: #7A7A7A !important;
+    color: #9CA3AF !important;
     text-align: center;
-    background: transparent;
+    background: #ffffff !important;
+    border-top: 1px solid #E5E7EB;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 10;
 }
 
 @media (max-width: 768px) {

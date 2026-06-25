@@ -535,9 +535,9 @@ video::cue {
 }
 
 .copyright {
-    position: absolute;
-    left: 0;
-    bottom: 16px;
+    position: static;
+    left: auto;
+    bottom: auto;
     width: 100%;
     height: auto;
     color: var(--muted);

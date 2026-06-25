@@ -327,12 +327,12 @@ function showCourseLoader() {
 }
 
 function hideCourseLoader() {
-	var loader = document.getElementById("courseLoader");
+	/*var loader = document.getElementById("courseLoader");
 	if (!loader) return;
 	loader.classList.add("loader-hide");
 	setTimeout(function () {
 		loader.style.display = "none";
-	}, 500);
+	}, 500);*/
 }
 function yesBtnClick() {
 	showCourseLoader();

@@ -100,7 +100,9 @@
     }
 
     .sideBar > .tocData {
-        height: calc(100% - 120px) !important;
+        flex: 1 !important;
+        height: auto !important;
+        min-height: 0 !important;
         font-size: 11px !important;
     }
 
@@ -127,8 +129,10 @@
 
     .copyright {
         font-size: 10px !important;
-        color: #7A7A7A !important;
-        bottom: 12px !important;
+        color: #9CA3AF !important;
+        position: absolute !important;
+        bottom: 0 !important;
+        padding: 6px 14px !important;
     }
 
     .prevClass,
