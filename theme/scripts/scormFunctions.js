@@ -486,7 +486,6 @@ function yesBtnClick() {
 	getPageCompleted()
 	var footerController = angular.element(document.querySelector(".footer"));
 	footerController.scope().fb.changeFooterNavigation();
-	setTimeout(hideCourseLoader, 100);
 }
 
 function noBtnClick() {
@@ -562,7 +561,6 @@ function noBtnClick() {
 	Resume_Bool = false;
 	$("#resumemainContainer").css("display", "none");
 	pageSormTrack();
-	setTimeout(hideCourseLoader, 100);
 }
 //Str1=Suspended Pagearray; Str2= Date; str3=attempt;
 // Utility: Parse suspend_data string to object
