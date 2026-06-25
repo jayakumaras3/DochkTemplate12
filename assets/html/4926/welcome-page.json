@@ -26,7 +26,7 @@
         "action": "startCourse()"
       },
       "secondary": {
-        "text": "Audio Version",
+        "text": "AUDIO VERSION",
         "backgroundColor": "#ffffff",
         "textColor": "#07142a",
         "borderColor": "#d9dee7",
@@ -65,7 +65,7 @@
       },
       {
         "id": "materials",
-        "label": "Materials",
+        "label": "Downloads",
         "value": "Resources",
         "icon": {
           "type": "svg",
