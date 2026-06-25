@@ -87,7 +87,7 @@ var stage, preload, lib = {};
         this.scope.$on('getTocData', assetLoader.proxy(this.getTocData, this));
         this.scope.$on('showHeader', assetLoader.proxy(this.showHeaderFunc, this));
         // Hide nav loader after ng-include content is in the DOM and all images are loaded.
-        // Flash pages are excluded here — finishLoading() fires after the canvas is ready.
+        // Flash pages are excluded — finishLoading() fires after the canvas is ready.
         this.scope.$on('$includeContentLoaded', function() {
             if (self.pageContentType === 'flash') return;
             var area = document.getElementById('htmlArea');
@@ -569,7 +569,6 @@ var stage, preload, lib = {};
                 this.pageContent = this.contentData[contentCounter].path;
                highlightNavCircle("s")
                 this.pageContentType = this.contentData[contentCounter].type;
-                // Loader is hidden by captivateIframeComplete() when the iframe fires onload
                 this.timeout(function () {
                     self.scope.$apply();
                 }, 10);
