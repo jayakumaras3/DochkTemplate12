@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name='viewport' content='width=device-width, initial-scale=1, viewport-fit=cover'/>
+    <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover'/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     <link href="theme/css/bootstrap.css" rel="stylesheet">
@@ -12,41 +12,7 @@
 	 <link href="theme/css/mobile.css" rel="stylesheet">
 	 <link href="theme/css/toc.css" rel="stylesheet">
 	 <link href="theme/css/Color.css" rel="stylesheet">
-    <script src="theme/lib/angular-1.5.8/angular.min.js"></script>
-    <script src="theme/lib/angular-1.5.8/angular-route.min.js"></script>
-    <script src="theme/lib/angular-1.5.8/angular-sanitize.min.js"></script>
-    <script src="theme/lib/radialIndicator.min.js"></script>
-    <script src="theme/lib/angular.radialIndicator.js"></script>
-    <script src="theme/lib/jquery-3.1.1.min.js"></script>
-    <script src="theme/lib/bootstrap.min.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/common/Proxy.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/common/Extend.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/common/EventDispatcher.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/SoundInstance.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/Preloadjs.js"></script>
-    <script src="theme/lib/preloadjs/assets/src/Soundjs.js"></script>
-    <script src="theme/lib/createjs-2015.11.26.min.js"></script>
-    <script type="text/javascript" src="theme/scripts/loader.js"></script>
-    <script src="theme/scripts/service/globalSettingService.js"></script>
-    <script src="theme/scripts/service/globalVariableService.js"></script>
-    <script src="theme/scripts/controller/sideBarController.js"></script>
-    <script src="theme/scripts/controller/footerBarController.js"></script>
-    <script src="theme/scripts/controller/contentController.js"></script>
-    <script src="theme/scripts/controller/certificateController.js"></script>
-    <script src="theme/scripts/controller/mainBarController.js"></script>
-    <script src="theme/scripts/controller/loginController.js"></script>
-    <script src="theme/scripts/app.js"></script>
-    <script src="theme/scripts/main.js"></script>
-	<script src="theme/scripts/jMain.js"></script>
-	<!-- VIDEO CAPTION INITIALIZATION - Handles caption loading on first page load -->
-	<script src="theme/scripts/videoTrackInitializer.js"></script>
-	<!-- VIDEO CAPTION DEBUGGER - Optional: Comment out in production -->
-	<script type="text/javascript" src="theme/scripts/SCORM_API_wrapper.js"></script>
-   <script type="text/javascript" src="theme/scripts/scormtrack.js"></script>
-   <script type="text/javascript" src="theme/scripts/scormFunctions.js"></script>
-  
-</head>
- <style>
+    <style>
         /* ── Overlay ── */
         #courseLoader {
             position: fixed;
@@ -98,8 +64,10 @@
             animation: touchstoneSpin 1.2s linear infinite;
             flex-shrink: 0;
         }
-        .touchstone-spinner .track { stroke: #83B4C5; }
-        .touchstone-spinner .arc   {
+        .touchstone-spinner .track {
+            stroke: #83B4C5;
+        }
+        .touchstone-spinner .arc {
             stroke: #0088BB;
             stroke-dasharray: 94 32;
             stroke-linecap: round;
@@ -118,19 +86,53 @@
         }
         /* ── Tablet ── */
         @media (max-width: 900px) {
-            .loader-logo  { width: 240px; }
-            .loader-card  { width: 320px; min-height: 240px; gap: 22px; }
-            .touchstone-spinner { width: 58px; height: 58px; }
-            .loader-text  { font-size: 15px; }
+            .loader-logo          { width: 240px; }
+            .loader-card          { width: 320px; min-height: 240px; gap: 22px; }
+            .touchstone-spinner   { width: 58px; height: 58px; }
+            .loader-text          { font-size: 15px; }
         }
         /* ── Mobile ── */
         @media (max-width: 520px) {
-            .loader-logo  { width: 180px; }
-            .loader-card  { width: 82vw; min-height: 200px; border-radius: 18px; gap: 18px; }
-            .touchstone-spinner { width: 48px; height: 48px; }
-            .loader-text  { font-size: 14px; }
+            .loader-logo          { width: 180px; }
+            .loader-card          { width: 82vw; min-height: 200px; border-radius: 18px; gap: 18px; }
+            .touchstone-spinner   { width: 48px; height: 48px; }
+            .loader-text          { font-size: 14px; }
         }
     </style>
+    <script src="theme/lib/angular-1.5.8/angular.min.js"></script>
+    <script src="theme/lib/angular-1.5.8/angular-route.min.js"></script>
+    <script src="theme/lib/angular-1.5.8/angular-sanitize.min.js"></script>
+    <script src="theme/lib/radialIndicator.min.js"></script>
+    <script src="theme/lib/angular.radialIndicator.js"></script>
+    <script src="theme/lib/jquery-3.1.1.min.js"></script>
+    <script src="theme/lib/bootstrap.min.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/common/Proxy.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/common/Extend.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/common/EventDispatcher.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/SoundInstance.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/Preloadjs.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/Soundjs.js"></script>
+    <script src="theme/lib/createjs-2015.11.26.min.js"></script>
+    <script type="text/javascript" src="theme/scripts/loader.js"></script>
+    <script src="theme/scripts/service/globalSettingService.js"></script>
+    <script src="theme/scripts/service/globalVariableService.js"></script>
+    <script src="theme/scripts/controller/sideBarController.js"></script>
+    <script src="theme/scripts/controller/footerBarController.js"></script>
+    <script src="theme/scripts/controller/contentController.js"></script>
+    <script src="theme/scripts/controller/certificateController.js"></script>
+    <script src="theme/scripts/controller/mainBarController.js"></script>
+    <script src="theme/scripts/controller/loginController.js"></script>
+    <script src="theme/scripts/app.js"></script>
+    <script src="theme/scripts/main.js"></script>
+	<script src="theme/scripts/jMain.js"></script>
+	<!-- VIDEO CAPTION INITIALIZATION - Handles caption loading on first page load -->
+	<script src="theme/scripts/videoTrackInitializer.js"></script>
+	<!-- VIDEO CAPTION DEBUGGER - Optional: Comment out in production -->
+	<script type="text/javascript" src="theme/scripts/SCORM_API_wrapper.js"></script>
+   <script type="text/javascript" src="theme/scripts/scormtrack.js"></script>
+   <script type="text/javascript" src="theme/scripts/scormFunctions.js"></script>
+  
+</head>
 <script>
 
 </script>
