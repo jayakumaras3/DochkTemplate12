@@ -85,6 +85,10 @@ var stage, preload, lib = {};
         this.scope.$on('initalizeController', assetLoader.proxy(this.globalSettingJson, this));
         this.scope.$on('getTocData', assetLoader.proxy(this.getTocData, this));
         this.scope.$on('showHeader', assetLoader.proxy(this.showHeaderFunc, this));
+        // Hide nav loader once ng-include (html/flash pages) finishes loading
+        this.scope.$on('$includeContentLoaded', function() {
+            if (typeof hideNavLoader === 'function') hideNavLoader();
+        });
 
     };
     var p = contentController.prototype;
@@ -521,13 +525,14 @@ var stage, preload, lib = {};
 				var vid = document.getElementById("vidArea");
 				if (document.getElementById("vidArea")) {
 					vid.play();
-					
+
 				}
 				vid.oncontextmenu = function(event) {
 					event.preventDefault();
 				};
+				if (typeof hideNavLoader === 'function') hideNavLoader();
                 }, 10);
-				
+
                 break;
             case "captivate":
 			  document.getElementsByClassName("pageContent")[0].style.height = "655px";
@@ -536,6 +541,7 @@ var stage, preload, lib = {};
                 this.pageContentType = this.contentData[contentCounter].type;
                 this.timeout(function () {
                     self.scope.$apply();
+                    if (typeof hideNavLoader === 'function') hideNavLoader();
                 }, 10);
 
                 break;
@@ -550,6 +556,7 @@ var stage, preload, lib = {};
                 this.pageContentType = this.contentData[contentCounter].type;
                 this.timeout(function () {
                     self.scope.$apply();
+                    if (typeof hideNavLoader === 'function') hideNavLoader();
                 }, 10);
 
                 break;

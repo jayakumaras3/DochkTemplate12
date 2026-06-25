@@ -327,12 +327,40 @@ function showCourseLoader() {
 }
 
 function hideCourseLoader() {
-	/*var loader = document.getElementById("courseLoader");
+	var loader = document.getElementById("courseLoader");
 	if (!loader) return;
 	loader.classList.add("loader-hide");
 	setTimeout(function () {
 		loader.style.display = "none";
-	}, 500);*/
+	}, 500);
+}
+
+// ── Per-page navigation loader ──────────────────────────────────────────────
+// Reuses showCourseLoader/hideCourseLoader with a 400ms minimum display time
+// and a nav-lock that blocks double-navigation while a page is loading.
+var _navLocked = false;
+var _navLoaderStart = 0;
+
+function showNavLoader() {
+	if (_navLocked) return false;
+	_navLocked = true;
+	_navLoaderStart = Date.now();
+	showCourseLoader();
+	// Safety release after 5s in case hideNavLoader is never called (e.g. error)
+	setTimeout(function() {
+		if (_navLocked) { _navLocked = false; hideCourseLoader(); }
+	}, 5000);
+	return true;
+}
+
+function hideNavLoader() {
+	if (!_navLocked) return;
+	var elapsed = Date.now() - _navLoaderStart;
+	var remaining = Math.max(0, 400 - elapsed);
+	setTimeout(function() {
+		_navLocked = false;
+		hideCourseLoader();
+	}, remaining);
 }
 function yesBtnClick() {
 	showCourseLoader();

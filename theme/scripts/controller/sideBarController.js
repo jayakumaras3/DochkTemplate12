@@ -724,7 +724,7 @@ if (img) {
 	 *
 	 */
 	p.tocDataClick = function(data) {
-
+		if (typeof showNavLoader === 'function' && !showNavLoader()) return;
 
 		if (stage) {
 			stage.removeAllChildren();

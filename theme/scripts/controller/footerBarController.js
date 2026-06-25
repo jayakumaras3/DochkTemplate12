@@ -558,6 +558,7 @@ var pauseTimer;
      *
      */
     p.nextBtnClick = function () {
+        if (typeof showNavLoader === 'function' && !showNavLoader()) return;
         var pageCounter = this.globalVariableService.getPageCounter();
         var prevElem = angular.element(document.getElementById("prev"));
         prevElem.removeClass("disabledClass");
@@ -571,6 +572,7 @@ var pauseTimer;
         this.changeFooterNavigation();
     };
     p.prevBtnClick = function () {
+        if (typeof showNavLoader === 'function' && !showNavLoader()) return;
 		//audio Version page added
 		if (this.globalVariableService.getPageCounter() === 3 && AudioVersionEnable) {
 			gotoCertainPage(1);
@@ -607,6 +609,7 @@ var pauseTimer;
      *
      */
     p.gotoCertainPage = function (gotoPage) {
+        if (typeof showNavLoader === 'function') showNavLoader();
         var pageCounter = this.globalVariableService.getPageCounter();
         this.globalVariableService.replaybtnvisible = false;
         this.commonForNaviagation();
