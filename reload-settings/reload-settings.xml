@@ -2,7 +2,7 @@
 <!--Spawned from Reload Scorm Player - http://www.reload.ac.uk-->
 <!--This is a version 1.2.2 SCORM 1.2 Sequencer Model-->
 <navigation default="pipwerks">
-  <manifest_last_modified>1773815639486</manifest_last_modified>
-  <item id="SCORM12_wrapper_test" organization="pipwerks">incomplete</item>
+  <manifest_last_modified>1782386722405</manifest_last_modified>
+  <item id="SCORM12_wrapper_test" organization="pipwerks">not attempted</item>
 </navigation>
 
