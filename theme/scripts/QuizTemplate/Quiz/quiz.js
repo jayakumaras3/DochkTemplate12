@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					<div class="options" aria-labelledby="question-header">
 						${optionsHtml}
 					</div>
-					<button class="btn btn1 ColorSet_CR FSize16" id="submitBtn" tabindex="0" disabled aria-label="${parent.quizButton}">
+					<button class="btn btn1 ColorSet_CR FSize16" id="submitBtn" tabindex="0" aria-label="${parent.quizButton}">
 						${parent.quizButton}
 					</button>
 					<div class="feedback" tabindex="0" id="feedback" aria-live="polite"></div>
@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					  </div>
 					  
 					  <div class="contentWrapper">
-						<div class="options1">${optionsHtml}<button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn" disabled>${parent.quizButton}</button></div>
+						<div class="options1">${optionsHtml}<button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button></div>
 						<div><img  tabindex="0" class="ImageQuestion zoomable" id="zoomableImage" src="${questionData.images}" alt="image"></img><br><div  tabindex="0" class="redtext1 instext">${parent.ImageZoomText}</div></div>
 						 
 					  </div>					 
@@ -270,22 +270,22 @@ document.addEventListener("DOMContentLoaded", function() {
 						<video id="myvideoQuiz" class="VideoQuestion" src="${questionData.video}" controls controlsList="nodownload noremoteplayback" disablePictureInPicture allowfullscreen>
 </video>
 					  </div>
-					<button tabindex="0"  class="btn btn1 ColorSet_CR FSize16" id="submitBtn" disabled>${parent.quizButton}</button>
+					<button tabindex="0"  class="btn btn1 ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button>
 					<div class="feedback" id="feedback"></div>
 				</div>
-				
+
 			`;
 			}
 		} else if (questionData.type === 'multiple') {
 			if (questionData.images == null && questionData.video == null) {
 
 				questionHtml = `
-			
+
 					<div class="questionContainer" >
-						
+
 						<div tabindex="0" class="question FSize16">${questionData.question}<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div></div>
 						<div class="options">${optionsHtml}</div>
-						<button tabindex="0"  class="btn btn1 ColorSet_CR FSize16" id="submitBtn" disabled>${parent.quizButton}</button>
+						<button tabindex="0"  class="btn btn1 ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button>
 						<div class="feedback" id="feedback"></div>
 					</div>
 					
@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function() {
 						 <div class="contentWrapper">
 							<div class="options1">
 							  ${optionsHtml}
-							  <button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn" disabled>${parent.quizButton}</button>
+							  <button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button>
 							</div>
 							<div class="imageContainer">
 							  <img  tabindex="0" class="ImageQuestion zoomable" id="zoomableImage" src="${questionData.images}" alt="Image">
@@ -327,7 +327,7 @@ document.addEventListener("DOMContentLoaded", function() {
 						
 						<div tabindex="0" class="question FSize16">${questionData.question}<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div></div>
 						<div class="contentWrapper">
-						<div class="options1">${optionsHtml} <button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn" disabled>${parent.quizButton}</button></div>
+						<div class="options1">${optionsHtml} <button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button></div>
 						<video id="myvideoQuiz" class="VideoQuestion" src="${questionData.video}" controls controlsList="nodownload noremoteplayback" disablePictureInPicture allowfullscreen>
 </video>
 					  </div>
@@ -363,11 +363,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			checkbox.addEventListener('click', function() {
 				// Manually toggle checkbox state
 				checkbox.checked = !checkbox.checked;
-
-				// Enable the submit button if any option is selected
-				const submitButton = document.getElementById('submitBtn');
-				const anyOptionSelected = document.querySelectorAll('input[name="answer"]:checked').length > 0;
-				submitButton.disabled = !anyOptionSelected;
 			});
 		});
 		
@@ -538,9 +533,6 @@ window.handleKeydown=function(event, idx, questionType) {
 		}
 		
 					
-		const submitButton = document.getElementById('submitBtn');
-		const anyOptionSelected = document.querySelectorAll('input[name="answer"]:checked').length > 0;
-		submitButton.disabled = !anyOptionSelected;
 	}
 
 	function startCountdown(totalSeconds) {
@@ -579,7 +571,8 @@ function checkAnswer() {
 	const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
 
 	if (selectedOptions.length === 0) {
-		alert("Please select an answer.");
+		const alertText = (parent.quizData && parent.quizData.AlertText && parent.quizData.AlertText.trim()) || "Please select an answer.";
+		alert(alertText);
 		return;
 	}
 

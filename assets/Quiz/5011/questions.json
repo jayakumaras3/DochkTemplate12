@@ -9,6 +9,7 @@
   "iframeSrc": "../../../theme/scripts/QuizTemplate/Quiz/Quiz.html",
   "duration": "0",
   "startpagedescrip": "",
+  "AlertText": "Please select an answer.11",
   "resultpagedescrip": "",
   "TotalQuestionste": "Total number of questions: ",
   "passingScorete": "Minimum passing score: ",
