@@ -22,6 +22,39 @@ document.addEventListener("DOMContentLoaded", function() {
 	var quiztype = "";
 	var QuestionHead="";
 	var selectedOptions="";
+
+	function ensureMenuCopyrightVisible() {
+		return;
+	}
+
+	function restoreFooterCopyright() {
+		return;
+	}
+
+	function applyMobileScrollFix() {
+		if (window.innerWidth > 900) {
+			return;
+		}
+
+		// Keep quiz pages scrollable on mobile when host template constrains height.
+		document.documentElement.style.setProperty('height', '100%', 'important');
+		document.documentElement.style.setProperty('overflow-y', 'auto', 'important');
+		document.documentElement.style.setProperty('-webkit-overflow-scrolling', 'touch');
+
+		document.body.style.setProperty('height', '100%', 'important');
+		document.body.style.setProperty('min-height', '100%', 'important');
+		document.body.style.setProperty('overflow-y', 'auto', 'important');
+		document.body.style.setProperty('-webkit-overflow-scrolling', 'touch');
+		document.body.style.setProperty('touch-action', 'pan-y', 'important');
+
+		if (quizContainer) {
+			quizContainer.style.setProperty('height', 'auto', 'important');
+			quizContainer.style.setProperty('min-height', '100%', 'important');
+			quizContainer.style.setProperty('overflow-y', 'auto', 'important');
+			quizContainer.style.setProperty('-webkit-overflow-scrolling', 'touch');
+			quizContainer.style.setProperty('padding-bottom', '24px', 'important');
+		}
+	}
 	function loadQuestions() {
 		questionsData = parent.mainData; // From questions.json
 		AnswerData = parent.AnsData; // From answers.json
@@ -29,9 +62,10 @@ document.addEventListener("DOMContentLoaded", function() {
 		parent.parent.QuizAttemptLimit = parent.QuizAttempt;
 		QuizMode = parent.QuizMode;
 		PostAttemptType = parent.PostAttemptType;
-		let newMargin = "6%"; // Example dynamic value
-		document.getElementById("quizContainer").style.marginLeft = newMargin;
-		document.getElementById("quizContainer").style.width = "94%";
+		quizContainer.classList.add('quiz-start-view');
+		parentquizContainer.style.display = 'none';
+		applyMobileScrollFix();
+		ensureMenuCopyrightVisible();
 
 	}
 
@@ -107,6 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		`;
 
 		quizContainer.innerHTML = resultsHtml;
+		applyMobileScrollFix();
 		document.getElementById('Startpage').addEventListener('click', startBut);
 		if (parseInt(parent.duration) == 0) {
 
@@ -126,11 +161,35 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	}
 
+	function ensureSubmitSection() {
+		const questionContainer = quizContainer.querySelector('.questionContainer');
+		const submitBtn = quizContainer.querySelector('#submitBtn');
+
+		if (!questionContainer || !submitBtn) {
+			return;
+		}
+
+		let submitSection = questionContainer.querySelector('.submit-section');
+		if (!submitSection) {
+			submitSection = document.createElement('div');
+			submitSection.className = 'submit-section';
+			const optionsSection = questionContainer.querySelector('.options, .options1, .contentWrapper');
+			if (optionsSection && optionsSection.parentNode === questionContainer) {
+				optionsSection.insertAdjacentElement('afterend', submitSection);
+			} else {
+				questionContainer.appendChild(submitSection);
+			}
+		}
+
+		submitSection.appendChild(submitBtn);
+	}
+
 	function loadQuestion(index) {
 
-		let newMargin = "7%"; // Example dynamic value
-		document.getElementById("quizContainer").style.marginLeft = newMargin;
-		document.getElementById("quizContainer").style.width = "89%";
+		quizContainer.classList.remove('quiz-start-view');
+		quizContainer.style.marginLeft = '';
+		quizContainer.style.width = '';
+		parentquizContainer.style.display = '';
 
 		const questionData = questionsData[index];
 
@@ -164,14 +223,14 @@ document.addEventListener("DOMContentLoaded", function() {
 				questionHtml = `
 			
 					<div class="questionContainer">
-					<div tabindex="0" class="question FSize20" id="question-header" >
+					<div tabindex="0" class="question FSize16" id="question-header" >
 						${questionData.question}
-						<div class="redtext instext FSize20" aria-live="polite">${parent.Questiontext}</div>
+						<div class="redtext instext FSize16" aria-live="polite">${parent.Questiontext}</div>
 					</div>
 					<div class="options" aria-labelledby="question-header">
 						${optionsHtml}
 					</div>
-					<button class="btn btn1 ColorSet_CR FSize20" id="submitBtn" tabindex="0" disabled aria-label="${parent.quizButton}">
+					<button class="btn btn1 ColorSet_CR FSize16" id="submitBtn" tabindex="0" aria-label="${parent.quizButton}">
 						${parent.quizButton}
 					</button>
 					<div class="feedback" tabindex="0" id="feedback" aria-live="polite"></div>
@@ -181,13 +240,13 @@ document.addEventListener("DOMContentLoaded", function() {
 			} else if (questionData.images != null && questionData.video == null) {
 					questionHtml = `
 					<div class="questionContainer">
-					  <div tabindex="0" class="question FSize20">
+					  <div tabindex="0" class="question FSize16">
 						${questionData.question}
-						<div class="redtext instext FSize20">${parent.QuestionMcQtext}</div>
+						<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div>
 					  </div>
 					  
 					  <div class="contentWrapper">
-						<div class="options1">${optionsHtml}<button tabindex="0"  class="btn ColorSet_CR FSize20" id="submitBtn" disabled>${parent.quizButton}</button></div>
+						<div class="options1">${optionsHtml}<button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button></div>
 						<div><img  tabindex="0" class="ImageQuestion zoomable" id="zoomableImage" src="${questionData.images}" alt="image"></img><br><div  tabindex="0" class="redtext1 instext">${parent.ImageZoomText}</div></div>
 						 
 					  </div>					 
@@ -211,22 +270,22 @@ document.addEventListener("DOMContentLoaded", function() {
 						<video id="myvideoQuiz" class="VideoQuestion" src="${questionData.video}" controls controlsList="nodownload noremoteplayback" disablePictureInPicture allowfullscreen>
 </video>
 					  </div>
-					<button tabindex="0"  class="btn btn1 ColorSet_CR FSize20" id="submitBtn" disabled>${parent.quizButton}</button>
+					<button tabindex="0"  class="btn btn1 ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button>
 					<div class="feedback" id="feedback"></div>
 				</div>
-				
+
 			`;
 			}
 		} else if (questionData.type === 'multiple') {
 			if (questionData.images == null && questionData.video == null) {
 
 				questionHtml = `
-			
+
 					<div class="questionContainer" >
-						
-						<div tabindex="0" class="question FSize20">${questionData.question}<div class="redtext instext FSize20">${parent.QuestionMcQtext}</div></div>
+
+						<div tabindex="0" class="question FSize16">${questionData.question}<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div></div>
 						<div class="options">${optionsHtml}</div>
-						<button tabindex="0"  class="btn btn1 ColorSet_CR FSize20" id="submitBtn" disabled>${parent.quizButton}</button>
+						<button tabindex="0"  class="btn btn1 ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button>
 						<div class="feedback" id="feedback"></div>
 					</div>
 					
@@ -241,11 +300,11 @@ document.addEventListener("DOMContentLoaded", function() {
 						 <div class="contentWrapper">
 							<div class="options1">
 							  ${optionsHtml}
-							  <button tabindex="0"  class="btn ColorSet_CR FSize20" id="submitBtn" disabled>${parent.quizButton}</button>
+							  <button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button>
 							</div>
 							<div class="imageContainer">
 							  <img  tabindex="0" class="ImageQuestion zoomable" id="zoomableImage" src="${questionData.images}" alt="Image">
-							  <div  tabindex="0" class="redtext1 instext FSize20">${parent.ImageZoomText}</div>
+							  <div  tabindex="0" class="redtext1 instext FSize16">${parent.ImageZoomText}</div>
 							</div>
 						  </div>
 					 
@@ -266,9 +325,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		
 					<div class="questionContainer" >
 						
-						<div tabindex="0" class="question FSize20">${questionData.question}<div class="redtext instext FSize20">${parent.QuestionMcQtext}</div></div>
+						<div tabindex="0" class="question FSize16">${questionData.question}<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div></div>
 						<div class="contentWrapper">
-						<div class="options1">${optionsHtml} <button tabindex="0"  class="btn ColorSet_CR FSize20" id="submitBtn" disabled>${parent.quizButton}</button></div>
+						<div class="options1">${optionsHtml} <button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button></div>
 						<video id="myvideoQuiz" class="VideoQuestion" src="${questionData.video}" controls controlsList="nodownload noremoteplayback" disablePictureInPicture allowfullscreen>
 </video>
 					  </div>
@@ -289,12 +348,14 @@ document.addEventListener("DOMContentLoaded", function() {
   ${parent.QuestionCountText} ${index + 1} ${parent.QuestionOFText} ${questionsData.length}
 </p>
 <div id="timer">${formattedTime}</div></div>
-		 	<img class="Bulb" src="../../../images/Bulb.svg" alt="Bulb"/>
 		 
 		 
         `;
 		parentquizContainer.innerHTML = parentquestionHtml;
 		quizContainer.innerHTML = questionHtml;
+		applyMobileScrollFix();
+		ensureMenuCopyrightVisible();
+		ensureSubmitSection();
 		timerElement = document.getElementById("timer");
 		document.getElementById('submitBtn').addEventListener('click', checkAnswer);
 		// Add click event listener to checkboxes
@@ -302,11 +363,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			checkbox.addEventListener('click', function() {
 				// Manually toggle checkbox state
 				checkbox.checked = !checkbox.checked;
-
-				// Enable the submit button if any option is selected
-				const submitButton = document.getElementById('submitBtn');
-				const anyOptionSelected = document.querySelectorAll('input[name="answer"]:checked').length > 0;
-				submitButton.disabled = !anyOptionSelected;
 			});
 		});
 		
@@ -477,9 +533,6 @@ window.handleKeydown=function(event, idx, questionType) {
 		}
 		
 					
-		const submitButton = document.getElementById('submitBtn');
-		const anyOptionSelected = document.querySelectorAll('input[name="answer"]:checked').length > 0;
-		submitButton.disabled = !anyOptionSelected;
 	}
 
 	function startCountdown(totalSeconds) {
@@ -518,7 +571,8 @@ function checkAnswer() {
 	const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
 
 	if (selectedOptions.length === 0) {
-		alert("Please select an answer.");
+		const alertText = (parent.quizData && parent.quizData.AlertText && parent.quizData.AlertText.trim()) || "Please select an answer.";
+		alert(alertText);
 		return;
 	}
 
@@ -803,7 +857,7 @@ function SetScoreEachQuestion() {
 
 							  ${!passed ? `
 								<button tabindex="0"
-								  class="retrybtn ColorSet_CR FSize20" 
+								  class="retrybtn FSize20" 
 								  id="retryBtn" 
 								  type="button" 
 								  aria-label="Retry the quiz. ${parent.retryButton}">
@@ -870,7 +924,7 @@ function SetScoreEachQuestion() {
 								
 								<p tabindex="0">${parent.resutscorecontent} ${percentage.toFixed(0)}%</p>
 								<p tabindex="0">${passed ? parent.Resutpassed : parent.Resutfailed}</p>
-								${!passed ? `<button tabindex="0" class="retrybtn ColorSet_CR FSize20" id="retryBtn">${parent.retryButton}</button>` : ''}
+								${!passed ? `<button tabindex="0" class="retrybtn  FSize20" id="retryBtn">${parent.retryButton}</button>` : ''}
 							</div>
 						`;
 						
@@ -903,7 +957,7 @@ function SetScoreEachQuestion() {
 								<p id="resultsHeading" role="text" tabindex="0" >${parent.Resulttitle}</p>
 								<p tabindex="0">${parent.resutscorecontent} ${percentage.toFixed(0)}%</p>
 								<p tabindex="0">${passed ? parent.Resutpassed : parent.Resutfailed}</p>
-								${!passed ? `<button tabindex="0" class="retrybtn ColorSet_CR FSize20" id="retryBtn">${parent.retryButton}</button>` : ''}
+								${!passed ? `<button tabindex="0" class="retrybtn  FSize20" id="retryBtn">${parent.retryButton}</button>` : ''}
 							</div>
 						`;
 						
@@ -911,6 +965,8 @@ function SetScoreEachQuestion() {
 					}
 				}
 				quizContainer.innerHTML = resultsHtml;
+				applyMobileScrollFix();
+				ensureMenuCopyrightVisible();
 				
 		if(QuizMode =="PreTest")
 		{
@@ -1061,6 +1117,8 @@ function SetScoreEachQuestion() {
 `;
 		/* ${!passed ? '<button class="retrybtn" id="retryBtn">Retry</button>' : '<button class="retrybtn" id="retryBtn">Retry</button>'}*/
 		quizContainer.innerHTML = resultsHtml;
+		applyMobileScrollFix();
+		ensureMenuCopyrightVisible();
 		/*document.getElementById('retryBtn').addEventListener('click', retryQuiz);
 		if (!passed) {
 			document.getElementById('retryBtn').addEventListener('click', retryQuiz);
@@ -1111,6 +1169,8 @@ function SetScoreEachQuestion() {
 		currentQuestionIndex = 0;
 		selectedAnswers = [];
 		loadQuestion(currentQuestionIndex);
+		applyMobileScrollFix();
+		ensureMenuCopyrightVisible();
 		document.getElementById('parentquizContainer').style.display = 'block';
 		// document.body.style.backgroundImage = "url('images/BG.png')";
 
@@ -1139,6 +1199,14 @@ function SetScoreEachQuestion() {
 	
 
 	loadQuestions();
+	applyMobileScrollFix();
+	ensureMenuCopyrightVisible();
+	window.addEventListener('resize', applyMobileScrollFix);
+	window.addEventListener('resize', ensureMenuCopyrightVisible);
+	window.addEventListener('orientationchange', applyMobileScrollFix);
+	window.addEventListener('orientationchange', ensureMenuCopyrightVisible);
+	window.addEventListener('beforeunload', restoreFooterCopyright);
+	window.addEventListener('pagehide', restoreFooterCopyright);
 	parent.parent.passScoreTOarticulate();
 	parent.parent.pretestCompleteCHeck=parent.parent.getSuspendString("str3");
 	/* console.log("i am here");

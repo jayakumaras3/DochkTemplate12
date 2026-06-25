@@ -2,7 +2,6 @@
 <div ng-controller="mainController as mc" class="wholeContainer">
     <div id="Tmenu" ng-controller="sideBar as sb" class="sideBar" ng-show="sb.showSideBar">
 		<img src="theme/images/logo.svg" class="logo" alt="Logo" role="img">
-		<div style='text-align:center;line-height: 1;'><div class='sideBarHeader1'></div></div>
         <div id="sideBarHeader">
 		<!-- <hr> -->
             <!-- Menu Button -->
@@ -10,11 +9,11 @@
   <span
     role="button"
     tabindex="0"
-    aria-label="Menu"
+    aria-label="Start"
     ng-click="sb.tocClick('toc')"
     onkeydown="keyHandler(event, 'toc')"
   >
-    Menu
+    Start
   </span>
 </div>
 
@@ -33,14 +32,21 @@
             <!--div id="glossary_id" ><span role="button"  ng-click="sb.tocClick('glossary')">Glossary</span></div-->
         </div>
         <div class="tocData" ng-bind-html="sb.sideBarData" style="line-height:1.5;overflow-y:auto !important;"></div>
+        <div class="copyright" ng-show="sb.transcriptClicked">&copy; 2026 Touchstone Learning11</div>
         <div class="line"><hr></div>
-		<div class="copyright">© 2026 Touchstone</div>
     </div>
-    <div class="contentArea" ng-controller="contentController as cc" ng-class="cc.fullScreen == true ? 'fullContentArea' : ''">
+        <img
+            id="sideBarCloseBtn"
+            src="theme/images/footer-menu/MenuClose_icon.svg"
+            alt="Close Menu"
+            title="Close Menu"
+            role="button"
+            tabindex="0"
+            onclick="menuClose()"
+            onkeydown="if(event.key==='Enter'||event.key===' ')menuClose()"
+            style="cursor:pointer;display:none;position:fixed;">
+        <div class="contentArea" ng-controller="contentController as cc" ng-class="cc.fullScreen == true ? 'fullContentArea' : ''">
 	
-	<div  class="FSize20" id="clickNextId">
-  <span tabindex="0" id="spanCliContinue">Click here to continue</span>
-</div>
 		<div
   id="clickableDiv"
   class="headingArea1"
@@ -59,7 +65,9 @@
   aria-expanded="{{sb.menuOpen ? 'true' : 'false'}}"
   style="cursor: pointer;">
 		 <img title="Menu"  style="display:none;" id="TmenuIcon1" ng-click="sb.tocClick('toggleMenu')"  alt="image"></div> 
-        <div class="headingArea FSize19" ng-show="cc.showHeader"><span tabindex="0" role="text"> {{cc.header}}</span><div  tabindex="0" id="pagenoHeader"></div>
+        <div class="headingArea FSize19" ng-show="cc.showHeader">
+        <span class="pageHeaderText" tabindex="0" role="text">{{cc.header}}</span>
+        <div  tabindex="0" id="pagenoHeader"></div>
         <button id="certificateid" onclick="showCertificate()" aria-label="View Certificate">
   <img  id="Imagcertificateid" src="theme/images/footer-menu/Certificate.svg" alt="" style="height: 32px; vertical-align: middle;">
 </button>
@@ -91,7 +99,7 @@
         </div>
 		
     </div>
-  <div ng-controller="footerBar as fb" class="footer" ng-show="fb.showFooter">
+    <div ng-controller="footerBar as fb" class="footer" ng-show="fb.showFooter">
  <!-- <img src="theme/images/logo.svg" class="footer-logo" alt="Logo" role="img">-->
 <div
     ng-repeat="btn in fb.navigationBtn"
@@ -130,6 +138,10 @@
         data-radial-indicator-model="indicatorValue"
         style="margin-top:10px"
     ></div>
+
+    <div class="FSize20" id="clickNextId">
+        <span tabindex="0" id="spanCliContinue">Click here to continue</span>
+    </div>
 
     </div>
 

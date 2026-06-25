@@ -1,7 +1,7 @@
 /**
  * Created by pc3 on 12/25/2016.
  */
-var windowResizeOption = "aspect"
+var windowResizeOption = "responsive"
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
@@ -9,6 +9,17 @@ $(function () {
 function windowResizing() {
     'use strict';
     var body = document.body;
+    if (windowResizeOption == "responsive") {
+        // Modern responsive mode: do not letterbox to 1366x768.
+        body.style.transform = "none";
+        body.style.left = "0px";
+        body.style.top = "0px";
+        body.style.width = "100%";
+        body.style.height = "100%";
+        body.style.overflow = "hidden";
+        return;
+    }
+
     var windowWidth = window.innerWidth;
     var windowHeight = window.innerHeight;
     var scaleX = windowWidth / 1366;

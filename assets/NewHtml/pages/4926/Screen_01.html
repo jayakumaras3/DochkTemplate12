@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neurodiversity</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script>
+    function startCourse() {
+      parent.beginButCall();
+    }
+
+    function playAudio() {
+      parent.audioButCall();
+    }
+
+    // Load JSON configuration
+    let welcomePageConfig = {};
+
+    function initializeWelcomePage(config) {
+      welcomePageConfig = config.welcomePage;
+
+      // Update badge
+      const eyebrow = document.querySelector('.eyebrow');
+      if (eyebrow) {
+        eyebrow.textContent = welcomePageConfig.badge.text;
+      }
+
+      // Update title
+      const title = document.querySelector('h1#welcome-title');
+      if (title) {
+        title.textContent = welcomePageConfig.title.text;
+      }
+
+      // Update description
+      const intro = document.querySelector('p.intro');
+      if (intro) {
+        intro.textContent = welcomePageConfig.description.text;
+      }
+
+      // Update primary button
+      const primaryBtn = document.querySelector('.primary-action');
+      if (primaryBtn) {
+        const btnText = primaryBtn.querySelector('span:first-child');
+        if (btnText) {
+          btnText.textContent = welcomePageConfig.buttons.primary.text;
+        }
+      }
+
+      // Update secondary button
+      const secondaryBtn = document.querySelector('.secondary-action');
+      if (secondaryBtn) {
+        const btnText = secondaryBtn.querySelector('span:last-child');
+        if (btnText) {
+          btnText.textContent = welcomePageConfig.buttons.secondary.text;
+        }
+      }
+
+      // Update info cards
+      const infoCards = document.querySelectorAll('.info-card');
+      welcomePageConfig.cards.forEach((cardData, index) => {
+        if (infoCards[index]) {
+          const card = infoCards[index];
+          const spanEl = card.querySelector('span');
+          const strongEl = card.querySelector('strong');
+          if (spanEl) spanEl.textContent = cardData.label;
+          if (strongEl) strongEl.textContent = cardData.value;
+        }
+      });
+
+      console.log('Welcome page initialized from JSON', welcomePageConfig);
+    }
+
+    // Fetch and load JSON on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('./welcome-page.json')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to load JSON: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          initializeWelcomePage(data);
+        })
+        .catch(error => {
+          console.warn('Could not load JSON configuration, using defaults:', error);
+          // Page will render with hardcoded HTML as fallback
+        });
+    });
+  </script>
+</head>
+<body>
+  <main class="welcome-card" aria-labelledby="welcome-title">
+    <section class="welcome-copy">
+      <p class="eyebrow">GETTING STARTED</p>
+      <h1 id="welcome-title">Neurodiversity</h1>
+      <p class="intro">
+        Begin your journey into understanding neurodiversity. This module covers
+        essential concepts for modern education and society.
+      </p>
+
+      <div class="info-grid" role="list" aria-label="Course details">
+        <article class="info-card" role="listitem">
+          <svg aria-hidden="true" class="info-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="8"></circle>
+            <path d="M12 8v5l3 2"></path>
+            <path d="M12 2v3"></path>
+          </svg>
+          <span>Duration</span>
+          <strong>15 Mins</strong>
+        </article>
+
+        <article class="info-card" role="listitem">
+          <svg aria-hidden="true" class="info-icon" viewBox="0 0 24 24">
+            <path d="M9 11l2 2 4-5"></path>
+            <path d="M5 5h11v14H5z"></path>
+            <path d="M17 8h2v13H8v-2"></path>
+          </svg>
+          <span>Assessment</span>
+          <strong>2 Quiz Items</strong>
+        </article>
+
+        <article class="info-card" role="listitem">
+          <svg aria-hidden="true" class="info-icon" viewBox="0 0 24 24">
+            <path d="M12 3v11"></path>
+            <path d="M8 10l4 4 4-4"></path>
+            <path d="M5 19h14"></path>
+          </svg>
+          <span>Materials</span>
+          <strong>Resources</strong>
+        </article>
+      </div>
+
+      <div class="actions">
+        <button class="primary-action" type="button" onclick="startCourse()">
+          <span>BEGIN COURSE</span>
+          <span aria-hidden="true" class="arrow">&rarr;</span>
+        </button>
+        <button class="secondary-action" type="button" onclick="playAudio()">
+          <svg aria-hidden="true" class="button-icon" viewBox="0 0 24 24">
+            <path d="M4 10v4h4l5 4V6L8 10H4z"></path>
+            <path d="M16 9a4 4 0 0 1 0 6"></path>
+          </svg>
+          <span>Audio Version</span>
+        </button>
+      </div>
+    </section>
+
+    <figure class="welcome-visual">
+      <img src="assets/bg.jpg" alt="Colorful puzzle pieces representing neurodiversity">
+    </figure>
+  </main>
+</body>
+</html>

@@ -1,3 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="79" height="50" viewBox="0 0 79 50">
-                    <image xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAE8AAAAyCAYAAAAdiIaZAAAAAXNSR0IArs4c6QAAAUdJREFUaEPt2kFKw0AYhuF/cFUQPIqFLBN6FfUGuYl4A72JlmbvETyCNxjpogtBC/nfDJj6Zt1vOnnmC4GflPBKC5R00mCIB0ognnhAAERtnnhAAERtnnhAAESbNW/X93clYoxStmB/LFrrR0S8vk3TA1vo53QTvK7rbq43m88WG86sWWu930/TSyZ7LtMEbxiG26uI96U3m12vRoz7w+Epm/8t1wTv+Ge7vn8spYxLb3j2erU+r+qxnX2DKw00a95KPWZtW7xZXN9/LJ54QABEbZ54QABEbZ54QABEbd5fxHOqkjwVpypJuGPMqQrAc6oC8f5D3LctOGXxxAMCIGrzxAMCIGrzxAMCIGrzxAMCINqseU5VkqfiVCUJ51QFwJ2ifquyAOIlL9HshXHJaKd7Ew+csnjiAQEQtXniAQEQtXniAQEQ/QJzDVczoJCzEAAAAABJRU5ErkJggg==" x="0" y="0" width="79" height="50"/>
-                  </svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="41px" height="41px" viewBox="0 0 41 41">
+<defs>
+<path id="Layer0_0_MEMBER_0_MEMBER_0_1_STROKES" stroke="#3F3C3C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+M 16.60462188720703 10.009747314453136
+L 32.44490432739258 10.009747314453136
+M 8.700416564941406 10.009747314453136
+L 11.8238525390625 10.009747314453136"/>
+
+<path id="Layer0_0_MEMBER_0_MEMBER_1_1_STROKES" stroke="#3F3C3C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+M 16.60462188720703 20.509747314453136
+L 32.44490432739258 20.509747314453136
+M 8.700416564941406 20.509747314453136
+L 11.8238525390625 20.509747314453136"/>
+
+<path id="Layer0_0_MEMBER_0_MEMBER_2_1_STROKES" stroke="#3F3C3C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+M 16.60462188720703 31.05974731445312
+L 32.44490432739258 31.05974731445312
+M 8.700416564941406 31.05974731445312
+L 11.8238525390625 31.05974731445312"/>
+
+<path id="Layer0_0_MEMBER_1_MEMBER_0_1_STROKES" stroke="#3F3C3C" stroke-width="3" stroke-linejoin="round" stroke-linecap="square" fill="none" d="
+M 527.55 234
+L 553.45 234
+Q 559.1 234 559.1 239.75
+L 559.1 265.45
+Q 559.1 271.1 553.45 271.1
+L 527.55 271.1
+Q 521.9 271.1 521.9 265.45
+L 521.9 239.75
+Q 521.9 234 527.55 234 Z"/>
+</defs>
+
+<g transform="matrix( 0.6374359130859375, 0, 0, 0.6374359130859375, -248.25,-141.7) ">
+<use xlink:href="#Layer0_0_MEMBER_0_MEMBER_0_1_STROKES" transform="matrix( 1.5687713623046875, 0, 0, 1.5687713623046875, 389.45,222.25) "/>
+</g>
+
+<g transform="matrix( 0.6374359130859375, 0, 0, 0.6374359130859375, -248.25,-131.2) ">
+<use xlink:href="#Layer0_0_MEMBER_0_MEMBER_1_1_STROKES" transform="matrix( 1.5687713623046875, 0, 0, 1.5687713623046875, 389.45,205.8) "/>
+</g>
+
+<g transform="matrix( 0.6374359130859375, 0, 0, 0.6374359130859375, -248.25,-120.65) ">
+<use xlink:href="#Layer0_0_MEMBER_0_MEMBER_2_1_STROKES" transform="matrix( 1.5687713623046875, 0, 0, 1.5687713623046875, 389.45,189.25) "/>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, -519.9,-232) ">
+<use xlink:href="#Layer0_0_MEMBER_1_MEMBER_0_1_STROKES"/>
+</g>
+</svg>

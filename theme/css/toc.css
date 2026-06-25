@@ -1,6 +1,6 @@
 ._ul
 {
-	padding-left:37px !important;
+  padding-left:16px !important;
 }
 ._li
 {
@@ -10,7 +10,7 @@
 
 ._li_1
 {
-	left: 9px !important;
+	left: 0 !important;
   font-weight:normal !important;
   font-size: 100% !important;
 }
