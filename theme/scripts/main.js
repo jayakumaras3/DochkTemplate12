@@ -205,7 +205,7 @@ function gotoCertainPage(pageNum) {
 }
 
 function captivateIframeComplete() {
-    //console.log(this.window.document.getElementById("main_container"))
+    if (typeof hideNavLoader === 'function') hideNavLoader();
 }
 
 function checkNextContent(counter) {

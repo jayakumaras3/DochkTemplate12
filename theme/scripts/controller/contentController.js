@@ -82,9 +82,33 @@ var stage, preload, lib = {};
 
         document.getElementById("preloader").className = "preloaderteempcls";
         currentContentValue = "";
+        var self = this;
         this.scope.$on('initalizeController', assetLoader.proxy(this.globalSettingJson, this));
         this.scope.$on('getTocData', assetLoader.proxy(this.getTocData, this));
         this.scope.$on('showHeader', assetLoader.proxy(this.showHeaderFunc, this));
+        // Hide nav loader after ng-include content is in the DOM and all images are loaded.
+        // Flash pages are excluded — finishLoading() fires after the canvas is ready.
+        this.scope.$on('$includeContentLoaded', function() {
+            if (self.pageContentType === 'flash') return;
+            var area = document.getElementById('htmlArea');
+            var imgs = area ? area.querySelectorAll('img') : [];
+            if (!imgs.length) {
+                if (typeof hideNavLoader === 'function') hideNavLoader();
+                return;
+            }
+            var loaded = 0, total = imgs.length, done = false;
+            function onImgDone() {
+                if (done) return;
+                if (++loaded >= total) { done = true; if (typeof hideNavLoader === 'function') hideNavLoader(); }
+            }
+            for (var i = 0; i < imgs.length; i++) {
+                if (imgs[i].complete) { onImgDone(); }
+                else {
+                    imgs[i].addEventListener('load', onImgDone);
+                    imgs[i].addEventListener('error', onImgDone);
+                }
+            }
+        });
 
     };
     var p = contentController.prototype;
@@ -605,6 +629,23 @@ var stage, preload, lib = {};
 				} else {
 					startVideo();
 				}
+				// Hide the course nav loader when the video has buffered its first frame
+				var vid2 = document.getElementById("vidArea");
+				if (vid2) {
+					var vidFired = false;
+					function onVidReady() {
+						if (vidFired) return;
+						vidFired = true;
+						vid2.removeEventListener('loadeddata', onVidReady);
+						vid2.removeEventListener('error', onVidReady);
+						if (typeof hideNavLoader === 'function') hideNavLoader();
+					}
+					vid2.addEventListener('loadeddata', onVidReady);
+					vid2.addEventListener('error', onVidReady);
+					if (vid2.readyState >= 2) onVidReady();
+				} else {
+					if (typeof hideNavLoader === 'function') hideNavLoader();
+				}
                 }, 10);
 				
                 break;
@@ -629,6 +670,7 @@ var stage, preload, lib = {};
                 this.pageContentType = this.contentData[contentCounter].type;
                 this.timeout(function () {
                     self.scope.$apply();
+                    if (typeof hideNavLoader === 'function') hideNavLoader();
                 }, 10);
 
                 break;
@@ -658,6 +700,7 @@ var stage, preload, lib = {};
         createjs.Ticker.setFPS(24);
         createjs.Ticker.addEventListener("tick", stage);
         currentFrame = 0;
+        if (typeof hideNavLoader === 'function') hideNavLoader();
     };
 
 
