@@ -369,7 +369,7 @@ function end() {
 }
 
 function yesBtnClick() {
-	showCourseLoader();
+	if (typeof showNavLoader === 'function') showNavLoader();
 	var lesson_status1 = scorm.get("cmi.core.lesson_status");
 	var lesson_status2 = scorm.get("cmi.success_status");
 	document.getElementById("mainPage").style.display = "block";
@@ -510,7 +510,7 @@ function yesBtnClick() {
 }
 
 function noBtnClick() {
-	showCourseLoader();
+	if (typeof showNavLoader === 'function') showNavLoader();
 	document.getElementById("mainPage").style.display = "block";
 	if (AudioVersionEnable) {
 		for (var i = 0; i < Totalpage; i++) {

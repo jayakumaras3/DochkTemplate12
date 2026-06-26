@@ -140,13 +140,6 @@ var stage, preload, lib = {};
      */
     p.getTocData = function () {
         try {
-            // Show preloader using PreloadManager for smooth fade in
-            if (typeof PreloadManager !== 'undefined') {
-                PreloadManager.show();
-            } else {
-                var preloader = document.getElementById("preloader");
-                if (preloader) preloader.style.opacity = "1";
-            }
             this.toc = this.globalVariableService.getTocData();
             var currentPage = this.globalVariableService.getPageCounter();
             
@@ -230,11 +223,6 @@ var stage, preload, lib = {};
 
 				// Update the UI
 				document.body.style.display = "block";
-				var preloader = document.getElementById("preloader");
-				if (preloader) {
-					preloader.style.display = "block";
-					preloader.style.opacity = "1";
-				}
 
 				this.pageContentType = "";
 				this.pageContent = "";

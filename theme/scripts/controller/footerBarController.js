@@ -697,10 +697,7 @@ var pauseTimer;
      *
      */
     p.nextBtnClick = function () {
-        // Show preloader immediately when navigating
-        if (typeof PreloadManager !== 'undefined') {
-            PreloadManager.show();
-        }
+        if (typeof showNavLoader === 'function' && !showNavLoader()) return;
         var pageCounter = this.globalVariableService.getPageCounter();
         var prevElem = angular.element(document.getElementById("prev"));
         prevElem.removeClass("disabledClass");
@@ -720,11 +717,8 @@ var pauseTimer;
 			gotoCertainPage(1);
 		}
 		else{
-        // Show preloader immediately when navigating
-        if (typeof PreloadManager !== 'undefined') {
-            PreloadManager.show();
-        }
-			
+        if (typeof showNavLoader === 'function' && !showNavLoader()) return;
+
         if (angular.element(document.getElementById("replay")).hasClass("showContent")) {
             angular.element(document.getElementById("replay")).removeClass("showContent").addClass("hideContent");
             angular.element(document.getElementById("pause")).removeClass("hideContent").addClass("showContent");

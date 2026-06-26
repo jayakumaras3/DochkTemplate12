@@ -535,10 +535,7 @@ if (img) {
 	 *
 	 */
 	p.tocDataClick = function(data) {
-		// Show preloader when navigating via menu
-		if (typeof PreloadManager !== 'undefined') {
-			PreloadManager.show();
-		}
+		if (typeof showNavLoader === 'function' && !showNavLoader()) return;
 
 		if (stage) {
 			stage.removeAllChildren();
