@@ -1,6 +1,30 @@
 /**
  * Created by pc3 on 12/31/2016.
  */
+
+// ── Navigation loader state ──────────────────────────────────────────────────
+// Defined here so it survives any revert of scormFunctions.js.
+// showNavLoader() is called by nav buttons; hideNavLoader() is called from
+// page-ready events (finishLoading, loadeddata, $includeContentLoaded, etc.).
+var isPageLoading = false;
+
+function showNavLoader() {
+	if (isPageLoading) return false;
+	isPageLoading = true;
+	showCourseLoader();
+	// Safety: release the lock after 8s if a page-ready event is never fired
+	setTimeout(function() {
+		if (isPageLoading) { isPageLoading = false; hideCourseLoader(); }
+	}, 8000);
+	return true;
+}
+
+function hideNavLoader() {
+	if (!isPageLoading) return;
+	isPageLoading = false;
+	hideCourseLoader();
+}
+
 var pauseAlreadyClicked = false;
 var currentCaptivativeFrames = 0;
 var volume_change=1;
