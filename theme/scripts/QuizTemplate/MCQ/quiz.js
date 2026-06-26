@@ -6,31 +6,6 @@
 			let SubmtBool=false;
 			let TotalQuestions=0;
 
-            function applyMobileScrollFix() {
-                if (window.innerWidth > 900) {
-                    return;
-                }
-
-                // Keep mobile quiz content scrollable even if outer template uses overflow hidden.
-                document.documentElement.style.setProperty('height', '100%', 'important');
-                document.documentElement.style.setProperty('overflow-y', 'auto', 'important');
-                document.documentElement.style.setProperty('-webkit-overflow-scrolling', 'touch');
-
-                document.body.style.setProperty('height', '100%', 'important');
-                document.body.style.setProperty('min-height', '100%', 'important');
-                document.body.style.setProperty('overflow-y', 'auto', 'important');
-                document.body.style.setProperty('-webkit-overflow-scrolling', 'touch');
-                document.body.style.setProperty('touch-action', 'pan-y', 'important');
-
-                if (quizContainer) {
-                    quizContainer.style.setProperty('height', 'auto', 'important');
-                    quizContainer.style.setProperty('min-height', '100%', 'important');
-                    quizContainer.style.setProperty('overflow-y', 'auto', 'important');
-                    quizContainer.style.setProperty('-webkit-overflow-scrolling', 'touch');
-                    quizContainer.style.setProperty('padding-bottom', '24px', 'important');
-                }
-            }
-
             function loadQuestion() {
 						questionData = parent.mainData.question;
                         attemptsLeft = questionData.attempts; // Load attemptsLeft from JSON
@@ -38,7 +13,7 @@
 const optionsHtml = questionData.options.map((option, index) => {
     TotalQuestions = index;
     return `
-        <div tabindex="0" role="checkbox" class="answer FSize16" id="Opt${index}" 
+        <div tabindex="0" role="checkbox" class="answer FSize20" id="Opt${index}" 
              onkeydown="handleKeydown(event, ${index})"
              aria-checked="false"  
         >
@@ -62,36 +37,24 @@ const optionsHtml = questionData.options.map((option, index) => {
 
                             <div class="questionContainer">
 							
-                                 <div class="question FSize16">
+                                 <div class="question FSize20">
 								<span id="question-text" tabindex="0">${questionData.question}</span>
-								  <div class="redtext instext FSize16">
+								  <div class="redtext instext FSize20">
 								<span id="instruction-text" tabindex="0">${parent.mainData.Questiontext}</span>
 							</div>
 								</div>
                                 <div class="options">${optionsHtml}</div>
-                                <button class="btn ColorSet_CR FSize16" id="submitBtn">${parent.mainData.quizButton}</button>
-                                <div class="feedback"><p tabindex="-1" id="feedback" role="status" aria-live="assertive" aria-atomic="true"></p></div>
+                                <button class="btn ColorSet_CR FSize20" id="submitBtn">${parent.mainData.quizButton}</button>
+                                <div class="feedback"  ><p tabindex="0" id="feedback"> </p></div>
                             </div>
+							<img class="Qmark" src="../../../images/Bulb.svg" alt="Q">
                         `;
-		parentquizContainer.innerHTML = "";
+const parentquestionHtml = `
+		 
+		 	<img class="Bulb" src="../../../images/Bulb.svg" alt="Bulb"/>`;
+		parentquizContainer.innerHTML = parentquestionHtml;
                         quizContainer.innerHTML = questionHtml;
-                        applyMobileScrollFix();
                         document.getElementById('submitBtn').addEventListener('click', checkAnswer);
-            }
-
-            function announceFeedback(message) {
-                const feedback = document.getElementById('feedback');
-                if (!feedback) {
-                    return;
-                }
-
-                feedback.style.display = 'block';
-                feedback.textContent = '';
-                requestAnimationFrame(() => {
-                    feedback.textContent = message;
-                    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    feedback.focus({ preventScroll: true });
-                });
             }
 
             var resetBool = false;
@@ -194,14 +157,15 @@ window.selectOption1 = function(idx) {
                         allCorrect = false;
                     }
                 });
+				feedback.style.display = 'block';
                 if (allCorrect && selectedAnswers.length === questionData.options.filter(option => option.correct).length) {
-                    announceFeedback(questionData.feedback.correct);
+                    feedback.textContent = questionData.feedback.correct;
 					feedback.classList.remove('incorrect');
                     feedback.classList.add('correct');
 					
 					feedback.classList.remove('Incorrect_CR');
 						feedback.classList.add('Correct_CR');
-                        feedback.classList.add('FSize16');
+						feedback.classList.add('FSize20');
                     document.getElementById('submitBtn').disabled = true;
 					
 					 document.getElementById('submitBtn').classList.add('no-select');
@@ -217,10 +181,10 @@ window.selectOption1 = function(idx) {
 
                     if (attemptsLeft > 0) {
 						console.log("1");
-                        announceFeedback(questionData.feedback.incorrect);
+                        feedback.textContent = questionData.feedback.incorrect;						
 						feedback.classList.remove('correct');
                         feedback.classList.add('incorrect');						
-                        feedback.classList.add('FSize16');
+						feedback.classList.add('FSize20');
 						feedback.classList.remove('Correct_CR');
 						feedback.classList.add('Incorrect_CR');
 						
@@ -231,7 +195,7 @@ window.selectOption1 = function(idx) {
 						optionReset();
                     } else {
 						console.log("2");
-                        announceFeedback(questionData.feedback.noAttempts);
+                        feedback.textContent = questionData.feedback.noAttempts;
 						feedback.classList.remove('correct');
                         feedback.classList.add('incorrect');
 						
@@ -299,9 +263,6 @@ window.selectOption1 = function(idx) {
 					}
 				}
             loadQuestion();
-                        applyMobileScrollFix();
-                        window.addEventListener('resize', applyMobileScrollFix);
-                        window.addEventListener('orientationchange', applyMobileScrollFix);
         });
 		document.addEventListener("DOMContentLoaded", function() {
 			

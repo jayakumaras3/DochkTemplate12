@@ -5,31 +5,6 @@ document.addEventListener("DOMContentLoaded", function() {
     let questionData;
     let SubmtBool = false;
     let TotalQuestions = 0;
-
-    function applyMobileScrollFix() {
-        if (window.innerWidth > 900) {
-            return;
-        }
-
-        // Force vertical scrolling in mobile view even if parent theme CSS sets overflow hidden.
-        document.documentElement.style.setProperty('height', '100%', 'important');
-        document.documentElement.style.setProperty('overflow-y', 'auto', 'important');
-        document.documentElement.style.setProperty('-webkit-overflow-scrolling', 'touch');
-
-        document.body.style.setProperty('height', '100%', 'important');
-        document.body.style.setProperty('min-height', '100%', 'important');
-        document.body.style.setProperty('overflow-y', 'auto', 'important');
-        document.body.style.setProperty('-webkit-overflow-scrolling', 'touch');
-        document.body.style.setProperty('touch-action', 'pan-y', 'important');
-
-        if (quizContainer) {
-            quizContainer.style.setProperty('height', 'auto', 'important');
-            quizContainer.style.setProperty('min-height', '100%', 'important');
-            quizContainer.style.setProperty('overflow-y', 'auto', 'important');
-            quizContainer.style.setProperty('-webkit-overflow-scrolling', 'touch');
-            quizContainer.style.setProperty('padding-bottom', '24px', 'important');
-        }
-    }
     function loadQuestion() {
 		console.log(" "+parent.mainData.quizButton);
         questionData = parent.mainData.question;
@@ -38,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const optionsHtml = questionData.options.map((option, index) => {
             TotalQuestions = index + 1; // Update TotalQuestions
-            return `<div class="answer FSize16" id="Opt${index}"
+            return `<div class="answer FSize20" id="Opt${index}"
      tabindex="0" aria-checked="false" role="radio"
      onclick="selectOption('answer${index}')"
      onkeydown="handleKeydown(event, ${index})">
@@ -58,41 +33,32 @@ document.addEventListener("DOMContentLoaded", function() {
 		const questionHtml = `
 			<div class="questionContainer">
 			<!-- Question Section with aria-labelledby pointing to a valid ID -->
-            <div class="question FSize16">
+			<div class="question FSize20">
 			<span id="question-text" tabindex="0">${questionData.question}</span>
 
-            <div class="redtext instext FSize16">
+			<div class="redtext instext FSize20">
 			<span id="instruction-text" tabindex="0">${parent.mainData.Questiontext}</span>
 			</div>
 			</div>
 			<div class="options" >${optionsHtml}</div>
-            <button aria-label="Submit quiz" role="button" class="btn ColorSet_CR FSize16" id="submitBtn" tabindex="0">
+			<button aria-label="Submit quiz" role="button" class="btn ColorSet_CR FSize20" id="submitBtn" tabindex="0">
 			${parent.mainData.quizButton}
 			</button>
-			<div class="feedback"><p tabindex="-1" id="feedback" role="status" aria-live="assertive" aria-atomic="true"></p></div>
+			<div class="feedback"  ><p tabindex="0" id="feedback"> </p></div>
 			</div>
+			<img class="Qmark" src="../../../images/Bulb.svg" alt="Question mark symbol for quiz" aria-hidden="true">
 			`;
 
 
 
-        parentquizContainer.innerHTML = "";
+const parentquestionHtml = `
+  <img class="Bulb" src="../../../images/Bulb.svg" alt="Bulb Icon representing a hint or idea" />
+`;
+
+
+		parentquizContainer.innerHTML = parentquestionHtml;
         quizContainer.innerHTML = questionHtml;
         document.getElementById('submitBtn').addEventListener('click', checkAnswer);
-    }
-
-    function announceFeedback(message) {
-        const feedback = document.getElementById('feedback');
-        if (!feedback) {
-            return;
-        }
-
-        feedback.style.display = 'block';
-        feedback.textContent = '';
-        requestAnimationFrame(() => {
-            feedback.textContent = message;
-            feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            feedback.focus({ preventScroll: true });
-        });
     }
 
  window.handleOptionSelection = function(selectedRadio) {
@@ -162,12 +128,11 @@ window.handleKeydown=function(event, idx) {
         }
 
         const isCorrect = selectedAnswer.dataset.correct === 'true';
+		feedback.style.display = 'block';
         if (isCorrect) {
-            announceFeedback(questionData.feedback.correct);
-            feedback.classList.remove('incorrect');
-            feedback.classList.remove('Incorrect_CR');
+            feedback.textContent = questionData.feedback.correct;
             feedback.classList.add('correct');
-            feedback.classList.add('FSize16');
+			feedback.classList.add('FSize20');
 			feedback.classList.add('Correct_CR');
             document.getElementById('submitBtn').disabled = true;
             SubmtBool = true;
@@ -180,8 +145,8 @@ window.handleKeydown=function(event, idx) {
             attemptsLeft--;
 
             if (attemptsLeft > 0) {
-                announceFeedback(questionData.feedback.incorrect);
-                feedback.classList.add('FSize16');
+                feedback.textContent = questionData.feedback.incorrect;
+				feedback.classList.add('FSize20');
                 feedback.classList.add('incorrect');
                 feedback.classList.add('Incorrect_CR');
                 document.getElementById('submitBtn').disabled = true;
@@ -190,8 +155,8 @@ window.handleKeydown=function(event, idx) {
 				document.getElementById('submitBtn').classList.add('no-select');
                 optionReset();
             } else {
-                announceFeedback(questionData.feedback.noAttempts);
-                feedback.classList.add('FSize16');
+                feedback.textContent = questionData.feedback.noAttempts;
+				feedback.classList.add('FSize20');
                 feedback.classList.add('incorrect');
                 feedback.classList.add('Incorrect_CR');
                 SubmtBool = true;
@@ -280,7 +245,4 @@ window.handleRadioKey = function(event, index) {
 
 
     loadQuestion();
-    applyMobileScrollFix();
-    window.addEventListener('resize', applyMobileScrollFix);
-    window.addEventListener('orientationchange', applyMobileScrollFix);
 });

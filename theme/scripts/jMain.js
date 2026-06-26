@@ -2,88 +2,7 @@ var Tmenu = false;
 var TogglemenuControl = false;
 //header and menu bar fullscren enabled but footer disabledClass
 var HF_footerdisBool = false;
-var MENU_STATE_KEY = "player.sidebar.open";
 // For Accesiblity Enable Disable for Next and prev
-
-function isMobileDrawerViewport() {
-    return window.matchMedia('(max-width: 1024px)').matches;
-}
-
-function updateMenuExpandedState(isOpen) {
-    var menuIcon = document.getElementById("TmenuIcon");
-    if (menuIcon) {
-        menuIcon.setAttribute("aria-expanded", isOpen ? "true" : "false");
-    }
-}
-
-function updateMenuVisualState(isOpen) {
-    var elements = document.getElementById("Tmenu");
-    var menuIcon = document.getElementById("TmenuIcon");
-    var menuIcon1 = document.getElementById("TmenuIcon1");
-    var wholeContainer = document.querySelector(".wholeContainer");
-    var clickDiv = document.getElementById("clickableDiv");
-
-    if (elements) {
-        elements.style.display = isOpen ? "block" : "none";
-    }
-    if (menuIcon) {
-        menuIcon.style.display = "block";
-    }
-    if (menuIcon1) {
-        menuIcon1.style.display = "none";
-    }
-    if (wholeContainer) {
-        wholeContainer.classList.toggle("menu-open", isOpen);
-    }
-    document.body.classList.toggle("menu-open-body", isOpen);
-    document.documentElement.classList.toggle("menu-open-body", isOpen);
-    if (clickDiv) {
-        clickDiv.classList.remove("headingcloser");
-        clickDiv.classList.add("headingArea1");
-    }
-    updateMenuExpandedState(isOpen);
-
-    // Transparent overlay to capture clicks on iframes when menu is open.
-    var overlay = document.getElementById("menuClickOverlay");
-    if (isOpen) {
-        if (!overlay) {
-            overlay = document.createElement("div");
-            overlay.id = "menuClickOverlay";
-            overlay.setAttribute("aria-hidden", "true");
-            overlay.style.cssText =
-                "position:fixed;top:0;left:0;right:0;bottom:0;" +
-                "z-index:1004;background:rgba(8,15,30,0.2);cursor:pointer;display:block;" +
-                "width:100vw;height:100dvh;";
-            overlay.addEventListener("click", function() { menuClose(); });
-            document.body.appendChild(overlay);
-        } else {
-            overlay.style.display = "block";
-            overlay.style.width = "100vw";
-            overlay.style.height = "100dvh";
-        }
-    } else {
-        if (overlay) { overlay.style.display = "none"; }
-    }
-}
-
-function persistMenuState(isOpen) {
-    try {
-        sessionStorage.setItem(MENU_STATE_KEY, isOpen ? "1" : "0");
-    } catch (e) {
-        // Ignore storage failures in restricted LMS iframes.
-    }
-}
-
-function shouldMenuBeForcedClosedForAudioPage() {
-    if (!AudioVersionEnable) {
-        return false;
-    }
-    var contentController = angular.element(document.querySelector(".contentArea"));
-    if (!contentController || !contentController.scope() || !contentController.scope().cc) {
-        return false;
-    }
-    return contentController.scope().cc.globalVariableService.pageCounter == 2;
-}
 
 function NexPrevAcessiblity_Check()
 {
@@ -109,7 +28,6 @@ function NexPrevAcessiblity_Check()
 function MainmenuAcessibility()
 {
 	var TmenuIcon = document.getElementById('TmenuIcon');
-    var clickDiv = document.getElementById('clickableDiv');
 
 	var pointerEvents = window.getComputedStyle(TmenuIcon).getPropertyValue('pointer-events');
 
@@ -118,20 +36,12 @@ function MainmenuAcessibility()
         TmenuIcon.setAttribute('aria-disabled', 'true');
         TmenuIcon.setAttribute('tabindex', '-1'); // remove from tab order
         TmenuIcon.style.pointerEvents = 'none'; 
-        TmenuIcon.style.cursor = 'default';
-        if (clickDiv) {
-            clickDiv.style.cursor = 'default';
-        }
 		//console.log('TmenuIcon is not interactive (pointer-events: none)');
 	} else {
 		TmenuIcon.setAttribute('aria-label', Menutitle);
         TmenuIcon.setAttribute('aria-disabled', 'false');
         TmenuIcon.setAttribute('tabindex', '0');
         TmenuIcon.style.pointerEvents = 'auto';
-        TmenuIcon.style.cursor = 'pointer';
-        if (clickDiv) {
-            clickDiv.style.cursor = 'pointer';
-        }
 		//console.log('TmenuIcon is interactive (pointer-events: ' + pointerEvents + ')');
 	}
 		
@@ -170,28 +80,94 @@ function PrevAcessibility(en) {
     }
 }
 function TtoggleMenu() {
-    var menuIcon = document.getElementById("TmenuIcon");
-    if (!menuIcon || menuIcon.style.pointerEvents === "none" || shouldMenuBeForcedClosedForAudioPage()) {
-        Tmenu = false;
-        updateMenuVisualState(false);
-        persistMenuState(false);
-        return;
-    }
+    var contentController = angular.element(document.querySelector(".contentArea"));
+    var temp = contentController.scope().cc.globalVariableService.pageCounter;
+    var elements = document.getElementById("Tmenu");
+    // Access the first element in the collection
 
-    if (!Tmenu) {
-        var sideBarController = angular.element(document.querySelector(".sideBar"));
-        if (sideBarController && sideBarController.scope() && sideBarController.scope().sb) {
-            sideBarController.scope().sb.tocClick('toc');
+    var menuIcon = document.getElementById("TmenuIcon");
+    var menuIcon1 = document.getElementById("TmenuIcon1");
+    if (AudioVersionEnable) {
+        // Audio version added
+        if (temp == 2) {
+            Tmenu = false;
+            //menuIcon.src = "assets/images/footer-menu/Menuopen.png";
+            elements.style.display = "none";
+            menuIcon.style.display = "block";
+            menuIcon1.style.display = "none";
+            menuIcon.style.marginTop = "6px";
+        } else {
+            // Change the marginTop property
+            menuIcon.style.marginTop = "6px";
+            // Set the new source path
+            if (!Tmenu) {
+
+               
+                //menuIcon.src = "theme/images/footer-menu/Mclose.png";
+                elements.style.display = "block";
+                menuIcon.style.display = "none";
+                menuIcon1.style.display = "none";
+                var sideBarController = angular.element(document.querySelector(".sideBar"));
+                sideBarController.scope().sb.tocClick('toc');
+               // document.getElementById("TmenuIcon").focus();
+                menuIcon.style.marginTop = "1%";
+				menuOpen();
+				setTimeout(callTmenuBool, 5);
+
+
+            } else {
+                Tmenu = false;
+                menuIcon.src = "theme/images/footer-menu/Menuopen.svg";
+                elements.style.display = "none";
+                menuIcon.style.display = "block";
+                menuIcon1.style.display = "none";
+            }
+
         }
-        Tmenu = true;
-        updateMenuVisualState(true);
-        persistMenuState(true);
+
+
     } else {
-        Tmenu = false;
-        menuIcon.src = "theme/images/footer-menu/Menuopen.svg";
-        updateMenuVisualState(false);
-        persistMenuState(false);
+        {
+            // Change the marginTop property
+            menuIcon.style.marginTop = "6px";
+
+            // Set the new source path
+            if (!Tmenu) {                
+             //   menuIcon.src = "theme/images/footer-menu/Mclose.png";
+                elements.style.display = "block";
+                menuIcon.style.display = "none";
+                menuIcon1.style.display = "none";
+                var sideBarController = angular.element(document.querySelector(".sideBar"));
+                sideBarController.scope().sb.tocClick('toc');
+           //     document.getElementById("TmenuIcon").focus();
+                menuIcon.style.marginTop = "1%";
+				menuOpen();
+				setTimeout(callTmenuBool, 5);				
+
+            } else {
+                Tmenu = false;
+                menuIcon.src = "theme/images/footer-menu/Menuopen.svg";
+                elements.style.display = "none";
+                menuIcon.style.display = "block";
+                menuIcon1.style.display = "none";
+            }
+
+        }
     }
+	//single page functionality
+	if(Totalpage==1)
+	{
+		document.querySelector(".sideBar").style.top = "1px"; 
+		document.querySelector(".sideBar").style.left = "2px";
+		//menuIcon1.style.marginLeft = "210px";
+	}
+	else{
+		document.querySelector(".sideBar").style.top = "0px";
+		document.querySelector(".sideBar").style.left = "8px";
+		menuIcon1.style.marginLeft = "206px";
+	}
+
+
 }
 function callTmenuBool()
 {
@@ -201,76 +177,32 @@ Tmenu = true;
 // for disable and enabled menuIcon
 function menuOpen()
 {
-    Tmenu = true;
-    updateMenuVisualState(true);
-    persistMenuState(true);
+	
+	var clickDiv=document.getElementById('clickableDiv')
+	/*clickDiv.addEventListener('click', TtoggleMenu); */ 
+  // Check if the div already has the 'headingArea1' class
+  if (clickDiv.classList.contains('headingArea1')) {
+    // Remove 'headingArea1' and add 'headingcloser'
+    //clickDiv.classList.remove('headingArea1');
+    clickDiv.classList.add('headingcloser');
+  }
 
 
 }
 function menuClose()
 {
-    if(!Tmenu) {
-        return;
-    }
-    Tmenu = false;
-    updateMenuVisualState(false);
-    persistMenuState(false);
+	//console.log("menu close"+Tmenu);
+	if(Tmenu)
+	{
+	var clickDiv=document.getElementById('clickableDiv')
+    // Otherwise, revert the classes back
+    clickDiv.classList.remove('headingcloser');
+    clickDiv.classList.add('headingArea1');
+	TtoggleMenu();
+	}
   
 
 }
-
-function restorePersistedMenuState() {
-    if (shouldMenuBeForcedClosedForAudioPage()) {
-        Tmenu = false;
-        updateMenuVisualState(false);
-        persistMenuState(false);
-        return;
-    }
-
-    var savedState = null;
-    try {
-        savedState = sessionStorage.getItem(MENU_STATE_KEY);
-    } catch (e) {
-        savedState = null;
-    }
-
-    if (savedState === "1") {
-        Tmenu = true;
-        updateMenuVisualState(true);
-    } else {
-        Tmenu = false;
-        updateMenuVisualState(false);
-    }
-}
-
-window.addEventListener('load', function() {
-    setTimeout(restorePersistedMenuState, 200);
-});
-
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && Tmenu) {
-        menuClose();
-    }
-});
-
-document.addEventListener('click', function(event) {
-    if (!Tmenu) {
-        return;
-    }
-    var sideBar = document.getElementById('Tmenu');
-    var menuIcon = document.getElementById('TmenuIcon');
-
-    if (!sideBar || !menuIcon) {
-        return;
-    }
-
-    var clickedInsideSidebar = sideBar.contains(event.target);
-    var clickedMenuIcon = menuIcon.contains(event.target);
-
-    if (!clickedInsideSidebar && !clickedMenuIcon) {
-        menuClose();
-    }
-});
 
 function menuEnDisble_fun(bool) {
    // console.log("menuEnDisble_fun called");
@@ -283,14 +215,9 @@ function menuEnDisble_fun(bool) {
         if (temp == 2) {
             headingArea.style.display = 'block';
 
-            // Keep the new menu icon and visually indicate disabled state
-            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
-            img.setAttribute('aria-disabled', 'true');
-            img.setAttribute('tabindex', '-1');
+            // Change the src attribute to the new image path
+            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.svg');
             img.style.pointerEvents = 'none';
-            img.style.cursor = 'default';
-            img.style.opacity = '0.35';
-            img.style.filter = 'grayscale(100%)';
 
             TtoggleMenu();
             document.getElementById("pageNo").innerHTML = "Audio";
@@ -298,23 +225,15 @@ function menuEnDisble_fun(bool) {
 
         } else {
             img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
-            img.setAttribute('aria-disabled', 'false');
-            img.setAttribute('tabindex', '0');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
-            img.style.opacity = '';
-            img.style.filter = '';
         }
 
     } else {
 
         img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
-        img.setAttribute('aria-disabled', 'false');
-        img.setAttribute('tabindex', '0');
         img.style.pointerEvents = 'auto';
         img.style.cursor = 'pointer';
-        img.style.opacity = '';
-        img.style.filter = '';
 
 
     }
@@ -331,8 +250,6 @@ function menuEnDisble_fun(bool) {
             headingArea.style.display = 'none';
         }
     }
-
-    MainmenuAcessibility();
 }
 //Content Foryou
 function menuEnable_fun_firstpage() {
@@ -345,12 +262,8 @@ function menuEnable_fun_firstpage() {
      {
        {
             img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
-            img.setAttribute('aria-disabled', 'false');
-            img.setAttribute('tabindex', '0');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
-            img.style.opacity = '';
-            img.style.filter = '';
            
             
 
@@ -384,19 +297,12 @@ function menuEnDisble_fun_firstpage() {
      {
        {
             headingArea.style.display = 'block';
-            // Keep the new menu icon and visually indicate disabled state
-            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
-            img.setAttribute('aria-disabled', 'true');
-            img.setAttribute('tabindex', '-1');
+            // Change the src attribute to the new image path
+            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.svg');
             img.style.pointerEvents = 'none';
-            img.style.cursor = 'default';
-            img.style.opacity = '0.35';
-            img.style.filter = 'grayscale(100%)';
         }
 
     }  
-
-    MainmenuAcessibility();
 }
 
 
@@ -412,14 +318,9 @@ function menuEnDisble_fun_PREV() {
         if (temp == 2) {
             headingArea.style.display = 'block';
 
-            // Keep the new menu icon and visually indicate disabled state
-            img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
-            img.setAttribute('aria-disabled', 'true');
-            img.setAttribute('tabindex', '-1');
+            // Change the src attribute to the new image path
+            img.setAttribute('src', 'theme/images/footer-menu/disableMenu.svg');
             img.style.pointerEvents = 'none';
-            img.style.cursor = 'default';
-            img.style.opacity = '0.35';
-            img.style.filter = 'grayscale(100%)';
 
             TtoggleMenu();
             document.getElementById("pageNo").innerHTML = "Audio";
@@ -427,28 +328,18 @@ function menuEnDisble_fun_PREV() {
 
         } else {
             img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
-            img.setAttribute('aria-disabled', 'false');
-            img.setAttribute('tabindex', '0');
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
-            img.style.opacity = '';
-            img.style.filter = '';
         }
 
     } else {
 
         img.setAttribute('src', 'theme/images/footer-menu/Menuopen.svg');
-        img.setAttribute('aria-disabled', 'false');
-        img.setAttribute('tabindex', '0');
         img.style.pointerEvents = 'auto';
         img.style.cursor = 'pointer';
-        img.style.opacity = '';
-        img.style.filter = '';
 
 
     }
-
-    MainmenuAcessibility();
 
 }
 
