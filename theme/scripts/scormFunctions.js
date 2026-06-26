@@ -10,41 +10,11 @@ function showCourseLoader() {
 
 function hideCourseLoader() {
 	var loader = document.getElementById("courseLoader");
-	if (!loader || loader.style.display === 'none' || loader.classList.contains('loader-hide')) return;
+	if (!loader) return;
 	loader.classList.add("loader-hide");
-	var finished = false;
-	function finish() {
-		if (finished) return;
-		finished = true;
-		loader.removeEventListener('transitionend', onTransition);
+	setTimeout(function () {
 		loader.style.display = "none";
-	}
-	function onTransition(e) {
-		if (e.propertyName === 'opacity' && e.target === loader) finish();
-	}
-	loader.addEventListener('transitionend', onTransition);
-	setTimeout(finish, 600); // fallback if transitionend never fires
-}
-
-// ── Per-page navigation loader ──────────────────────────────────────────────
-// Event-based: hides only when the page signals it is fully ready.
-var isPageLoading = false;
-
-function showNavLoader() {
-	if (isPageLoading) return false;
-	isPageLoading = true;
-	showCourseLoader();
-	// Safety release after 8s to prevent a permanent lock if a ready event is missed
-	setTimeout(function() {
-		if (isPageLoading) { isPageLoading = false; hideCourseLoader(); }
-	}, 8000);
-	return true;
-}
-
-function hideNavLoader() {
-	if (!isPageLoading) return;
-	isPageLoading = false;
-	hideCourseLoader();
+	}, 500);/**/
 }
 
 var scorm = pipwerks.SCORM;
@@ -528,6 +498,7 @@ function yesBtnClick() {
 	getPageCompleted()
 	var footerController = angular.element(document.querySelector(".footer"));
 	footerController.scope().fb.changeFooterNavigation();
+	setTimeout(hideCourseLoader, 100);
 }
 
 function noBtnClick() {
@@ -603,6 +574,7 @@ function noBtnClick() {
 	Resume_Bool = false;
 	$("#resumemainContainer").css("display", "none");
 	pageSormTrack();
+	setTimeout(hideCourseLoader, 100);
 }
 //Str1=Suspended Pagearray; Str2= Date; str3=attempt;
 // Utility: Parse suspend_data string to object
