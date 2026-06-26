@@ -732,10 +732,9 @@ input.checkbox {
     text-transform: none;
 }
 .retrybtn {
-    background: #870D0D;
-   
+    background: #005E80;
     border-radius: 0;
-    box-shadow: 0 10px 24px rgba(135, 13, 13, 0.16);
+    box-shadow: 0 10px 24px rgba(0, 94, 128, 0.16);
     min-height: 44px;
     font-size: 16px !important;
     margin-top: 20px;
@@ -747,11 +746,11 @@ input.checkbox {
 .btn:hover,
 .Startpagebtn:hover {
     background: #096F95;
-    box-shadow: 0 12px 28px rgba(135, 13, 13, 0.18);
+    box-shadow: 0 12px 28px rgba(0, 94, 128, 0.18);
 }
 .retrybtn:hover {
-    background:#A50909;
-    box-shadow: 0 12px 28px rgba(135, 13, 13, 0.18);
+    background: #096F95;
+    box-shadow: 0 12px 28px rgba(0, 94, 128, 0.18);
 }
 
 .contentWrapper {

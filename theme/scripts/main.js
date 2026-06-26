@@ -177,8 +177,26 @@ function gotoCertainPage(pageNum) {
    
 }
 
+var isPageLoading = false;
+
+function showNavLoader() {
+    if (isPageLoading) return false;
+    isPageLoading = true;
+    showCourseLoader();
+    setTimeout(function() {
+        if (isPageLoading) { isPageLoading = false; hideCourseLoader(); }
+    }, 8000);
+    return true;
+}
+
+function hideNavLoader() {
+    if (!isPageLoading) return;
+    isPageLoading = false;
+    hideCourseLoader();
+}
+
 function captivateIframeComplete() {
-    //console.log(this.window.document.getElementById("main_container"))
+    if (typeof hideNavLoader === 'function') hideNavLoader();
 }
 
 function checkNextContent(counter) {
@@ -637,6 +655,7 @@ function handleKeydown_Close(event) {
 
 function generateResourceList(data) {
   const resourceContent = document.getElementById("resourceContent");
+  if (!resourceContent) return;
   resourceContent.innerHTML = ""; // Clear existing content
 
   // Ensure Resources is always an array

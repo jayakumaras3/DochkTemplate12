@@ -327,15 +327,24 @@ function showCourseLoader() {
 }
 
 function hideCourseLoader() {
-	/*var loader = document.getElementById("courseLoader");
-	if (!loader) return;
-	loader.classList.add("loader-hide");
-	setTimeout(function () {
-		loader.style.display = "none";
-	}, 500);*/
+    var loader = document.getElementById("courseLoader");
+    if (!loader || loader.style.display === 'none' || loader.classList.contains('loader-hide')) return;
+    loader.classList.add("loader-hide");
+    var finished = false;
+    function finish() {
+        if (finished) return;
+        finished = true;
+        loader.removeEventListener('transitionend', onTransition);
+        loader.style.display = "none";
+    }
+    function onTransition(e) {
+        if (e.propertyName === 'opacity' && e.target === loader) finish();
+    }
+    loader.addEventListener('transitionend', onTransition);
+    setTimeout(finish, 600);
 }
 function yesBtnClick() {
-	showCourseLoader();
+	if (typeof showNavLoader === 'function') showNavLoader(); else showCourseLoader();
 	var lesson_status1 = scorm.get("cmi.core.lesson_status");
 	var lesson_status2 = scorm.get("cmi.success_status");
 	document.getElementById("mainPage").style.display = "block";
@@ -473,11 +482,10 @@ function yesBtnClick() {
 	getPageCompleted()
 	var footerController = angular.element(document.querySelector(".footer"));
 	footerController.scope().fb.changeFooterNavigation();
-	setTimeout(hideCourseLoader, 100);
 }
 
 function noBtnClick() {
-	showCourseLoader();
+	if (typeof showNavLoader === 'function') showNavLoader(); else showCourseLoader();
 	document.getElementById("mainPage").style.display = "block";
 	if (AudioVersionEnable) {
 		for (var i = 0; i < Totalpage; i++) {
@@ -552,7 +560,6 @@ function noBtnClick() {
 	Resume_Bool = false;
 	$("#resumemainContainer").css("display", "none");
 	pageSormTrack();
-	setTimeout(hideCourseLoader, 100);
 
 }
 //Str1=Suspended Pagearray; Str2= Date; str3=attempt;

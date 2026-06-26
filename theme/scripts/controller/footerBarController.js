@@ -558,6 +558,7 @@ var pauseTimer;
      *
      */
     p.nextBtnClick = function () {
+        if (typeof showNavLoader === 'function' && !showNavLoader()) return;
         var pageCounter = this.globalVariableService.getPageCounter();
         var prevElem = angular.element(document.getElementById("prev"));
         prevElem.removeClass("disabledClass");
@@ -576,7 +577,8 @@ var pauseTimer;
 			gotoCertainPage(1);
 		}
 		else{
-			
+            if (typeof showNavLoader === 'function' && !showNavLoader()) return;
+
         if (angular.element(document.getElementById("replay")).hasClass("showContent")) {
             angular.element(document.getElementById("replay")).removeClass("showContent").addClass("hideContent");
             angular.element(document.getElementById("pause")).removeClass("hideContent").addClass("showContent");
@@ -607,6 +609,7 @@ var pauseTimer;
      *
      */
     p.gotoCertainPage = function (gotoPage) {
+        if (typeof showNavLoader === 'function') showNavLoader();
         var pageCounter = this.globalVariableService.getPageCounter();
         this.globalVariableService.replaybtnvisible = false;
         this.commonForNaviagation();

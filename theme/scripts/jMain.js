@@ -244,7 +244,9 @@ function restorePersistedMenuState() {
 }
 
 window.addEventListener('load', function() {
-    setTimeout(restorePersistedMenuState, 200);
+    Tmenu = false;
+    updateMenuVisualState(false);
+    try { sessionStorage.setItem(MENU_STATE_KEY, "0"); } catch(e) {}
 });
 
 document.addEventListener('keydown', function(event) {
