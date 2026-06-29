@@ -974,4 +974,76 @@ input.checkbox {
     }
 }
 
+/* Final mobile/iPad parity layer: keep controls and submit close to desktop visuals */
+@media (max-width: 1024px) {
+    .answer {
+        align-items: center !important;
+        gap: 12px !important;
+        padding: 5px 16px !important;
+    }
+
+    .answer input[type="checkbox"],
+    .answer input[type="radio"],
+    input.radioBut,
+    input.checkbox {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px !important;
+        height: 20px !important;
+        margin: 0 !important;
+        border: 2px solid #8f8f8f;
+        background: #ffffff;
+        box-sizing: border-box;
+        position: relative;
+        flex: 0 0 20px;
+        cursor: pointer;
+    }
+
+    .answer input[type="radio"],
+    input.radioBut {
+        border-radius: 50%;
+    }
+
+    .answer input[type="checkbox"],
+    input.checkbox {
+        border-radius: 6px;
+    }
+
+    .answer input[type="radio"]:checked,
+    input.radioBut:checked {
+        border-color: #3f6fe0;
+        background: radial-gradient(circle, #3f6fe0 0 40%, #ffffff 41% 68%, #3f6fe0 69% 100%);
+    }
+
+    .answer input[type="checkbox"]:checked,
+    input.checkbox:checked {
+        border-color: #3f6fe0;
+        background-color: #3f6fe0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 12px 10px;
+    }
+
+    .answer label {
+        font-size: 16px !important;
+        line-height: 1.45 !important;
+    }
+
+    #quizContainer:not(.quiz-start-view):not(:has(.results)) .submit-section {
+        text-align: center;
+    }
+
+    #quizContainer:not(.quiz-start-view):not(:has(.results)) #submitBtn,
+    #submitBtn,
+    .btn {
+        align-self: center !important;
+        display: inline-flex;
+        justify-content: center;
+        margin: 12px auto 0 !important;
+        min-width: 161px;
+        min-height: 44px;
+    }
+}
+
 

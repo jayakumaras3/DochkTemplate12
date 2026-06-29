@@ -598,8 +598,8 @@ video::cue {
     color: #707070;
 }
 
-.tickSymbol::before,
-.tickSymbol1::before {
+#tocData .tickSymbol::before,
+#tocData .tickSymbol1::before {
     content: "";
     display: block;
     width: 8px;
@@ -610,7 +610,7 @@ video::cue {
     background-size: 100% 100%;
 }
 
-.tickSymbol1::before {
+#tocData .tickSymbol1::before {
     visibility: visible;
 }
 

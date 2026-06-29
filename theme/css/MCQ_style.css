@@ -527,4 +527,98 @@ input.checkbox {
     }
 }
 
+/* Mobile/iPad control parity with desktop reference */
+@media (max-width: 1024px) {
+    .answer {
+        align-items: center;
+        gap: 14px;
+    }
+
+    input.radioBut,
+    input.checkbox {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        border: 2px solid #8f8f8f;
+        background: #ffffff;
+        box-sizing: border-box;
+        position: relative;
+        flex: 0 0 20px;
+        cursor: pointer;
+    }
+
+    input.radioBut {
+        border-radius: 50%;
+    }
+
+    input.checkbox {
+        border-radius: 6px;
+    }
+
+    input.radioBut:checked {
+        border-color: #3f6fe0;
+        background: radial-gradient(circle, #3f6fe0 0 40%, #ffffff 41% 68%, #3f6fe0 69% 100%);
+    }
+
+    input.checkbox:checked {
+        border-color: #3f6fe0;
+        background-color: #3f6fe0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 12px 10px;
+    }
+
+    input.radioBut:focus-visible,
+    input.checkbox:focus-visible {
+        outline: 2px solid rgba(63, 111, 224, 0.35);
+        outline-offset: 1px;
+    }
+
+    #submitBtn,
+    .btn {
+        display: block;
+        margin: 16px auto 0 !important;
+        min-width: 161px;
+        text-align: center;
+    }
+
+    .answer > span[id^="Opttick"] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        min-width: 20px;
+        flex: 0 0 20px;
+        margin: 0;
+        line-height: 1;
+    }
+
+    #Opttick0::before,
+    #Opttick1::before,
+    #Opttick2::before,
+    #Opttick3::before,
+    #Opttick4::before,
+    #Opttick5::before,
+    #Opttick6::before,
+    #Opttick7::before,
+    #Opttick8::before,
+    #Opttick9::before,
+    #Opttick10::before,
+    #Opttick11::before {
+        content: "";
+        visibility: var(--before-visibility, hidden);
+        display: block;
+        width: 16px;
+        height: 16px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%2328A745' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
+    }
+}
+
 
