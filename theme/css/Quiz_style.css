@@ -978,8 +978,9 @@ input.checkbox {
 @media (max-width: 1024px) {
     .answer {
         align-items: center !important;
-        gap: 12px !important;
-        padding: 5px 16px !important;
+        gap: 14px !important;
+        padding: 11px 16px !important;
+        min-height: 48px;
     }
 
     .answer input[type="checkbox"],
@@ -1006,7 +1007,7 @@ input.checkbox {
 
     .answer input[type="checkbox"],
     input.checkbox {
-        border-radius: 6px;
+        border-radius: 4px;
     }
 
     .answer input[type="radio"]:checked,
@@ -1028,6 +1029,7 @@ input.checkbox {
     .answer label {
         font-size: 16px !important;
         line-height: 1.45 !important;
+        text-align: left;
     }
 
     #quizContainer:not(.quiz-start-view):not(:has(.results)) .submit-section {
@@ -1043,6 +1045,75 @@ input.checkbox {
         margin: 12px auto 0 !important;
         min-width: 161px;
         min-height: 44px;
+    }
+}
+
+/* Responsive Typography (Mixed Quiz): tablet/mobile only */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .question {
+        font-size: 24px;
+    }
+
+    .redtext,
+    .redtext1,
+    #inste {
+        font-size: 18px;
+    }
+
+    .answer label {
+        font-size: 17px !important;
+    }
+
+    #quizContainer:not(.quiz-start-view):not(:has(.results)) #submitBtn,
+    #submitBtn,
+    .btn,
+    .Startpagebtn,
+    .retrybtn {
+        font-size: 16px !important;
+    }
+
+    .feedback,
+    #feedback,
+    .correct,
+    .incorrect,
+    .results p,
+    .results span,
+    .results div {
+        font-size: 17px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .question {
+        font-size: 20px;
+    }
+
+    .redtext,
+    .redtext1,
+    #inste {
+        font-size: 16px;
+    }
+
+    .answer label {
+        font-size: 16px !important;
+    }
+
+    #quizContainer:not(.quiz-start-view):not(:has(.results)) #submitBtn,
+    #submitBtn,
+    .btn,
+    .Startpagebtn,
+    .retrybtn {
+        font-size: 15px !important;
+    }
+
+    .feedback,
+    #feedback,
+    .correct,
+    .incorrect,
+    .results p,
+    .results span,
+    .results div {
+        font-size: 16px !important;
     }
 }
 

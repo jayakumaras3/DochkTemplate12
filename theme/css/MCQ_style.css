@@ -532,6 +532,16 @@ input.checkbox {
     .answer {
         align-items: center;
         gap: 14px;
+        padding: 11px 16px;
+        min-height: 48px;
+    }
+
+    .answer label {
+        display: block;
+        flex: 1;
+        margin: 0;
+        line-height: 1.45;
+        text-align: left;
     }
 
     input.radioBut,
@@ -554,7 +564,7 @@ input.checkbox {
     }
 
     input.checkbox {
-        border-radius: 6px;
+        border-radius: 4px;
     }
 
     input.radioBut:checked {
@@ -595,6 +605,7 @@ input.checkbox {
         flex: 0 0 20px;
         margin: 0;
         line-height: 1;
+        align-self: center;
     }
 
     #Opttick0::before,
@@ -612,12 +623,71 @@ input.checkbox {
         content: "";
         visibility: var(--before-visibility, hidden);
         display: block;
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%2328A745' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: center;
         background-size: 100% 100%;
+    }
+}
+
+/* Responsive Typography (MCQ): tablet/mobile only */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .question {
+        font-size: 24px;
+    }
+
+    .redtext,
+    #inste {
+        font-size: 18px;
+    }
+
+    .answer label {
+        font-size: 17px;
+    }
+
+    .btn,
+    #submitBtn,
+    .Startpagebtn,
+    .retrybtn {
+        font-size: 16px;
+    }
+
+    .feedback,
+    #feedback,
+    .correct,
+    .incorrect {
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 767px) {
+    .question {
+        font-size: 20px;
+    }
+
+    .redtext,
+    #inste {
+        font-size: 16px;
+    }
+
+    .answer label {
+        font-size: 16px;
+    }
+
+    .btn,
+    #submitBtn,
+    .Startpagebtn,
+    .retrybtn {
+        font-size: 15px;
+    }
+
+    .feedback,
+    #feedback,
+    .correct,
+    .incorrect {
+        font-size: 16px;
     }
 }
 
