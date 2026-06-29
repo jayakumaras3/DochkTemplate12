@@ -106,7 +106,7 @@ body {
     content: "";
     position: absolute;
     right: 0;
-    top: 21px;
+    top: 18px;
     width: 1px;
     height: 18px;
     background: var(--line);
@@ -1738,5 +1738,93 @@ body,
         width: 20px;
         height: 20px;
         font-size: 16px;
+    }
+}
+
+/* Mobile-only alignment and overflow guards for player chrome/content */
+@media (max-width: 1024px) {
+    .headingArea,
+    .headingArea1,
+    .pageHeaderText,
+    #pagenoHeader {
+        display: flex;
+        align-items: center;
+    }
+
+    .headingArea {
+        min-width: 0;
+    }
+
+    .headingArea1::after {
+        top: 50%;
+        height: clamp(16px, calc(100% - 22px), 28px);
+        transform: translateY(-50%);
+    }
+
+    .pageHeaderText {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 1.2;
+    }
+
+    #pagenoHeader {
+        margin-left: auto;
+        padding-left: 10px;
+        white-space: nowrap;
+        line-height: 1;
+    }
+
+    .footer {
+        align-items: center;
+        justify-content: flex-end;
+        gap: clamp(6px, 2.2vw, 12px);
+    }
+
+    .footer > div,
+    #resource1,
+    #prev,
+    #next {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    #prev::before {
+        left: -8px;
+        top: 50%;
+        height: 60%;
+        min-height: 20px;
+        transform: translateY(-50%);
+    }
+
+    .pageContent,
+    .pageContent.fullContentArea {
+        overflow-x: hidden !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .headingArea {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 8px;
+    }
+
+    #resource1 {
+        margin-right: 2px !important;
+    }
+
+    #prev::before {
+        left: -6px;
+    }
+
+    .footer {
+        padding-left: clamp(8px, 3vw, 14px) !important;
+        padding-right: clamp(8px, 3vw, 14px) !important;
     }
 }
