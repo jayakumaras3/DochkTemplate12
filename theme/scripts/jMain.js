@@ -24,7 +24,12 @@ function updateMenuVisualState(isOpen) {
     var clickDiv = document.getElementById("clickableDiv");
 
     if (elements) {
-        elements.style.display = isOpen ? "block" : "none";
+        // For mobile, use display property; desktop uses transform
+        if (isMobileDrawerViewport()) {
+            elements.style.display = isOpen ? "block" : "none";
+        } else {
+            elements.style.display = isOpen ? "block" : "none";
+        }
     }
     if (menuIcon) {
         menuIcon.style.display = "block";
@@ -35,6 +40,16 @@ function updateMenuVisualState(isOpen) {
     if (wholeContainer) {
         wholeContainer.classList.toggle("menu-open", isOpen);
     }
+    
+    // Handle body scroll lock for iOS Safari
+    if (isOpen && isMobileDrawerViewport()) {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+    }
+    
     document.body.classList.toggle("menu-open-body", isOpen);
     document.documentElement.classList.toggle("menu-open-body", isOpen);
     if (clickDiv) {
@@ -62,7 +77,15 @@ function updateMenuVisualState(isOpen) {
             overlay.style.height = "100dvh";
         }
     } else {
-        if (overlay) { overlay.style.display = "none"; }
+        if (overlay) { 
+            overlay.style.display = "none";
+            // For mobile, completely remove the overlay when closed
+            if (isMobileDrawerViewport() && overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+                document.getElementById("menuClickOverlay") !== null && 
+                    document.body.removeChild(document.getElementById("menuClickOverlay"));
+            }
+        }
     }
 }
 
@@ -227,6 +250,14 @@ function restorePersistedMenuState() {
         return;
     }
 
+    // On mobile viewports, ALWAYS force menu closed on load
+    if (isMobileDrawerViewport()) {
+        Tmenu = false;
+        updateMenuVisualState(false);
+        persistMenuState(false);
+        return;
+    }
+
     var savedState = null;
     try {
         savedState = sessionStorage.getItem(MENU_STATE_KEY);
@@ -244,9 +275,23 @@ function restorePersistedMenuState() {
 }
 
 window.addEventListener('load', function() {
+    // Ensure menu is closed on page load
     Tmenu = false;
     updateMenuVisualState(false);
+    
+    // Clear body overflow lock on load
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    
     try { sessionStorage.setItem(MENU_STATE_KEY, "0"); } catch(e) {}
+    
+    // On mobile, ensure the sidebar starts hidden
+    if (isMobileDrawerViewport()) {
+        var sideBar = document.getElementById("Tmenu");
+        if (sideBar) {
+            sideBar.style.display = "none";
+        }
+    }
 });
 
 document.addEventListener('keydown', function(event) {
@@ -270,6 +315,14 @@ document.addEventListener('click', function(event) {
     var clickedMenuIcon = menuIcon.contains(event.target);
 
     if (!clickedInsideSidebar && !clickedMenuIcon) {
+        menuClose();
+    }
+});
+
+// Handle viewport resize - close menu on mobile when resizing from desktop
+window.addEventListener('resize', function() {
+    if (isMobileDrawerViewport() && Tmenu) {
+        // If viewport became mobile and menu is open, close it
         menuClose();
     }
 });

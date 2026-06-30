@@ -190,13 +190,14 @@ label {
 }
 .Startpagebtn {
 	margin-bottom: 0% !important;
+    width: 161px;
     position: relative;
     margin: 4px 2px;
     padding: 4px;
    /* background-color: #F2672E;*/
     color: white;
     border: none;
-    /* font-weight: bold; */
+    font-weight: bold;
     text-align: center;
     padding-left: 20px;
     padding-right: 20px;
