@@ -465,7 +465,9 @@ video::cue {
     justify-content: flex-start !important;
     gap: 0 !important;
     width: 100% !important;
-    height: 24px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    flex: 0 0 32px;
     padding: 0 !important;
     background: #005E80 !important;
 }
@@ -483,9 +485,11 @@ video::cue {
     color: #FFFFFF !important;
     background: #005E80 !important;
     border: none !important;
+    border-bottom: 2px solid transparent !important;
     border-radius: 0 !important;
+    box-sizing: border-box;
     font-size: 14px !important;
-    line-height: 32px !important;
+    line-height: 30px !important;
     font-weight: 600 !important;
     letter-spacing: 0 !important;
     cursor: pointer;
@@ -504,11 +508,13 @@ video::cue {
     height: 32px !important;
     font-size: 14px !important;
     font-weight: 600 !important;
-    line-height: 32px !important;
+    line-height: 30px !important;
     color: #FFFFFF !important;
     background: #005E80 !important;
     border: none !important;
+    border-bottom: 2px solid transparent !important;
     border-radius: 0 !important;
+    box-sizing: border-box;
     padding: 0 !important;
     float: none !important;
     text-align: center !important;
@@ -544,12 +550,37 @@ video::cue {
     font-weight: 700 !important;
     box-shadow: none !important;
     border-bottom: 2px solid rgba(255,255,255,0.7) !important;
+    box-sizing: border-box;
 }
 
 .tocclickedclscss:hover {
     color: #FFFFFF !important;
     background: #004d6a !important;
     border-color: transparent !important;
+}
+
+/* Explicit active-state style for Menu/Transcript tabs (same theme colors, clearer affordance) */
+.sideBar #sideBarHeader > #toc_id,
+.sideBar #sideBarHeader > #trans_id {
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.sideBar #sideBarHeader > #toc_id[aria-selected="true"],
+.sideBar #sideBarHeader > #trans_id[aria-selected="true"] {
+    background: #004d6a !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    border-bottom: 2px solid rgba(255,255,255,0.7) !important;
+    opacity: 1;
+}
+
+.sideBar #sideBarHeader > #toc_id[aria-selected="false"],
+.sideBar #sideBarHeader > #trans_id[aria-selected="false"] {
+    background: #005E80 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid transparent !important;
+    opacity: 0.88;
 }
 
 .sideBar > .tocData {
@@ -1108,7 +1139,7 @@ html.menu-open-body {
     inset: 0;
     background: rgba(8, 15, 30, 0);
     pointer-events: none;
-    transition: all 0.3s ease;
+    transition: opacity 0.2s ease;
     z-index: 1003;
 }
 
@@ -1977,4 +2008,39 @@ body,
         white-space: nowrap;
         text-overflow: ellipsis;
     } */
+}
+
+/* iPhone/iPad drawer scroll containment: only sidebar content scrolls when menu is open */
+@media (max-width: 1024px) {
+    html.menu-open-body,
+    body.menu-open-body {
+        overflow: hidden !important;
+        overscroll-behavior: none;
+    }
+
+    .wholeContainer.menu-open .contentArea,
+    .wholeContainer.menu-open .pageContent,
+    .wholeContainer.menu-open .pageContent.fullContentArea {
+        overflow: hidden !important;
+    }
+
+    .sideBar {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        overflow: hidden !important;
+    }
+
+    .sideBar > .tocData {
+        flex: 1 1 auto;
+        min-height: 0;
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
+    }
 }

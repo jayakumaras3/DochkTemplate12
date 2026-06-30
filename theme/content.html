@@ -2,10 +2,10 @@
 <div ng-controller="mainController as mc" class="wholeContainer">
     <div id="Tmenu" ng-controller="sideBar as sb" class="sideBar" ng-show="sb.showSideBar" style="display:none">
 		<img src="theme/images/logo.svg" class="logo" alt="Logo" role="img">
-        <div id="sideBarHeader">
+        <div id="sideBarHeader" role="tablist" aria-label="Sidebar tabs">
 		<!-- <hr> -->
             <!-- Menu Button -->
-<div class="tocclickedclscss" id="toc_id">
+<div class="tocclickedclscss" id="toc_id" role="tab" aria-selected="true" aria-current="page">
   <span
     role="button"
     tabindex="0"
@@ -18,7 +18,7 @@
 </div>
 
 <!-- Transcript Button -->
-<div id="trans_id">
+<div id="trans_id" role="tab" aria-selected="false">
   <span
     role="button"
     tabindex="0"

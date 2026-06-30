@@ -420,29 +420,63 @@ p.handleKeydown = function(event, name) {
     event.preventDefault(); // Prevent spacebar from scrolling the page
 	var img = document.getElementById('TmenuIcon');
 
-if (img) {
-  var pointerEvents = window.getComputedStyle(img).pointerEvents;
+	if (img) {
+	  var pointerEvents = window.getComputedStyle(img).pointerEvents;
 
-  if (pointerEvents === 'none') {
-    console.log('Pointer events are disabled');
-  } else {
-	  p.tocClick(name);
-	  document.getElementById("clickableDiv").focus();
-    console.log('Pointer events are enabled');
-  }
-}
-    
+	  if (pointerEvents === 'none') {
+	    console.log('Pointer events are disabled');
+	  } else {
+		  this.tocClick(name);
+		  document.getElementById("clickableDiv").focus();
+	    console.log('Pointer events are enabled');
+	  }
+	}
   }
 };
+
+	p.updateTabSelectionState = function(activeTab) {
+		var isTocActive = activeTab === 'toc';
+		var tocTab = document.getElementById('toc_id');
+		var transTab = document.getElementById('trans_id');
+
+		if (tocTab) {
+			tocTab.setAttribute('aria-selected', isTocActive ? 'true' : 'false');
+			if (isTocActive) {
+				tocTab.setAttribute('aria-current', 'page');
+			} else {
+				tocTab.removeAttribute('aria-current');
+			}
+		}
+
+		if (transTab) {
+			transTab.setAttribute('aria-selected', isTocActive ? 'false' : 'true');
+			if (isTocActive) {
+				transTab.removeAttribute('aria-current');
+			} else {
+				transTab.setAttribute('aria-current', 'page');
+			}
+		}
+	};
 
 	p.tocClick = function(name) {
 	//	console.log(name);
 		switch (name) {
 			case 'toc':
+				var switchedFromAlternatePanel = this.transcriptClicked || this.glossaryClicked;
+				this.updateTabSelectionState('toc');
 				getCurrentTrackName();
 				$("#toc_id").addClass('tocclickedclscss');
 				$("#trans_id").removeClass('tocclickedclscss');
 				$("#glossary_id").removeClass('tocclickedclscss');
+
+				// Avoid re-rendering TOC when Menu is already active; this prevents visible list jerk.
+				if (!switchedFromAlternatePanel) {
+					this.transcriptClicked = false;
+					this.glossaryClicked = false;
+					this.globalVariableService.replaybtnvisible = true;
+					break;
+				}
+
 				this.sideBarData = this.$sce.trustAsHtml(this.tocContent);
 				var self = this;
 				this.transcriptClicked = false;
@@ -464,7 +498,7 @@ if (img) {
 						}
 					}
 					// page tiltle enable when click transcript and menu toggle end
-				}, 100);
+				}, 0);
 				break;
 			
 			 case 'toggleMenu':
@@ -481,6 +515,7 @@ if (img) {
 			  break;
 
 			case 'transcript':
+				this.updateTabSelectionState('transcript');
 			
 				$("#toc_id").removeClass('tocclickedclscss');
 				$("#glossary_id").removeClass('tocclickedclscss');
@@ -492,6 +527,7 @@ if (img) {
 				//alert();
 				break;
 			case 'glossary':
+				this.updateTabSelectionState('toc');
 				$("#toc_id").removeClass('tocclickedclscss');
 				$("#trans_id").removeClass('tocclickedclscss');
 				$("#glossary_id").addClass('tocclickedclscss');
