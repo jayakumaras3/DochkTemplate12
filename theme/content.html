@@ -66,7 +66,7 @@
   style="cursor: pointer;">
 		 <img title="Menu"  style="display:none;" id="TmenuIcon1" ng-click="sb.tocClick('toggleMenu')"  alt="image"></div> 
         <div class="headingArea FSize19" ng-show="cc.showHeader">
-        <span class="pageHeaderText" tabindex="0" role="text">{{cc.header}}</span>
+        <span class="pageHeaderText" tabindex="0" role="text" ng-attr-title="{{cc.header}}" ng-attr-aria-label="{{cc.header}}">{{cc.header}}</span>
         <div  tabindex="0" id="pagenoHeader"></div>
         <button id="certificateid" onclick="showCertificate()" aria-label="View Certificate">
   <img  id="Imagcertificateid" src="theme/images/footer-menu/Certificate.svg" alt="" style="height: 32px; vertical-align: middle;">

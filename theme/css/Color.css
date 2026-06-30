@@ -185,7 +185,7 @@ body {
     margin-left: auto;
     color: var(--muted);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 #certificateid {
@@ -1920,4 +1920,61 @@ body,
         margin-left: 10px;
         white-space: nowrap;
     }
+}
+
+/* Mobile/tablet title truncation guard: keep page number visible and TOC rows single-line */
+@media (max-width: 991px) {
+    .headingArea {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .pageHeaderText {
+        display: block;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding-right: 8px;
+    }
+
+    #pagenoHeader {
+        flex: 0 0 auto;
+        flex-shrink: 0;
+        margin-left: auto;
+        white-space: nowrap;
+    }
+
+    #certificateid {
+        flex: 0 0 auto;
+    }
+
+    /*#tocData > span > li > span.toc-row-item {
+        min-height: 42px;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .toc-item-text {
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: normal;
+        overflow-wrap: normal;
+    }*/
+
+    /* Fallback for legacy TOC markup before toc-item-text enhancement is applied
+    #tocData li > span[role="button"] {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    } */
 }
