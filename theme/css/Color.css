@@ -1356,7 +1356,7 @@ html.menu-open-body {
         left: 0 !important;
         bottom: 0 !important;
         width: var(--player-sidebar-width) !important;
-        min-width: 240px;
+        min-width: 300px;
         max-width: 380px;
         height: 100dvh !important;
         max-height: 100dvh !important;
@@ -1409,7 +1409,7 @@ html.menu-open-body {
         left: 0 !important;
         bottom: 0 !important;
         width: var(--player-sidebar-width) !important;
-        min-width: 240px;
+        min-width: 270px;
         max-width: 380px;
         height: 100dvh !important;
         max-height: 100dvh !important;
@@ -2008,6 +2008,38 @@ body,
         white-space: nowrap;
         text-overflow: ellipsis;
     } */
+}
+
+/* iPad/tablet header title alignment */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .headingArea {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start !important;
+        padding-left: 63px !important;
+        padding-right: 16px !important;
+        text-align: left;
+    }
+
+    .headingArea .pageHeaderText {
+        position: static;
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex: 0 1 auto;
+        height: 100%;
+        width: auto;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+        line-height: 1;
+        transform: translateY(3px);
+    }
+
+    .headingArea #pagenoHeader {
+        margin-left: auto;
+    }
 }
 
 /* iPhone/iPad drawer scroll containment: only sidebar content scrolls when menu is open */
