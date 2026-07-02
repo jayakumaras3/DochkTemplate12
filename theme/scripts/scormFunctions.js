@@ -173,7 +173,7 @@ function init() {
 			buttonElem.setAttribute('aria-label', labelText);
 			buttonElem.setAttribute('aria-disabled', 'false');
 			buttonElem.setAttribute('tabindex', '0');
-			buttonElem.removeAttribute('title');
+			buttonElem.setAttribute('title', labelText);
 			return buttonElem;
 		}
 		
