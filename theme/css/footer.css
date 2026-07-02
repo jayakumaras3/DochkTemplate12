@@ -197,6 +197,6 @@
 }
 .navCircleHighlight
 {
-    background-color: #79aebf;
-	border:2px solid #00677f !important;
+    background-color: var(--brand, #e1251b);
+	border:2px solid var(--brand-active, #bf1f17) !important;
 }

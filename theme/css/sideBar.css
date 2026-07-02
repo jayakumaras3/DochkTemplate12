@@ -132,7 +132,7 @@
 }
 
 .sideBar li span:hover {
-    color: #5097ab;
+    color: var(--brand, #e1251b);
 }
 
 .sideBar {

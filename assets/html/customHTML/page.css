@@ -8,9 +8,9 @@
 
 /* ── CSS Variable Defaults (overridden by JS from JSON) ─── */
 :root {
-  --color-primary:        #1A56DB;
-  --color-primary-dark:   #1341B0;
-  --color-primary-light:  #EBF2FF;
+  --color-primary:        #e1251b;
+  --color-primary-dark:   #bf1f17;
+  --color-primary-light:  #fce9e8;
   --color-accent:         #06B6D4;
   --color-text-primary:   #111827;
   --color-text-secondary: #4B5563;
@@ -25,8 +25,8 @@
   --font-body:            'DM Sans', 'Segoe UI', system-ui, sans-serif;
   --font-heading:         'Manrope', 'DM Sans', sans-serif;
   --shadow-sm:            0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md:            0 4px 16px rgba(26,86,219,0.10);
-  --shadow-lg:            0 8px 32px rgba(26,86,219,0.14);
+  --shadow-md:            0 4px 16px rgba(225,37,27,0.10);
+  --shadow-lg:            0 8px 32px rgba(225,37,27,0.14);
 
   /* Layout vars (set by JS) */
   --layout-flex-dir:      row;

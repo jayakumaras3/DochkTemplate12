@@ -17,11 +17,11 @@
   --text-soft: #27384f;
   --line: #d9dee7;
   --line-soft: #e7eaf0;
-  --brand: #005E80;
-  --brand-hover: #004166;
+  --brand: #e1251b;
+  --brand-hover: #ca2118;
   --tag-bg: #e0f6ff;
   --tag-border: #70D4FF;
-  --tag-text: #005E80;
+  --tag-text: #e1251b;
   --surface: #ffffff;
 
   --page-max: 900px;
@@ -193,8 +193,8 @@ h1 {
 }
 
 .info-card:hover {
-  border-color: #9eb8cc;
-  box-shadow: 0 4px 14px rgba(0, 94, 128, 0.08);
+  border-color: #ddadaa;
+  box-shadow: 0 4px 14px rgba(225, 37, 27, 0.08);
   transform: translateY(-1px);
 }
 
@@ -257,7 +257,7 @@ h1 {
   white-space: nowrap;
   cursor: pointer;
   color: #ffffff;
-  background: #005E80;
+  background: var(--brand);
   transition: background-color var(--ease), box-shadow var(--ease);
 }
 
@@ -283,12 +283,12 @@ h1 {
 .secondary-action:hover,
 .secondary-action:focus-visible {
   background: var(--brand-hover);
-  box-shadow: 0 6px 16px rgba(0, 94, 128, 0.30);
+  box-shadow: 0 6px 16px rgba(225, 37, 27, 0.30);
 }
 
 .primary-action:focus-visible,
 .secondary-action:focus-visible {
-  outline: 3px solid rgba(0, 94, 128, 0.30);
+  outline: 3px solid rgba(225, 37, 27, 0.25);
   outline-offset: 2px;
 }
 

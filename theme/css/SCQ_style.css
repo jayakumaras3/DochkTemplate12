@@ -261,7 +261,7 @@ label {
 }
 
 .answer label:hover {
-    color: #007bff;
+    color: var(--quiz-accent-dark, #bf1f17);
 }
 .no-select {
     user-select: none;
@@ -315,8 +315,8 @@ label {
 }
 
 :root {
-    --quiz-accent: #870D0D;
-    --quiz-accent-dark: #5f0909;
+    --quiz-accent: #e1251b;
+    --quiz-accent-dark: #bf1f17;
     --quiz-accent-soft: #f8e6e2;
     --quiz-accent-border: #dcb8b2;
     --quiz-surface: rgba(255, 255, 255, 0.97);
@@ -417,22 +417,22 @@ body {
 }
 
 .answer:hover {
-    border-color: #cfd8eb;
-    box-shadow: 0 4px 14px rgba(30, 51, 84, 0.06);
+    border-color: #d6c0bc;
+    box-shadow: 0 4px 14px rgba(41, 28, 28, 0.05);
 }
 
 .answer[aria-checked="true"],
 .highlight {
-    background: #f4f8ff !important;
-    border: 1px solid #8eb2ff !important;
-    box-shadow: 0 0 0 3px rgba(76, 128, 255, 0.12);
+    background: rgba(225, 37, 27, 0.06) !important;
+    border: 1px solid var(--quiz-accent, #e1251b) !important;
+    box-shadow: 0 0 0 3px rgba(225, 37, 27, 0.12);
 }
 
 input.radioBut,
 input.checkbox {
     width: 22px;
     height: 22px;
-    accent-color: #2f6dff;
+    accent-color: var(--quiz-accent, #e1251b);
     margin-top: 0;
     flex-shrink: 0;
 }
@@ -450,7 +450,7 @@ input.checkbox {
 
 .answer label:hover,
 .answer[aria-checked="true"] label {
-    color: #204fbf;
+    color: var(--quiz-accent-dark, #bf1f17);
 }
 
 .correct,
@@ -488,9 +488,9 @@ input.checkbox {
 .btn,
 .Startpagebtn,
 .retrybtn {
-    background: #005E80;
+    background: var(--quiz-accent, #e1251b);
     border-radius: 0;
-    box-shadow: 0 10px 24px rgba(135, 13, 13, 0.16);
+    box-shadow: 0 10px 24px rgba(225, 37, 27, 0.16);
     min-height: 44px;
     margin-top: 16px;
     letter-spacing: 0.02em;
@@ -501,8 +501,8 @@ input.checkbox {
 .btn:hover,
 .Startpagebtn:hover,
 .retrybtn:hover {
-    background: #096F95;
-    box-shadow: 0 12px 28px rgba(135, 13, 13, 0.18);
+    background: var(--quiz-accent-dark, #bf1f17);
+    box-shadow: 0 12px 28px rgba(225, 37, 27, 0.18);
 }
 
 .btn.disabled {
@@ -594,13 +594,13 @@ input.checkbox {
     }
 
     input.radioBut:checked {
-        border-color: #3f6fe0;
-        background: radial-gradient(circle, #3f6fe0 0 40%, #ffffff 41% 68%, #3f6fe0 69% 100%);
+        border-color: var(--quiz-accent, #e1251b);
+        background: radial-gradient(circle, var(--quiz-accent, #e1251b) 0 40%, #ffffff 41% 68%, var(--quiz-accent, #e1251b) 69% 100%);
     }
 
     input.checkbox:checked {
-        border-color: #3f6fe0;
-        background-color: #3f6fe0;
+        border-color: var(--quiz-accent, #e1251b);
+        background-color: var(--quiz-accent, #e1251b);
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: center;
@@ -609,7 +609,7 @@ input.checkbox {
 
     input.radioBut:focus-visible,
     input.checkbox:focus-visible {
-        outline: 2px solid rgba(63, 111, 224, 0.35);
+        outline: 2px solid rgba(225, 37, 27, 0.35);
         outline-offset: 1px;
     }
 

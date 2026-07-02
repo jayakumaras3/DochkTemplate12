@@ -19,8 +19,8 @@
     "buttons": {
       "primary": {
         "text": "BEGIN COURSE",
-        "backgroundColor": "#2456d6",
-        "backgroundColorHover": "#1d48bd",
+        "backgroundColor": "#e1251b",
+        "backgroundColorHover": "#ca2118",
         "textColor": "#ffffff",
         "arrowIcon": "→",
         "action": "startCourse()"
@@ -83,8 +83,8 @@
       "textSoft": "#27384f",
       "line": "#d9dee7",
       "lineSoft": "#e7eaf0",
-      "brand": "#2456d6",
-      "brandHover": "#1d48bd",
+      "brand": "#e1251b",
+      "brandHover": "#ca2118",
       "tagBg": "#f0e8ff",
       "tagBorder": "#d9c6ff",
       "tagText": "#6f2ce8",
