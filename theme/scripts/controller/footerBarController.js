@@ -30,7 +30,7 @@ var pauseTimer;
         this.scope.indicatorOption = {
             radius: 15,
             percentage: true,
-            barColor: "#e1251b"
+            barColor: "#D70010"
         };
         this.navCircle = [];
         this.scope.indicatorValue = 0;

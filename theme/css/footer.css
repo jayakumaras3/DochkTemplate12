@@ -197,6 +197,6 @@
 }
 .navCircleHighlight
 {
-    background-color: var(--brand, #e1251b);
-	border:2px solid var(--brand-active, #bf1f17) !important;
+    background-color: var(--brand, #D70010);
+	border:2px solid var(--brand-active, #B7000D) !important;
 }

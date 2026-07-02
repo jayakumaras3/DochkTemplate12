@@ -6,11 +6,19 @@
 /* ── Google Fonts ────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
 
+@font-face {
+  font-family: 'Tahoma';
+  src: url('../../../theme/fonts/tahoma.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── CSS Variable Defaults (overridden by JS from JSON) ─── */
 :root {
-  --color-primary:        #e1251b;
-  --color-primary-dark:   #bf1f17;
-  --color-primary-light:  #fce9e8;
+  --color-primary:        #D70010;
+  --color-primary-dark:   #B7000D;
+  --color-primary-light:  #fce7e6;
   --color-accent:         #06B6D4;
   --color-text-primary:   #111827;
   --color-text-secondary: #4B5563;
@@ -22,11 +30,11 @@
   --radius:               12px;
   --radius-sm:            8px;
   --radius-lg:            16px;
-  --font-body:            'DM Sans', 'Segoe UI', system-ui, sans-serif;
-  --font-heading:         'Manrope', 'DM Sans', sans-serif;
+  --font-body:            Tahoma, Arial, Helvetica, sans-serif;
+  --font-heading:         Tahoma, Arial, Helvetica, sans-serif;
   --shadow-sm:            0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md:            0 4px 16px rgba(225,37,27,0.10);
-  --shadow-lg:            0 8px 32px rgba(225,37,27,0.14);
+  --shadow-md:            0 4px 16px rgba(215,0,16,0.10);
+  --shadow-lg:            0 8px 32px rgba(215,0,16,0.14);
 
   /* Layout vars (set by JS) */
   --layout-flex-dir:      row;

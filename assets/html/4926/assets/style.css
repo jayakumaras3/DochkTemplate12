@@ -6,6 +6,14 @@
 }
 
 @font-face {
+  font-family: "Tahoma";
+  src: url("../../../../theme/fonts/tahoma.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "MyriadPro";
   src: url("MYRIADPRO-BOLD.OTF") format("opentype");
   font-weight: 700;
@@ -17,11 +25,11 @@
   --text-soft: #27384f;
   --line: #d9dee7;
   --line-soft: #e7eaf0;
-  --brand: #e1251b;
-  --brand-hover: #ca2118;
+  --brand: #D70010;
+  --brand-hover: #C2000E;
   --tag-bg: #e0f6ff;
   --tag-border: #70D4FF;
-  --tag-text: #e1251b;
+  --tag-text: #D70010;
   --surface: #ffffff;
 
   --page-max: 900px;
@@ -65,7 +73,7 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: var(--text);
-  font-family: "MyriadPro", "Segoe UI", Tahoma, Arial, sans-serif;
+  font-family: Tahoma, Arial, Helvetica, sans-serif;
   font-size: var(--fs-body);
   line-height: 1.5;
 }
@@ -193,8 +201,8 @@ h1 {
 }
 
 .info-card:hover {
-  border-color: #ddadaa;
-  box-shadow: 0 4px 14px rgba(225, 37, 27, 0.08);
+  border-color: #dcaaa7;
+  box-shadow: 0 4px 14px rgba(215, 0, 16, 0.08);
   transform: translateY(-1px);
 }
 
@@ -283,12 +291,12 @@ h1 {
 .secondary-action:hover,
 .secondary-action:focus-visible {
   background: var(--brand-hover);
-  box-shadow: 0 6px 16px rgba(225, 37, 27, 0.30);
+  box-shadow: 0 6px 16px rgba(215, 0, 16, 0.30);
 }
 
 .primary-action:focus-visible,
 .secondary-action:focus-visible {
-  outline: 3px solid rgba(225, 37, 27, 0.25);
+  outline: 3px solid rgba(215, 0, 16, 0.25);
   outline-offset: 2px;
 }
 

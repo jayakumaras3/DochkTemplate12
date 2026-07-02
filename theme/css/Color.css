@@ -1,16 +1,24 @@
+@font-face {
+    font-family: 'Tahoma';
+    src: url('../fonts/tahoma.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
     --app-bg: #f3f4f6;
     --surface: #ffffff;
     --surface-soft: #f7f8fb;
-    --text: #07142a;
+    --text: #1E1B1C;
     --text-soft: #24364c;
-    --muted: #637083;
-    --line: #d9dee7;
+    --muted: #63666A;
+    --line: #D9D9D9;
     --line-soft: #e8ebf1;
-    --brand: #e1251b;
-    --brand-hover: #ca2118;
-    --brand-active: #bf1f17;
-    --brand-focus: rgba(225, 37, 27, 0.25);
+    --brand: #D70010;
+    --brand-hover: #C2000E;
+    --brand-active: #B7000D;
+    --brand-focus: rgba(215, 0, 16, 0.25);
     --accent: #7b2ff2;
     --shadow-soft: 0 18px 50px rgba(17, 24, 39, 0.08);
 }
@@ -46,7 +54,7 @@ body {
     -webkit-transform: none !important;
     background: var(--app-bg);
     color: var(--text);
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
 
 .wholeContainer {
@@ -618,7 +626,7 @@ video::cue {
 
 #tocData li:hover {
     color: var(--brand);
-    background: rgba(225, 37, 27, 0.08);
+    background: rgba(215, 0, 16, 0.08);
 }
 
 .sideBar li span {
@@ -878,8 +886,8 @@ video::cue {
 
 .resource-modal-item:hover {
     border-color: var(--brand);
-    box-shadow: 0 3px 14px rgba(225, 37, 27, 0.12);
-    background: rgba(225, 37, 27, 0.06);
+    box-shadow: 0 3px 14px rgba(215, 0, 16, 0.12);
+    background: rgba(215, 0, 16, 0.06);
     color: #07142a !important;
     text-decoration: none !important;
 }
@@ -887,7 +895,7 @@ video::cue {
 .resource-item-icon-wrap {
     width: 40px;
     height: 40px;
-    background: rgba(225, 37, 27, 0.1);
+    background: rgba(215, 0, 16, 0.1);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -1638,7 +1646,7 @@ body,
 }
 
 #tocData > span > li > span.toc-row-item:hover {
-    background: rgba(225, 37, 27, 0.08);
+    background: rgba(215, 0, 16, 0.08);
     color: var(--brand);
 }
 
@@ -1656,7 +1664,7 @@ body,
 }
 
 #tocData > span > li > span.toc-row-item.selectedToc {
-    background: rgba(225, 37, 27, 0.14);
+    background: rgba(215, 0, 16, 0.14);
     color: var(--brand);
     font-weight: 700;
     border-radius: 0;
@@ -1672,7 +1680,7 @@ body,
     top: 50%;
     width: 48px;
     height: 2px;
-    background: rgba(225, 37, 27, 0.14);
+    background: rgba(215, 0, 16, 0.14);
     transform: translateY(-50%);
 }
 

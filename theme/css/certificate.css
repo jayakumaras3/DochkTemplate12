@@ -3,10 +3,18 @@
   size: 216mm 280mm;
 }
 
+@font-face {
+  font-family: 'Tahoma';
+  src: url('../fonts/tahoma.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 body, html {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
 
 #printContent {

@@ -77,12 +77,21 @@
 }
 
 
+/* Disabled: this previously aliased the "tahoma" font-family name to a
+   Myriad Pro file, silently substituting real Tahoma everywhere it was used.
 @font-face {
-     font-family: 'tahoma';
+     font-family: Tahoma, Arial, Helvetica, sans-serif;
      src: url('../../../fonts/MYRIADPRO-BOLD.OTF') format('opentype');
+} */
+@font-face {
+    font-family: 'Tahoma';
+    src: url('../fonts/tahoma.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 body {
-    font-family: "tahoma";
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
     background-color: #ffffff;
     font-size: 20px;
     margin: 0;
@@ -205,7 +214,7 @@ label {
     /*border-radius: 12px;*/
     /*font-size: 20px;*/
 
-	font-family: "tahoma";
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
     /* transition: background-color 0.3s ease; */
 }
 .retrybtn{
@@ -351,13 +360,13 @@ label {
 }
 
 .answer label:hover {
-    color: var(--quiz-accent-dark, #bf1f17);
+    color: var(--quiz-accent-dark, #B7000D);
 }
 
 
 .btn {
 	width: 161px;
-	font-family: 'tahoma';
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
     position: relative;
    /* margin-left: 5.5%;*/
    /* background-color: #F2672E;*/
@@ -376,8 +385,8 @@ label {
 }
 
 :root {
-    --quiz-accent: #e1251b;
-    --quiz-accent-dark: #bf1f17;
+    --quiz-accent: #D70010;
+    --quiz-accent-dark: #B7000D;
     --quiz-accent-soft: #f8e6e2;
     --quiz-surface: rgba(255, 255, 255, 0.97);
     --quiz-shadow: 0 18px 40px rgba(135, 13, 13, 0.12);
@@ -576,7 +585,7 @@ body {
 
 .redtext,
 .redtext1 {
-    color: var(--quiz-accent, #e1251b);
+    color: var(--quiz-accent, #D70010);
     font-weight: 600;
     font-style: italic;
     font-size: clamp(13px, 1vw, 14px);
@@ -612,7 +621,7 @@ body {
     padding-bottom: 4px;
     margin-top: 10px;
     scrollbar-width: thin;
-    scrollbar-color: rgba(225, 37, 27, 0.3) rgba(255, 255, 255, 0.1);
+    scrollbar-color: rgba(215, 0, 16, 0.3) rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -630,7 +639,7 @@ body {
 
 #quizContainer:not(.quiz-start-view):not(:has(.results)) .options::-webkit-scrollbar-thumb,
 #quizContainer:not(.quiz-start-view):not(:has(.results)) .options1::-webkit-scrollbar-thumb {
-    background: rgba(225, 37, 27, 0.3);
+    background: rgba(215, 0, 16, 0.3);
     border-radius: 0;
 }
 
@@ -678,22 +687,22 @@ body {
 }
 
 .answer:hover {
-    border-color: var(--quiz-accent, #e1251b);
-    background: rgba(225, 37, 27, 0.03);
-    box-shadow: 0 2px 8px rgba(225, 37, 27, 0.1);
+    border-color: var(--quiz-accent, #D70010);
+    background: rgba(215, 0, 16, 0.03);
+    box-shadow: 0 2px 8px rgba(215, 0, 16, 0.1);
 }
 
 .answer[aria-checked="true"] {
-    background: rgba(225, 37, 27, 0.06) !important;
-    border: 1px solid var(--quiz-accent, #e1251b) !important;
-    box-shadow: inset 0 0 0 1px rgba(225, 37, 27, 0.45), 0 0 0 2px rgba(225, 37, 27, 0.1);
+    background: rgba(215, 0, 16, 0.06) !important;
+    border: 1px solid var(--quiz-accent, #D70010) !important;
+    box-shadow: inset 0 0 0 1px rgba(215, 0, 16, 0.45), 0 0 0 2px rgba(215, 0, 16, 0.1);
 }
 
 input.radioBut,
 input.checkbox {
     width: 20px;
     height: 20px;
-    accent-color: var(--quiz-accent, #e1251b);
+    accent-color: var(--quiz-accent, #D70010);
     margin-top: 0;
     flex-shrink: 0;
 }
@@ -717,14 +726,14 @@ input.checkbox {
 
 .answer label:hover,
 .answer[aria-checked="true"] label {
-    color: var(--quiz-accent-dark, #bf1f17);
+    color: var(--quiz-accent-dark, #B7000D);
 }
 
 .btn,
 .Startpagebtn {
-    background: var(--quiz-accent, #e1251b);
+    background: var(--quiz-accent, #D70010);
     border-radius: 0;
-    box-shadow: 0 10px 24px rgba(225, 37, 27, 0.16);
+    box-shadow: 0 10px 24px rgba(215, 0, 16, 0.16);
     min-height: 44px;
     font-size: 16px !important;
     margin-top: 20px;
@@ -733,9 +742,9 @@ input.checkbox {
     text-transform: none;
 }
 .retrybtn {
-    background: var(--quiz-accent, #e1251b);
+    background: var(--quiz-accent, #D70010);
     border-radius: 0;
-    box-shadow: 0 10px 24px rgba(225, 37, 27, 0.16);
+    box-shadow: 0 10px 24px rgba(215, 0, 16, 0.16);
     min-height: 44px;
     font-size: 16px !important;
     margin-top: 20px;
@@ -746,12 +755,12 @@ input.checkbox {
 
 .btn:hover,
 .Startpagebtn:hover {
-    background: var(--quiz-accent-dark, #bf1f17);
-    box-shadow: 0 12px 28px rgba(225, 37, 27, 0.18);
+    background: var(--quiz-accent-dark, #B7000D);
+    box-shadow: 0 12px 28px rgba(215, 0, 16, 0.18);
 }
 .retrybtn:hover {
-    background: var(--quiz-accent-dark, #bf1f17);
-    box-shadow: 0 12px 28px rgba(225, 37, 27, 0.18);
+    background: var(--quiz-accent-dark, #B7000D);
+    box-shadow: 0 12px 28px rgba(215, 0, 16, 0.18);
 }
 
 .contentWrapper {
@@ -1013,14 +1022,14 @@ input.checkbox {
 
     .answer input[type="radio"]:checked,
     input.radioBut:checked {
-        border-color: var(--quiz-accent, #e1251b);
-        background: radial-gradient(circle, var(--quiz-accent, #e1251b) 0 40%, #ffffff 41% 68%, var(--quiz-accent, #e1251b) 69% 100%);
+        border-color: var(--quiz-accent, #D70010);
+        background: radial-gradient(circle, var(--quiz-accent, #D70010) 0 40%, #ffffff 41% 68%, var(--quiz-accent, #D70010) 69% 100%);
     }
 
     .answer input[type="checkbox"]:checked,
     input.checkbox:checked {
-        border-color: var(--quiz-accent, #e1251b);
-        background-color: var(--quiz-accent, #e1251b);
+        border-color: var(--quiz-accent, #D70010);
+        background-color: var(--quiz-accent, #D70010);
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: center;
@@ -1053,7 +1062,7 @@ input.checkbox {
         min-height: 48px;
         -webkit-appearance: none;
         appearance: none;
-        font-family: 'tahoma', sans-serif !important;
+        font-family: Tahoma, Arial, Helvetica, sans-serif !important;
         font-size: 16px !important;
         line-height: 1.3;
         letter-spacing: 0.02em;

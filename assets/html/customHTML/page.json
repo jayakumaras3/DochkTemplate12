@@ -5,9 +5,9 @@
   },
 
   "theme": {
-    "primary":      "#e1251b",
-    "primaryDark":  "#bf1f17",
-    "primaryLight": "#fce9e8",
+    "primary":      "#D70010",
+    "primaryDark":  "#B7000D",
+    "primaryLight": "#fce7e6",
     "accent":       "#06B6D4",
     "text":         "#0F172A",
     "text2":        "#475569",

@@ -35,12 +35,21 @@
     visibility: var(--before-visibility, hidden);
 	color: green;
 }
+/* Disabled: this previously aliased the "tahoma" font-family name to a
+   Myriad Pro file, silently substituting real Tahoma everywhere it was used.
 @font-face {
     font-family: 'tahoma';
     src: url('../../../fonts/MYRIADPRO-BOLD.OTF') format('opentype');
+} */
+@font-face {
+    font-family: 'Tahoma';
+    src: url('../fonts/tahoma.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 body {
-    font-family: "tahoma";
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
     background-color: #ffffff;
     
     margin: 0;
@@ -161,7 +170,7 @@ label {
     cursor: pointer;
     border-radius: 0;
    /* font-size: 20px;*/
-	font-family: "tahoma";
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
     /* transition: background-color 0.3s ease; */
 }
 .retrybtn{
@@ -261,7 +270,7 @@ label {
 }
 
 .answer label:hover {
-    color: var(--quiz-accent-dark, #bf1f17);
+    color: var(--quiz-accent-dark, #B7000D);
 }
 .no-select {
     user-select: none;
@@ -300,7 +309,7 @@ label {
 }
 .btn {
 	width: 161px;
-	font-family: 'tahoma';
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
     position: relative;
     margin-left: 2.5%;
     /*background-color: #F2672E;*/
@@ -315,8 +324,8 @@ label {
 }
 
 :root {
-    --quiz-accent: #e1251b;
-    --quiz-accent-dark: #bf1f17;
+    --quiz-accent: #D70010;
+    --quiz-accent-dark: #B7000D;
     --quiz-accent-soft: #f8e6e2;
     --quiz-accent-border: #dcb8b2;
     --quiz-surface: rgba(255, 255, 255, 0.97);
@@ -423,16 +432,16 @@ body {
 
 .answer[aria-checked="true"],
 .highlight {
-    background: rgba(225, 37, 27, 0.06) !important;
-    border: 1px solid var(--quiz-accent, #e1251b) !important;
-    box-shadow: 0 0 0 3px rgba(225, 37, 27, 0.12);
+    background: rgba(215, 0, 16, 0.06) !important;
+    border: 1px solid var(--quiz-accent, #D70010) !important;
+    box-shadow: 0 0 0 3px rgba(215, 0, 16, 0.12);
 }
 
 input.radioBut,
 input.checkbox {
     width: 22px;
     height: 22px;
-    accent-color: var(--quiz-accent, #e1251b);
+    accent-color: var(--quiz-accent, #D70010);
     margin-top: 0;
     flex-shrink: 0;
 }
@@ -450,7 +459,7 @@ input.checkbox {
 
 .answer label:hover,
 .answer[aria-checked="true"] label {
-    color: var(--quiz-accent-dark, #bf1f17);
+    color: var(--quiz-accent-dark, #B7000D);
 }
 
 .correct,
@@ -488,9 +497,9 @@ input.checkbox {
 .btn,
 .Startpagebtn,
 .retrybtn {
-    background: var(--quiz-accent, #e1251b);
+    background: var(--quiz-accent, #D70010);
     border-radius: 0;
-    box-shadow: 0 10px 24px rgba(225, 37, 27, 0.16);
+    box-shadow: 0 10px 24px rgba(215, 0, 16, 0.16);
     min-height: 44px;
     margin-top: 16px;
     letter-spacing: 0.02em;
@@ -501,8 +510,8 @@ input.checkbox {
 .btn:hover,
 .Startpagebtn:hover,
 .retrybtn:hover {
-    background: var(--quiz-accent-dark, #bf1f17);
-    box-shadow: 0 12px 28px rgba(225, 37, 27, 0.18);
+    background: var(--quiz-accent-dark, #B7000D);
+    box-shadow: 0 12px 28px rgba(215, 0, 16, 0.18);
 }
 
 .btn.disabled {
@@ -594,13 +603,13 @@ input.checkbox {
     }
 
     input.radioBut:checked {
-        border-color: var(--quiz-accent, #e1251b);
-        background: radial-gradient(circle, var(--quiz-accent, #e1251b) 0 40%, #ffffff 41% 68%, var(--quiz-accent, #e1251b) 69% 100%);
+        border-color: var(--quiz-accent, #D70010);
+        background: radial-gradient(circle, var(--quiz-accent, #D70010) 0 40%, #ffffff 41% 68%, var(--quiz-accent, #D70010) 69% 100%);
     }
 
     input.checkbox:checked {
-        border-color: var(--quiz-accent, #e1251b);
-        background-color: var(--quiz-accent, #e1251b);
+        border-color: var(--quiz-accent, #D70010);
+        background-color: var(--quiz-accent, #D70010);
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: center;
@@ -609,7 +618,7 @@ input.checkbox {
 
     input.radioBut:focus-visible,
     input.checkbox:focus-visible {
-        outline: 2px solid rgba(225, 37, 27, 0.35);
+        outline: 2px solid rgba(215, 0, 16, 0.35);
         outline-offset: 1px;
     }
 
@@ -630,7 +639,7 @@ input.checkbox {
     .retrybtn {
         -webkit-appearance: none;
         appearance: none;
-        font-family: 'tahoma', sans-serif;
+        font-family: Tahoma, Arial, Helvetica, sans-serif;
         font-size: 16px;
         line-height: 1.3;
         letter-spacing: 0.02em;
