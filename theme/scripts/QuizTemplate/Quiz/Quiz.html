@@ -4,6 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mixed Quiz</title>
+    <script>
+    /* iPad Safari can report pointer:fine / hover:hover (e.g. with a
+       trackpad/Magic Keyboard attached, or in its default "desktop site"
+       mode), so CSS alone can't reliably tell an iPad from a laptop with a
+       mouse. navigator.maxTouchPoints is the standard capability check
+       (unaffected by input peripherals or UA spoofing) used to flag real
+       touch hardware; the width check keeps large touch-screen desktops
+       out. This is a one-time class toggle -- no listeners, no polling --
+       Quiz_style.css does the actual responsive work from here via plain
+       CSS media queries. */
+    (function () {
+        var isTouch = (navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+        if (isTouch && window.innerWidth <= 1366) {
+            document.documentElement.classList.add('is-touch-device');
+        }
+
+        /* This page runs inside an iframe the course chrome (content.html)
+           creates around it; that outer chrome's own header sits above
+           this iframe and isn't part of this file. Rather than hardcode
+           its height, measure it once from the parent document and expose
+           it as a CSS variable so #parentquizContainer's clearance in
+           Quiz_style.css is calculated from the real header, not guessed.
+           Every step is defensive: cross-origin access, a missing/renamed
+           element, or an implausible height (this isn't a normal page
+           header) all fall through silently and Quiz_style.css's own
+           var(--outer-header-height, 64px) fallback takes over -- nothing
+           here can break the page if the assumption doesn't hold. */
+        try {
+            var outerHeader = window.parent && window.parent !== window
+                ? window.parent.document.querySelector('.headingArea')
+                : null;
+            if (outerHeader) {
+                var h = outerHeader.getBoundingClientRect().height;
+                if (h >= 20 && h <= 150) {
+                    document.documentElement.style.setProperty('--outer-header-height', h + 'px');
+                }
+            }
+        } catch (e) {
+            /* Cross-origin or structural mismatch: Quiz_style.css's fallback covers this. */
+        }
+    })();
+    </script>
     <link rel="stylesheet" href="../../../css/Quiz_style.css">
     <link rel="stylesheet" href="../../../css/Color.css">
     <link rel="stylesheet" href="../../../css/QuestionOptions.css">

@@ -736,7 +736,11 @@ p.handleKeydown = function(event, name) {
 
 			var textSpan = document.createElement('span');
 			textSpan.className = 'toc-item-text';
-			textSpan.textContent = textContent;
+
+			var textInner = document.createElement('span');
+			textInner.className = 'menu-title';
+			textInner.textContent = textContent;
+			textSpan.appendChild(textInner);
 
 			label.innerHTML = '';
 			label.appendChild(iconSpan);

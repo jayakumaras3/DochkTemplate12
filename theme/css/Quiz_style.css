@@ -772,6 +772,7 @@ html body {
     }
 
     #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer {
+        flex-shrink: 0;
         max-height: none !important;
         overflow: visible !important;
         padding: 14px 12px;
@@ -779,6 +780,7 @@ html body {
 
     #quizContainer:not(.quiz-start-view):not(:has(.results)) .options,
     #quizContainer:not(.quiz-start-view):not(:has(.results)) .options1 {
+        flex-shrink: 0;
         max-height: none !important;
         overflow: visible !important;
         padding-right: 0;
@@ -848,6 +850,118 @@ html body {
     .results span,
     .results div {
         font-size: 16px !important;
+    }
+}
+
+/* iPhone & iPad only: the question heading, instruction text and option
+   cards read as cramped on touch devices. Add breathing room without
+   touching desktop or the shared QuestionOptions.css skin (used by the
+   separate SCQ/MCQ interaction pages, which must stay untouched).
+   Scoped via html.is-touch-device (set once in Quiz.html from
+   navigator.maxTouchPoints) rather than the (hover:none)/(pointer:coarse)
+   media features: iPad Safari can report pointer:fine and hover:hover
+   (e.g. with a trackpad/Magic Keyboard attached, or in its default
+   "desktop site" mode) even though the user is touching the screen, so
+   those media features alone are not reliable for detecting iPad. The
+   max-width is kept as a second, defense-in-depth guard. .questionContainer
+   raises specificity above QuestionOptions.css's .answer rules without
+   editing that shared file. */
+@media (max-width: 1366px) {
+    /* The course-level header ("Quiz  X/Y") lives outside this iframe, in
+       the shared theme/content.html chrome. On iPhone/iPad it can sit
+       close enough to this iframe's top edge that our own "Questions X of
+       Y" bar starts partially behind it. --outer-header-height is set by
+       Quiz.html from the real, measured height of that header (falling
+       back to 64px, a safe value above its ~45-60px measured range across
+       breakpoints in content.css/Color.css, if the measurement isn't
+       available) -- calculated clearance instead of a guessed constant,
+       without touching that shared chrome file. */
+    html.is-touch-device #parentquizContainer {
+        margin-top: calc(env(safe-area-inset-top, 0px) + var(--outer-header-height, 64px));
+    }
+
+    /* iOS Safari's address bar shows/hides as the page scrolls, which
+       changes the actually-visible viewport height while 100vh alone stays
+       fixed at the "chrome hidden" size. That mismatch is a well-documented
+       trigger for iOS Safari repainting this flex layout mid-transition and
+       intermittently leaving static content (the header, the Submit
+       button) blank until something forces a repaint. 100dvh tracks the
+       real visible viewport instead. */
+    html.is-touch-device body {
+        height: 100dvh;
+    }
+
+    /* Promote the header to its own compositing layer so iOS Safari
+       reliably repaints it after a scroll/resize (the same well-known
+       WebKit "content vanishes until repainted" bug). No .modal element
+       lives under #parentquizContainer, so this has no effect on the
+       image-zoom overlay's fixed positioning. */
+    html.is-touch-device #parentquizContainer {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+
+    /* One primary scrolling container for the whole touch range (not just
+       phones, which the "Mobile quiz readability fix" block below already
+       covers up to 900px): #quizContainer scrolls and everything inside it
+       uses natural document flow. This avoids stacking a second internal
+       scrollbar (.options) and a sticky Submit button inside an
+       overflow:hidden ancestor -- that specific combination is the classic
+       trigger for iOS Safari's intermittent disappearing-content bug during
+       scroll. will-change: scroll-position (not "transform") hints the
+       compositor for smooth scrolling without changing the containing
+       block that the .modal image-zoom overlay (a descendant of this
+       container) is positioned against. */
+    html.is-touch-device #quizContainer {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        will-change: scroll-position;
+    }
+
+    html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer {
+        flex-shrink: 0;
+        max-height: none;
+        overflow: visible;
+    }
+
+    html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .options,
+    html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .options1 {
+        flex-shrink: 0;
+        max-height: none;
+        overflow: visible;
+    }
+
+    html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .submit-section {
+        position: static;
+        background: #ffffff;
+    }
+
+    html.is-touch-device .question {
+        padding-top: 6px;
+        padding-bottom: 18px;
+        line-height: 1.5;
+    }
+
+    html.is-touch-device .redtext,
+    html.is-touch-device .redtext1 {
+        margin-top: 10px;
+        margin-bottom: 4px;
+        line-height: 1.55;
+    }
+
+    html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .options,
+    html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .options1 {
+        gap: 16px;
+        margin-top: 16px;
+    }
+
+    html.is-touch-device .questionContainer .answer {
+        padding: 16px 18px;
+        line-height: 1.55;
+    }
+
+    html.is-touch-device .questionContainer .answer label {
+        line-height: 1.55;
     }
 }
 

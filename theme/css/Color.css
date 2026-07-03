@@ -1540,8 +1540,8 @@ body,
     display: block !important;
     margin: 0 !important;
     transform: none !important;
-    width: 28px !important;
-    height: 28px !important;
+    width: 37px !important;
+    height: 37px !important;
    /*padding: 2px !important;*/
     object-fit: contain !important;
     opacity: 1 !important;
@@ -1604,7 +1604,9 @@ body,
     display: none !important;
 }
 
-/* Icon container */
+/* Icon container: no align-self override - it inherits align-items:
+   center from .toc-row-item so it centers against the full text
+   block (1-3 lines), not just the first line. */
 .toc-item-icon {
     flex-shrink: 0;
     width: 18px;
@@ -1624,15 +1626,50 @@ body,
     flex-shrink: 0;
 }
 
-/* Text label */
+/* Text label wrapper: stays a plain flex item so it gets a definite
+   width from the flex layout. The line-clamp box lives on .menu-title
+   below - applying -webkit-line-clamp directly to a `flex: 1` item is
+   unreliable in Chromium/WebKit because the -webkit-box width
+   resolution fights the flexbox algorithm, so the clamp silently
+   never engages. Deliberately no overflow:hidden here: a second clip
+   stacked on top of .menu-title's own clip shaved a sub-pixel off the
+   box and broke the browser-generated ellipsis on the third line. */
 .toc-item-text {
     flex: 1;
     min-width: 0;
+    display: block;
+}
+
+/* #tocData-prefixed for specificity: the legacy `.sideBar li span`
+   rule (sideBar.css) matches this element too (it's a span nested in
+   li within .sideBar) and, at equal load order, its higher selector
+   specificity was silently winning over a bare `.menu-title` - forcing
+   word-break back to "normal" and overriding hover color - which
+   skewed where the line-clamp truncated and broke the ellipsis. */
+#tocData .menu-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
     font-size: 14px;
     line-height: 1.3;
     text-align: left;
     word-break: break-word;
-    overflow-wrap: anywhere;
+    color: inherit;
+}
+
+/* Engines without native line-clamp support (no JS involved): hard-cap
+   at 3 lines with a plain clip. No fabricated "..." - an honest cut
+   beats fake dots, and this path is effectively unreachable in any
+   current evergreen browser. */
+@supports not (-webkit-line-clamp: 3) {
+    #tocData .menu-title {
+        max-height: 3.9em;
+        overflow: hidden;
+    }
 }
 
 #tocData > span > li > span.toc-row-item:hover {

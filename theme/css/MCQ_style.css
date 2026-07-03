@@ -426,11 +426,17 @@ body {
 
 /* iPhone & iPad only: the Submit button inherits margin-left: 2.5% from the
    legacy .btn rule above and sits left-aligned, leaving empty space on the
-   right. Center it on touch devices (coarse pointer, no hover) so desktop
-   and laptop layouts are unaffected. .questionContainer raises specificity
-   above QuestionOptions.css's #submitBtn rule without touching that file. */
-@media (hover: none) and (pointer: coarse) and (max-width: 1366px) {
-    .questionContainer #submitBtn {
+   right. Center it on touch devices so desktop and laptop layouts are
+   unaffected. Scoped via html.is-touch-device (set once in MCQ.html from
+   navigator.maxTouchPoints) rather than (hover:none)/(pointer:coarse):
+   iPad Safari can report pointer:fine and hover:hover (e.g. with a
+   trackpad/Magic Keyboard attached) even though the user is touching the
+   screen, so those media features alone are not reliable for detecting
+   iPad. The max-width is kept as a second, defense-in-depth guard.
+   .questionContainer raises specificity above QuestionOptions.css's
+   #submitBtn rule without touching that shared file. */
+@media (max-width: 1366px) {
+    html.is-touch-device .questionContainer #submitBtn {
         display: flex;
         float: none;
         margin-left: auto;
