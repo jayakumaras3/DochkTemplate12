@@ -447,4 +447,18 @@ body {
     }
 }
 
+/* iPhone & iPad only: the Submit button inherits margin-left: 2.5% from the
+   legacy .btn rule above and sits left-aligned, leaving empty space on the
+   right. Center it on touch devices (coarse pointer, no hover) so desktop
+   and laptop layouts are unaffected. .questionContainer raises specificity
+   above QuestionOptions.css's #submitBtn rule without touching that file. */
+@media (hover: none) and (pointer: coarse) and (max-width: 1366px) {
+    .questionContainer #submitBtn {
+        display: flex;
+        float: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
 
