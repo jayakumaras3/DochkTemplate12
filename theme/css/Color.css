@@ -485,7 +485,7 @@ video::cue {
     color: #FFFFFF !important;
     background: #005E80 !important;
     border: none !important;
-    border-bottom: 2px solid transparent !important;
+   /* border-bottom: 2px solid transparent !important; */
     border-radius: 0 !important;
     box-sizing: border-box;
     font-size: 14px !important;
@@ -512,7 +512,7 @@ video::cue {
     color: #FFFFFF !important;
     background: #005E80 !important;
     border: none !important;
-    border-bottom: 2px solid transparent !important;
+    /*border-bottom: 2px solid transparent !important;  */
     border-radius: 0 !important;
     box-sizing: border-box;
     padding: 0 !important;
@@ -579,7 +579,7 @@ video::cue {
     background: #005E80 !important;
     color: #FFFFFF !important;
     font-weight: 600 !important;
-    border-bottom: 2px solid transparent !important;
+   /* border-bottom: 2px solid transparent !important; */
     opacity: 0.88;
 }
 

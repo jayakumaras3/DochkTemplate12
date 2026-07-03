@@ -77,6 +77,7 @@ const optionsHtml = questionData.options.map((option, index) => {
                         quizContainer.innerHTML = questionHtml;
                         applyMobileScrollFix();
                         document.getElementById('submitBtn').addEventListener('click', checkAnswer);
+                        bindAnswerRowHandlers();
             }
 
             function announceFeedback(message) {
@@ -303,51 +304,38 @@ window.selectOption1 = function(idx) {
                         window.addEventListener('resize', applyMobileScrollFix);
                         window.addEventListener('orientationchange', applyMobileScrollFix);
         });
-		document.addEventListener("DOMContentLoaded", function() {
-			
- // Define the same click handler used for adding listeners
-function answerClickHandler(event) {
-    const checkbox = this.querySelector('input[type="checkbox"]');
-
-    // Toggle checkbox only if it's not already the clicked element
-    if (event.target !== checkbox) {
-        checkbox.checked = !checkbox.checked;
-    }
-
-    // Handle selection logic
-    handleOptionSelection(checkbox);
-}
-
-// This stores the divs so we can reference them in both add/remove
-let answerDivs = [];
-
-// Add event listeners on page load
-document.addEventListener("DOMContentLoaded", function () {
-    answerDivs = Array.from(document.querySelectorAll('.answer'));
-    answerDivs.forEach(answerDiv => {
-        answerDiv.addEventListener('click', answerClickHandler);
+// Makes the whole option row clickable (not just the label text/checkbox),
+// matching SCQ's behaviour. Previously this was wired up via nested
+// document.addEventListener("DOMContentLoaded", ...) calls that only ever
+// bound to whichever .answer rows existed at that one-time event, so rows
+// rebuilt by loadQuestion() (every question navigation) lost their full-row
+// click handling and only the native <label for> hit area (i.e. just the
+// text) kept working. Calling this directly from loadQuestion(), right
+// after the row markup is injected, guarantees it re-binds every time.
+function bindAnswerRowHandlers() {
+    document.querySelectorAll('.answer').forEach(function(answerDiv) {
+        answerDiv.addEventListener('click', function(event) {
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            // Skip the manual toggle if the click originated on the checkbox
+            // itself (or was forwarded there natively by clicking the
+            // <label>) - it has already toggled itself at that point.
+            if (event.target !== checkbox) {
+                checkbox.checked = !checkbox.checked;
+            }
+            handleOptionSelection(checkbox);
+        });
     });
-});
 
-// 🔻 NEW FUNCTION: Call this to disable answer click behavior
-function disableAnswerClicks() {
-    if (answerDivs.length === 0) {
-        answerDivs = Array.from(document.querySelectorAll('.answer'));
-    }
-    answerDivs.forEach(answerDiv => {
-        answerDiv.removeEventListener('click', answerClickHandler);
-    });
-}
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
         checkbox.addEventListener('click', function(event) {
-            event.stopPropagation(); // Prevent the div click from triggering again
+            event.stopPropagation(); // Prevent the row click from firing again
             handleOptionSelection(this);
         });
     });
 
-    document.querySelectorAll('label.clicken').forEach(label => {
+    document.querySelectorAll('label.clicken').forEach(function(label) {
         label.addEventListener('click', function(event) {
-            event.stopPropagation(); // Prevent double toggling
+            event.stopPropagation(); // Prevent double toggling via native label forwarding
         });
     });
-});
+}
