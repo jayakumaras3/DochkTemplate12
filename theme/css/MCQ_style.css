@@ -12,32 +12,7 @@
     background-size: cover;
     background-position: center center; 
 }*/
-.highlight {
-    background-color: #EEFCF2 !important;
-    border: 1px solid #14e34f !important; /* Adjust the border width if necessary */
-    color: #155724;
-    display: inline-block; /* Ensure the label is inline-block to apply padding and border properly */
-     /* Adjust the padding to suit your needs */
-}
-.checkbox {
-  cursor: pointer;
-}
-#Opttick0::before,
-#Opttick1::before,
-#Opttick2::before, /* Add more IDs as needed */
-#Opttick3::before, /* Add more IDs as needed */
-#Opttick4::before, /* Add more IDs as needed */
-#Opttick5::before, /* Add more IDs as needed */
-#Opttick6::before, /* Add more IDs as needed */
-#Opttick7::before,
-#Opttick8::before,
-#Opttick9::before,
-#Opttick10::before,
-#Opttick11::before {
-    content: "✔"; /* Example tick mark */
-    visibility: var(--before-visibility, hidden);
-	color: green;
-}
+/* Option, input, tick and button skins live in QuestionOptions.css (shared). */
 @font-face {
     font-family: 'tahoma';
     src: url('../../../fonts/MYRIADPRO-BOLD.OTF') format('opentype');
@@ -69,19 +44,6 @@ body {
 {
 	/*font-size: 20px;*/
 	line-height: 0.5;
-}
-	
-.answer {
-    display: flex;
-    align-items: center; /* Vertically center the items */
-    gap: 19px; /* Optional space between radio/checkbox and label */
-}
-
-/* Increase size of radio buttons and checkboxes */
-input.radioBut, input.checkbox {
-  width: 20px;
-    height: 20px;
-    flex-shrink: 0;
 }
 
 /* Ensure label text is centered and aligned with the radio/checkbox */
@@ -230,52 +192,11 @@ label {
     flex-direction: column;
 }
 
-.answer {
-	padding: 10px;
-    margin-bottom: 15px;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    /* background-color: #f1f1f1; */
-    /* padding: 0.2%; */
-    /* border-radius: 5px; */
-    /* transition: background-color 0.3s ease; 
-    cursor: pointer;*/
-}
 .Qmark {
 	display:none;
     position: absolute;
     top: 33%;
     right: 5%;
-}
-
-.answer input[type="checkbox"] {
-    margin-right: 10px;
-}
-.btn.disabled {
-    opacity: 0.5; /* Adjust opacity as needed */
-    pointer-events: none; /* Prevent clicking */
-}
-.answer label {
-   /* font-size: 20px;*/
-    color: #555;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.answer label:hover {
-    color: #007bff;
-}
-.no-select {
-    user-select: none;
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE/Edge */
-}
-
-/* Remove pointer cursor */
-.no-pointer {
-  cursor: default !important;
 }
 
 .incorrect
@@ -407,51 +328,6 @@ body {
     margin-bottom: 4px;
 }
 
-.answer {
-    padding: 11px 16px;
-    margin-bottom: 0;
-    border: 1px solid #e7e1de;
-    border-radius: 0;
-    background: #ffffff;
-    box-shadow: none;
-    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-    gap: 14px;
-    align-items: flex-start;
-}
-
-.answer:hover {
-    border-color: #d6c0bc;
-    box-shadow: 0 4px 14px rgba(41, 28, 28, 0.05);
-}
-
-.answer[aria-checked="true"],
-.highlight {
-    background: #f4f8ff !important;
-    border: 1px solid #8eb2ff !important;
-    box-shadow: 0 0 0 3px rgba(76, 128, 255, 0.12);
-}
-
-input.radioBut,
-input.checkbox {
-    width: 22px;
-    height: 22px;
-    accent-color: #2f6dff;
-    margin-top: 3px;
-}
-
-.answer label {
-    color: #3f3a39;
-    line-height: 1.5;
-    justify-content: flex-start;
-    text-align: left;
-    transition: color 0.2s ease;
-}
-
-.answer label:hover,
-.answer[aria-checked="true"] label {
-    color: #204fbf;
-}
-
 .correct,
 .incorrect {
     width: 100%;
@@ -487,27 +363,8 @@ input.checkbox {
 .btn,
 .Startpagebtn,
 .retrybtn {
-    background: #005E80;
-    border-radius: 0;
-    box-shadow: 0 10px 24px rgba(135, 13, 13, 0.16);
-    min-height: 44px;
     margin-top: 16px;
-    letter-spacing: 0.02em;
-    padding: 10px 26px;
     text-transform: none;
-}
-
-.btn:hover,
-.Startpagebtn:hover,
-.retrybtn:hover {
-    background: #096F95;
-    box-shadow: 0 12px 28px rgba(135, 13, 13, 0.18);
-}
-
-.btn.disabled {
-    opacity: 0.45;
-    box-shadow: none;
-    filter: grayscale(0.15);
 }
 
 @media (max-width: 768px) {
@@ -528,129 +385,9 @@ input.checkbox {
     }
 }
 
-/* Mobile/iPad control parity with desktop reference */
-@media (max-width: 1024px) {
-    .answer {
-        align-items: center;
-        gap: 14px;
-        padding: 11px 16px;
-        min-height: 48px;
-    }
-
-    .answer label {
-        display: block;
-        flex: 1;
-        margin: 0;
-        line-height: 1.45;
-        text-align: left;
-    }
-
-    input.radioBut,
-    input.checkbox {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 20px;
-        height: 20px;
-        margin: 0;
-        border: 2px solid #8f8f8f;
-        background: #ffffff;
-        box-sizing: border-box;
-        position: relative;
-        flex: 0 0 20px;
-        cursor: pointer;
-    }
-
-    input.radioBut {
-        border-radius: 50%;
-    }
-
-    input.checkbox {
-        border-radius: 4px;
-    }
-
-    input.radioBut:checked {
-        border-color: #3f6fe0;
-        background: radial-gradient(circle, #3f6fe0 0 40%, #ffffff 41% 68%, #3f6fe0 69% 100%);
-    }
-
-    input.checkbox:checked {
-        border-color: #3f6fe0;
-        background-color: #3f6fe0;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 12px 10px;
-    }
-
-    input.radioBut:focus-visible,
-    input.checkbox:focus-visible {
-        outline: 2px solid rgba(63, 111, 224, 0.35);
-        outline-offset: 1px;
-    }
-
-    #submitBtn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: auto;
-        margin: 16px 0 0 2.5% !important;
-        min-width: 161px;
-        min-height: 48px;
-        text-align: center;
-    }
-
-    #submitBtn,
-    .btn,
-    .Startpagebtn,
-    .retrybtn {
-        -webkit-appearance: none;
-        appearance: none;
-        font-family: 'tahoma', sans-serif;
-        font-size: 16px;
-        line-height: 1.3;
-        letter-spacing: 0.02em;
-        text-transform: none;
-        text-align: center;
-    }
-
-    .answer > span[id^="Opttick"] {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 20px;
-        height: 20px;
-        min-width: 20px;
-        flex: 0 0 20px;
-        margin: 0;
-        line-height: 1;
-        align-self: center;
-    }
-
-    #Opttick0::before,
-    #Opttick1::before,
-    #Opttick2::before,
-    #Opttick3::before,
-    #Opttick4::before,
-    #Opttick5::before,
-    #Opttick6::before,
-    #Opttick7::before,
-    #Opttick8::before,
-    #Opttick9::before,
-    #Opttick10::before,
-    #Opttick11::before {
-        content: "";
-        visibility: var(--before-visibility, hidden);
-        display: block;
-        width: 18px;
-        height: 18px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%2328A745' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 100% 100%;
-    }
-}
-
-/* Responsive Typography (MCQ): tablet/mobile only */
+/* Responsive Typography (MCQ): tablet/mobile only.
+   Option rows, inputs and buttons keep the shared QuestionOptions.css look
+   at every width. */
 @media (min-width: 768px) and (max-width: 1024px) {
     .question {
         font-size: 24px;
@@ -659,17 +396,6 @@ input.checkbox {
     .redtext,
     #inste {
         font-size: 18px;
-    }
-
-    .answer label {
-        font-size: 17px;
-    }
-
-    .btn,
-    #submitBtn,
-    .Startpagebtn,
-    .retrybtn {
-        font-size: 16px;
     }
 
     .feedback,
@@ -688,22 +414,6 @@ input.checkbox {
     .redtext,
     #inste {
         font-size: 16px;
-    }
-
-    .answer label {
-        font-size: 16px;
-    }
-
-    .btn,
-    #submitBtn,
-    .Startpagebtn,
-    .retrybtn {
-        font-size: 16px;
-    }
-
-    #submitBtn {
-        min-width: 180px;
-        min-height: 48px;
     }
 
     .feedback,

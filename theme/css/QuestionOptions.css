@@ -1,0 +1,214 @@
+/* ==========================================================================
+   QuestionOptions.css
+   Shared option-card skin for all question templates:
+   SCQ / MCQ (Knowledge Check) and mixed Quiz.
+   Must be linked AFTER <type>_style.css and Color.css in each template so it
+   owns the option, input, tick and submit-button appearance in one place.
+   Identical at every viewport width — no responsive overrides here.
+   ========================================================================== */
+
+/* --- Option list -------------------------------------------------------- */
+.options,
+.options1 {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+/* --- Option card -------------------------------------------------------- */
+.answer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 48px;
+    padding: 12px 16px;
+    margin-bottom: 0;
+    background: #FFFFFF;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    box-shadow: none;
+    cursor: pointer;
+    font-family: Tahoma, Verdana, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.answer label {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    color: #333333;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: break-word;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+/* --- Hover (not while disabled) -------------------------------------------
+   Kept visually lighter than the selected state below so a hovered,
+   unselected row can never be mistaken for the actual selection. */
+.answer:not(.no-pointer):hover {
+    background: #F5F9FC;
+    border-color: #BBD6EF;
+}
+
+/* --- Selected ------------------------------------------------------------
+   Inset shadow reads as a 2px border without shifting the row height. */
+.answer[aria-checked="true"],
+.answer[aria-checked="true"]:not(.no-pointer):hover,
+.highlight {
+    background: #EAF4FF;
+ /*   border-color: #2A78C8;*/
+    box-shadow: inset 0 0 0 1px #2A78C8;
+}
+
+.answer[aria-checked="true"] label {
+    color: #333333;
+  /*  font-weight: 600;*/
+}
+
+/* --- Keyboard focus ------------------------------------------------------ */
+.answer:focus-visible {
+    outline: 2px solid #2A78C8;
+    outline-offset: 2px;
+}
+
+/* --- Disabled (after submit) --------------------------------------------- */
+.answer.no-pointer {
+    opacity: 0.8;
+    cursor: default;
+}
+
+.answer.no-pointer label,
+.answer.no-pointer input.radioBut,
+.answer.no-pointer input.checkbox {
+    cursor: default;
+}
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.no-pointer {
+    cursor: default !important;
+}
+
+/* --- Radio / checkbox ----------------------------------------------------
+   Radio: kept as the browser's native control. Modern Chromium/Edge/Firefox/
+   Safari already paint an accent-colored ring + dot that matches the
+   reference design exactly, so hand-drawing it only fights the platform.
+   Checkbox: custom-drawn so the tick glyph is guaranteed identical everywhere. */
+input.radioBut,
+input.checkbox {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    flex: 0 0 20px;
+    box-sizing: border-box;
+    accent-color: #2A78C8;
+    cursor: pointer;
+    outline: none;
+}
+
+input.checkbox {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 2px solid #8F8F8F;
+    background: #FFFFFF;
+    border-radius: 4px;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+input.checkbox:checked {
+    border-color: #2A78C8;
+    background-color: #2A78C8;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 10px;
+}
+
+input.radioBut:focus-visible,
+input.checkbox:focus-visible {
+    outline: 2px solid #2A78C8;
+    outline-offset: 1px;
+}
+
+/* --- Correct-answer tick (SCQ / MCQ) --------------------------------------
+   Visibility is driven by the JS-set --before-visibility custom property. */
+.tickSymbol {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    line-height: 1;
+}
+
+.tickSymbol::before {
+    content: "";
+    visibility: var(--before-visibility, hidden);
+    display: block;
+    width: 18px;
+    height: 18px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%2328A745' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+}
+
+/* --- Submit / action buttons --------------------------------------------- */
+.btn,
+#submitBtn,
+.Startpagebtn,
+.retrybtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 161px;
+    min-height: 44px;
+    padding: 10px 26px;
+    border: none;
+    border-radius: 4px;
+    background: #006B8F;
+    color: #FFFFFF;
+    font-family: Tahoma, Verdana, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    text-align: center;
+    box-shadow: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover,
+#submitBtn:hover,
+.Startpagebtn:hover,
+.retrybtn:hover {
+    background: #00587A;
+    box-shadow: none;
+}
+
+.btn.disabled,
+#submitBtn.disabled,
+.btn:disabled,
+#submitBtn:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+}
