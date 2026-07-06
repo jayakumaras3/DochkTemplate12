@@ -2126,6 +2126,30 @@ body,
         overflow: hidden !important;
     }
 
+    /* Angular sets an inline style="display: block" on .sideBar when the
+       drawer opens (see the identical [style*="display: block"] hack in
+       mobile.css's <=768px block). That inline style beats sideBar.css's
+       unscoped, non-!important `display: flex`, so between 769px and this
+       1024px breakpoint the sidebar was silently rendering as a plain
+       block box. Flex properties on children (.tocData's flex/min-height
+       below) have no effect without an actual flex *container*, so
+       .tocData just grew to fit all of its content and the overflow:
+       hidden above clipped whatever didn't fit, with nothing left inside
+       .tocData to scroll. Forcing flex only while shown -- never when
+       style="display: none" -- leaves the closed/hidden state untouched. */
+    .sideBar[style*="display: block"],
+    .wholeContainer.menu-open .sideBar {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .sideBar .logo,
+    .sideBar #sideBarHeader,
+    .sideBar .line,
+    .sideBar .copyright {
+        flex: 0 0 auto;
+    }
+
     .sideBar > .tocData {
         flex: 1 1 auto;
         min-height: 0;
@@ -2149,12 +2173,22 @@ body,
    orientation alone, so desktop/laptop layouts are never touched. */
 @media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
     html.is-touch-device .sideBar {
-        display: flex;
-        flex-direction: column;
         height: 100dvh !important;
         max-height: 100dvh !important;
         min-height: 0 !important;
         overflow: hidden;
+    }
+
+    /* Same inline-style problem as the <=1024px block above: Angular's
+       inline style="display: block" on .sideBar beats a plain (non-
+       !important) `display: flex`, so this flex column never actually
+       formed in landscape either -- .tocData's flex/min-height rule below
+       had no flex container to attach to. Forcing flex only while shown
+       keeps the closed/hidden state untouched. */
+    html.is-touch-device .sideBar[style*="display: block"],
+    html.is-touch-device .wholeContainer.menu-open .sideBar {
+        display: flex !important;
+        flex-direction: column !important;
     }
 
     html.is-touch-device .sideBar .logo,
