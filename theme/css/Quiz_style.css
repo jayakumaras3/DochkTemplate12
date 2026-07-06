@@ -965,11 +965,25 @@ html body {
         min-height: 0;
     }
 
+    /* Submit lives in .submit-section, the footer wrapper quiz.js already
+       builds around it (ensureSubmitSection()). The button itself is
+       display:inline-flex (QuestionOptions.css), so as a lone inline-level
+       box inside this plain block div it just sits at the inline-start
+       edge -- unbalanced once the answer cards above span the full width.
+       Making this wrapper a flex row and centering its one child fixes
+       that without touching the button's own size/color/radius/states or
+       the shared QuestionOptions.css skin. Touch-only + <=1366px, same as
+       the rest of this block, so desktop keeps its existing left-aligned
+       sticky footer untouched. */
     html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .submit-section {
         position: static;
         background: #ffffff;
         margin-top: 28px;
         padding-top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
     }
 
     html.is-touch-device .question {
