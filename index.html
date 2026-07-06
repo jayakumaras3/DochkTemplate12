@@ -4,6 +4,26 @@
     <meta name='viewport' content='width=device-width, initial-scale=1, viewport-fit=cover'/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
+    <script>
+    /* iPad Safari can report pointer:fine / hover:hover (e.g. with a
+       trackpad/Magic Keyboard attached, or in its default "desktop site"
+       mode), so CSS alone can't reliably tell an iPad from a laptop with
+       a mouse - and several iPad landscape widths (1024-1366px CSS
+       points) overlap common laptop resolutions, so width/orientation
+       media queries alone can't either. navigator.maxTouchPoints is the
+       standard capability check (unaffected by input peripherals or UA
+       spoofing) used to flag real touch hardware; the width check keeps
+       large touch-screen desktops out. One-time class toggle, no
+       listeners, no polling - Color.css does the responsive work from
+       here via plain CSS media queries scoped to html.is-touch-device.
+       Same pattern already used in MCQ.html / SCQ.html / Quiz.html. */
+    (function () {
+        var isTouch = (navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+        if (isTouch && window.innerWidth <= 1366) {
+            document.documentElement.classList.add('is-touch-device');
+        }
+    })();
+    </script>
     <link href="theme/css/bootstrap.css" rel="stylesheet">
     <link href="theme/css/sideBar.css" rel="stylesheet">
     <link href="theme/css/content.css" rel="stylesheet">

@@ -76,6 +76,14 @@
      font-family: 'tahoma';
      src: url('../../../fonts/MYRIADPRO-BOLD.OTF') format('opentype');
 }
+/* iOS Safari can rescale rendered text size after an orientation change
+   (its automatic text-inflation heuristic), which made this page's fonts
+   appear to grow/shrink on rotation even though no CSS rule changed.
+   Disabling it keeps the font sizes below the single source of truth. */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
 body {
     font-family: "tahoma";
     background-color: #ffffff;
@@ -808,8 +816,17 @@ html body {
 
 /* Responsive Typography (Mixed Quiz): tablet/mobile only.
    Option rows, inputs and buttons keep the shared QuestionOptions.css look
-   at every width. */
-@media (min-width: 768px) and (max-width: 1024px) {
+   at every width.
+
+   Breakpoints key off the viewport's *short* edge instead of raw width.
+   Width alone doesn't work: an iPhone in landscape is 740-930px wide, which
+   used to fall inside the "tablet" range below even though it's the same
+   phone that got the "mobile" sizes a moment earlier in portrait -- that
+   mismatch was why fonts visibly jumped on rotation. Real tablets are
+   >=768px on both edges, so keying the tablet query to min-height:768px
+   (in addition to the existing width range) excludes rotated phones
+   without changing which real tablets qualify. */
+@media (min-width: 768px) and (max-width: 1024px) and (min-height: 768px) {
     .question {
         font-size: 24px;
     }
@@ -831,7 +848,8 @@ html body {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px),
+       (max-height: 767px) and (orientation: landscape) {
     .question {
         font-size: 20px;
     }
@@ -918,7 +936,14 @@ html body {
         will-change: scroll-position;
     }
 
+    /* flex-shrink:0 alone (above the fold before this fix) only cancels the
+       shrink component of the base rule's `flex: 1 1 auto` -- the grow
+       component (1) survived and stretched .questionContainer/.options to
+       fill the flex column, shoving the (now static) submit-section down
+       and leaving a large empty gap above it. flex-grow:0 makes the box
+       height content-driven, which is what collapses that gap. */
     html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer {
+        flex-grow: 0;
         flex-shrink: 0;
         max-height: none;
         overflow: visible;
@@ -926,14 +951,25 @@ html body {
 
     html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .options,
     html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .options1 {
+        flex-grow: 0;
         flex-shrink: 0;
         max-height: none;
         overflow: visible;
     }
 
+    /* Same fix as .options above, for the image/video question layout
+       (.options1 sits inside .contentWrapper instead of directly in
+       .questionContainer there). */
+    html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .contentWrapper {
+        flex-grow: 0;
+        min-height: 0;
+    }
+
     html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .submit-section {
         position: static;
         background: #ffffff;
+        margin-top: 28px;
+        padding-top: 0;
     }
 
     html.is-touch-device .question {
@@ -951,17 +987,17 @@ html body {
 
     html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .options,
     html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .options1 {
-        gap: 16px;
-        margin-top: 16px;
+        gap: 10px;
+        margin-top: 12px;
     }
 
     html.is-touch-device .questionContainer .answer {
-        padding: 16px 18px;
-        line-height: 1.55;
+        padding: 12px 16px;
+        line-height: 1.4;
     }
 
     html.is-touch-device .questionContainer .answer label {
-        line-height: 1.55;
+        line-height: 1.4;
     }
 }
 

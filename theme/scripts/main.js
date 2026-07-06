@@ -16,6 +16,7 @@ var Menutitle="Menutitle";
 var LearningAidsTitle= "LearningAidsTitle";
 var NextTitle= "NextT";
 var Prevtitle="PrevT";
+var ExitCourseTitle="Exit Course";
 var VttLabel="English";
 var VttLanguage="English";
 var TranscriptPath="";
@@ -602,6 +603,7 @@ function processMasterValue1(data) {
   LearningAidsTitle = data.LearningAidsTitle || "";
   NextTitle = data.NextTitle || "";
   Prevtitle = data.Prevtitle || "";
+  ExitCourseTitle = data.ExitCourseTitle || "";
   CourseName = data.CourseName || "";
   PageLevelCourseComplete = data.PageLevelCourseComplete || false;
   VttLanguage = data.VttLanguage || "";

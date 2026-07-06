@@ -17,10 +17,18 @@
     font-family: 'tahoma';
     src: url('../../../fonts/MYRIADPRO-BOLD.OTF') format('opentype');
 }
+/* iOS Safari can rescale rendered text size after an orientation change
+   (its automatic text-inflation heuristic), which made this page's fonts
+   appear to grow/shrink on rotation even though no CSS rule changed.
+   Disabling it keeps the font sizes below the single source of truth. */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
 body {
     font-family: "tahoma";
     background-color: #ffffff;
-    
+
     margin: 0;
     padding: 0;
     display: flex;
@@ -410,8 +418,17 @@ body {
 
 /* Responsive Typography (SCQ): tablet/mobile only.
    Option rows, inputs and buttons keep the shared QuestionOptions.css look
-   at every width. */
-@media (min-width: 768px) and (max-width: 1024px) {
+   at every width.
+
+   Breakpoints key off the viewport's *short* edge instead of raw width.
+   Width alone doesn't work: an iPhone in landscape is 740-930px wide, which
+   used to fall inside the "tablet" range below even though it's the same
+   phone that got the "mobile" sizes a moment earlier in portrait -- that
+   mismatch was why fonts visibly jumped on rotation. Real tablets are
+   >=768px on both edges, so keying the tablet query to min-height:768px
+   (in addition to the existing width range) excludes rotated phones
+   without changing which real tablets qualify. */
+@media (min-width: 768px) and (max-width: 1024px) and (min-height: 768px) {
     .question {
         font-size: 24px;
     }
@@ -429,7 +446,8 @@ body {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px),
+       (max-height: 767px) and (orientation: landscape) {
     .question {
         font-size: 20px;
     }

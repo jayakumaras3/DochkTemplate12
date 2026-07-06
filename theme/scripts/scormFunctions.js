@@ -257,6 +257,12 @@ function AfterTemaplateJson() {
     const nextBtn = document.getElementById("next");
     if (nextBtn) nextBtn.title = Prevtitle;
 
+    const exitCourseBtn = document.getElementById("exitCourseBtn");
+    if (exitCourseBtn) {
+        exitCourseBtn.title = ExitCourseTitle;
+        exitCourseBtn.setAttribute("aria-label", ExitCourseTitle);
+    }
+
     // Language Change
     waitForVideoAndChangeTrack?.(VttLanguage, VttLabel);
 }

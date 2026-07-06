@@ -188,22 +188,40 @@ body {
     font-weight: 700;
 }
 
-#certificateid {
+#certificateid,
+#exitCourseBtn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     margin-left: 8px;
     padding: 0;
     border: 1px solid var(--line);
     border-radius: 8px;
     background: var(--surface);
+    cursor: pointer;
 }
 
-#Imagcertificateid {
-    width: 20px;
-    height: 20px !important;
+/* pagenumberEna_DIsable() (jMain.js) sets #pagenoHeader's inline
+   display to "none" on pages that don't show a page count (e.g. the
+   Welcome/start page). A hidden flex item doesn't consume any layout
+   space, so its margin-left:auto no longer pushes anything - fall
+   back to giving the exit button its own auto margin only in that
+   case, so normal pages (where #pagenoHeader does the pushing) don't
+   end up with two auto-margins and a gap between "x/8" and the icon. */
+#pagenoHeader[style*="none"] ~ #exitCourseBtn {
+    margin-left: auto;
+}
+
+#exitCourseBtn:hover {
+    background: #f1f4f9;
+}
+
+#Imagcertificateid,
+#ImagExitCourse {
+    width: 15px;
+    height: 15px !important;
     background-size: contain;
     background-repeat: no-repeat;
 }
@@ -1473,10 +1491,15 @@ body,
         padding-left: 52px;
     }
 
-    #certificateid {
+    #certificateid,
+    #exitCourseBtn {
         width: 30px;
         height: 30px;
         margin-left: 4px;
+    }
+
+    #pagenoHeader[style*="none"] ~ #exitCourseBtn {
+        margin-left: auto;
     }
 
     .footer {
@@ -2016,7 +2039,8 @@ body,
         white-space: nowrap;
     }
 
-    #certificateid {
+    #certificateid,
+    #exitCourseBtn {
         flex: 0 0 auto;
     }
 
@@ -2111,5 +2135,49 @@ body,
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
         touch-action: pan-y;
+    }
+}
+
+/* iPad Landscape: modern iPad landscape CSS widths (iPad mini/10.2"/Air/
+   Pro) run ~1024-1366px, wider than the max-width:1024px block above, so
+   the Menu/Transcript panel (.tocData, shared by both tabs) fell through
+   to the plain Laptop/base sidebar rules with no scroll containment,
+   leaving long content inaccessible below the fold. 1366px alone is also
+   a very common laptop resolution, so this is gated behind
+   html.is-touch-device (set in index.html via navigator.maxTouchPoints,
+   same pattern as MCQ.html/SCQ.html/Quiz.html) rather than width/
+   orientation alone, so desktop/laptop layouts are never touched. */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+    html.is-touch-device .sideBar {
+        display: flex;
+        flex-direction: column;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        min-height: 0 !important;
+        overflow: hidden;
+    }
+
+    html.is-touch-device .sideBar .logo,
+    html.is-touch-device .sideBar #sideBarHeader,
+    html.is-touch-device .sideBar .line,
+    html.is-touch-device .sideBar .copyright {
+        flex: 0 0 auto;
+    }
+
+    html.is-touch-device .sideBar > .tocData {
+        flex: 1 1 auto;
+        min-height: 0;
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
+    }
+
+    html.is-touch-device.menu-open-body,
+    html.is-touch-device body.menu-open-body {
+        overflow: hidden !important;
+        overscroll-behavior: none;
     }
 }
