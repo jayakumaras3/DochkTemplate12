@@ -20,30 +20,56 @@
             document.documentElement.classList.add('is-touch-device');
         }
 
-        /* This page runs inside an iframe the course chrome (content.html)
-           creates around it; that outer chrome's own header sits above
-           this iframe and isn't part of this file. Rather than hardcode
-           its height, measure it once from the parent document and expose
-           it as a CSS variable so #parentquizContainer's clearance in
-           Quiz_style.css is calculated from the real header, not guessed.
-           Every step is defensive: cross-origin access, a missing/renamed
-           element, or an implausible height (this isn't a normal page
-           header) all fall through silently and Quiz_style.css's own
-           var(--outer-header-height, 64px) fallback takes over -- nothing
-           here can break the page if the assumption doesn't hold. */
-        try {
-            var outerHeader = window.parent && window.parent !== window
-                ? window.parent.document.querySelector('.headingArea')
-                : null;
-            if (outerHeader) {
-                var h = outerHeader.getBoundingClientRect().height;
-                if (h >= 20 && h <= 150) {
-                    document.documentElement.style.setProperty('--outer-header-height', h + 'px');
+        /* This page runs inside an iframe chain the course chrome creates
+           around it (Quiz.html <- per-quiz wrapper <- course window that
+           owns the .headingArea course header). Depending on the host
+           (standalone browser vs. the reload SCORM player frameset), that
+           chain can end up positioned so the course header overlaps this
+           page's top edge and clips the "Questions X of Y" bar.
+
+           Rather than hardcode anything, measure the actual INTRUSION:
+           walk up the same-origin frameElement chain accumulating this
+           viewport's top offset within each ancestor's viewport; when the
+           document owning .headingArea is reached, the overlap is the
+           header's bottom edge minus our accumulated top. That is 0 when
+           the layout already places this iframe below the header (a
+           standalone launch) and the exact covered height when it does
+           not (the player) -- so the CSS clearance driven by
+           --outer-header-overlap self-adjusts per host with no guessed
+           constants. Re-measured on resize/load (event-driven, no timers)
+           because the hosting chrome reflows with the window.
+
+           Every step is defensive: a cross-origin ancestor or a missing
+           .headingArea leaves the variable unset and Quiz_style.css's
+           fallbacks (0 on desktop, the legacy 64px on touch) take over --
+           nothing here can break the page if the assumption doesn't hold. */
+        function updateOuterHeaderClearance() {
+            try {
+                var offsetTop = 0;
+                var w = window;
+                var overlap = null;
+                for (var depth = 0; depth < 4; depth++) {
+                    var fe = w.frameElement;
+                    if (!fe) break; /* reached the top window */
+                    offsetTop += fe.getBoundingClientRect().top;
+                    w = w.parent;
+                    var header = w.document.querySelector('.headingArea');
+                    if (header) {
+                        overlap = header.getBoundingClientRect().bottom - offsetTop;
+                        break;
+                    }
                 }
+                if (overlap !== null) {
+                    overlap = Math.max(0, Math.min(150, overlap));
+                    document.documentElement.style.setProperty('--outer-header-overlap', overlap.toFixed(1) + 'px');
+                }
+            } catch (e) {
+                /* Cross-origin or structural mismatch: CSS fallbacks cover this. */
             }
-        } catch (e) {
-            /* Cross-origin or structural mismatch: Quiz_style.css's fallback covers this. */
         }
+        updateOuterHeaderClearance();
+        window.addEventListener('resize', updateOuterHeaderClearance);
+        window.addEventListener('load', updateOuterHeaderClearance);
     })();
     </script>
     <link rel="stylesheet" href="../../../css/Quiz_style.css">

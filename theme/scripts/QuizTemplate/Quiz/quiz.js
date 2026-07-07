@@ -36,23 +36,61 @@ document.addEventListener("DOMContentLoaded", function() {
 			return;
 		}
 
-		// Keep quiz pages scrollable on mobile when host template constrains height.
-		document.documentElement.style.setProperty('height', '100%', 'important');
+		// Single scrolling context (html), not a chain of nested
+		// overflow:auto containers. The previous version gave html, body,
+		// AND #quizContainer each their own height:100%+overflow-y:auto --
+		// three independent scrollers stacked inside each other. That's
+		// fragile on real iOS Safari (confirmed via WebKit device
+		// emulation): a touch-driven scroll can rubber-band the outer
+		// page while the actual overflowing content -- e.g. the Submit
+		// button below a tall video -- sits in the INNER container and
+		// needs that container's own scrollTop moved, not the page's.
+		// height:auto (not a hard 100%) on html/body lets them genuinely
+		// grow to fit content; only html keeps overflow-y:auto, so the
+		// browser's native page scroll is the one and only way to reach
+		// anything below the fold.
+		document.documentElement.style.setProperty('height', 'auto', 'important');
+		document.documentElement.style.setProperty('min-height', '100%', 'important');
 		document.documentElement.style.setProperty('overflow-y', 'auto', 'important');
 		document.documentElement.style.setProperty('-webkit-overflow-scrolling', 'touch');
 
-		document.body.style.setProperty('height', '100%', 'important');
+		document.body.style.setProperty('height', 'auto', 'important');
 		document.body.style.setProperty('min-height', '100%', 'important');
-		document.body.style.setProperty('overflow-y', 'auto', 'important');
+		document.body.style.setProperty('overflow-y', 'visible', 'important');
 		document.body.style.setProperty('-webkit-overflow-scrolling', 'touch');
 		document.body.style.setProperty('touch-action', 'pan-y', 'important');
 
 		if (quizContainer) {
 			quizContainer.style.setProperty('height', 'auto', 'important');
-			quizContainer.style.setProperty('min-height', '100%', 'important');
-			quizContainer.style.setProperty('overflow-y', 'auto', 'important');
+			quizContainer.style.setProperty('min-height', '0', 'important');
+			quizContainer.style.setProperty('overflow-y', 'visible', 'important');
 			quizContainer.style.setProperty('-webkit-overflow-scrolling', 'touch');
 			quizContainer.style.setProperty('padding-bottom', '24px', 'important');
+			// #quizContainer's stylesheet rule gives it flex:1 1 0% (flex-basis
+			// 0, flex-grow 1) to fill body's flex column on desktop. On mobile
+			// that is actively harmful: body's own min-height:100% gives the
+			// flex algorithm a DEFINITE distributable space even though body's
+			// preferred height is auto, so flex-grow:1 greedily stretches
+			// #quizContainer to fill exactly that (viewport-sized) space --
+			// capping it there regardless of how much taller its own content
+			// (e.g. a tall video question) actually is. overflow:visible then
+			// just paints the extra content past that fixed box without it
+			// ever counting as real document height, which is why html/body's
+			// own scrollHeight stayed pinned to the viewport size and the
+			// Submit button below the video was permanently unreachable, not
+			// just scrolled-past. Only flex-basis needs to change (0% -> auto,
+			// so sizing starts from actual content instead of zero); grow:1
+			// stays so a short question still fills the screen, and shrink
+			// stays allowed (min-height:0 above already permits shrinking to
+			// nothing if truly needed). flex-shrink:0 (tried first) fixed the
+			// height-capping bug but traded it for a WORSE one confirmed on
+			// real WebKit: with BOTH #parentquizContainer and #quizContainer
+			// refusing to shrink, an over-height column doesn't just overflow
+			// at the bottom -- it renders #parentquizContainer (and the top of
+			// the question) at a NEGATIVE offset above the viewport, with no
+			// way to scroll up far enough to recover it. flex-basis:auto with
+			// shrink left enabled avoids that.
+			quizContainer.style.setProperty('flex', '1 1 auto', 'important');
 		}
 	}
 	function loadQuestions() {
@@ -184,6 +222,101 @@ document.addEventListener("DOMContentLoaded", function() {
 		submitSection.appendChild(submitBtn);
 	}
 
+	// Land every newly rendered question (or the results page) at the top.
+	// Scroll positions survive an innerHTML swap: the persistent scrollers --
+	// #quizContainer on touch layouts, the iframe window on phones (where
+	// applyMobileScrollFix makes the body scroll), and the COURSE PLAYER's
+	// own page two frames up (its sticky header then covers the
+	// "Questions X of Y" bar) -- all keep wherever the previous question
+	// left them. Called once per render from loadQuestion/displayResults;
+	// no timers, no listeners.
+	function resetQuizScroll() {
+		if (quizContainer) {
+			quizContainer.scrollTop = 0;
+			quizContainer.querySelectorAll('.options, .options1').forEach(function (el) {
+				el.scrollTop = 0;
+			});
+		}
+		// Always instant, never 'behavior:smooth'. A smooth/animated scroll
+		// takes real time to finish (~300-500ms), and media (particularly a
+		// <video>) can still be settling its own layout during that window --
+		// if the page's scrollable height changes mid-animation, the
+		// animation's "resting" position is no longer top:0 relative to the
+		// NEW height, silently leaving the top of the question (and the
+		// dark "Questions X of Y" bar) scrolled just out of reach with no
+		// way to scroll further up to recover it. An instant jump has no
+		// such window: by the time anything else can reflow, scroll is
+		// already pinned to 0.
+		var w = window;
+		for (var depth = 0; depth < 4; depth++) {
+			try {
+				w.scrollTo(0, 0);
+			} catch (e) {
+				break; // cross-origin ancestor: nothing above is ours to scroll
+			}
+			if (!w.parent || w.parent === w) {
+				break;
+			}
+			w = w.parent;
+		}
+	}
+
+	// Reusable media column: every branch below (single/multiple type x
+	// image/video/neither) renders through this. Image and video get their
+	// OWN independent panel wrapper (.quiz-image-panel / .quiz-video-panel)
+	// with no shared sizing class between them, per Quiz_style.css's "Media
+	// panels" section -- styling one can never affect the other. When a
+	// question has neither, this renders nothing at all (not even a hidden
+	// placeholder): .options/.options1 in .contentWrapper already has
+	// flex:1 1 auto, so with no sibling to share the row with it naturally
+	// expands to the full width -- no extra CSS needed for that case.
+	function renderMediaPanel(questionData) {
+		const hasImage = questionData.images != null;
+		const hasVideo = questionData.video != null;
+
+		if (!hasImage && !hasVideo) {
+			return '';
+		}
+
+		const imagePanelHtml = hasImage
+			? `
+				<div class="quiz-image-panel">
+					<img tabindex="0" class="ImageQuestion zoomable" id="zoomableImage" src="${questionData.images}" alt="image">
+				</div>
+				<div tabindex="0" class="quiz-image-panel-caption">${parent.ImageZoomText}</div>
+			`
+			: '';
+		const videoPanelHtml = hasVideo
+			? `
+				<div class="quiz-video-panel">
+					<video id="myvideoQuiz" class="VideoQuestion" src="${questionData.video}" controls controlsList="nodownload noremoteplayback" disablePictureInPicture allowfullscreen></video>
+				</div>
+			`
+			: '';
+
+		// Modifier class lets Quiz_style.css size the column differently per
+		// media type (image: fixed ~540px display width; video: unchanged
+		// 35%-of-row/400px-cap) without the two ever sharing a width rule.
+		const columnModifier = hasImage ? ' quiz-media-column--image' : ' quiz-media-column--video';
+
+		return `
+			<div class="quiz-media-column${columnModifier}">
+				${imagePanelHtml}${videoPanelHtml}
+			</div>
+		`;
+	}
+
+	function renderImageModal() {
+		return `
+			<div id="imageModal" aria-label="Image" class="modal">
+				<span aria-label="close" tabindex="0" class="close FSize3_RM">&times;</span>
+				<div class="modal-content-wrapper">
+					<img class="modal-img" id="modalImg">
+				</div>
+			</div>
+		`;
+	}
+
 	function loadQuestion(index) {
 
 		quizContainer.classList.remove('quiz-start-view');
@@ -227,8 +360,11 @@ document.addEventListener("DOMContentLoaded", function() {
 						${questionData.question}
 						<div class="redtext instext FSize16" aria-live="polite">${parent.Questiontext}</div>
 					</div>
+					<div class="contentWrapper">
 					<div class="options" aria-labelledby="question-header">
 						${optionsHtml}
+					</div>
+					${renderMediaPanel(questionData)}
 					</div>
 					<button class="btn btn1 ColorSet_CR FSize16" id="submitBtn" tabindex="0" aria-label="${parent.quizButton}">
 						${parent.quizButton}
@@ -247,28 +383,21 @@ document.addEventListener("DOMContentLoaded", function() {
 					  
 					  <div class="contentWrapper">
 						<div class="options1">${optionsHtml}<button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button></div>
-						<div><img  tabindex="0" class="ImageQuestion zoomable" id="zoomableImage" src="${questionData.images}" alt="image"></img><br><div  tabindex="0" class="redtext1 instext">${parent.ImageZoomText}</div></div>
+						${renderMediaPanel(questionData)}
 						 
 					  </div>					 
 					  <div class="feedback" id="feedback"></div>
 					</div>
 
-				  <!-- Responsive Image Modal -->
-				  <div id="imageModal" aria-label="Image" class="modal">
-					<span aria-label="close" tabindex="0" class="close FSize3_RM" >&times;</span>
-					<div class="modal-content-wrapper">
-					  <img class="modal-img" id="modalImg">
-					</div>
-				  </div>
+				  ${renderImageModal()}
 				`;
 			} else if (questionData.images == null && questionData.video != null) {
 				questionHtml = `
 				<div class="questionContainer">
-					<div tabindex="0" class="question FSize20">${questionData.question}<div class="redtext instext FSize20">${parent.Questiontext}</div></div>
+					<div tabindex="0" class="question FSize16">${questionData.question}<div class="redtext instext FSize16">${parent.Questiontext}</div></div>
 					 <div class="contentWrapper">
 						<div class="options1">${optionsHtml}</div>
-						<video id="myvideoQuiz" class="VideoQuestion" src="${questionData.video}" controls controlsList="nodownload noremoteplayback" disablePictureInPicture allowfullscreen>
-</video>
+						${renderMediaPanel(questionData)}
 					  </div>
 					<button tabindex="0"  class="btn btn1 ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button>
 					<div class="feedback" id="feedback"></div>
@@ -284,7 +413,10 @@ document.addEventListener("DOMContentLoaded", function() {
 					<div class="questionContainer" >
 
 						<div tabindex="0" class="question FSize16">${questionData.question}<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div></div>
+						<div class="contentWrapper">
 						<div class="options">${optionsHtml}</div>
+						${renderMediaPanel(questionData)}
+						</div>
 						<button tabindex="0"  class="btn btn1 ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button>
 						<div class="feedback" id="feedback"></div>
 					</div>
@@ -295,30 +427,21 @@ document.addEventListener("DOMContentLoaded", function() {
 			
 					<div class="questionContainer" >
 						
-						<div tabindex="0" class="question FSize20">${questionData.question}<div class="redtext instext FSize20">${parent.QuestionMcQtext}</div></div>
+						<div tabindex="0" class="question FSize16">${questionData.question}<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div></div>
 						
 						 <div class="contentWrapper">
 							<div class="options1">
 							  ${optionsHtml}
 							  <button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button>
 							</div>
-							<div class="imageContainer">
-							  <img  tabindex="0" class="ImageQuestion zoomable" id="zoomableImage" src="${questionData.images}" alt="Image">
-							  <div  tabindex="0" class="redtext1 instext FSize16">${parent.ImageZoomText}</div>
-							</div>
+							${renderMediaPanel(questionData)}
 						  </div>
 					 
 					
 						<div class="feedback" id="feedback"></div>
 					</div>
 					
-					 <!-- Responsive Image Modal -->
-				  <div id="imageModal" class="modal">
-					<span class="close FSize3_RM" >&times;</span>
-					<div class="modal-content-wrapper">
-					  <img class="modal-img" id="modalImg">
-					</div>
-				  </div>
+					 ${renderImageModal()}
 				`;
 			} else if (questionData.images == null && questionData.video != null) {
 				questionHtml = `
@@ -328,8 +451,7 @@ document.addEventListener("DOMContentLoaded", function() {
 						<div tabindex="0" class="question FSize16">${questionData.question}<div class="redtext instext FSize16">${parent.QuestionMcQtext}</div></div>
 						<div class="contentWrapper">
 						<div class="options1">${optionsHtml} <button tabindex="0"  class="btn ColorSet_CR FSize16" id="submitBtn">${parent.quizButton}</button></div>
-						<video id="myvideoQuiz" class="VideoQuestion" src="${questionData.video}" controls controlsList="nodownload noremoteplayback" disablePictureInPicture allowfullscreen>
-</video>
+						${renderMediaPanel(questionData)}
 					  </div>
 						
 						<div class="feedback" id="feedback"></div>
@@ -356,6 +478,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		applyMobileScrollFix();
 		ensureMenuCopyrightVisible();
 		ensureSubmitSection();
+		resetQuizScroll();
 		timerElement = document.getElementById("timer");
 		document.getElementById('submitBtn').addEventListener('click', checkAnswer);
 		// Add click event listener to checkboxes
@@ -385,6 +508,35 @@ if (zoomableImage) {
 	 // console.log("open Image");
 	  openModal();
   });
+
+  // Classify by intrinsic aspect ratio (naturalWidth/naturalHeight) so
+  // Quiz_style.css can size the question image by its own shape --
+  // landscape fits by width, portrait fits by height, square bounds both
+  // axes -- instead of a fixed on-screen size. ratio is only meaningful
+  // once the image has decoded, so branch on .complete (cached images may
+  // already be loaded before this script runs and never fire another
+  // 'load' event).
+  var classifyImageOrientation = function () {
+    var w = zoomableImage.naturalWidth;
+    var h = zoomableImage.naturalHeight;
+    if (!w || !h) {
+      return;
+    }
+    var ratio = w / h;
+    zoomableImage.classList.remove('landscape', 'portrait', 'square');
+    if (ratio > 1) {
+      zoomableImage.classList.add('landscape');
+    } else if (ratio < 1) {
+      zoomableImage.classList.add('portrait');
+    } else {
+      zoomableImage.classList.add('square');
+    }
+  };
+  if (zoomableImage.complete) {
+    classifyImageOrientation();
+  } else {
+    zoomableImage.addEventListener('load', classifyImageOrientation);
+  }
 }
 var imageopen="";
 function openModal() {
@@ -967,7 +1119,8 @@ function SetScoreEachQuestion() {
 				quizContainer.innerHTML = resultsHtml;
 				applyMobileScrollFix();
 				ensureMenuCopyrightVisible();
-				
+				resetQuizScroll();
+
 		if(QuizMode =="PreTest")
 		{
 			parent.parent.enablenextbtn()

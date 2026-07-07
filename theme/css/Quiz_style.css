@@ -58,16 +58,60 @@
   z-index: 10000;
 }
 
-/* Responsive tweaks */
-@media (max-width: 600px) {
+/* Responsive tweaks. The combined max-width/max-height query (rather than
+   just max-width) catches phones in BOTH portrait and landscape: a phone's
+   short axis is always <=600px (e.g. iPhone Pro Max landscape height is
+   430px), while iPad's short axis is >=744px in any orientation, so this
+   block stays phone-only and leaves iPad/desktop untouched. */
+@media (max-width: 600px), (max-height: 600px) {
+  .modal {
+    /* iOS Safari's address bar show/hide changes the real visible viewport
+       height while the fixed-position "height:100%" box does not track it;
+       100dvh does, keeping the dark overlay covering exactly what's on
+       screen instead of leaving a gap or extending past the fold. */
+    height: 100dvh;
+  }
+
+  .modal-content-wrapper {
+    box-sizing: border-box;
+    padding:
+      calc(env(safe-area-inset-top, 0px) + 20px)
+      16px
+      calc(env(safe-area-inset-bottom, 0px) + 20px)
+      16px;
+  }
+
   .modal-img {
     max-width: 95vw;
-    max-height: 80vh;
+    max-height: calc(100vh - 120px);
+    max-height: calc(100dvh - 120px);
   }
+
+  /* .close was position:absolute against .modal's top:0 box, which iOS
+     Safari can size taller than the actually-visible viewport while its
+     address bar is showing -- so "top:0" landed under the browser chrome /
+     notch instead of the visible screen edge, making the button impossible
+     to see or tap. Pinning .close itself to position:fixed with safe-area
+     insets guarantees it sits in the real visible area regardless of the
+     parent box's size, and the very high z-index keeps it above the zoomed
+     image on every device/orientation. */
   .close {
+    position: fixed;
+    top: max(env(safe-area-inset-top, 0px), 12px);
+    right: max(env(safe-area-inset-right, 0px), 12px);
+    z-index: 999999;
+
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     font-size: 1.5rem;
-    right: 15px;
-    top: 10px;
+    line-height: 1;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, .75);
+    touch-action: manipulation;
   }
 }
 
@@ -334,7 +378,7 @@ label {
 }
 .btn1 {
 	
-   margin-left: 2.5%;
+  /* margin-left: 2.5%;*/
 }
 
 :root {
@@ -474,8 +518,12 @@ html body {
     flex-direction: column;
     flex: 1 1 auto;
     min-height: 0;
-    max-height: calc(100vh - 138px);
-    max-height: calc(100dvh - 138px);
+    /* The subtracted var is the course-header clearance the body reserves
+       as padding-top (see the html:not(.is-touch-device) body rule); the
+       viewport units don't know about it, so remove it here too or the
+       card overflows its clipped container inside the SCORM player. */
+    max-height: calc(100vh - 138px - var(--outer-header-overlap, 0px));
+    max-height: calc(100dvh - 138px - var(--outer-header-overlap, 0px));
     overflow: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -630,14 +678,36 @@ html body {
     text-transform: none;
 }
 
+/* align-items: stretch (the default, restated for clarity) so .options/
+   .options1 receive the row's actual cross-size and their overflow-y:auto
+   rule can clip+scroll them within it. flex-start here would let a long
+   options list render at its full natural content height regardless of
+   the space contentWrapper was given -- the box would silently outgrow
+   contentWrapper (which has no overflow of its own) and spill down over
+   the Submit button that follows it in the column. .quiz-media-column
+   opts out of this stretch itself (align-self: flex-start) so it still
+   hugs its own content height instead of being stretched to match the
+   options column. */
 .contentWrapper {
-    align-items: flex-start;
+    align-items: stretch;
     gap: 24px;
 }
 
-.ImageQuestion,
+/* Fallback appearance for .ImageQuestion/.VideoQuestion if ever rendered
+   outside the dedicated .quiz-image-panel/.quiz-video-panel wrappers
+   (see the "Media panels" section below) -- kept as two independent
+   rules, never a shared one, so tuning one can't move the other. */
+.ImageQuestion {
+    border-radius: 6px;
+    box-shadow: 0 8px 22px rgba(41, 28, 28, 0.06);
+    background: #ffffff;
+    border: 1px solid #efe7e4;
+    padding: 6px;
+    box-sizing: border-box;
+}
+
 .VideoQuestion {
-    border-radius: 0;
+    border-radius: 8px;
     box-shadow: 0 8px 22px rgba(41, 28, 28, 0.06);
     background: #ffffff;
     border: 1px solid #efe7e4;
@@ -673,7 +743,7 @@ html body {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 120px);
+    min-height: calc(100vh - 120px - var(--outer-header-overlap, 0px));
     padding-top: 0;
     padding-bottom: 0;
 }
@@ -681,8 +751,8 @@ html body {
 @media (max-width: 1366px) {
     #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer {
         width: min(100%, 1120px);
-        max-height: calc(100vh - 132px);
-        max-height: calc(100dvh - 94px);
+        max-height: calc(100vh - 132px - var(--outer-header-overlap, 0px));
+        max-height: calc(100dvh - 94px - var(--outer-header-overlap, 0px));
     }
 }
 
@@ -699,8 +769,8 @@ html body {
         max-width: 100%;
         padding: 16px;
         border-radius: 0;
-        max-height: calc(100vh - 120px);
-        max-height: calc(100dvh - 120px);
+        max-height: calc(100vh - 120px - var(--outer-header-overlap, 0px));
+        max-height: calc(100dvh - 120px - var(--outer-header-overlap, 0px));
     }
 
     #quizContainer:not(.quiz-start-view):not(:has(.results)) {
@@ -711,8 +781,8 @@ html body {
     #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer {
         flex: 1 1 auto;
         min-height: 0;
-        max-height: calc(100vh - 120px);
-        max-height: calc(100dvh - 120px);
+        max-height: calc(100vh - 120px - var(--outer-header-overlap, 0px));
+        max-height: calc(100dvh - 120px - var(--outer-header-overlap, 0px));
         height: auto;
         width: 100%;
     }
@@ -888,14 +958,18 @@ html body {
     /* The course-level header ("Quiz  X/Y") lives outside this iframe, in
        the shared theme/content.html chrome. On iPhone/iPad it can sit
        close enough to this iframe's top edge that our own "Questions X of
-       Y" bar starts partially behind it. --outer-header-height is set by
-       Quiz.html from the real, measured height of that header (falling
-       back to 64px, a safe value above its ~45-60px measured range across
-       breakpoints in content.css/Color.css, if the measurement isn't
-       available) -- calculated clearance instead of a guessed constant,
-       without touching that shared chrome file. */
+       Y" bar starts partially behind it. --outer-header-overlap is set by
+       Quiz.html from the real, measured intrusion of that header into
+       this iframe's viewport (0 when the layout already clears it), so
+       the clearance is calculated, not guessed. The 64px constant only
+       applies when the measurement is unavailable (cross-origin ancestor,
+       e.g. a remote LMS): a safe value above the header's ~45-60px range
+       across breakpoints in content.css/Color.css. Desktop gets the same
+       measured clearance via the html:not(.is-touch-device) body
+       padding-top rule near the end of this file -- exactly one of the
+       two applies, never both. */
     html.is-touch-device #parentquizContainer {
-        margin-top: calc(env(safe-area-inset-top, 0px) + var(--outer-header-height, 64px));
+        margin-top: var(--outer-header-overlap, calc(env(safe-area-inset-top, 0px) + 64px));
     }
 
     /* iOS Safari's address bar shows/hides as the page scrolls, which
@@ -1015,4 +1089,422 @@ html body {
     }
 }
 
+/* ==========================================================================
+   Media panels (image / video / no-media) for quiz questions.
+   .quiz-image-panel and .quiz-video-panel are INDEPENDENT components: each
+   owns its own border/padding/shadow/sizing rules below and shares nothing
+   but layout (the .quiz-media-column flex column + gap). Changing one
+   panel's design can never move or resize the other. Purely additive:
+   nothing above this block is edited, so any element still styled only by
+   the bare .ImageQuestion / .VideoQuestion rules above keeps whatever
+   appearance it already had; these rules only take effect for markup that
+   opts in via the new .quiz-image-panel / .quiz-video-panel wrappers.
+   ========================================================================== */
+:root {
+    --media-accent: #006B8F;
+    /* Single source of truth for the media column's reserved width, also
+       read by the .submit-section rule below so its sticky fade-gradient
+       never has to duplicate (and risk drifting from) these values. */
+    --media-column-width-image: clamp(320px, 32vw, 520px);
+    --media-column-width-video: clamp(260px, 35%, 400px);
+    --content-gap: 24px;
+}
+
+.quiz-media-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* 0, not a shared spacing value: the image panel drives its own
+       caption spacing directly (.quiz-image-panel-caption's margin-top),
+       per "do not share CSS between the image and video components". The
+       video panel never has a sibling caption, so it never needed this
+       gap either. */
+    gap: 0;
+    /* Opt out of contentWrapper's align-items:stretch: the column should
+       hug its own media, not be stretched to match the (scrollable)
+       options column's full height. This align-self declaration is
+       load-bearing, not the comment describing it -- it was accidentally
+       dropped in a previous edit (the comment survived, the property
+       didn't), which silently let the column inherit stretch again. With
+       that gone, a tall image's rendered height could exceed the
+       (options-driven) row height, and justify-content:center then
+       centered the OVERFLOWING content within the stretched box -- the
+       image bled upward past the column's own top edge, overlapping the
+       question header above it. height:auto (NOT 100%) matters for the
+       same reason: an explicit height overrides align-self's
+       stretch-avoidance entirely (align-self only governs axes that
+       compute to auto), so a height:100% here would silently reintroduce
+       the identical bug even with align-self correctly declared.
+       justify-content:center is inert ONLY when align-self:flex-start is
+       actually in effect (a single-child column then hugs its content
+       exactly, with no leftover space to distribute) -- it is not inert
+       on its own, as this bug demonstrated. */
+    align-self: flex-start;
+    height: auto;
+    box-sizing: border-box;
+}
+
+/* Video column: width unchanged from before this file's image redesign --
+   the video panel "must remain unchanged". Kept as its own modifier rule
+   (not shared with the image column below) so tuning the image's width
+   can never move the video. */
+.quiz-media-column.quiz-media-column--video {
+    flex: 0 0 var(--media-column-width-video);
+    width: var(--media-column-width-video);
+    max-width: 400px;
+}
+
+/* Image column: a flexible band the image can occupy, NOT a fixed size --
+   the image itself (via its own natural-dimension-driven rules below)
+   determines how much of this band it actually uses. clamp() alone
+   (a fluid 320-520px range tied to 32% of the viewport) already adapts
+   continuously, so unlike the column's very first design (35%-of-row,
+   card-oriented) or its immediate predecessor (a rigid 540px), this one
+   needs no separate tablet/phone breakpoint override -- the orientation
+   rules on .ImageQuestion below are what actually keep every screen size
+   correct. */
+.quiz-media-column.quiz-media-column--image {
+    flex: 0 0 var(--media-column-width-image);
+    width: var(--media-column-width-image);
+    max-width: 520px;
+}
+
+/* .submit-section (the sticky Submit button's wrapper, built by quiz.js's
+   ensureSubmitSection()) is a SIBLING of .contentWrapper, not a child of
+   the options column specifically -- so its width:100% (set further up
+   this file) spans the WHOLE row, options and media column alike. That's
+   invisible for the button itself (it doesn't stretch), but the wrapper's
+   fade-to-white gradient background is position:sticky with an explicit
+   z-index, so it paints ABOVE the media column (plain position:static,
+   no z-index) wherever their boxes overlap -- confirmed by sampling
+   rendered pixels under the image's zoom caption: solid teal per
+   computed style, but the actual paint was a near-white wash from this
+   gradient sitting on top of it. Narrowing .submit-section to just the
+   options column's share of the row (100% minus the media column's
+   reserved width and the row gap, both read from the shared custom
+   properties above) keeps the gradient inside the scrolling options
+   area it was designed for. Scoped to the exact inverse of the stacking
+   breakpoints below (plain >900px non-touch, or >1366px touch) --
+   wherever contentWrapper is actually a COLUMN instead of a row, this
+   must NOT apply, and the width:100% reset already present in those
+   stacked breakpoints is left as the only rule there. */
+@media (min-width: 901px) {
+    html:not(.is-touch-device) #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:has(.quiz-media-column--image) .submit-section {
+        max-width: calc(100% - var(--media-column-width-image) - var(--content-gap));
+    }
+
+    html:not(.is-touch-device) #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:has(.quiz-media-column--video) .submit-section {
+        max-width: calc(100% - var(--media-column-width-video) - var(--content-gap));
+    }
+}
+
+@media (min-width: 1367px) {
+    html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:has(.quiz-media-column--image) .submit-section {
+        max-width: calc(100% - var(--media-column-width-image) - var(--content-gap));
+    }
+
+    html.is-touch-device #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:has(.quiz-media-column--video) .submit-section {
+        max-width: calc(100% - var(--media-column-width-video) - var(--content-gap));
+    }
+}
+
+/* -------------------- Image panel (independent) --------------------
+   Deliberately NO card chrome (no border/background/shadow/padding): many
+   source assessment images already carry their own border/frame, and
+   wrapping those in a second bordered card produced a double-border look.
+   This is just a plain flex wrapper for layout; the image is the only
+   visible thing. Never share rules with .quiz-video-panel below, which
+   keeps its own bordered-card treatment intentionally. */
+.quiz-image-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* Never let flex-shrink compress this below what its own image needs
+       (default is flex-shrink:1 -- shrinkable); belt-and-braces alongside
+       .quiz-media-column's height:auto above. */
+    flex-shrink: 0;
+    width: 100%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quiz-image-panel .ImageQuestion {
+    display: block;
+    /* Base/fallback state, applied before quiz.js's orientation classifier
+       (naturalWidth vs naturalHeight, added on the image's `load`) settles
+       .landscape/.portrait/.square below. width/height BOTH auto (never a
+       fixed px width) is the point of this whole design: the image is
+       sized from its own intrinsic dimensions, never forced to a uniform
+       display size. max-height:65vh is a general safety net (vh is the
+       QUIZ IFRAME's height); the orientation classes refine this per
+       shape so a document scan doesn't just get "capped shorter" but
+       fits the way a real image viewer would. */
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 65vh;
+    object-fit: contain;
+    margin: 0 auto;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Landscape (naturalWidth > naturalHeight): fit by width. */
+.quiz-image-panel .ImageQuestion.landscape {
+    width: min(67%, 520px);
+    height: auto;
+}
+
+/* Portrait (naturalHeight > naturalWidth): fit by height, so a tall
+   document/table scan shrinks to fit the viewport instead of rendering
+   at full width with an enormous derived height. */
+.quiz-image-panel .ImageQuestion.portrait {
+    width: auto;
+    height: min(46vh, 520px);
+}
+
+/* Square (naturalWidth == naturalHeight): bounded on both axes at once. */
+.quiz-image-panel .ImageQuestion.square {
+    width: auto;
+    height: auto;
+    max-width: 420px;
+    max-height: 420px;
+}
+
+.quiz-image-panel-caption {
+    width: 100%;
+    margin: 12px 0 0;
+    text-align: center;
+    color: var(--media-accent);
+    font-style: italic;
+    font-weight: 600;
+}
+
+.quiz-image-panel .ImageQuestion:focus-visible,
+.quiz-image-panel-caption:focus-visible {
+    outline: 2px solid var(--media-accent);
+    outline-offset: 2px;
+}
+
+/* -------------------- Video panel (independent) -------------------- */
+.quiz-video-panel {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px;
+    background: #ffffff;
+    border: 2px solid var(--media-accent);
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(0, 107, 143, 0.12);
+    overflow: hidden;
+}
+
+.quiz-video-panel .VideoQuestion {
+    display: block;
+    width: 100%;
+    /* height:auto is required here, not cosmetic: a legacy single-class
+       .VideoQuestion rule earlier in this file sets height:40% for an
+       older, unrelated layout. That rule doesn't compete on any OTHER
+       property (this selector's extra class already wins those), but a
+       property this rule never declares isn't overridden by specificity --
+       so without this explicit auto, the legacy 40% would apply instead of
+       aspect-ratio, which only takes effect when the other main-axis
+       dimension has fully computed to auto. Fixed 16:9 box regardless of
+       the source file's own dimensions -- object-fit:cover crops to fill
+       it rather than adding letterbox whitespace, and aspect-ratio (not a
+       height rule) is what stops it from stretching taller than 16:9. */
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-width: 100%;
+    object-fit: cover;
+    margin: 0;
+    background: #000000;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    border-radius: 10px;
+}
+
+.quiz-video-panel .VideoQuestion:focus-visible {
+    outline: 2px solid var(--media-accent);
+    outline-offset: 2px;
+}
+
+/* No image/video for this question: renderMediaPanel() in quiz.js emits
+   nothing at all (no .quiz-media-column, no placeholder) -- .options/
+   .options1 is then contentWrapper's only child and its existing
+   flex:1 1 auto already expands it to the row's full width with zero
+   extra CSS needed here. */
+
+/* Stacked layouts below key off WIDTH only. Height/orientation media
+   features are unreliable here: this page runs inside the course player's
+   content iframe, whose height on an ordinary laptop is well under 768px
+   (window height minus the player's header and footer) and whose aspect is
+   landscape -- so a (max-height)+(orientation:landscape) clause intended
+   for rotated phones fires on desktop and hands the panel phone rules
+   (full width, collapsing the options column). The typography blocks above
+   get away with that clause because slightly-larger fonts are harmless on
+   desktop; layout is not. Touch hardware at tablet widths is handled by
+   the html.is-touch-device block after these (same detection the rest of
+   this file already uses). */
+
+/* Narrow windows / tablets: stacked under the question, capped width.
+   Selector repeats the base .quiz-media-column plus BOTH compound
+   .quiz-media-column--image/--video variants deliberately: those
+   modifier rules (added later, for the submit-section width fix) are
+   2-class compounds with no media-query guard, so they have permanently
+   HIGHER specificity than a bare 1-class .quiz-media-column override --
+   this reset would otherwise silently never win at ANY viewport for a
+   question that actually has media (confirmed live on iPhone/WebKit: the
+   video column stayed pinned near its desktop clamp width instead of
+   going full-width when stacked, overflowing .contentWrapper and making
+   Submit visually overlap the video below it). */
+@media (min-width: 601px) and (max-width: 900px) {
+    .quiz-media-column,
+    .quiz-media-column.quiz-media-column--image,
+    .quiz-media-column.quiz-media-column--video {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .quiz-video-panel {
+        padding: 10px;
+    }
+}
+
+/* Phones (portrait) -- same specificity fix as above. */
+@media (max-width: 600px) {
+    .quiz-media-column,
+    .quiz-media-column.quiz-media-column--image,
+    .quiz-media-column.quiz-media-column--video {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .quiz-video-panel {
+        padding: 8px;
+    }
+}
+
+/* Touch devices at tablet/desktop widths (iPad portrait+landscape, phones
+   in landscape): stack the media column under the options, centered and
+   width-capped. Width queries alone cannot catch iPad landscape (1024 to
+   1366px overlaps laptops), so this uses the html.is-touch-device class
+   Quiz.html already sets from navigator.maxTouchPoints -- the same pattern
+   as the touch blocks earlier in this file. Declared last so it wins over
+   the width-based blocks above when both match. */
+@media (min-width: 601px) and (max-width: 1366px) {
+    html.is-touch-device .contentWrapper {
+        flex-direction: column;
+    }
+
+    html.is-touch-device .quiz-media-column,
+    html.is-touch-device .quiz-media-column.quiz-media-column--image,
+    html.is-touch-device .quiz-media-column.quiz-media-column--video {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    html.is-touch-device .quiz-video-panel {
+        padding: 10px;
+    }
+}
+
+/* ==========================================================================
+   Desktop SCQ/MCQ submit alignment -- no-media questions only.
+   The base non-touch rules above give .questionContainer/.contentWrapper/
+   .options/.options1 flex:1 1 auto so a media panel's height can dictate
+   the row -- but for a plain question with no image/video that same rule
+   stretched a 2-option list to fill the whole card height regardless of
+   content, and .submit-section's position:sticky/bottom:0 then pinned
+   Submit to the bottom of that stretched space instead of right after the
+   last option, producing the inconsistent gaps/positions this section
+   fixes. Scoped to :not(:has(.quiz-media-column)) so image/video questions
+   (the media-panel rules above) are completely untouched, and to non-touch
+   desktop widths so iPhone/iPad keep their existing rules (the
+   html.is-touch-device block above already gives touch layouts an
+   equivalent content-driven-height fix independently). */
+@media (min-width: 901px) {
+    html:not(.is-touch-device) #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:not(:has(.quiz-media-column)) {
+        flex: 0 0 auto;
+        overflow-y: auto;
+    }
+
+    html:not(.is-touch-device) #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:not(:has(.quiz-media-column)) .contentWrapper,
+    html:not(.is-touch-device) #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:not(:has(.quiz-media-column)) .options,
+    html:not(.is-touch-device) #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:not(:has(.quiz-media-column)) .options1 {
+        flex: 0 0 auto;
+        min-height: 0;
+        max-height: none;
+        overflow: visible;
+    }
+
+    /* Submit now sits in normal document flow immediately after the options
+       list instead of being pinned to the bottom of a stretched card; the
+       sticky fade-gradient background is dropped since there's nothing
+       scrolling underneath it to fade anymore. */
+    html:not(.is-touch-device) #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:not(:has(.quiz-media-column)) .submit-section {
+        position: static;
+        background: none;
+        margin-top: 20px;
+        padding-top: 0;
+    }
+}
+
+/* ==========================================================================
+   Course-header clearance.
+   --outer-header-overlap is the measured intrusion of the course chrome's
+   .headingArea into THIS iframe's viewport (set by Quiz.html's frame-chain
+   walk; unset when an ancestor is cross-origin). Standalone launches
+   measure 0 -- no visual change; inside the reload SCORM player, where the
+   hosting chain positions this page partially under that header, the body
+   reserves exactly the covered height so "Questions X of Y" always renders
+   fully below the header. Non-touch only: on touch devices the clearance
+   is applied by the html.is-touch-device #parentquizContainer margin rule
+   above (which now consumes the same measured value), and applying both
+   would double the offset. box-sizing keeps the 100vh body from
+   overflowing by the added padding. */
+html:not(.is-touch-device) body {
+    box-sizing: border-box;
+    padding-top: var(--outer-header-overlap, 0px);
+}
+
+/* body is a flex COLUMN (the html body rule above), and the legacy
+   `body { justify-content: center }` near the top of this file therefore
+   centers the page VERTICALLY. A centered flex column whose content is
+   taller than the container overflows at BOTH ends -- so whenever a
+   question renders taller than the viewport (short windows inside the
+   SCORM player; touch layouts where applyMobileScrollFix gives
+   #quizContainer min-height:100%), the "Questions X of Y" bar is pushed
+   ABOVE the viewport top and clipped with every scroller still at 0.
+   Anchor the column to the top instead: with #quizContainer at flex:1
+   this renders identically whenever content fits, and overflow now
+   happens only at the bottom, where it can scroll. */
+html body {
+    justify-content: flex-start;
+}
+
+/* Whenever anything scrolls the "Questions X of Y" bar into view (anchor
+   navigation, focus handling, scrollIntoView), keep it clear of the course
+   player's header instead of letting it tuck underneath. 0 fallback so
+   the page is unaffected when it runs standalone. quiz.js additionally
+   resets all persistent scrollers to the top on every question render
+   (resetQuizScroll), which restores the unclipped layout after
+   mid-question scrolling. */
+#parentquizContainer {
+    scroll-margin-top: calc(env(safe-area-inset-top, 0px) + var(--outer-header-overlap, 0px));
+}
 
