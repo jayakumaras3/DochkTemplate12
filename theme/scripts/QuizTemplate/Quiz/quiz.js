@@ -306,17 +306,6 @@ document.addEventListener("DOMContentLoaded", function() {
 		`;
 	}
 
-	function renderImageModal() {
-		return `
-			<div id="imageModal" aria-label="Image" class="modal">
-				<span aria-label="close" tabindex="0" class="close FSize3_RM">&times;</span>
-				<div class="modal-content-wrapper">
-					<img class="modal-img" id="modalImg">
-				</div>
-			</div>
-		`;
-	}
-
 	function loadQuestion(index) {
 
 		quizContainer.classList.remove('quiz-start-view');
@@ -388,8 +377,6 @@ document.addEventListener("DOMContentLoaded", function() {
 					  </div>					 
 					  <div class="feedback" id="feedback"></div>
 					</div>
-
-				  ${renderImageModal()}
 				`;
 			} else if (questionData.images == null && questionData.video != null) {
 				questionHtml = `
@@ -440,8 +427,6 @@ document.addEventListener("DOMContentLoaded", function() {
 					
 						<div class="feedback" id="feedback"></div>
 					</div>
-					
-					 ${renderImageModal()}
 				`;
 			} else if (questionData.images == null && questionData.video != null) {
 				questionHtml = `
@@ -541,6 +526,7 @@ if (zoomableImage) {
 var imageopen="";
 function openModal() {
 	modal.style.display = "flex";
+	document.body.classList.add('popup-open');
 	modalImg.src = zoomableImage.src;
 	imageopen="open";
 	modalImg.onload = () => {
@@ -593,6 +579,7 @@ window.addEventListener("keydown", (event) => {
 
 function closeModal() {
   modal.style.display = "none";
+  document.body.classList.remove('popup-open');
   zoomableImage.focus(); // Return focus to the zoomable image after closing
 }
 
@@ -627,6 +614,7 @@ window.addEventListener("resize", () => {
 		document.querySelectorAll('.close').forEach(img => {
 			img.addEventListener('click', function() {
 				document.getElementById('imageModal').style.display = 'none';
+				document.body.classList.remove('popup-open');
 				document.querySelectorAll('.ImageQuestion').forEach(img => {
 					img.style.display = 'block';
 				  });

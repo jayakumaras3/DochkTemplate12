@@ -70,6 +70,51 @@
         updateOuterHeaderClearance();
         window.addEventListener('resize', updateOuterHeaderClearance);
         window.addEventListener('load', updateOuterHeaderClearance);
+
+        /* Same idea as updateOuterHeaderClearance, mirrored for the course
+           player's bottom nav bar (theme/content.html's .footer -- prev/next
+           + transcript download). That bar lives in the same outer chrome
+           window as .headingArea, two iframe hops up from here, so nothing
+           in this document's own stacking order can ever paint over it or
+           hide it; the only thing this page CAN do is avoid letting the
+           image-zoom popup's content render underneath/against it. Measures
+           how far the footer's top edge reaches into OUR bottom edge (our
+           own accumulated bottom offset, in the footer's document's
+           coordinate space, minus the footer's top) so Quiz_style.css can
+           reserve exactly that much space via --outer-footer-overlap. 0 when
+           the footer sits below this iframe's box entirely (already the
+           case on desktop), so this is a no-op there. */
+        function updateOuterFooterClearance() {
+            try {
+                var offsetTop = 0;
+                var w = window;
+                var overlap = null;
+                var ourHeight = window.innerHeight;
+                for (var depth = 0; depth < 4; depth++) {
+                    var fe = w.frameElement;
+                    if (!fe) break; /* reached the top window */
+                    offsetTop += fe.getBoundingClientRect().top;
+                    w = w.parent;
+                    var footer = w.document.querySelector('.footer');
+                    if (footer) {
+                        var footerRect = footer.getBoundingClientRect();
+                        if (footerRect.height > 0) {
+                            overlap = (offsetTop + ourHeight) - footerRect.top;
+                        }
+                        break;
+                    }
+                }
+                if (overlap !== null) {
+                    overlap = Math.max(0, Math.min(150, overlap));
+                    document.documentElement.style.setProperty('--outer-footer-overlap', overlap.toFixed(1) + 'px');
+                }
+            } catch (e) {
+                /* Cross-origin or structural mismatch: CSS fallback (0px) covers this. */
+            }
+        }
+        updateOuterFooterClearance();
+        window.addEventListener('resize', updateOuterFooterClearance);
+        window.addEventListener('load', updateOuterFooterClearance);
     })();
     </script>
     <link rel="stylesheet" href="../../../css/Quiz_style.css">
@@ -79,10 +124,25 @@
 <body>
  <div id="parentquizContainer">	</div>
 	 <div id="quizContainer"></div>
-	
-			
 
-   
+    <!-- Image-zoom popup lives here, as a direct child of body, instead of
+         being templated inside #quizContainer's per-question innerHTML.
+         quiz.js's loadQuestion() replaces quizContainer's entire innerHTML
+         on every question navigation, which was destroying and rebuilding
+         this element each time; being nested several layers deep inside
+         #quizContainer's flex/scroll layout also meant its position:fixed
+         close button inherited that ancestor chain for no reason. A single
+         persistent node at the body level removes both: quiz.js's existing
+         getElementById("imageModal"/"modalImg"/"closeModal") lookups find
+         this same element wherever it lives, so no script changes were
+         needed beyond no longer re-templating it per question. -->
+    <div id="imageModal" aria-label="Image" class="modal">
+        <span aria-label="close" tabindex="0" class="close FSize3_RM">&times;</span>
+        <div class="modal-content-wrapper">
+            <img class="modal-img" id="modalImg">
+        </div>
+    </div>
+
     <script src="quiz.js"></script>
 </body>
 </html>

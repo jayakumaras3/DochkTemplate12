@@ -20,24 +20,60 @@
   left: 0;
   width: 100%;
   height: 100%;
+  height: 100dvh;
+  overflow: hidden;
   background-color: rgba(0,0,0,0.9);
   justify-content: center;
   align-items: center;
  /* padding: 1rem;*/
 }
 /* Option, input and button skins live in QuestionOptions.css (shared). */
-/* Modal content wrapper to center image */
+/* Modal content wrapper to center image. width/height:auto (rather than the
+   old 100%/100%) so the box shrink-wraps the image instead of claiming the
+   full overlay -- needed for max-height below to actually constrain it.
+   max-height reserves room on BOTH edges: --outer-header-overlap/top for
+   the course player's "Quiz X/Y" header, --outer-footer-overlap/bottom for
+   its prev/next + download bar. Both live in an outer chrome window two
+   iframe hops above this page (see Quiz.html's updateOuterHeaderClearance /
+   updateOuterFooterClearance) -- nothing this page's own CSS does can ever
+   paint over that chrome, so the only thing available here is making sure
+   the popup's own content never renders into the space that chrome
+   occupies. 0px fallbacks where nothing overlaps (desktop, standalone
+   launches), so the wrapper -- and therefore the image inside it -- never
+   grows taller than what's actually visible. */
 .modal-content-wrapper {
-  max-width: 100%;
-  max-height: 100%;
+  position: relative;
+  width: auto;
+  height: auto;
+  max-width: 95vw;
+  max-height: calc(100vh - 80px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
+  max-height: calc(100dvh - 80px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Modal image */
+/* Modal image. quiz.js's openModal() sets an inline pixel width OR height
+   (whichever axis matches the image's aspect ratio) to size it at ~90% of
+   the window -- but "window" there is this iframe's own viewport, which
+   can be taller than what's actually visible once the safe area and the
+   player's outer header/footer chrome are subtracted, and forcing only one
+   axis inline leaves the other unconstrained. width/height:auto here are
+   !important specifically to win over those inline pixel values (the one
+   place !important is warranted: overriding script-set inline styles
+   without touching the script itself), handing sizing back to the
+   standard max-width/max-height + object-fit:contain algorithm, which
+   scales both axes together and keeps the aspect ratio intact -- no
+   stretching, no bottom cropped off, and it re-applies for free on the
+   resize listener already in quiz.js since these are stylesheet rules, not
+   one-off inline values. */
 .modal-img {
-    width: 50vw;
+    width: auto !important;
+    height: auto !important;
+    max-width: 95vw !important;
+    max-height: calc(100vh - 120px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px)) !important;
+    max-height: calc(100dvh - 120px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px)) !important;
+    object-fit: contain;
 }
 .H_heightimg {
     width: 35vw;
@@ -45,73 +81,92 @@
 .H_Widthimg {
     width: 88vw;
 }
-/* Close button */
+/* Close button. Fixed (not absolute-against-.modal) so it never depends on
+   .modal's own box tracking the real visible viewport, with a very high
+   z-index so the zoomed image can never paint over it.
+
+   top adds together the two obstructions this iframe can sit under,
+   matching the --outer-header-overlap idiom already used for
+   #parentquizContainer/#quizContainer elsewhere in this file:
+     - env(safe-area-inset-top): the device notch/Dynamic Island/status bar.
+     - var(--outer-header-overlap): the reload player's OWN "Quiz X/Y"
+       chrome, which lives one frame up and can cover this iframe's top
+       edge by ~45-64px depending on host. Without this term the button
+       was placed at a "top" that was correct relative to this iframe but
+       still physically hidden under that outer header on real devices --
+       the actual cause of the "missing on iPhone" bug, not a z-index or
+       viewport-percentage issue. 0px fallback so nothing changes where the
+       chrome doesn't overlap (desktop, standalone launches, iPad). */
 .close {
-  position: absolute;
-  top: 0px;
-    right: 13px;
-  
- /* font-size: 3rem;*/
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + var(--outer-header-overlap, 0px) + 20px);
+  right: calc(env(safe-area-inset-right, 0px) + 20px);
+
   color: white;
   font-weight: bold;
   cursor: pointer;
-  z-index: 10000;
+  z-index: 999999;
+  touch-action: manipulation;
 }
 
-/* Responsive tweaks. The combined max-width/max-height query (rather than
-   just max-width) catches phones in BOTH portrait and landscape: a phone's
-   short axis is always <=600px (e.g. iPhone Pro Max landscape height is
-   430px), while iPad's short axis is >=744px in any orientation, so this
-   block stays phone-only and leaves iPad/desktop untouched. */
-@media (max-width: 600px), (max-height: 600px) {
-  .modal {
-    /* iOS Safari's address bar show/hide changes the real visible viewport
-       height while the fixed-position "height:100%" box does not track it;
-       100dvh does, keeping the dark overlay covering exactly what's on
-       screen instead of leaving a gap or extending past the fold. */
-    height: 100dvh;
-  }
+/* Background scroll lock while the popup is open. quiz.js toggles
+   body.popup-open alongside modal.style.display so the page underneath
+   can't rubber-band/scroll on iOS while the overlay is up (desktop is
+   unaffected: the class is only ever added while the modal is open). */
+body.popup-open {
+  overflow: hidden;
+  height: 100dvh;
+}
 
-  .modal-content-wrapper {
-    box-sizing: border-box;
-    padding:
-      calc(env(safe-area-inset-top, 0px) + 20px)
-      16px
-      calc(env(safe-area-inset-bottom, 0px) + 20px)
-      16px;
-  }
-
-  .modal-img {
-    max-width: 95vw;
-    max-height: calc(100vh - 120px);
-    max-height: calc(100dvh - 120px);
-  }
-
-  /* .close was position:absolute against .modal's top:0 box, which iOS
-     Safari can size taller than the actually-visible viewport while its
-     address bar is showing -- so "top:0" landed under the browser chrome /
-     notch instead of the visible screen edge, making the button impossible
-     to see or tap. Pinning .close itself to position:fixed with safe-area
-     insets guarantees it sits in the real visible area regardless of the
-     parent box's size, and the very high z-index keeps it above the zoomed
-     image on every device/orientation. */
+/* Responsive tweaks. Width-only (not height/orientation) for this base
+   query: Quiz.html renders inside a nested player iframe whose own height
+   can be short/landscape-shaped on an ordinary desktop (player chrome eats
+   window height), so a height-based clause here would misfire on desktop
+   rather than reliably targeting phones -- see the quiz-iframe-media-queries
+   note. */
+@media (max-width: 600px) {
   .close {
-    position: fixed;
-    top: max(env(safe-area-inset-top, 0px), 12px);
-    right: max(env(safe-area-inset-right, 0px), 12px);
-    z-index: 999999;
+    font-size: 1.5rem;
 
-    width: 44px;
-    height: 44px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    font-size: 1.5rem;
-    line-height: 1;
     border-radius: 50%;
     background: rgba(0, 0, 0, .75);
-    touch-action: manipulation;
+  }
+}
+
+/* The two orientation-specific tweaks below are gated on html.is-touch-device
+   (real touch hardware per navigator.maxTouchPoints, set once in Quiz.html)
+   rather than on (orientation: ...) alone: a desktop browser window can be
+   both narrower than these max-widths and wider-than-tall (which also
+   matches "orientation: landscape"), so without this guard a resized
+   desktop window could pick up phone-only sizing -- the same class of bug
+   the quiz-iframe-media-queries note describes for a height-only query. */
+@media (max-width: 480px) and (orientation: portrait) {
+  html.is-touch-device .modal-content-wrapper {
+    max-width: 90vw;
+    max-height: calc(100vh - 100px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
+    max-height: calc(100dvh - 100px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
+  }
+  html.is-touch-device .modal-img {
+    max-width: 90vw !important;
+    max-height: calc(100vh - 140px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px)) !important;
+    max-height: calc(100dvh - 140px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px)) !important;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  html.is-touch-device .modal-content-wrapper {
+    max-width: 85vw;
+    max-height: calc(100vh - 90px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
+    max-height: calc(100dvh - 90px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
+  }
+  html.is-touch-device .modal-img {
+    max-height: calc(100vh - 130px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px)) !important;
+    max-height: calc(100dvh - 130px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px)) !important;
   }
 }
 

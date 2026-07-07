@@ -211,7 +211,7 @@ label {
 {
 	/*font-size: 20px;*/
 	    color: white;
-		/*padding-left: 2.1%;*/
+		padding-left: 2.1%;
 		/*padding-top: 1.5%;*/
 		width: 76%;
 		padding: 1%;
@@ -234,7 +234,7 @@ label {
 	width: 161px;
 	font-family: 'tahoma';
     position: relative;
-    margin-left: 2.5%;
+   /* margin-left: 2.5%;*/
     /*background-color: #F2672E;*/
     color: white;
     border: none;
