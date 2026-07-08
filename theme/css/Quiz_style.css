@@ -585,7 +585,7 @@ html body {
     overflow: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: clamp(18px, 2vw, 24px) clamp(18px, 2vw, 24px) clamp(24px, 3vw, 32px);
+    padding: clamp(18px, 2vw, 24px) clamp(18px, 2vw, 24px) clamp(24px, 3vw, 20px);
     height: auto;
     margin: 0 auto;
     width: min(100%, 1280px);
@@ -689,7 +689,7 @@ html body {
     overflow-x: hidden;
     padding-right: 10px;
     padding-bottom: 4px;
-    margin-top: 2px;
+    margin-top: 0px;
     scrollbar-width: thin;
     scrollbar-color: rgba(47, 109, 255, 0.3) rgba(255, 255, 255, 0.1);
     display: flex;

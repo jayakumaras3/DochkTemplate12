@@ -588,7 +588,7 @@ video::cue {
     background: #004d6a !important;
     color: #FFFFFF !important;
     font-weight: 700 !important;
-    border-bottom: 2px solid rgba(255,255,255,0.7) !important;
+   /* border-bottom: 2px solid rgba(255,255,255,0.7) !important;*/
     opacity: 1;
 }
 

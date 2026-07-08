@@ -552,7 +552,7 @@ html:not(.is-touch-device) body {
         overflow-y: auto;
         overflow-x: hidden;
         scrollbar-width: thin;
-        scrollbar-color: rgba(135, 13, 13, 0.35) rgba(0, 0, 0, 0.05);
+      /*  scrollbar-color: rgba(135, 13, 13, 0.35) rgba(0, 0, 0, 0.05);*/
     }
 
     html:not(.is-touch-device) .questionContainer::-webkit-scrollbar {
