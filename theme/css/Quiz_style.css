@@ -158,15 +158,49 @@ body.popup-open {
   }
 }
 
+/* iPhone landscape only: touch hardware + <=900px wide + landscape. iPad
+   landscape is wider than 900px (excluded); portrait phones are excluded by
+   orientation; desktop never gets html.is-touch-device. A phone on its side is
+   only ~390px tall in CSS, so the scarce dimension is HEIGHT, not width. The
+   previous rule shrank the image to fit that short height (minus 130px of
+   chrome allowance), which left it tiny in a large black margin -- the bug in
+   the screenshot. Instead let the image grow toward the full WIDTH (and a
+   generous over-viewport height cap) and make the overlay scroll vertically
+   when the result is taller than the viewport, so the zoom actually uses the
+   available space. Desktop/iPad/portrait keep the base centered-fit behaviour
+   above; only this one block changes. No 100dvh->-webkit-fill-available shim
+   is needed for the Safari address bar: .modal already uses 100dvh, which
+   tracks the visible viewport more reliably than fill-available. */
 @media (max-width: 900px) and (orientation: landscape) {
+  /* Overlay becomes the scroll container, top-aligned so a tall image scrolls
+     from its top edge. Background stays scroll-locked via body.popup-open. */
+  html.is-touch-device .modal {
+    align-items: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
   html.is-touch-device .modal-content-wrapper {
-    max-width: 85vw;
-    max-height: calc(100vh - 90px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
-    max-height: calc(100dvh - 90px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
+    max-width: 96vw;
+    /* Remove the short-viewport height cap; min-height:100% still centers a
+       small image vertically and gives a tall one somewhere to scroll. */
+    max-height: none;
+    min-height: 100%;
+    /* Clear the fixed .close button (top-right) and both outer chrome bars so
+       neither the top nor the bottom of a scrolled image tucks under them. */
+    padding: calc(56px + env(safe-area-inset-top, 0px) + var(--outer-header-overlap, 0px)) 12px calc(24px + var(--outer-footer-overlap, 0px));
+    box-sizing: border-box;
   }
   html.is-touch-device .modal-img {
-    max-height: calc(100vh - 130px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px)) !important;
-    max-height: calc(100dvh - 130px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px)) !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: 96vw !important;
+    /* Larger than the viewport on purpose: a landscape image is bound by the
+       96vw width (so it fills the screen); a portrait image is bound here and
+       the overlay scrolls to reveal the rest. */
+    max-height: 150vh !important;
+    max-height: 150dvh !important;
+    object-fit: contain;
   }
 }
 

@@ -88,6 +88,13 @@
 
 #resumeArea > .row > .col-xs-6 {
     float: none;
+    /* flex: 0 0 auto (not just width:auto) is required: without an
+       explicit flex-shrink:0, these columns default to flex-shrink:1 and
+       the flex algorithm was measured (via getBoundingClientRect in a live
+       test) collapsing each column to ~6px -- far narrower than the button
+       inside it -- so the button overflowed its own column asymmetrically
+       instead of the pair being centered as intended. */
+    flex: 0 0 auto;
     width: auto;
     padding-left: 0;
     padding-right: 0;
