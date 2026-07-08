@@ -1563,6 +1563,45 @@ html body {
 }
 
 /* ==========================================================================
+   Desktop image/video (media) questions -- content-driven card + Submit
+   seated in the options column.
+   Counterpart to the no-media block above, for questions that DO have a
+   .quiz-media-column. Two things combined to produce the large empty band
+   below the options before Submit:
+     1. The base media rules give .questionContainer/.contentWrapper
+        flex:1 1 auto so the media panel's height can drive the row -- but
+        with only 2-3 options that grow:1 also stretched the whole card to
+        ~full viewport height.
+     2. ensureSubmitSection() placed Submit below the two-column row, so it
+        sat under the (tall) media panel rather than under the options.
+   flex-grow:0 here makes the card hug its content (the taller of the options
+   column / media panel) instead of the viewport; flex-shrink:1 + min-height:0
+   + the options' own overflow-y:auto (all kept from the base rules) still
+   bound and scroll a long option list on short screens, so Submit stays
+   reachable. quiz.js now keeps Submit inside .options1 for these questions
+   (non-touch only), so the .options1 .submit-section rule below strips the
+   sibling-of-contentWrapper sticky/gradient/row-width treatment it would
+   otherwise inherit and renders it as a plain block right after the options.
+   The media panel components themselves are untouched; touch/mobile keep
+   their existing stacked layout and Submit placement. */
+@media (min-width: 901px) {
+    html:not(.is-touch-device) #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:has(.quiz-media-column),
+    html:not(.is-touch-device) #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:has(.quiz-media-column) .contentWrapper {
+        flex-grow: 0;
+    }
+
+    html:not(.is-touch-device) #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer:has(.quiz-media-column) .options1 .submit-section {
+        position: static;
+        background: none;
+        max-width: none;
+        width: 100%;
+        margin-top: 12px;
+        padding-top: 0;
+        flex-shrink: 0;
+    }
+}
+
+/* ==========================================================================
    Course-header clearance.
    --outer-header-overlap is the measured intrusion of the course chrome's
    .headingArea into THIS iframe's viewport (set by Quiz.html's frame-chain

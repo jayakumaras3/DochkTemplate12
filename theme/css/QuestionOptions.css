@@ -45,6 +45,10 @@
     font-size: clamp(14px, 0.9vw, 17px);
     line-height: 1.4;
     transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    /* WebKit's native tap flash is separate from the :hover rule below and
+       would still flash even once :hover is scoped out; kill it here so a
+       tap never paints anything but the real aria-checked selection. */
+    -webkit-tap-highlight-color: transparent;
 }
 
 .answer label {
@@ -62,12 +66,21 @@
     overflow-wrap: break-word;
     cursor: pointer;
     transition: color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* --- Hover (not while disabled) -------------------------------------------
    Kept visually lighter than the selected state below so a hovered,
-   unselected row can never be mistaken for the actual selection. */
-.answer:not(.no-pointer):hover {
+   unselected row can never be mistaken for the actual selection.
+   Scoped to non-touch (html:not(.is-touch-device), same convention used
+   elsewhere for touch vs. desktop): touch devices have no real "hover"
+   intent, and WebKit applies :hover on tap without a matching mouseleave,
+   so on iOS Safari the last-tapped option (or even a scroll) would stay
+   stuck showing this style on the next question/reload, looking exactly
+   like a pre-selected option. There's no legitimate touch use case for
+   hover feedback, so simplest fix is to never apply it on touch at all;
+   the real selection still shows via aria-checked below. */
+html:not(.is-touch-device) .answer:not(.no-pointer):hover {
     background: #F5F9FC;
     border-color: #BBD6EF;
 }
@@ -75,7 +88,7 @@
 /* --- Selected ------------------------------------------------------------
    Inset shadow reads as a 2px border without shifting the row height. */
 .answer[aria-checked="true"],
-.answer[aria-checked="true"]:not(.no-pointer):hover,
+html:not(.is-touch-device) .answer[aria-checked="true"]:not(.no-pointer):hover,
 .highlight {
     background: #EAF4FF;
  /*   border-color: #2A78C8;*/
@@ -131,6 +144,7 @@ input.checkbox {
     accent-color: #2A78C8;
     cursor: pointer;
     outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 input.checkbox {

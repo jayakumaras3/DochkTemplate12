@@ -108,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	function Startpage() {
+		if (parent.hideShellSpinner) parent.hideShellSpinner();
 		if(QuizMode =="PreTest")
 		{
 					if(parent.parent.getSuspendString("str4")=="" ||parent.parent.getSuspendString("str4")==null)
@@ -120,10 +121,10 @@ document.addEventListener("DOMContentLoaded", function() {
 					}
 					
 						if (parent.parent.PrecurAttempt == parent.parent.QuizAttemptLimit) {
-							attempt = parseInt(parent.parent.PrecurAttempt);
+							attempt = parseInt(parent.parent.PrecurAttempt) || 0;
 						}
 						else{
-							attempt = parseInt(parent.parent.PrecurAttempt) + 1;
+							attempt = (parseInt(parent.parent.PrecurAttempt) || 0) + 1;
 						}
 						const resultsHtml = `
 						<div id ="Startpageid" class="Startpage FSize20" >
@@ -156,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 		else{
 			
-		attempt = parseInt(parent.parent.curAttempt) + 1;
+		attempt = (parseInt(parent.parent.curAttempt) || 0) + 1;
 		//    document.body.style.backgroundImage = "url('images/BG_1.png')";
 		const resultsHtml = `
 		  <div id ="Startpageid" class="Startpage FSize20" >
@@ -211,11 +212,32 @@ document.addEventListener("DOMContentLoaded", function() {
 		if (!submitSection) {
 			submitSection = document.createElement('div');
 			submitSection.className = 'submit-section';
-			const optionsSection = questionContainer.querySelector('.options, .options1, .contentWrapper');
-			if (optionsSection && optionsSection.parentNode === questionContainer) {
-				optionsSection.insertAdjacentElement('afterend', submitSection);
+
+			// On non-touch desktop, an image/video question seats Submit INSIDE
+			// the left options column (.options1) so it renders directly after
+			// the options, beside the media panel -- instead of below the whole
+			// two-column row, which left a large empty band whenever the media
+			// panel was taller than the few options (the reported bug). Only the
+			// button's DOM position changes here; it is still the same #submitBtn
+			// node with the same click handler (bound by id after this runs), so
+			// validation/scoring/attempts/SCORM are unaffected.
+			//
+			// Touch layouts (tablet/phone) stack the media UNDER the options, so
+			// there the original placement -- Submit after the whole row, i.e.
+			// options -> media -> Submit -- is deliberately kept unchanged.
+			const isTouch = document.documentElement.classList.contains('is-touch-device');
+			const optionsColumn = questionContainer.querySelector('.options1');
+			const mediaColumn = questionContainer.querySelector('.quiz-media-column');
+
+			if (!isTouch && optionsColumn && mediaColumn) {
+				optionsColumn.appendChild(submitSection);
 			} else {
-				questionContainer.appendChild(submitSection);
+				const optionsSection = questionContainer.querySelector('.options, .options1, .contentWrapper');
+				if (optionsSection && optionsSection.parentNode === questionContainer) {
+					optionsSection.insertAdjacentElement('afterend', submitSection);
+				} else {
+					questionContainer.appendChild(submitSection);
+				}
 			}
 		}
 
@@ -1177,6 +1199,7 @@ function SetScoreEachQuestion() {
 	}
 
 	function displayResultsScorm() {
+	if (parent.hideShellSpinner) parent.hideShellSpinner();
 	//   document.body.style.backgroundImage = "url('images/BG_1.png')";
 	if(QuizMode =="PreTest")
 	{

@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
     function loadQuestion() {
+        if (parent.hideShellSpinner) parent.hideShellSpinner();
 		console.log(" "+parent.mainData.quizButton);
         questionData = parent.mainData.question;
         attemptsLeft = questionData.attempts || 2; // Get attempts from JSON or default to 2

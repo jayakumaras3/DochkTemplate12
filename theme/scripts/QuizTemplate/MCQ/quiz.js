@@ -32,6 +32,7 @@
             }
 
             function loadQuestion() {
+                        if (parent.hideShellSpinner) parent.hideShellSpinner();
 						questionData = parent.mainData.question;
                         attemptsLeft = questionData.attempts; // Load attemptsLeft from JSON
                         const backgroundImage = questionData.image;

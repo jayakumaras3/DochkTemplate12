@@ -529,12 +529,29 @@ body {
 html:not(.is-touch-device) body {
     padding-top: var(--outer-header-overlap, 0px);
     padding-bottom: var(--outer-footer-overlap, 0px);
+    /* Anchor the flex column to the top so the now content-sized
+       #quizContainer (flex:0 0 auto below) sits directly under the header
+       instead of being vertically centered by the legacy
+       body{justify-content:center}. Inert before this change (flex:1 filled
+       the column, leaving nothing to distribute); mirrors the same
+       top-anchor already proven on the Quiz.html/Mixed template. */
+    justify-content: flex-start;
 }
 
 @media (min-width: 901px) {
     html:not(.is-touch-device) #quizContainer {
         min-height: 0;
         overflow: hidden;
+        /* Content-driven height on large desktops (1366/1080p/1440p/4K):
+           the base rule's flex:1 made this box fill the whole 100vh body,
+           so a 2-option question rendered a tall empty card below its
+           content -- the "unfinished / stretched card" look. flex:0 0 auto
+           lets the card hug .questionContainer instead. The short-screen
+           scroll fix is unaffected: it relies on .questionContainer's own
+           max-height:calc(100vh-...) + overflow-y:auto below, not on this
+           box being a full 100vh, so a many-option question on 1366x768
+           still caps and scrolls internally with Submit reachable. */
+        flex: 0 0 auto;
     }
 
     /* max-height is computed directly from 100vh/100dvh (not a percentage
