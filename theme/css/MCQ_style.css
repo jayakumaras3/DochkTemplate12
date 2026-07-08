@@ -315,8 +315,15 @@ body {
 .question {
     color: #241d1c;
     font-weight: bold;
+    /* Explicit desktop base size, kept identical to the Quiz (Mixed) template
+       so all three question headings match. The legacy .question rule above
+       only commented its font-size out and the tablet/mobile queries below
+       set 24/20px, so desktop was left at the browser default (~16px) --
+       smaller than mobile and under-scaled on high-res. clamp floors at 17px
+       (comfortable on 1366 laptops) and grows to 23px on 1920/2560. */
+    font-size: clamp(17px, 1.15vw, 23px);
     line-height: 1.45;
-    padding: 0 0 16px;
+    padding: 0 0 0px;
     text-shadow: none;
 }
 
@@ -324,6 +331,12 @@ body {
     color: var(--quiz-accent);
     font-weight: bold;
     font-style: italic;
+    /* Explicit desktop size so SCQ and MCQ match: MCQ's legacy .redtext rule
+       above is left uncommented at 20px, which used to win here on desktop;
+       pin it to the same value SCQ resolves to so the instruction text is
+       identical across both templates. Reaches the tablet (18px) step at its
+       cap; the mobile query still holds it to 16px. */
+    font-size: clamp(14px, 0.95vw, 18px);
     margin-top: 2px;
     margin-bottom: 10px;
 }
@@ -459,6 +472,74 @@ body {
         float: none;
         margin-left: auto;
         margin-right: auto;
+    }
+}
+
+/* ==========================================================================
+   Outer chrome clearance + desktop short-height fix.
+   --outer-header-overlap / --outer-footer-overlap are set by the
+   frame-chain measurement script in MCQ.html's <head> (the same one
+   already proven on the Quiz.html/Mixed-Quiz template): the real intrusion
+   of the SCORM player's own header/footer bars -- which live in a window
+   one or two iframe hops above this page -- into this iframe's own
+   viewport. 0px fallback when nothing overlaps (standalone launches), so
+   this is a no-op there.
+
+   Reserving that space as body padding keeps #quizContainer's flex:1 share
+   of the (fixed 100vh) body confined to what's ACTUALLY visible, instead of
+   extending underneath chrome this page can never paint over.
+
+   min-height:0 on #quizContainer lets that share differ from its content's
+   natural size -- flex items default to min-height:auto (their content's
+   min size), which otherwise silently wins over flex-basis/grow and lets
+   the box grow past the viewport whenever a question has enough options.
+   That was the root cause of the Submit button being pushed off-screen on
+   short desktop windows (e.g. 1366x768) with no way to reach it.
+
+   .questionContainer then gets a bounded max-height and becomes the actual
+   scroll container, so question + options + Submit + feedback scroll
+   together as one unit and Submit is always reachable.
+
+   Scoped to non-touch desktop widths only (html:not(.is-touch-device),
+   >=901px): the max-width:900px block above already gives narrower/mobile
+   windows their own scroll handling, and iPad/touch layouts keep today's
+   existing behaviour untouched, as required. */
+html:not(.is-touch-device) body {
+    padding-top: var(--outer-header-overlap, 0px);
+    padding-bottom: var(--outer-footer-overlap, 0px);
+}
+
+@media (min-width: 901px) {
+    html:not(.is-touch-device) #quizContainer {
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    /* max-height is computed directly from 100vh/100dvh (not a percentage
+       of #quizContainer) because #quizContainer's flex-resolved height is
+       not "definite" from a percentage-resolution standpoint here -- a
+       percentage max-height on .questionContainer against it was measured
+       (via computed-style + offsetHeight in a live test) to compute as
+       "none", letting .questionContainer grow to its natural content size
+       instead of being clipped. 38px is #quizContainer's own vertical
+       padding (20px top + 16px bottom) + border (1px + 1px); update this
+       if that padding/border ever changes. */
+    html:not(.is-touch-device) .questionContainer {
+        max-height: calc(100vh - 38px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
+        max-height: calc(100dvh - 38px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(135, 13, 13, 0.35) rgba(0, 0, 0, 0.05);
+    }
+
+    html:not(.is-touch-device) .questionContainer::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    html:not(.is-touch-device) .questionContainer::-webkit-scrollbar-thumb {
+        background: rgba(135, 13, 13, 0.35);
+        border-radius: 0;
     }
 }
 

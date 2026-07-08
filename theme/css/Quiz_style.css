@@ -186,7 +186,7 @@ html {
 body {
     font-family: "tahoma";
     background-color: #ffffff;
-    font-size: 20px;
+    font-size: 16px;
     margin: 0;
     padding: 0;
     /* display: flex
@@ -470,7 +470,7 @@ html body {
     width: 100%;
     flex-shrink: 0;
     background: #404040;
-    min-height: 55px;
+    min-height: 40px;
     display: flex;
     align-items: center;
 }
@@ -518,7 +518,7 @@ html body {
 }
 
 .parentquestion {
-    min-height: 55px;
+    min-height: 40px;
     padding: 12px 20px;
     margin: 0;
     border-radius: 0;
@@ -551,7 +551,10 @@ html body {
     border-left: 0;
     border-radius: 0;
     color: var(--quiz-accent);
-    font-size: 16px !important;
+    /* Instruction line ("Select the correct answer(s)..."). Fluid so it grows
+       with the question on large displays; the responsive-typography queries
+       below still override it to 18/16px on tablet/mobile. */
+    font-size: clamp(15px, 0.95vw, 18px) !important;
     padding: 0;
     margin-top: 12px;
     line-height: 1.45;
@@ -639,7 +642,11 @@ html body {
 .question {
     color: #241d1c;
     font-weight: 700;
-    font-size: clamp(16px, 1.4vw, 18px);
+    /* Desktop base; tablet/mobile queries below still override to 24/20px.
+       Widened cap (23px) so 1920/2560 read as balanced rather than small,
+       while 17px keeps 1366 laptops comfortable. Kept identical in
+       SCQ_style.css / MCQ_style.css so all three question headings match. */
+    font-size: clamp(17px, 1.15vw, 23px);
     line-height: 1.4;
     padding: 0 0 12px;
     text-shadow: none;
@@ -651,7 +658,9 @@ html body {
     color: #0066cc;
     font-weight: 600;
     font-style: italic;
-    font-size: clamp(13px, 1vw, 14px);
+    /* Scales with the question above; tablet/mobile queries below still cap
+       this at 18/16px. */
+    font-size: clamp(14px, 0.95vw, 18px);
     line-height: 1.4;
     margin: 6px 0 0 0;
 }
@@ -680,12 +689,12 @@ html body {
     overflow-x: hidden;
     padding-right: 10px;
     padding-bottom: 4px;
-    margin-top: 10px;
+    margin-top: 2px;
     scrollbar-width: thin;
     scrollbar-color: rgba(47, 109, 255, 0.3) rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 6px;
 }
 
 #quizContainer:not(.quiz-start-view):not(:has(.results)) .options::-webkit-scrollbar,
@@ -709,8 +718,8 @@ html body {
     bottom: 0;
     z-index: 4;
     flex-shrink: 0;
-    margin-top: 8px;
-    padding-top: 8px;
+    margin-top: 0px;
+    padding-top: 0px;
     padding-bottom: 0;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 30%, #ffffff 60%, #ffffff 100%);
     width: 100%;
@@ -807,7 +816,7 @@ html body {
     #quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer {
         width: min(100%, 1120px);
         max-height: calc(100vh - 132px - var(--outer-header-overlap, 0px));
-        max-height: calc(100dvh - 94px - var(--outer-header-overlap, 0px));
+        max-height: calc(100dvh - 68px - var(--outer-header-overlap, 0px));
     }
 }
 
