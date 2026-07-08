@@ -316,6 +316,17 @@ function bindAnswerRowHandlers() {
     document.querySelectorAll('.answer').forEach(function(answerDiv) {
         answerDiv.addEventListener('click', function(event) {
             const checkbox = this.querySelector('input[type="checkbox"]');
+            // Once the question is locked after Submit, optionDisabled() has
+            // set checkbox.disabled = true. The native checkbox already ignores
+            // clicks, but this row handler toggles checkbox.checked in JS, which
+            // bypasses `disabled` - so without this guard the user could still
+            // change answers after the result is shown by clicking the row. The
+            // guard is disabled-based (not SubmtBool-based) so the incorrect
+            // retry state, which resets but does NOT disable the options, keeps
+            // its options clickable.
+            if (checkbox.disabled) {
+                return;
+            }
             // Skip the manual toggle if the click originated on the checkbox
             // itself (or was forwarded there natively by clicking the
             // <label>) - it has already toggled itself at that point.
@@ -329,6 +340,9 @@ function bindAnswerRowHandlers() {
     document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
         checkbox.addEventListener('click', function(event) {
             event.stopPropagation(); // Prevent the row click from firing again
+            if (this.disabled) {
+                return; // Locked after Submit - ignore any residual click.
+            }
             handleOptionSelection(this);
         });
     });
