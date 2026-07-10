@@ -2,12 +2,8 @@
     font-family: '';
     src: url('../fonts/MYRIADPRO-REGULAR.OTF') format('truetype');
 }*/
-@font-face {
-    font-family: 'tahoma';
-    src: url('../fonts/MYRIADPRO-REGULAR.OTF') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
+/* Tahoma is registered once, correctly, in Color.css (loaded after this
+   file on every page) - no need to duplicate/mislabel it here. */
 
 /*25-04-2022
 */
@@ -132,7 +128,7 @@
 }
 
 .sideBar li span:hover {
-    color: #5097ab;
+    color: #D70010;
 }
 
 .sideBar {
@@ -174,7 +170,7 @@
 body {
     position: relative;
     left: auto;
-    font-family: 'tahoma';
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
     top: auto;
     width: 100%;
     height: 100%;

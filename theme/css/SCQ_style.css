@@ -12,11 +12,9 @@
     background-size: cover;
     background-position: center center; 
 }*/
-/* Option, input, tick and button skins live in QuestionOptions.css (shared). */
-@font-face {
-    font-family: 'tahoma';
-    src: url('../../../fonts/MYRIADPRO-BOLD.OTF') format('opentype');
-}
+/* Option, input, tick and button skins live in QuestionOptions.css (shared).
+   Tahoma is registered once, correctly, in Color.css (loaded on this page
+   right after this file) - no need to duplicate/mislabel it here. */
 /* iOS Safari can rescale rendered text size after an orientation change
    (its automatic text-inflation heuristic), which made this page's fonts
    appear to grow/shrink on rotation even though no CSS rule changed.
@@ -26,7 +24,7 @@ html {
     text-size-adjust: 100%;
 }
 body {
-    font-family: "tahoma";
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
     background-color: #ffffff;
 
     margin: 0;
@@ -86,7 +84,7 @@ label {
     /* padding: 7px; */
     margin-top: 2%;
     margin-left: 2%;
-    background-color: #615e5e;
+    background-color: #1E1B1C;
     display: flex
 ;
 }
@@ -133,7 +131,7 @@ label {
     cursor: pointer;
     border-radius: 0;
    /* font-size: 20px;*/
-	font-family: "tahoma";
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
     /* transition: background-color 0.3s ease; */
 }
 .retrybtn{
@@ -231,7 +229,7 @@ label {
 }
 .btn {
 	width: 161px;
-	font-family: 'tahoma';
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
     position: relative;
    /* margin-left: 2.5%;*/
     /*background-color: #F2672E;*/
@@ -246,17 +244,17 @@ label {
 }
 
 :root {
-    --quiz-accent: #870D0D;
-    --quiz-accent-dark: #5f0909;
-    --quiz-accent-soft: #f8e6e2;
-    --quiz-accent-border: #dcb8b2;
+    --quiz-accent: #D70010;
+    --quiz-accent-dark: #A8000D;
+    --quiz-accent-soft: #FBE9EA;
+    --quiz-accent-border: #F0B4B8;
     --quiz-surface: rgba(255, 255, 255, 0.97);
-    --quiz-shadow: 0 18px 40px rgba(135, 13, 13, 0.12);
+    --quiz-shadow: 0 18px 40px rgba(215, 0, 16, 0.12);
 }
 
 body {
     background: #ffffff;
-    color: #2f2524;
+    color: #1E1B1C;
     overflow-x: hidden;
     overflow-y: auto;
     display: flex;
@@ -275,7 +273,7 @@ body {
 
 #quizContainer {
     background: #ffffff;
-    border: 1px solid #efe7e4;
+    border: 1px solid #D9D9D9;
     border-radius: 0;
     box-shadow: 0 8px 22px rgba(41, 28, 28, 0.05);
     box-sizing: border-box;
@@ -305,14 +303,14 @@ body {
 
 .questionContainer {
     background: #ffffff;
-    border: 1px solid #f3e8e4;
+    border: 1px solid #D9D9D9;
     border-radius: 0;
     box-shadow: 0 10px 24px rgba(41, 28, 28, 0.04);
     padding: 20px;
 }
 
 .question {
-    color: #241d1c;
+    color: #1E1B1C;
     font-weight: bold;
     /* Explicit desktop base size, kept identical to the Quiz (Mixed) template
        so all three question headings match. The legacy .question rule above

@@ -1,15 +1,28 @@
+/* Wabtec Interim Brand Identity Guidelines (Feb 2019): Tahoma is the
+   specified Office/system typeface; ship it locally so it renders
+   identically regardless of the host OS's installed fonts. */
+@font-face {
+    font-family: "Tahoma";
+    src: url("../fonts/tahoma_.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
     --app-bg: #f3f4f6;
     --surface: #ffffff;
     --surface-soft: #f7f8fb;
-    --text: #07142a;
-    --text-soft: #24364c;
-    --muted: #637083;
-    --line: #d9dee7;
-    --line-soft: #e8ebf1;
-    --brand: #005E80;
-    --brand-hover: #1d48bd;
-    --accent: #7b2ff2;
+    --text: #1E1B1C;
+    --text-soft: #63666A;
+    --muted: #63666A;
+    --line: #D9D9D9;
+    --line-soft: #D9D9D9;
+    --brand: #D70010;
+    --brand-hover: #A8000D;
+    --brand-tint: #FBE9EA;
+    --brand-focus: rgba(215, 0, 16, 0.25);
+    --accent: #00847E;
     --shadow-soft: 0 18px 50px rgba(17, 24, 39, 0.08);
 }
 
@@ -44,7 +57,17 @@ body {
     -webkit-transform: none !important;
     background: var(--app-bg);
     color: var(--text);
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select,
+menu {
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
 
 .wholeContainer {
@@ -134,7 +157,7 @@ body {
 }
 
 #TmenuIcon:focus-visible {
-    outline: 2px solid #2456d6;
+    outline: 2px solid var(--brand-focus);
     outline-offset: 3px;
     border-radius: 4px;
 }
@@ -171,13 +194,13 @@ body {
 }
 
 .breadcrumbDivider {
-    color: #8b96a8;
+    color: #63666A;
     font-size: 18px;
     line-height: 1;
 }
 
 .pageHeaderText {
-    color: #000000;
+    color: #1E1B1C;
     font-weight: 700;
 }
 
@@ -215,7 +238,7 @@ body {
 }
 
 #exitCourseBtn:hover {
-    background: #f1f4f9;
+    background: #FBE9EA;
 }
 
 #Imagcertificateid,
@@ -313,7 +336,7 @@ video::cue {
 
 .footerCopyright {
     margin-right: auto !important;
-    color: #273246;
+    color: #63666A;
     font-size: clamp(13px, 1.05vw, 18px);
     font-weight: 400;
     white-space: nowrap;
@@ -346,7 +369,7 @@ video::cue {
 }
 
 .footer > div:not(.footerCopyright):hover {
-    background-color: #f1f4f9;
+    background-color: #FBE9EA;
     filter: contrast(1.2) brightness(0.5);
     transform: none;
 }
@@ -413,14 +436,14 @@ video::cue {
 }
 
 .disabledClass span:hover {
-    color: #8f8f8f !important;
+    color: #63666A !important;
 }
 
 .navCircle {
     width: 10px;
     height: 10px;
     margin-left: 0 !important;
-    border: 1px solid #9aa4b4;
+    border: 1px solid #63666A;
     border-radius: 50%;
     background: transparent;
 }
@@ -487,7 +510,7 @@ video::cue {
     min-height: 32px !important;
     flex: 0 0 32px;
     padding: 0 !important;
-    background: #005E80 !important;
+    background: #1E1B1C !important;
 }
 
 #toc_id,
@@ -501,7 +524,7 @@ video::cue {
     margin: 0 !important;
     padding: 0 !important;
     color: #FFFFFF !important;
-    background: #005E80 !important;
+    background: #1E1B1C !important;
     border: none !important;
    /* border-bottom: 2px solid transparent !important; */
     border-radius: 0 !important;
@@ -528,7 +551,7 @@ video::cue {
     font-weight: 600 !important;
     line-height: 30px !important;
     color: #FFFFFF !important;
-    background: #005E80 !important;
+    background: #1E1B1C !important;
     border: none !important;
     /*border-bottom: 2px solid transparent !important;  */
     border-radius: 0 !important;
@@ -558,12 +581,12 @@ video::cue {
 #toc_id:hover,
 #trans_id:hover {
     color: #FFFFFF !important;
-    background: #004d6a !important;
+    background: #D70010 !important;
 }
 
 .tocclickedclscss {
     color: #FFFFFF !important;
-    background: #004d6a !important;
+    background: #D70010 !important;
     border-color: transparent !important;
     font-weight: 700 !important;
     box-shadow: none !important;
@@ -573,7 +596,7 @@ video::cue {
 
 .tocclickedclscss:hover {
     color: #FFFFFF !important;
-    background: #004d6a !important;
+    background: #D70010 !important;
     border-color: transparent !important;
 }
 
@@ -585,7 +608,7 @@ video::cue {
 
 .sideBar #sideBarHeader > #toc_id[aria-selected="true"],
 .sideBar #sideBarHeader > #trans_id[aria-selected="true"] {
-    background: #004d6a !important;
+    background: #D70010 !important;
     color: #FFFFFF !important;
     font-weight: 700 !important;
    /* border-bottom: 2px solid rgba(255,255,255,0.7) !important;*/
@@ -594,7 +617,7 @@ video::cue {
 
 .sideBar #sideBarHeader > #toc_id[aria-selected="false"],
 .sideBar #sideBarHeader > #trans_id[aria-selected="false"] {
-    background: #005E80 !important;
+    background: #1E1B1C !important;
     color: #FFFFFF !important;
     font-weight: 600 !important;
    /* border-bottom: 2px solid transparent !important; */
@@ -621,7 +644,7 @@ video::cue {
     width: 100%;
     margin: 0 0 2px;
     padding: 0;
-    color: #5F6670;
+    color: #63666A;
     border-radius: 0;
     list-style: none;
     font-size: 11px;
@@ -634,7 +657,7 @@ video::cue {
 
 #tocData li:hover {
     color: var(--brand);
-    background: #f5f7ff;
+    background: var(--brand-tint);
 }
 
 .sideBar li span {
@@ -644,7 +667,7 @@ video::cue {
 }
 
 .visitedTOC {
-    color: #707070;
+    color: #63666A;
 }
 
 #tocData .tickSymbol::before,
@@ -724,7 +747,7 @@ video::cue {
     display: inline-block;
     padding: 10px 16px;
     color: var(--surface);
-    background:#005E80;
+    background: var(--brand);
     border-radius: 999px;
     box-shadow: 0 12px 30px rgba(17, 24, 39, 0.18);
     font-size: 14px;
@@ -832,21 +855,21 @@ video::cue {
     align-items: center;
     justify-content: space-between;
     padding: 20px 24px 16px;
-    border-bottom: 1px solid #e8ebf1;
+    border-bottom: 1px solid #D9D9D9;
     flex-shrink: 0;
 }
 
 .resource-modal-title {
     font-size: 16px;
     font-weight: 700;
-    color: #07142a;
+    color: #1E1B1C;
     display: flex;
     align-items: center;
     gap: 10px;
     margin: 0;
 }
 
-.resource-modal-icon-brand { color: #005E80; }
+.resource-modal-icon-brand { color: #D70010; }
 
 .resource-modal-close {
     width: 32px;
@@ -862,11 +885,11 @@ video::cue {
     flex-shrink: 0;
     padding: 0;
     line-height: 1;
-    color: #07142a;
+    color: #1E1B1C;
 }
 
 .resource-modal-close:hover {
-    background: #e8ebf1;
+    background: #D9D9D9;
     transform: scale(1.1);
 }
 
@@ -880,10 +903,10 @@ video::cue {
     align-items: center;
     gap: 14px;
     padding: 13px 16px;
-    border: 1.5px solid #e8ebf1;
+    border: 1.5px solid #D9D9D9;
     border-radius: 10px;
     text-decoration: none !important;
-    color: #07142a !important;
+    color: #1E1B1C !important;
     margin-bottom: 10px;
     transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
     font-size: 14px;
@@ -893,29 +916,29 @@ video::cue {
 .resource-modal-item:last-child { margin-bottom: 0; }
 
 .resource-modal-item:hover {
-    border-color: #005E80;
-    box-shadow: 0 3px 14px rgba(0, 94, 128, 0.12);
-    background: #f0f8fb;
-    color: #07142a !important;
+    border-color: #D70010;
+    box-shadow: 0 3px 14px rgba(215, 0, 16, 0.12);
+    background: var(--brand-tint);
+    color: #1E1B1C !important;
     text-decoration: none !important;
 }
 
 .resource-item-icon-wrap {
     width: 40px;
     height: 40px;
-    background: #e8f4f8;
+    background: var(--brand-tint);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: #005E80;
+    color: #D70010;
 }
 
 .resource-item-label { flex: 1; line-height: 1.35; }
 
 .resource-item-arrow {
-    color: #005E80;
+    color: #D70010;
     flex-shrink: 0;
     opacity: 0.65;
     transition: opacity 0.15s, transform 0.15s;
@@ -974,7 +997,7 @@ video::cue {
 }
 
 .ColorSet_CR {
-    background-color:#005E80;
+    background-color: #D70010;
 }
 
 .instext {
@@ -995,7 +1018,7 @@ video::cue {
 }
 
 .parentquestion_CR {
-    background-color: #404040;
+    background-color: #1E1B1C;
 }
 
 .FSize20 { font-size: 20px; }
@@ -1205,7 +1228,7 @@ html.menu-open-body {
 }
 
 #TmenuIcon:hover {
-    background: #eef2f8;
+    background: #FBE9EA;
 }
 
 .headingcloser {
@@ -1267,7 +1290,7 @@ html.menu-open-body {
 }
 
 .sideBar > .tocData::-webkit-scrollbar-thumb {
-    background: #cfd7e6;
+    background: #D9D9D9;
     border-radius: 999px;
 }
 
@@ -1608,7 +1631,7 @@ body,
     width: 100%;
     min-height: 42px;
     padding: 6px 0 6px 8px;
-    color: #5F6670;
+    color: #63666A;
     border-radius: 0;
     font-size: 14px;
     font-weight: 600;
@@ -1638,7 +1661,7 @@ body,
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #9CA3AF;
+    color: #63666A;
     opacity: 1;
 }
 
@@ -1681,7 +1704,15 @@ body,
     line-height: 1.3;
     text-align: left;
     word-break: break-word;
-    color: inherit;
+    /* Explicit, not `inherit`: on titles long enough to actually hit the
+       3-line clamp (display:-webkit-box + text-overflow:ellipsis), some
+       Chromium builds fail to resolve `color: inherit` through the
+       -webkit-box formatting context and fall back to the UA link-blue
+       default instead of the row's real color - invisible on short
+       titles that never trigger the clamp, which is why only the odd
+       long title showed up blue. Setting it directly here, and again per
+       state below, removes the dependency on inheritance entirely. */
+    color: #63666A;
 }
 
 /* Engines without native line-clamp support (no JS involved): hard-cap
@@ -1696,8 +1727,12 @@ body,
 }
 
 #tocData > span > li > span.toc-row-item:hover {
-    background: #EEF7FA;
-    color: #005E80;
+    background: #FBE9EA;
+    color: #D70010;
+}
+
+#tocData > span > li > span.toc-row-item:hover .menu-title {
+    color: #D70010;
 }
 
 #tocData > span > li > span.toc-row-item:hover .toc-item-icon {
@@ -1710,12 +1745,12 @@ body,
 
 #tocData > span > li > span.toc-row-item:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px #3B82F6;
+    box-shadow: 0 0 0 2px var(--brand-focus);
 }
 
 #tocData > span > li > span.toc-row-item.selectedToc {
-    background: #D8E9F0;
-    color: #005E80;
+    background: #D70010;
+    color: #FFFFFF;
     font-weight: 700;
     border-radius: 0;
     padding-left: 5px;
@@ -1723,24 +1758,28 @@ body,
 }
 
 #tocData > span > li > span.toc-row-item.selectedToc::after {
-  
+
     position: absolute;
     left: auto;
     right: 24px;
     top: 50%;
     width: 48px;
     height: 2px;
-    background: #D8E9F0;
+    background: rgba(255, 255, 255, 0.4);
     transform: translateY(-50%);
 }
 
 #tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
-    color: #005E80;
+    color: #FFFFFF;
     opacity: 1;
 }
 
 #tocData > span > li > span.toc-row-item.visitedTOC {
-    color: #475569;
+    color: #63666A;
+}
+
+#tocData > span > li > span.toc-row-item.visitedTOC .menu-title {
+    color: #63666A;
 }
 
 #tocData > span > li > span.toc-row-item.visitedTOC .toc-item-icon {
@@ -1750,6 +1789,10 @@ body,
 #tocData > span > li > span.toc-row-item.selectedToc .toc-item-text,
 #tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
     color: inherit;
+}
+
+#tocData > span > li > span.toc-row-item.selectedToc .menu-title {
+    color: #FFFFFF;
 }
 
 .toc-list-row {
@@ -1788,7 +1831,7 @@ body,
     font-weight: 700;
     line-height: 1;
     vertical-align: middle;
-    background: #00A3D7;
+    background: #00847E;
     border-radius: 50%;
     align-self: center;
 }
@@ -1801,10 +1844,10 @@ body,
     margin: 0 !important;
     padding: 7px 14px !important;
     font-size: 10px !important;
-    color: #9CA3AF !important;
+    color: #63666A !important;
     text-align: center;
     background: #ffffff !important;
-    border-top: 1px solid #E5E7EB;
+    border-top: 1px solid #D9D9D9;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2214,4 +2257,52 @@ body,
         overflow: hidden !important;
         overscroll-behavior: none;
     }
+}
+
+/* ==========================================================================
+   TOC text-color guard (last in the cascade, !important).
+   Belt-and-braces for a specific bug: on titles long enough to trigger the
+   3-line -webkit-line-clamp (only the longest title in the course actually
+   does), the row's link/button text was rendering in the browser's default
+   link-blue instead of brand grey/red/white - a `color: inherit` resolution
+   issue through the -webkit-box formatting context. Covers both the
+   decorated state (.toc-row-item/.menu-title, added by
+   applyTopicTypeClasses() in sideBarController.js) and the raw pre-
+   decoration markup (#tocData li > span[role="button"]) so the fix holds
+   even if that JS hasn't run yet for a given row. !important + last in the
+   stylesheet load order beats any legacy/vendor rule regardless of its own
+   specificity. */
+#tocData li > span[role="button"] {
+    color: #63666A !important;
+}
+
+#tocData li > span[role="button"]:hover,
+#tocData li > span[role="button"].toc-row-item:hover .menu-title {
+    color: #D70010 !important;
+}
+
+#tocData li > span[role="button"].visitedTOC,
+#tocData li > span[role="button"].toc-row-item.visitedTOC .menu-title {
+    color: #63666A !important;
+}
+
+#tocData li > span[role="button"].selectedToc,
+#tocData li > span[role="button"].toc-row-item.selectedToc .menu-title {
+    color: #FFFFFF !important;
+}
+
+#tocData .menu-title {
+    color: #63666A !important;
+}
+
+#tocData > span > li > span.toc-row-item:hover .menu-title {
+    color: #D70010 !important;
+}
+
+#tocData > span > li > span.toc-row-item.visitedTOC .menu-title {
+    color: #63666A !important;
+}
+
+#tocData > span > li > span.toc-row-item.selectedToc .menu-title {
+    color: #FFFFFF !important;
 }

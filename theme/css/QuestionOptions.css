@@ -37,7 +37,7 @@
     border-radius: 4px;
     box-shadow: none;
     cursor: pointer;
-    font-family: Tahoma, Verdana, sans-serif;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
     /* Fluid: 14px on laptops, up to 17px on 1920/2560 so options don't read
        as under-scaled on large displays. min-height:48px above is a floor,
        not a fixed height, so rows still auto-grow for wrapped text and stay
@@ -56,7 +56,7 @@
     flex: 1;
     min-width: 0;
     margin: 0;
-    color: #333333;
+    color: #1E1B1C;
     font-family: inherit;
     /* Match the .answer card's fluid size so the label text scales with it. */
     font-size: clamp(14px, 0.9vw, 17px);
@@ -81,8 +81,11 @@
    hover feedback, so simplest fix is to never apply it on touch at all;
    the real selection still shows via aria-checked below. */
 html:not(.is-touch-device) .answer:not(.no-pointer):hover {
-    background: #F5F9FC;
-    border-color: #BBD6EF;
+    /* rgba tints of the one official Wabtec Red (#D70010, PMS 485) rather
+       than a separately-invented light-red hex, so every shade on this row
+       is still provably "the brand red", just at lower opacity. */
+    background: rgba(215, 0, 16, 0.06);
+    border-color: rgba(215, 0, 16, 0.3);
 }
 
 /* --- Selected ------------------------------------------------------------
@@ -90,19 +93,19 @@ html:not(.is-touch-device) .answer:not(.no-pointer):hover {
 .answer[aria-checked="true"],
 html:not(.is-touch-device) .answer[aria-checked="true"]:not(.no-pointer):hover,
 .highlight {
-    background: #EAF4FF;
- /*   border-color: #2A78C8;*/
-    box-shadow: inset 0 0 0 1px #2A78C8;
+    background: rgba(215, 0, 16, 0.06);
+ /*   border-color: #D70010;*/
+    box-shadow: inset 0 0 0 1px #D70010;
 }
 
 .answer[aria-checked="true"] label {
-    color: #333333;
+    color: #1E1B1C;
   /*  font-weight: 600;*/
 }
 
 /* --- Keyboard focus ------------------------------------------------------ */
 .answer:focus-visible {
-    outline: 2px solid #2A78C8;
+    outline: 2px solid rgba(215, 0, 16, 0.25);
     outline-offset: 2px;
 }
 
@@ -141,7 +144,7 @@ input.checkbox {
     margin: 0;
     flex: 0 0 20px;
     box-sizing: border-box;
-    accent-color: #2A78C8;
+    accent-color: #D70010;
     cursor: pointer;
     outline: none;
     -webkit-tap-highlight-color: transparent;
@@ -152,15 +155,15 @@ input.checkbox {
     height: 20px;
     -webkit-appearance: none;
     appearance: none;
-    border: 2px solid #8F8F8F;
+    border: 2px solid #63666A;
     background: #FFFFFF;
     border-radius: 4px;
     transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 input.checkbox:checked {
-    border-color: #2A78C8;
-    background-color: #2A78C8;
+    border-color: #D70010;
+    background-color: #D70010;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
@@ -169,7 +172,7 @@ input.checkbox:checked {
 
 input.radioBut:focus-visible,
 input.checkbox:focus-visible {
-    outline: 2px solid #2A78C8;
+    outline: 2px solid rgba(215, 0, 16, 0.25);
     outline-offset: 1px;
 }
 
@@ -210,9 +213,9 @@ input.checkbox:focus-visible {
     padding: 10px 26px;
     border: none;
     border-radius: 4px;
-    background: #006B8F;
+    background: #D70010;
     color: #FFFFFF;
-    font-family: Tahoma, Verdana, sans-serif;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
     /* Fluid label so the Submit/action buttons scale with the rest of the UI
        on large displays; min-width/min-height above keep the hit area steady. */
     font-size: clamp(14px, 0.85vw, 16px);
@@ -229,7 +232,7 @@ input.checkbox:focus-visible {
 #submitBtn:hover,
 .Startpagebtn:hover,
 .retrybtn:hover {
-    background: #00587A;
+    background: #A8000D;
     box-shadow: none;
 }
 
@@ -237,6 +240,7 @@ input.checkbox:focus-visible {
 #submitBtn.disabled,
 .btn:disabled,
 #submitBtn:disabled {
+    background: #63666A;
     opacity: 0.5;
     pointer-events: none;
     cursor: default;
