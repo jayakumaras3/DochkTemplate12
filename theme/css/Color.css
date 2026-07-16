@@ -2215,3 +2215,406 @@ body,
         overscroll-behavior: none;
     }
 }
+
+/* ==========================================================================
+   WABTEC MOTION SYSTEM — visual-only, strictly additive.
+   Shared animation tokens + micro-interactions for the player chrome.
+   This file is loaded by the shell (index.html) AND by the SCQ/MCQ/Quiz
+   iframes, so the tokens and @keyframes declared here are available in
+   every document; QuestionOptions.css / Quiz_style.css reference them
+   (with literal fallbacks in var() for safety).
+
+   Ground rules, enforced throughout this section:
+   - Animate ONLY transform / opacity / filter / box-shadow (compositor-
+     friendly). Never width, height, top, left or margin - so no rule here
+     can reflow layout, shift geometry, or affect SCORM/JS behavior.
+   - Every entrance animation ends at the element's normal, untransformed
+     state (transform: none / opacity: 1), so the settled page is pixel-
+     identical to before this section existed.
+   - Hover motion is scoped to html:not(.is-touch-device): WebKit lets
+     :hover stick after a tap (see the quiz option hover note earlier in
+     the cascade), so touch devices get state changes without hover-lift.
+   - One prefers-reduced-motion guard at the very end collapses everything.
+   ========================================================================== */
+
+:root {
+    --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    /* Soft spring (slight overshoot) for dialogs/popovers - same curve the
+       existing resourceModalIn keyframe already uses, promoted to a token. */
+    --ease-spring: cubic-bezier(0.34, 1.26, 0.64, 1);
+    /* Motion token scale: fast/normal/medium/slow/extra. Every rule in this
+       system (and QuestionOptions.css / Quiz_style.css) reads these, so
+       updating the five numbers here re-times the whole product. */
+    --transition-fast: 0.12s;
+    --transition-normal: 0.22s;
+    --transition-medium: 0.32s;
+    --transition-slow: 0.45s;
+    --transition-extra: 0.65s;
+    /* Entrance travel distance for rise-in animations - overridden smaller
+       per breakpoint below so mobile entrances cover proportionally less
+       of a small viewport. Used by waRiseInBig (large content/card
+       entrances); the original subtle waRiseIn (chrome-level: dialogs,
+       feedback banner, TOC rows) stays fixed at 8px on purpose - it was
+       already tuned and re-scaling it would make dozens of already-
+       approved animations 3x more dramatic. */
+    --wa-rise-distance: 24px;
+}
+
+@media (max-width: 1024px) {
+    :root { --wa-rise-distance: 16px; }
+}
+
+@media (max-width: 600px) {
+    :root { --wa-rise-distance: 10px; }
+}
+
+/* --- Typography rendering (no font, size or spacing changes) ------------- */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Shared keyframes (referenced from the quiz stylesheets too) ---------- */
+@keyframes waFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes waRiseIn {
+    from { opacity: 0; transform: translate3d(0, 8px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* Larger, responsive-distance sibling of waRiseIn - for prominent content
+   entrances (question card, lesson content blocks) rather than chrome-
+   level nudges. Reads --wa-rise-distance, which is 24/16/10px at desktop/
+   tablet/phone. */
+@keyframes waRiseInBig {
+    from { opacity: 0; transform: translate3d(0, var(--wa-rise-distance, 24px), 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes waDialogIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes waSlideInLeft {
+    from { opacity: 0; transform: translate3d(-14px, 0, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes waControlPop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes waMediaIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* --- Page transition (entrance) -------------------------------------------
+   Angular re-mounts the content node per page (ng-if / ng-include), so a
+   new page's container re-fires this entrance each navigation. The
+   outgoing page is removed synchronously by Angular - an exit animation
+   would require JS changes (out of bounds), so this is entrance-only:
+   still no flash, the incoming page fades up over ~300ms.
+   #htmlArea / #flashArea host CreateJS canvases whose click handling maps
+   through getBoundingClientRect - they get FADE ONLY (no transform) so
+   pointer coordinates are never even momentarily offset; the video and
+   captivate/quiz iframes rise 8px as specced (browsers remap pointer
+   events through iframe transforms correctly). */
+#htmlArea,
+#flashArea {
+    animation: waFadeIn var(--transition-normal) var(--ease-smooth);
+}
+
+#captivateFrame,
+#vidArea {
+    animation: waRiseIn var(--transition-normal) var(--ease-smooth);
+}
+
+/* --- Sidebar open ----------------------------------------------------------
+   The sidebar is shown by JS toggling display, which restarts this
+   animation on every open. The close path flips straight to display:none,
+   which CSS alone cannot animate (that would need JS out of bounds), so
+   close stays instant - and since only transform/opacity move, there is
+   never a layout jump either way. */
+.sideBar {
+    animation: waSlideInLeft var(--transition-normal) var(--ease-smooth);
+}
+
+/* --- Menu (TOC) micro-interactions ----------------------------------------
+   Row background/color transitions already exist earlier in this file;
+   this adds the icon's gentle scale on hover. Transform on the inner svg
+   (not the row) so the scroll container's geometry is untouched. */
+.toc-item-icon svg {
+    transition: transform var(--transition-fast) var(--ease-standard);
+}
+
+html:not(.is-touch-device) #tocData li > span[role="button"]:hover .toc-item-icon svg {
+    transform: scale(1.12) translateZ(0);
+}
+
+/* --- Header / chrome buttons ----------------------------------------------
+   Hamburger, close, certificate and exit-course controls: soft lift on
+   hover, press-in on click, visible ring for keyboard focus. */
+#TmenuIcon,
+#sideBarCloseBtn,
+#certificateid,
+#exitCourseBtn {
+    transition: transform var(--transition-fast) var(--ease-standard),
+                background-color var(--transition-fast) var(--ease-standard),
+                box-shadow var(--transition-fast) var(--ease-standard),
+                opacity var(--transition-fast) ease;
+}
+
+html:not(.is-touch-device) #TmenuIcon:hover,
+html:not(.is-touch-device) #sideBarCloseBtn:hover {
+    /* Small 5deg tilt alongside the existing scale - img elements rotate
+       cleanly around their own center by default, no transform-origin
+       change needed. */
+    transform: scale(1.08) rotate(5deg) translateZ(0);
+}
+
+html:not(.is-touch-device) #certificateid:hover {
+    transform: translate3d(0, -1px, 0);
+    box-shadow: 0 2px 6px rgba(30, 27, 28, 0.10), 0 6px 16px rgba(30, 27, 28, 0.08);
+}
+
+/* Exit ("power") control: soft glow instead of a lift - it's a leave-the-
+   course action, a glow reads as "attention" without the "go" implication
+   a lift/bounce carries on every other button. */
+html:not(.is-touch-device) #exitCourseBtn:hover {
+    box-shadow: 0 0 0 6px rgba(30, 27, 28, 0.06);
+}
+
+/* Download / resource controls: small bounce on hover. Two-step keyframe
+   (lift then settle) rather than a plain lift, so the "download" affinity
+   reads as a gentle drop-and-catch rather than a generic hover. */
+@keyframes waIconBounce {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    40%      { transform: translate3d(0, -3px, 0); }
+    70%      { transform: translate3d(0, 1px, 0); }
+}
+
+.resourceClass,
+.transcriptDownL {
+    transition: transform var(--transition-fast) var(--ease-standard);
+}
+
+html:not(.is-touch-device) .resourceClass:hover,
+html:not(.is-touch-device) .transcriptDownL:hover {
+    animation: waIconBounce 0.5s var(--ease-standard) 1;
+}
+
+#TmenuIcon:active,
+#sideBarCloseBtn:active,
+#certificateid:active,
+#exitCourseBtn:active {
+    transform: scale(0.95);
+}
+
+#certificateid:focus-visible,
+#exitCourseBtn:focus-visible,
+#sideBarCloseBtn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(215, 0, 16, 0.25);
+}
+
+/* --- Footer navigation ------------------------------------------------------
+   Hover treatment already exists (tint + filter, transform deliberately
+   kept at none there); this only adds the press-in state, declared after
+   that rule so it wins while the pointer is down. Nav circles get a soft
+   grow on hover - transform only, so the dot row never reflows. */
+.footer > div:not(.footerCopyright):active {
+    transform: scale(0.94);
+}
+
+.navCircle {
+    transition: background-color var(--transition-fast) ease,
+                border-color var(--transition-fast) ease,
+                transform var(--transition-fast) var(--ease-standard);
+}
+
+html:not(.is-touch-device) .navCircle:hover {
+    transform: scale(1.2) translateZ(0);
+}
+
+/* --- Overlays & dialogs ------------------------------------------------------
+   All of these are toggled via display by existing JS, which restarts the
+   entrance each open. Backdrop fades; dialog scales 0.95 -> 1.
+   NOTE: .resume_content_container and #resourceContent are centered via
+   their own transform (translate(-50%,-50%)), so a scale keyframe here
+   would override that centering mid-animation and make them jump - they
+   get FADE ONLY (and #resourceContent already has its own composed
+   scale+translate keyframe earlier in this file). #exitArea / #searchArea
+   center via inset+margin:auto (no transform), so scaling them is safe. */
+#preloader,
+#resourceArea,
+#resourceArea1,
+#exitContainer,
+#searchContainer,
+#resumemainContainer {
+    animation: waFadeIn var(--transition-fast) ease-out;
+}
+
+#exitArea,
+#searchArea {
+    animation: waDialogIn var(--transition-normal) var(--ease-spring);
+}
+
+.resume_content_container {
+    animation: waFadeIn var(--transition-normal) var(--ease-smooth);
+}
+
+/* --- Dialog / resume / resource buttons -------------------------------------
+   These buttons carry inline background-colors (content.html), which CSS
+   hover cannot override without !important - so hover darkens via filter
+   instead (compositor-friendly and inline-style-proof). */
+#exitArea .btn,
+#searchArea .btn,
+#resumeArea .btn,
+#resourceContent button {
+    transition: filter var(--transition-fast) ease,
+                transform var(--transition-fast) var(--ease-standard),
+                box-shadow var(--transition-fast) var(--ease-standard);
+}
+
+html:not(.is-touch-device) #exitArea .btn:hover,
+html:not(.is-touch-device) #searchArea .btn:hover,
+html:not(.is-touch-device) #resumeArea .btn:hover,
+html:not(.is-touch-device) #resourceContent button:hover {
+    filter: brightness(0.88);
+    transform: translate3d(0, -1px, 0);
+    box-shadow: 0 4px 12px rgba(30, 27, 28, 0.14);
+}
+
+#exitArea .btn:active,
+#searchArea .btn:active,
+#resumeArea .btn:active,
+#resourceContent button:active {
+    transform: scale(0.97);
+    box-shadow: none;
+}
+
+#exitArea .btn:focus-visible,
+#searchArea .btn:focus-visible,
+#resumeArea .btn:focus-visible,
+#resourceContent button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(215, 0, 16, 0.25);
+}
+
+/* --- Search input focus glow ------------------------------------------------
+   (Its border is set inline as none in content.html, so the glow carries
+   the whole focus affordance.) */
+#searchtext {
+    transition: box-shadow var(--transition-fast) ease,
+                border-color var(--transition-fast) ease;
+}
+
+#searchtext:focus {
+    outline: none;
+    border-color: #D70010;
+    box-shadow: 0 0 0 3px rgba(215, 0, 16, 0.18);
+}
+
+/* --- Sidebar accordion (legacy toggle-box) -----------------------------------
+   Expansion is display:none -> block (sideBar.css), so the open state
+   re-mounts and this entrance fires; collapse back to display:none cannot
+   be animated without JS. */
+.toggle-box:checked + label + ul {
+    animation: waRiseIn var(--transition-normal) var(--ease-smooth);
+}
+
+/* --- Menu (TOC) cascade ------------------------------------------------------
+   Row-by-row reveal when the sidebar opens: the whole sidebar going
+   display:none cancels descendant animations, so re-opening restarts the
+   cascade for free - no JS. fill-mode:backwards is load-bearing: delayed
+   rows must hold their from-state (invisible) during their delay instead
+   of flashing fully visible first. Delays cap at row 10 and every later
+   row shares the final slot, so long courses never feel slow to open. */
+#tocData > span {
+    animation: waRiseIn var(--transition-normal) var(--ease-smooth) backwards;
+}
+
+#tocData > span:nth-child(1)  { animation-delay: 0.02s; }
+#tocData > span:nth-child(2)  { animation-delay: 0.05s; }
+#tocData > span:nth-child(3)  { animation-delay: 0.08s; }
+#tocData > span:nth-child(4)  { animation-delay: 0.11s; }
+#tocData > span:nth-child(5)  { animation-delay: 0.14s; }
+#tocData > span:nth-child(6)  { animation-delay: 0.17s; }
+#tocData > span:nth-child(7)  { animation-delay: 0.20s; }
+#tocData > span:nth-child(8)  { animation-delay: 0.23s; }
+#tocData > span:nth-child(9)  { animation-delay: 0.26s; }
+#tocData > span:nth-child(n+10) { animation-delay: 0.29s; }
+
+/* Transcript tab swaps .tocData's children (ng-bind-html), so the fresh
+   node fades in rather than snapping. */
+.transcriptClass {
+    animation: waFadeIn var(--transition-normal) var(--ease-smooth);
+}
+
+/* --- Selected menu item: one-shot glow pulse ---------------------------------
+   Answers "what changed?" when navigation moves the selection. Keyed to
+   the .selectedToc class the sidebar JS already applies; box-shadow only
+   (the row's background/color use !important elsewhere and would beat an
+   animation anyway). Glow derives from the theme's current selection
+   palette. Single iteration, then fully transparent. */
+@keyframes waSelectedPulse {
+    from { box-shadow: 0 0 0 0 rgba(0, 94, 128, 0.30); }
+    to   { box-shadow: 0 0 0 8px rgba(0, 94, 128, 0); }
+}
+
+#tocData > span > li > span.toc-row-item.selectedToc {
+    animation: waSelectedPulse 0.45s ease-out 1;
+}
+
+/* --- "Next" attention state ---------------------------------------------------
+   When a page completes, existing JS swaps in .nextClassHighlight and
+   shows the "Click here to continue" pill - both class/display driven, so
+   these one-shot entrances re-fire exactly when that state changes.
+   The pop targets the button div (its hover rule doesn't force transform,
+   unlike #clickNextId's, so the animation is never fought by !important);
+   the pill animates on the inner span for the same reason. */
+.nextClassHighlight {
+    animation: waControlPop 0.3s var(--ease-standard) 1;
+}
+
+#spanCliContinue {
+    animation: waRiseIn var(--transition-normal) var(--ease-smooth);
+}
+
+/* --- Mobile: shorter, snappier motion ----------------------------------------
+   Small screens get the same choreography at reduced duration - less
+   travel-time on entrances that cover proportionally more of the
+   viewport. Distances are already small (8-14px), so duration is the
+   right lever; keyframes stay shared. */
+@media (max-width: 600px) {
+    #captivateFrame,
+    #vidArea,
+    .sideBar,
+    #tocData > span {
+        animation-duration: var(--transition-fast);
+    }
+}
+
+/* --- Reduced motion: collapse ALL motion from this system -------------------
+   One guard for every document that loads this file (shell + all three
+   quiz templates). Near-zero durations rather than `none` so JS that
+   listens for animation/transition end events (none in this template
+   today, but belt-and-braces) still fires. */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

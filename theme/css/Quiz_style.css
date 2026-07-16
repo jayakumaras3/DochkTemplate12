@@ -723,7 +723,18 @@ html body {
     overflow-x: hidden;
     padding-right: 10px;
     padding-bottom: 4px;
-    margin-top: 0px;
+    /* Matches the base .options/.options1 rule above (12px) - this block
+       only needs to add scroll-container behavior (flex/overflow) for
+       long option lists on short viewports, not touch the gap above the
+       list. Zeroing it here (the pre-existing value) collapsed the space
+       between the instruction text and the first option on every non-
+       touch width, since this is the only rule specific enough to win
+       here; SCQ/MCQ have no equivalent scroll-container override, which
+       is why they never showed the bug. html.is-touch-device already
+       carries the correct 12px further down this file (the touch path
+       was fixed already) - this brings the non-touch/desktop path in
+       line with it. */
+    margin-top: 12px;
     scrollbar-width: thin;
     scrollbar-color: rgba(47, 109, 255, 0.3) rgba(255, 255, 255, 0.1);
     display: flex;
@@ -1643,5 +1654,71 @@ html body {
    mid-question scrolling. */
 #parentquizContainer {
     scroll-margin-top: calc(env(safe-area-inset-top, 0px) + var(--outer-header-overlap, 0px));
+}
+
+/* ==========================================================================
+   MEDIA & ZOOM-OVERLAY MOTION — visual-only, strictly additive.
+   Entrance animations for this template's question media and the image-
+   zoom popup. Tokens and the waFadeIn/waMediaIn keyframes come from
+   Color.css (always linked right after this file on Quiz.html); var()
+   fallbacks keep every rule safe on its own. Only transform/opacity are
+   animated, and every animation ends at the element's normal state, so
+   the media panels' carefully-tuned sizing rules above (orientation
+   classes, aspect-ratio, clamp widths) are untouched once settled.
+   The prefers-reduced-motion guard in Color.css covers this section too.
+   ========================================================================== */
+
+/* Question media: fade + settle from 0.98 scale as each question renders.
+   quiz.js rebuilds this markup per question (innerHTML swap), so the
+   entrance re-fires per question. transform:scale composes on elements
+   with no transform of their own (true for all three), and object-fit is
+   already declared by their sizing rules above. */
+.ImageQuestion,
+.VideoQuestion,
+.quiz-image-panel-caption {
+    /* Literal 0.35s, not var(--transition-slow): that token is 0.45s and
+       the image spec is 350ms. */
+    animation: waMediaIn 0.35s var(--ease-smooth, ease-out);
+}
+
+/* Image-zoom popup: backdrop fades, image settles in. Both are display-
+   toggled by openModal()/closeModal(), which restarts the entrance each
+   open; closing flips display:none directly (animating that would need
+   JS, out of bounds). .modal-img is sized purely via max-width/max-height
+   (no centering transform), so the scale keyframe cannot fight any
+   existing transform. */
+.modal {
+    animation: waFadeIn var(--transition-fast, 0.18s) ease-out;
+}
+
+.modal-img {
+    animation: waMediaIn 0.35s var(--ease-smooth, ease-out);
+}
+
+/* Zoom-close button: gentle grow on hover (non-touch only - same sticky-
+   :hover-on-tap reasoning as the rest of this template), press-in on tap.
+   It's position:fixed with a transform-free base, so scaling it cannot
+   move its anchor point. */
+.close {
+    transition: transform var(--transition-fast, 0.18s) var(--ease-standard, ease),
+                opacity var(--transition-fast, 0.18s) ease;
+}
+
+html:not(.is-touch-device) .close:hover {
+    transform: scale(1.1) translateZ(0);
+}
+
+.close:active {
+    transform: scale(0.95);
+}
+
+/* Start page and results card: both are injected as fresh innerHTML by
+   quiz.js (start view once, results after the last question), so each
+   gets a single soft entrance. The per-question card entrance itself
+   lives in QuestionOptions.css (.questionContainer), shared by all three
+   templates. */
+#Startpageid,
+.results {
+    animation: waRiseIn var(--transition-normal, 0.28s) var(--ease-smooth, ease-out);
 }
 

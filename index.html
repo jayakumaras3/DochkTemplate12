@@ -135,6 +135,18 @@
             font-weight: 400;
             font-family: Arial, sans-serif;
             text-align: center;
+            /* Reveal after the spinner has had a moment on screen, rather
+               than both appearing in the same instant. Ends at its normal
+               opacity:1 state - settled appearance is unchanged. */
+            opacity: 0;
+            animation: loaderTextIn .5s ease-out .25s forwards;
+        }
+        @keyframes loaderTextIn {
+            from { opacity: 0; transform: translate3d(0, 6px, 0); }
+            to   { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .loader-text { animation-duration: .01ms; animation-delay: 0s; }
         }
         /* ── Tablet ── */
         @media (max-width: 900px) {
@@ -162,7 +174,8 @@
             <circle class="arc"   cx="25" cy="25" r="20" fill="none" stroke-width="5"
                     transform="rotate(-90 25 25)"/>
         </svg>
-    </div>
+       <!--<div class="loader-text">Preparing your learning experience&hellip;</div>
+    --> </div>
 </div>
 <div id="mainPage" ng-view="">
 

@@ -44,7 +44,23 @@
        equal-height across SCQ/MCQ/Quiz. */
     font-size: clamp(14px, 0.9vw, 17px);
     line-height: 1.4;
-    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    /* `transform` was missing from this list: the hover rule below sets a
+       translate3d, and a property absent from `transition` changes
+       INSTANTLY rather than easing - so the lift snapped while
+       background/border/shadow eased over 200ms, reading as a jerk even
+       though nothing here ever touches a layout property. */
+    transition: background-color 0.2s ease, border-color 0.2s ease,
+                box-shadow 0.2s ease, transform 0.2s ease;
+    /* GPU layer promoted up front (not just on hover) so the first hover
+       never has to allocate a new compositor layer mid-interaction - that
+       allocation is a common source of a one-time flicker/jerk on the
+       very first hover. contain:layout paint isolates this row's repaint
+       from siblings/ancestors (pure optimization - .answer's own layout
+       inputs are all fixed already, so this changes no rendering). */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
+    contain: layout paint;
     /* WebKit's native tap flash is separate from the :hover rule below and
        would still flash even once :hover is scoped out; kill it here so a
        tap never paints anything but the real aria-checked selection. */
@@ -137,7 +153,7 @@ html:not(.is-touch-device) .answer[aria-checked="true"]:not(.no-pointer):hover,
 input.radioBut,
 input.checkbox {
     width: 15px;
-    height: 15px;
+    height: 20px;
     margin: 0;
     flex: 0 0 20px;
     box-sizing: border-box;
@@ -148,8 +164,11 @@ input.checkbox {
 }
 
 input.checkbox {
-    width: 14px;
-    height: 20px;
+    /* No width/height override here (was a non-square 14x20 rectangle) -
+       inherits the shared 15x15 square from input.radioBut, input.checkbox
+       above. Static shape fix found while auditing this rule per your
+       checklist; unrelated to the hover-transform property list, which is
+       what actually caused the jerk. */
     -webkit-appearance: none;
     appearance: none;
     border: 2px solid #8F8F8F;
@@ -241,3 +260,192 @@ input.checkbox:focus-visible {
     pointer-events: none;
     cursor: default;
 }
+
+/* ==========================================================================
+   QUIZ MICRO-INTERACTIONS — visual-only, strictly additive.
+   Motion layer on top of the state hooks the quiz JS ALREADY sets
+   (aria-checked, data-correct, .no-pointer via optionDisabled(), the
+   #feedback correct/incorrect classes) - zero JS/HTML/logic changes, and
+   every animation ends at the element's normal untransformed state.
+   Tokens (--transition-fast/normal/slow, --ease-standard, --ease-smooth)
+   and shared keyframes (waRiseIn, waControlPop) come from Color.css, which
+   every template that links this file loads first; var() fallbacks keep
+   each rule safe regardless.
+   Only transform / opacity / box-shadow are animated - never a layout
+   property - so option rows, scroll containers and the sticky submit
+   section keep their exact geometry. The prefers-reduced-motion guard in
+   Color.css collapses everything below for users who ask for it.
+   ========================================================================== */
+
+/* --- Selecting an option: control pop --------------------------------------
+   One-shot 180ms pop on the freshly-checked radio/checkbox (fires again
+   naturally when SCQ moves the check to a different row). The row itself
+   already glides via its existing background/border/box-shadow transition;
+   deliberately NO transform on .answer rows - they live inside overflow-y
+   scroll containers where a hover-lift would clip at the edges. */
+input.radioBut:checked,
+input.checkbox:checked {
+    animation: waControlPop var(--transition-fast, 0.18s) var(--ease-standard, ease-out);
+}
+
+/* --- Correct answer (after Submit): soft glow + tick pop --------------------
+   .no-pointer only ever exists once optionDisabled() has locked the
+   question, so neither of these can fire pre-Submit. Glow color derives
+   from this file's own correct-tick green. One iteration, then done. */
+@keyframes waCorrectGlow {
+    from { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.35); }
+    to   { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+}
+
+.answer.no-pointer:has(input[data-correct="true"]) {
+    animation: waCorrectGlow 0.5s ease-out 1;
+}
+
+@keyframes waTickPop {
+    0%   { transform: scale(0.6); }
+    60%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.answer.no-pointer:has(input[data-correct="true"]) .tickSymbol {
+    animation: waTickPop 0.3s var(--ease-standard, ease-out) 1;
+}
+
+/* --- Wrong pick (after Submit): one subtle 3px shake ------------------------
+   Scoped to the option the learner actually selected (aria-checked) that
+   was wrong - never every wrong row. Single iteration, 3px max travel,
+   translate3d only (no reflow). The MCQ retry path resets options WITHOUT
+   adding .no-pointer, so retries stay motion-free as before. */
+@keyframes waWrongShake {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    25%      { transform: translate3d(-3px, 0, 0); }
+    75%      { transform: translate3d(3px, 0, 0); }
+}
+
+.answer.no-pointer[aria-checked="true"]:has(input[data-correct="false"]) {
+    animation: waWrongShake 0.3s var(--ease-standard, ease-out) 1;
+}
+
+/* --- Feedback banner entrance ------------------------------------------------
+   announceFeedback() toggles display and (re)applies these classes, which
+   restarts the entrance on each evaluation - fade up 8px, no flash. */
+#feedback.correct,
+#feedback.incorrect {
+    animation: waRiseIn var(--transition-normal, 0.28s) var(--ease-smooth, ease-out);
+}
+
+/* --- Submit / action button motion -------------------------------------------
+   Extends the base transition (background-color only) with transform,
+   shadow and opacity so every state change glides. Hover lift is scoped
+   to non-touch, same convention as the option hover above. */
+.btn,
+#submitBtn,
+.Startpagebtn,
+.retrybtn {
+    transition: background-color var(--transition-fast, 0.18s) var(--ease-standard, ease),
+                transform var(--transition-fast, 0.18s) var(--ease-standard, ease),
+                box-shadow var(--transition-fast, 0.18s) var(--ease-standard, ease),
+                opacity var(--transition-fast, 0.18s) ease;
+}
+
+html:not(.is-touch-device) .btn:not(.disabled):not(:disabled):hover,
+html:not(.is-touch-device) #submitBtn:not(.disabled):not(:disabled):hover,
+html:not(.is-touch-device) .Startpagebtn:hover,
+html:not(.is-touch-device) .retrybtn:hover {
+    transform: translate3d(0, -1px, 0);
+    box-shadow: 0 2px 6px rgba(30, 27, 28, 0.14), 0 6px 16px rgba(30, 27, 28, 0.10);
+}
+
+.btn:active,
+#submitBtn:active,
+.Startpagebtn:active,
+.retrybtn:active {
+    transform: scale(0.97);
+    box-shadow: none;
+}
+
+/* Modern glow ring for keyboard focus (mouse clicks don't trigger
+   :focus-visible, so pointer users never see it). Ring color derives from
+   this file's own button color so it reads as part of the control. */
+.btn:focus-visible,
+#submitBtn:focus-visible,
+.Startpagebtn:focus-visible,
+.retrybtn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 107, 143, 0.35);
+}
+
+/* Disabled: settle to 0.6 and drop any hover artifacts; the transition
+   above makes enable/disable fade instead of snap. */
+.btn.disabled,
+#submitBtn.disabled,
+.btn:disabled,
+#submitBtn:disabled {
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+}
+
+/* --- Question entry cascade ---------------------------------------------------
+   Question -> each option, one by one -> Submit, ~60ms apart - rather than
+   the whole card sliding in as one block. Each template's loadQuestion()
+   replaces the container's innerHTML per question, so this re-fires every
+   time, on the existing markup (no new elements). fill-mode:backwards
+   holds each piece invisible during its delay instead of flashing fully
+   visible first; transform is transient (ends at none) and position:sticky
+   descendants (the mixed Quiz's submit-section) stick relative to their
+   scroll container, which a temporary ancestor transform does not change.
+   Distance comes from --wa-rise-distance (Color.css): 24/16/10px at
+   desktop/tablet/phone. */
+.questionContainer > .question,
+.questionContainer > .contentWrapper {
+    animation: waRiseInBig var(--transition-normal, 0.22s) var(--ease-smooth, ease-out) backwards;
+    animation-delay: 0.02s;
+}
+
+.options > .answer,
+.options1 > .answer {
+    animation: waRiseInBig var(--transition-normal, 0.22s) var(--ease-smooth, ease-out) backwards;
+}
+
+.options > .answer:nth-child(1),
+.options1 > .answer:nth-child(1)  { animation-delay: 0.08s; }
+.options > .answer:nth-child(2),
+.options1 > .answer:nth-child(2)  { animation-delay: 0.14s; }
+.options > .answer:nth-child(3),
+.options1 > .answer:nth-child(3)  { animation-delay: 0.20s; }
+.options > .answer:nth-child(4),
+.options1 > .answer:nth-child(4)  { animation-delay: 0.26s; }
+.options > .answer:nth-child(5),
+.options1 > .answer:nth-child(5)  { animation-delay: 0.32s; }
+.options > .answer:nth-child(n+6),
+.options1 > .answer:nth-child(n+6) { animation-delay: 0.38s; }
+
+.questionContainer > #submitBtn,
+.questionContainer > .btn,
+.questionContainer .submit-section {
+    animation: waRiseInBig var(--transition-normal, 0.22s) var(--ease-smooth, ease-out) backwards;
+    animation-delay: 0.44s;
+}
+
+/* --- Option hover elevation -----------------------------------------------------
+   2px lift + soft glow, in the option row's own existing accent color
+   (#2A78C8) - not a new color, just extending the row's current selected/
+   focus hue to hover too. transform is on .answer itself; 2px is small
+   enough not to clip against this row's own overflow-y scroll ancestors
+   (unlike a larger lift would). box-shadow/transform are both already in
+   the row's transition list, so this glides in and reverses on mouseleave
+   for free - no separate "leave" rule needed. The selected state's
+   higher-specificity rule keeps its inset ring while hovered, unaffected. */
+html:not(.is-touch-device) .answer:not(.no-pointer):hover {
+    transform: translate3d(0,2px,0);
+    box-shadow: 0 4px 12px rgba(42, 120, 200, 0.18);
+}
+
+/* Checkbox and label deliberately do NOT move or scale on hover: three
+   independent transforms on three nested elements (row + checkbox +
+   label), each easing at its own rate, is what read as "jerky" even
+   though none of them touched layout - one clean row-level lift reads as
+   a single, cohesive motion instead. The checkbox's own :checked pop
+   (waControlPop, above) and the correct-answer tick pop are untouched -
+   this only removes hover-triggered movement. */
