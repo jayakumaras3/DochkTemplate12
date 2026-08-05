@@ -410,10 +410,15 @@ function renderError(message) {
 
 /* ── 11. Loading State ───────────────────────────────────── */
 function hideLoader() {
+  setTimeout(function() {
+alert();
+parent.PageCompleteNextFun();
+}, 1000);	
   const loader = document.getElementById('page-loading');
   if (!loader) return;
   loader.classList.add('fade-out');
   setTimeout(() => loader.remove(), 400);
+
 }
 
 /* ── 12. Utility: Safe HTML escaping ─────────────────────── */

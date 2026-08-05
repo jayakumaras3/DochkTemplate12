@@ -6,7 +6,7 @@
   "OptionRandom": "1",
 											  
   "passingScore": "80",
-												
+  "AlertText": "Please select an answer.11",							
   "QuizAttempt": "2",  																	 
   "iframeSrc": "../../../theme/scripts/QuizTemplate/Quiz/Quiz.html",										  
   "duration": "0",

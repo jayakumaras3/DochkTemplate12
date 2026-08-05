@@ -22,7 +22,7 @@
   },
 
   "layout": {
-    "type":         "image-right",
+    "type":         "image-left",
     "mediaRatio":   "46%",
     "contentRatio": "54%",
     "gap":          "52px",
