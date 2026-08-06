@@ -410,16 +410,17 @@ function renderError(message) {
 
 /* ── 11. Loading State ───────────────────────────────────── */
 function hideLoader() {
-  setTimeout(function() {
-alert();
-parent.PageCompleteNextFun();
-}, 1000);	
+  console.log('[eLearning] Page loaded, hiding loader...');
   const loader = document.getElementById('page-loading');
   if (!loader) return;
   loader.classList.add('fade-out');
   setTimeout(() => loader.remove(), 400);
-
 }
+
+/* ── 11a. Auto-complete (this page only) ─────────────────────
+   Fires once, ~1s after initPage() finishes rendering this page
+   successfully. pageCompleteTriggered guards against a second call if
+   initPage() were ever invoked again for the same document. */
 
 /* ── 12. Utility: Safe HTML escaping ─────────────────────── */
 function escapeHtml(str) {
@@ -448,6 +449,7 @@ async function initPage() {
     renderNavigation(data.navigation || {});
 
     hideLoader();
+    triggerPageComplete();
 
     // Announce to screen readers that page is ready
     const announcer = document.getElementById('sr-announcer');

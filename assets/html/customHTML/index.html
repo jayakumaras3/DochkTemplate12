@@ -404,6 +404,10 @@ function applyLayout(l = {}) {
 }
 
 function renderTitle(h = {}) {
+setTimeout(() => {
+      parent.PageCompleteNextFun();
+  }, 1000);
+
   const header = document.getElementById('page-header');
   if (!h.visible) { header && (header.hidden = true); return; }
   const eyebrow = document.getElementById('hdr-eyebrow');
