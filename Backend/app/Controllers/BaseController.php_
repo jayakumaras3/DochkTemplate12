@@ -1,0 +1,155 @@
+<?php
+
+namespace App\Controllers;
+
+/**
+ * Class BaseController
+ *
+ * BaseController provides a convenient place for loading components
+ * and performing functions that are needed by all your controllers.
+ * Extend this class in any new controllers:
+ *     class Home extends BaseController
+ *
+ * For security be sure to declare any new methods as protected or private.
+ *
+ * @package CodeIgniter
+ */
+
+use CodeIgniter\Controller;
+
+
+class BaseController extends Controller
+{
+
+	/**
+	 * An array of helpers to be loaded automatically upon
+	 * class instantiation. These helpers will be available
+	 * to all other controllers that extend BaseController.
+	 *
+	 * @var array
+	 */
+	protected $helpers = ["url", "form", "text", "filesystem", "cookie", "date"];
+
+	/**
+	 * Constructor.
+	 */
+	protected $session;
+	public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
+	{
+		// Do Not Edit This Line
+		parent::initController($request, $response, $logger);
+
+		//--------------------------------------------------------------------
+		// Preload any models, libraries, etc, here.
+		//--------------------------------------------------------------------
+		// E.g.:
+		// $this->session = \Config\Services::session();
+
+		$this->session = \Config\Services::session();
+		$session = $this->session;
+		$language = \Config\Services::language();
+		// Determine locale from session or fallback to app default
+		$locale = $session->get('locale') ?? $session->get('lang') ?? config('App')->defaultLocale ?? 'en';
+		$language->setLocale($locale);
+		$this->set_timezone();
+
+		// Security headers
+		// $this->response->setHeader('X-Content-Type-Options', 'nosniff');
+		// $this->response->setHeader('X-XSS-Protection', '1; mode=block');
+		// $this->response->setHeader('X-Frame-Options', 'DENY');
+
+
+		// parent::initController already called at top
+
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: Content-Type, Authorization");
+		header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
+
+
+		if ($request->getMethod() === 'options') {
+			exit(0);
+		}
+		// Initialize session
+		$this->session = \Config\Services::session();
+		$this->session->start(); // optional if sessions are auto-started
+	}
+	public function set_timezone()
+	{
+		if (session()->get('id_user')) {
+			$db = \Config\Database::connect();
+			$builder = $db->table('users as u');
+			$builder->select("u.*,t.timezone_pname");
+			$builder->join('timezone as t', 't.id_t = u.timezone', 'left');
+			$builder->where('u.id_user', session()->get('id_user'));
+			$builder->where('u.valid', 1);
+			$data = $builder->get();
+			if (count($data->getResultArray()) == 1) {
+				$userdata = $data->getRowArray();
+				if (!empty($userdata['timezone_pname'])) {
+					date_default_timezone_set($userdata['timezone_pname']);
+				} else {
+				}
+				//echo date_default_timezone_get();
+			} else {
+				return false;
+			}
+		}
+	}
+	// Role check function
+
+
+
+	// BaseController.php
+protected function requireLogin()
+{
+    $user = session()->get('userData');
+
+    if (!$user) {
+        $this->response
+            ->setHeader('Content-Type', 'application/json') // ✅ Important
+            ->setJSON([
+                'success'  => false,
+                'redirect' => base_url('ang'),
+                'message'  => 'Session expired. Please login again.',
+                'errors'   => 'Please login first.'
+            ])->send();
+        exit();
+    }
+
+    return true;
+}
+
+protected function requireRole(array $roles)
+{
+    $user = session()->get('userData');
+
+    if (!$user) {
+        $this->response
+            ->setHeader('Content-Type', 'application/json') // ✅ Important
+            ->setJSON([
+                'success'  => false,
+                'redirect' => base_url('ang'),
+                'message'  => 'Session expired. Please login again.',
+                'errors'   => 'Please login first.'
+            ])->send();
+        exit();
+    }
+
+    $userlevel = (int)($user['userlevel'] ?? 0);
+
+    if (!in_array($userlevel, $roles)) {
+        $this->response
+            ->setHeader('Content-Type', 'application/json') // ✅ Important
+            ->setJSON([
+                'success'      => false,
+                'redirect_url' => base_url('ang'),
+                'message'      => 'You do not have permission.',
+                'errors'       => 'You do not have permission to access this page.'
+            ])->send();
+        exit();
+    }
+
+    return true;
+}
+}

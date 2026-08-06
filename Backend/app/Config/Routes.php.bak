@@ -1,0 +1,45 @@
+<?php
+
+use CodeIgniter\Router\RouteCollection;
+
+/**
+ * @var RouteCollection $routes
+ */
+$routes->setDefaultNamespace('App\Controllers');
+$routes->setDefaultController('Aristo_site');
+$routes->setDefaultMethod('index');
+$routes->setTranslateURIDashes(false);
+$routes->set404Override();
+$routes->setAutoRoute(true);
+
+$routes->get('/', 'Login::index',['filter'=>'noauth']);
+$routes->get('logout', 'Login::logout',['filter' => 'auth']);
+$routes->match(['get','post'],'profile', 'Profile::index',['filter' => 'auth']);
+$routes->match(['get','post'],'changeUserdata', 'Profile::changeUserdata',['filter' => 'auth']);
+$routes->get('dashboard', 'Dashboard::index');
+$routes->get('users', 'Users::index',['filter' => 'auth']);
+$routes->get('projects','Projects::index',['filter' => 'auth']);
+$routes->match(['get','post'],'Project_settings', 'Projects::project_settings',['filter' => 'auth']);
+$routes->get('projects_details','Projects_details::index',['filter' => 'auth']);
+$routes->get('project_feedback', 'Project_feedback::index',['filter' => 'auth']);
+$routes->get('project_management','Project_management::index',['filter' => 'auth']);
+$routes->get('pages','Pages::index',['filter' => 'auth']);
+$routes->match(['get','post'],'createnewpage','Pages::createnewpage',['filter' => 'auth']);
+$routes->match(['get','post'],'register','Users::register',['filter' => 'auth']);
+$routes->match(['get','post'],'editUsers','Users::editUsers',['filter' => 'auth']);
+//$routes->match(['get','post'],'updateUsers','Users::updateUsers',['filter'=>'auth']);
+$routes->get('deleteUsers','Users::deleteUsers',['filter' => 'auth']);
+$routes->get('dropdown', 'Dropdown::index',['filter' => 'auth']);
+$routes->match(['get','post'],'categoryItem','Dropdown::categoryItem',['filter' => 'auth']);
+$routes->match(['get','post'],'category','Dropdown::category',['filter' => 'auth']);
+$routes->match(['get','post'],'updateCategory','Users::updateCategory',['filter' => 'auth']);
+$routes->match(['get','post'],'updateCategoryItem','Users::updateCategoryItem',['filter' => 'auth']);
+$routes->match(['get','post'],'deleted_userslist','Users::deleted_userslist',['filter' => 'auth']);
+//$routes->match(['get','post'],'usergraph', 'Usergraph::index',['filter' => 'noauth']);
+
+$routes->group('api',function($routes){
+	$routes->group('opentask',function($routes){
+		$routes->get('findAll','Open_task::findAll');
+	});
+});
+$routes->get('/lang/{locale}', 'Language::index');
