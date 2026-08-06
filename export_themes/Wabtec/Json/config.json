@@ -1,0 +1,187 @@
+{
+  "footer": {
+    "navigation": {
+      "prev": {
+        "id": "prev",
+        "name": "",
+        "display": "yes",
+        "class": "prevClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"2",
+        "tooltip":"Previous"
+
+      },
+      "next": {
+        "id": "next",
+        "name": "",
+        "display": "yes",
+        "class": "nextClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"3",
+        "tooltip":"Next"
+      },
+      "volume": {
+        "id": "volume",
+        "name": "volume",
+        "display": "no",
+        "class": "",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"4",
+        "tooltip":"Volume"
+      },
+      "mute": {
+        "id": "mute",
+        "name": "",
+        "display": "no",
+        "class": "muteClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"5",
+        "tooltip":"Help"
+
+      },
+      "unmute": {
+        "id": "unmute",
+        "name": "",
+        "display": "no",
+        "class": "unmuteClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"6",
+        "tooltip":"Unmute"
+      },
+      "play": {
+        "id": "play",
+        "name": "",
+        "display": "no",
+        "class": "playClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"7",
+        "tooltip":"Play"
+      },
+      "pause": {
+        "id": "pause",
+        "name": "",
+        "display": "no",
+        "class": "pauseClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"8",
+        "tooltip":"Pause"
+      },
+      "pageNo": {
+        "id": "pageNo",
+        "name": "{{fb.pageNo}}",
+        "display": "no",
+        "class": "pageClass",
+		"tabindex":"9",
+        "callback": "customizeFn"
+
+      },
+
+      "slider": {
+        "id": "slider",
+        "name": "slider",
+        "display": "no",
+        "class": "prevClass",
+		"tabindex":"10",
+        "callback": "customizeFn"
+      },
+      "resource": {
+        "id": "resource",
+        "name": "",
+        "display": "yes",
+        "class": "resourceClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"11",
+        "tooltip":"Help"
+		
+
+      },
+      "resource": {
+        "id": "resource1",
+        "name": "",
+        "display": "yes",
+        "class": "resourceClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"12",
+        "tooltip":"Help"
+		
+
+      },
+      "exit": {
+        "id": "exit1",
+        "name": "",
+        "display": "yes",
+        "class": "exitClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"13",
+        "tooltip":"Exit"
+      },
+      "exit": {
+        "id": "exit",
+        "name": "",
+        "display": "yes",
+        "class": "exitClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"14",
+        "tooltip":"Exit"
+      },
+      "replay": {
+        "id": "replay",
+        "name": "",
+        "display": "no",
+        "class": "replayClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"15",
+        "tooltip":"Replay"
+      }, 
+	  "cc": {
+        "id": "cc",
+        "name": "",
+        "display": "cc",
+        "class": "ccClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"16",
+        "tooltip":"Close Caption"
+      },
+	  "search": {
+        "id": "search",
+        "name": "Search",
+        "display": "yes",
+        "class": "searchClass",
+        "callback": "customizeFn",
+        "role":"button",
+		"tabindex":"17",
+        "tooltip":"Search"
+      },
+      "order": [		
+		"exit",
+		"mute",		
+        "unmute",        
+		"pageNo",
+        "play",
+        "replay",
+        "pause",
+        "next",
+		"prev",        
+		"slider"
+      ]
+    }
+  },
+  "header": {
+  },
+  "toc": "yes",
+  "transcript": "no",
+  "nextBtnDisabled":false
+}

@@ -1,0 +1,836 @@
+
+
+@media only screen and (max-width: 844px) {
+  /* Common styles for both portrait and landscape */
+
+  /* Example: Set the font size to be smaller for better readability on smaller screens */
+ #pageNo {
+    left: 34%;
+    font-size: 14px;
+    padding: 0px;
+    margin: 0px;
+}
+#TmenuIcon
+{
+	width: 60px;
+    height: 38px;
+	/*margin-left: -454px;*/
+}
+.footer {
+    position: fixed;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: auto;
+    background-color: transparent !important;
+    background: none !important;
+    float: none;
+    width: auto;
+    border-radius: 0 !important;
+    z-index: 2001;
+    box-shadow: none !important;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    left: auto;
+}
+.pageClass {
+    width: 73px;
+    margin-top: 41px !important;
+}
+.contentArea {
+    position: relative;
+    float: left;
+    width: 1235px;
+    height: 749px;
+    left: 0px;
+    box-shadow: 0px 0px 5px rgb(0 0 0 / 0%);
+}
+.pageContent {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 94% !important;
+    margin-top: -4px;
+    margin-left: 0px;
+}
+#ProgressBar {
+    margin-left: 0px;
+    margin-top: 0px !important;
+    /* margin-right: 113px; */
+    padding-left: 28px;
+    padding-top: 0px;
+}
+.footer>div {
+    float: none;
+    position: static;
+    margin: 0;
+    padding: 0;
+}
+
+.resourceClass {
+    background-image: url("../images/footer-menu/") !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    width: 44px !important;
+    height: 44px !important;
+}
+.headingArea1 {
+    position: fixed;
+    right: 18px;
+    top: 20px;
+    z-index: 2002;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    height: auto;
+}
+#TmenuIcon1
+{
+	/*margin-top: 3%;  */ 
+	height: 64px;
+    width: 124px;
+}
+/*.headingArea {
+    position: relative;
+    height: 49px;
+    left: 5%;
+    margin-top: 4px;
+    width: 95%;
+    /* background-color: #333333; */
+   /* background-color: #1e2946;
+    color: white;
+    border-top-left-radius: 1px;
+    border-top-right-radius: 1px;
+    font-size: 19px;
+    font-weight: bold;
+    padding: 8px 20px;
+}*/
+    .headingArea {
+        position: relative;
+        height: 49px;
+        /* left: 5%; */
+        margin-top: 4px;
+        width: 100%;
+        /* background-color: #333333; */
+        background-color: #ffffff;
+        color: #000000;
+        border-top-left-radius: 1px;
+        border-top-right-radius: 1px;
+        font-size: 19px;
+        font-weight: bold;
+        padding: 8px 20px 8px 61px;
+    }
+.sideBar {
+    position: absolute;
+    width: 453px;
+    height: 763px;
+    background-color: white;
+    float: left;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+.pageClass
+{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    padding: 6px 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1998;
+    margin: 0 !important;
+    width: auto !important;
+}
+  /* You can add more common styles for mobile devices as needed */
+
+
+#tocData li {
+    /* list-style: none; */
+    right: 29px;
+    align-content: center;
+    width: 100%;
+    font-weight: bold;
+    position: relative;
+    font-size: 14px;
+    /* padding-left: 11px; */
+    margin-bottom: 2px;
+}
+#sideBarHeader div {
+    width: 50%;
+    position: relative;
+    float: left;
+    margin-bottom: 12px;
+  /*  padding-bottom: 67px;
+    padding-left: 20px !important;*/
+    text-align: center;
+    font-size: 15px;
+    height: 30px;
+}
+
+.sideBartopicHeader {
+    padding: 4px;
+    font-size: 13px;
+}
+.sideBar li {
+    list-style: square;
+    right: 0px;
+    font-weight: bold;
+    position: relative;
+    min-height: auto;
+    font-size: 14px;
+}
+.sideBar > .tocData {
+    position: relative;
+    float: left;
+    width: 94%;
+    overflow: auto;
+    height: auto;
+    background-color: white;
+    font-size: 14px;
+    margin-left: 11px;
+}
+.copyright {
+    font-size: 12px;
+    bottom: 13px;
+    width: 100%;
+    height: auto;
+    text-align: center;
+    position: absolute;
+    display: block;
+}
+.toggle-box + label:before {
+    background-color: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #333;
+    content: "+";
+    display: block;
+    float: left;
+    font-weight: bold;
+    height: 20px;
+    line-height: 20px;
+    margin-right: 5px;
+    text-align: center;
+    width: 20px;
+    font-size: 14px;
+}
+.toggle-box + label {
+    cursor: pointer;
+    display: block;
+    width: 100% !important;
+    font-weight: bold;
+    line-height: 21px;
+    margin-top: 5px;
+    margin-left: -20px;
+}
+.sideBartopicHeader {
+    padding: 8px;
+    font-size: 13px;
+}
+.sideBar #sideBarHeader {
+    width: 100%;
+    height: auto;
+    position: relative;
+    bottom: 0;
+    top: 0px;
+}
+.exitClass {
+    height: 50px;
+    background-image: url(../images/footer-menu/exit_Iphone.png);
+    background-repeat: no-repeat;
+    width: 79px;
+}
+canvas {
+	    width: 60px !important;
+    height: 60px !important;
+}
+.muteClass {
+    background-image: url(../images/footer-menu/Leran_iphone.png);
+    background-repeat: no-repeat;
+    width: 79px;
+    height: 50px;
+}
+.prevClass {
+    background-image: url(../images/footer-menu/set%202_up%20btn.png) !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-color: transparent !important;
+    width: 44px !important;
+    height: 44px !important;
+    padding-bottom: 0 !important;
+    margin-left: 0 !important;
+}
+.nextClass {
+    background-image: url(../images/footer-menu/set%202_down%20btn.png) !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-color: transparent !important;
+    width: 44px !important;
+    height: 44px !important;
+    margin-top: 0 !important;
+}
+.nextClassHighlight {
+    background-image: url(../images/footer-menu/set%202_down%20btn.png) !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-color: transparent !important;
+}
+.exitHighlight
+{
+    background-image:  url("../images/footer-menu/Power_Iphone_Height.png") !important;
+}
+.toggle-box + label + ul {
+    margin-bottom: 10px;
+    margin-left: 0px;
+    margin-top: 12px;
+}
+.logo {
+    margin-top: 20px;
+    position: relative;
+    width: 80%;
+    margin-left: 8%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.sideBarHeader .logo {
+    width: 88% !important;
+    max-width: 250px !important;
+    margin-left: 0 !important;
+    margin-top: 8px !important;
+}
+
+body:has(.vertical-video-layout) .contentArea {
+    width: 100% !important;
+    height: 100vh !important;   /* fallback */
+    height: 100dvh !important;  /* iOS Safari dynamic viewport */
+    left: 0 !important;
+}
+
+body:has(.vertical-video-layout) .pageContent {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 8px 10px 88px !important;
+}
+
+body:has(.vertical-video-layout) .headingArea1 {
+    position: fixed !important;
+    margin-left: 10px !important;
+    height: auto !important;
+    right: auto !important;
+    top: auto !important;
+    left: 10px !important;
+    z-index: 2002 !important;
+}
+
+body:has(.vertical-video-layout) #TmenuIcon {
+    margin-left: 0 !important;
+    width: 38px !important;
+    height: 23px !important;
+}
+
+body:has(.vertical-video-layout) .footer {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
+    transform: none !important;
+    width: 100% !important;
+    height: 84px !important;
+    padding: 0 10px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0)) !important;
+}
+
+body:has(.vertical-video-layout) .footer > div {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+}
+
+body:has(.vertical-video-layout) .footer #prev,
+body:has(.vertical-video-layout) .footer .prevClass {
+    left: 10px !important;
+}
+
+body:has(.vertical-video-layout) .footer #next,
+body:has(.vertical-video-layout) .footer .nextClass,
+body:has(.vertical-video-layout) .footer .nextClassHighlight {
+    right: 10px !important;
+    margin-top: 0 !important;
+}
+
+body:has(.vertical-video-layout) #ProgressBar {
+    bottom: 90px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body:has(.vertical-video-layout) .vertical-video-layout {
+    --reel-width: min(94vw, calc(84vh * 9 / 16));
+}
+
+}
+@media only screen
+  and (min-device-width: 768px) /* Minimum width for iPad landscape mode */
+  and (max-device-width: 1024px) /* Maximum width for iPad portrait mode */
+  and (-webkit-min-device-pixel-ratio: 1) { /* Ensuring it's an iPad by checking pixel ratio */
+  /* Your CSS styles specific to iPad here */
+  .contentArea {
+  
+    box-shadow: 0px 0px 5px rgb(0 0 0 / 0%);
+}
+}
+
+/* ===== ORIENTATION MESSAGE RESPONSIVE STYLES ===== */
+@media only screen and (max-width: 844px) {
+    /* Mobile phone styles for orientation message */
+    .orientationMessageContent {
+        gap: 20px;
+        max-width: 340px;
+        padding: 0 20px;
+    }
+
+    .orientationIcon {
+        width: 169px;
+        height: 169px;
+    }
+
+    .rotateIcon {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .orientationTitle {
+        font-size: 24px;
+    }
+
+    .orientationSubtext {
+        font-size: 13px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    /* Smaller phone styles */
+    .orientationMessageContent {
+        gap: 18px;
+        max-width: 300px;
+        padding: 0 15px;
+    }
+
+    .orientationIcon {
+        width: 143px;
+        height: 143px;
+    }
+
+    .rotateIcon {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .orientationTitle {
+        font-size: 22px;
+    }
+
+    .orientationSubtext {
+        font-size: 12px;
+    }
+}
+
+@media only screen and (max-width: 844px) {
+    .contentArea.video-mode {
+        position: relative !important;
+        /* No subtraction — inside the SCORM content frame 100vh = frame height */
+        height: 100vh !important;
+        height: 100% !important;   /* iOS Safari ≤15 via -webkit-fill-available on html */
+        height: 100dvh !important; /* iOS Safari 16+ / modern */
+        overflow: hidden !important;
+    }
+
+    .contentArea.video-mode .headingArea {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 54px !important;
+        z-index: 1001 !important;
+    }
+
+    .contentArea.video-mode .pageContent {
+        position: absolute !important;
+        top: 54px !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+        padding: 0 !important;
+    }
+
+    .contentArea.video-mode .headingArea {
+        height: 46px !important;
+        padding: 6px 10px 6px 46px !important;
+        font-size: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+    }
+
+    .contentArea.video-mode .headingArea > span {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        line-height: 1.2 !important;
+    }
+
+    .contentArea.video-mode #pagenoHeader {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        float: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 44px !important;
+        height: auto !important;
+        line-height: 1.4 !important;
+        padding: 6px 12px !important;
+    }
+
+    .contentArea.video-mode .headingArea1 {
+        margin-left: -9px !important;
+        margin-top: 0 !important;
+        top: 16px !important;
+        height: 20px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .contentArea.video-mode #TmenuIcon {
+        width: 32px !important;
+        height: 20px !important;
+        margin-top: 0 !important;
+        display: block !important;
+    }
+
+    .contentArea.video-mode .shorts-container {
+        width: min(96vw, calc(89vh * 9 / 16));
+        max-height: 89vh;
+    }
+
+    .contentArea.video-mode .action-bar {
+        right: 6px;
+        gap: 8px;
+    }
+
+    .contentArea.video-mode .action-btn {
+        width: 40px;
+        height: 40px;
+        background-size: 17px 17px;
+    }
+
+    .contentArea.video-mode + .footer {
+        right: 12px !important;
+        gap: 12px !important;
+        height: auto !important;
+        min-height: auto !important;
+    }
+
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass,
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight {
+        width: 44px !important;
+        height: 44px !important;
+        background-image: url(../images/footer-menu/set%202_up%20btn.png) !important;
+        background-size: contain !important;
+        background-color: transparent !important;
+    }
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight {
+        background-image: url(../images/footer-menu/set%202_down%20btn.png) !important;
+    }
+    .contentArea.video-mode + .footer .resourceClass {
+        width: 44px !important;
+        height: 44px !important;
+        background-size: contain !important;
+    }
+}
+
+/* ── Mobile: button visibility reset on page navigation ── */
+@media only screen and (max-width: 844px) {
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass,
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight,
+    .contentArea.video-mode + .footer .resourceClass {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+}
+
+/* ── Portrait: phones up to 844 px wide ──────────────────────── */
+@media only screen and (max-width: 844px) and (orientation: portrait) {
+    .footer #prev,
+    .footer .prevClass,
+    .footer #next,
+    .footer .nextClass,
+    .footer .nextClassHighlight {
+        width: 44px !important;
+        height: 44px !important;
+        background-size: contain !important;
+        background-color: transparent !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .footer #prev,
+    .footer .prevClass {
+        background-image: url(../images/footer-menu/set%202_up%20btn.png) !important;
+    }
+    .footer #next,
+    .footer .nextClass,
+    .footer .nextClassHighlight {
+        background-image: url(../images/footer-menu/set%202_down%20btn.png) !important;
+    }
+    .footer .resourceClass {
+        width: 44px !important;
+        height: 44px !important;
+        background-size: 22px 22px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+/* ── Landscape: phones rotated ───────────────────────────────── */
+@media only screen and (max-width: 844px) and (orientation: landscape) {
+    .footer #prev,
+    .footer .prevClass,
+    .footer #next,
+    .footer .nextClass,
+    .footer .nextClassHighlight {
+        width: 40px !important;
+        height: 40px !important;
+        background-size: contain !important;
+        background-color: transparent !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .footer #prev,
+    .footer .prevClass {
+        background-image: url(../images/footer-menu/set%202_up%20btn.png) !important;
+    }
+    .footer #next,
+    .footer .nextClass,
+    .footer .nextClassHighlight {
+        background-image: url(../images/footer-menu/set%202_down%20btn.png) !important;
+    }
+    .footer .resourceClass {
+        width: 40px !important;
+        height: 40px !important;
+        background-size: 20px 20px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   iPHONE-SPECIFIC FIXES
+   @supports (-webkit-touch-callout: none) targets iOS Safari exclusively.
+   Combined with retina DPR + portrait orientation for precision targeting.
+   ═══════════════════════════════════════════════════════════════════ */
+@supports (-webkit-touch-callout: none) {
+
+    /* All iPhones: ensure html anchors the -webkit-fill-available height */
+    html {
+        height: -webkit-fill-available !important;
+    }
+    body {
+        min-height: -webkit-fill-available !important;
+    }
+
+    /* Portrait mode: phones up to iPhone 16 Pro Max width (430px) */
+    @media only screen
+        and (max-width: 430px)
+        and (orientation: portrait)
+        and (-webkit-min-device-pixel-ratio: 2) {
+
+        .contentArea.video-mode {
+            /* 100% resolves to html's -webkit-fill-available = true visible area */
+            height: 100% !important;
+        }
+
+        .contentArea.video-mode .headingArea {
+            height: 54px !important;
+            /* Offset for iPhone status bar via safe-area-inset-top */
+            padding-top: max(8px, env(safe-area-inset-top, 8px)) !important;
+        }
+
+        .contentArea.video-mode .pageContent {
+            /* Push top below status bar if needed */
+            top: max(54px, calc(54px + env(safe-area-inset-top, 0px) - 8px)) !important;
+            /* Stop at footer top edge (60px) + home indicator (safe-area) */
+            bottom: calc(60px + env(safe-area-inset-bottom, 34px)) !important;
+        }
+
+        .contentArea.video-mode + .footer {
+            /* Ensure footer always covers bottom safe area */
+            padding-bottom: max(env(safe-area-inset-bottom, 0px), 10px) !important;
+            min-height: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+        }
+    }
+
+    /* Landscape mode on iPhones */
+    @media only screen
+        and (max-height: 430px)
+        and (orientation: landscape)
+        and (-webkit-min-device-pixel-ratio: 2) {
+
+        .contentArea.video-mode {
+            height: 100% !important;
+        }
+
+        .contentArea.video-mode .headingArea {
+            /* In landscape, safe-area-inset-left/right matter (iPhone notch) */
+            padding-left: max(46px, calc(46px + env(safe-area-inset-left, 0px))) !important;
+            padding-right: max(16px, calc(16px + env(safe-area-inset-right, 0px))) !important;
+        }
+
+        .contentArea.video-mode .pageContent {
+            bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+            /* Respect side notch area */
+            left: env(safe-area-inset-left, 0px) !important;
+            right: env(safe-area-inset-right, 0px) !important;
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       MOBILE HEADER BACKGROUND REMOVAL
+       Remove background gradient and backdrop-filter on mobile devices
+       both in portrait and landscape modes
+       ═══════════════════════════════════════════════════════════════════ */
+    
+    /* Portrait mode: remove header background */
+    @media (max-width: 844px) and (orientation: portrait) {
+        .contentArea.video-mode .headingArea {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .wholeContainer.reels-wrapper .headingArea {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+    }
+
+    /* Landscape mode: remove header background */
+    @media (max-width: 844px) and (orientation: landscape) {
+        .contentArea.video-mode .headingArea {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .wholeContainer.reels-wrapper .headingArea {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE FONT SIZE OVERRIDES
+   Targets phones ≤ 768px to keep all text readable and appropriately
+   sized in the sidebar, TOC, tabs, and page content areas.
+   ═══════════════════════════════════════════════════════════════════ */
+@media only screen and (max-width: 768px) {
+
+    /* Sidebar panel tabs (Menu / Transcript) */
+    .sideBarMenuContent #sideBarHeader div,
+    #sideBarHeader div,
+    #sideBarHeader .tab,
+    #sideBarHeader a {
+        font-size: 15px !important;
+        padding-bottom: 8px !important;
+        height: auto !important;
+    }
+
+    /* TOC list items */
+    #tocData li,
+    .tocData li {
+        font-size: 14px !important;
+        min-height: auto !important;
+        line-height: 1.5 !important;
+    }
+
+    /* Sidebar list items */
+    .sideBar li,
+    .sideBarMenuContent li {
+        font-size: 14px !important;
+        min-height: auto !important;
+        line-height: 1.6 !important;
+    }
+
+    /* TOC section / topic headers */
+    .sideBartopicHeader {
+        font-size: 13px !important;
+        padding: 6px 8px !important;
+    }
+
+    /* Sidebar scrollable content area */
+    .sideBar > .tocData,
+    .sideBarMenuContent .tocData {
+        font-size: 14px !important;
+        height: auto !important;
+    }
+
+    /* Copyright footer text */
+    .copyright {
+        font-size: 12px !important;
+        height: auto !important;
+    }
+
+    /* Toggle expand/collapse label */
+    .toggle-box + label,
+    .toggle-box + label:before {
+        font-size: 14px !important;
+    }
+
+    /* Page number display */
+    #pageNo,
+    #pagenoHeader {
+        font-size: 13px !important;
+    }
+
+    /* General heading area text */
+    .headingArea span,
+    .headingArea .title {
+        font-size: 14px !important;
+    }
+}

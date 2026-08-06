@@ -1,0 +1,319 @@
+/*body {
+    font-family: 'Calibri', sans-serif;
+    background-color: #ffffff;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+	background-image: url('images/BG.png') !important; 
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center; 
+}*/
+.highlight {
+    background-color: #EEFCF2 !important;
+    border: 1px solid #14e34f !important; /* Adjust the border width if necessary */
+    color: #155724;
+    display: inline-block; /* Ensure the label is inline-block to apply padding and border properly */
+     /* Adjust the padding to suit your needs */
+}
+#Opttick0::before,
+#Opttick1::before,
+#Opttick2::before, /* Add more IDs as needed */
+#Opttick3::before {
+    content: "✔"; /* Example tick mark */
+    visibility: var(--before-visibility, hidden);
+	color: green;
+}
+@font-face {
+    font-family: 'tahoma';
+    src: url('../../../fonts/MYRIADPRO-REGULAR.OTF') format('truetype');
+}
+body {
+    font-family: "tahoma";
+    background-color: #ffffff;
+    
+    margin: 0;
+    padding: 0;
+    /* display: flex
+; */
+    justify-content: center;
+    /* align-items: center; */
+    height: 100%;
+    width: 100%;
+   /* background-image: url(images/BG.png) !important;*/
+    background-repeat: no-repeat;
+    /* background-size: cover; */
+    /* background-position: center center; */
+}
+#q1
+{
+	padding-left: 20px;
+}
+#timer
+{
+	margin-top: 18px;
+    margin-left: 82%;
+	
+}
+.Startpage_sub
+{
+	font-size: 20px;
+	line-height: 0.5;
+}
+	
+.answer {
+    display: flex;
+    align-items: center; /* Vertically center the items */
+    gap: 19px; /* Optional space between radio/checkbox and label */
+}
+
+/* Increase size of radio buttons and checkboxes */
+input.radioBut, input.checkbox {
+  width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* Ensure label text is centered and aligned with the radio/checkbox */
+label {
+    display: inline-flex;
+    align-items: center; /* Vertically center the label text */
+    justify-content: center; /* Horizontally center the label text */
+
+}
+
+#parentquizContainer {
+    position: absolute;
+    margin: 0;
+    width: 98%;
+    
+    top: 0px;
+}
+.imgbg {
+	display:none;
+    position: relative; /* Sets the element's position to relative */
+    /*background-image: url('images/bg.png') !important; /* Uses the background image */
+    background-repeat: no-repeat;
+    background-size: cover; /* Ensures the image covers the element */
+    background-position: center center; /* Centers the image */
+	    width: 100%;
+    height: 89%;
+}
+.parentquestion {
+	font-size: 20px;
+    margin-bottom: 0px;
+    font-weight: bold;
+    color: #ffffff;
+    /* padding: 7px; */
+    margin-top: 2%;
+    margin-left: 2%;
+    background-color: #615e5e;
+    display: flex
+;
+}
+.results {
+    margin-top: 15%;
+    text-align: center;
+    margin-right: 48%;
+}
+#inste {
+    background-color: #fdf1e5;
+    /* padding-top: 1%; */
+    /* padding-right: 0%; */
+    /* padding-bottom: 1%; */
+    /* padding-left: 1%; 
+    width: 10.5%;*/
+    padding: 5px;
+    font-size: 20px;
+    color: #F2672E;
+    /* font-weight: bold; */
+}
+.headerAss{
+	font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.Startpage {
+    margin-top: 12%;
+    /* text-align: center; */
+    
+}
+.Startpagebtn {
+    position: relative;
+    margin: 4px 2px;
+    padding: 4px;
+    background-color: #F2672E;
+    color: white;
+    border: none;
+    /* font-weight: bold; */
+    text-align: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    cursor: pointer;
+    border-radius: 12px;
+    font-size: 20px;
+	font-family: "tahoma";
+    /* transition: background-color 0.3s ease; */
+}
+.retrybtn{
+	
+    position: relative;
+    /* margin-left: 29%; */
+    background-color: #F2672E;
+    color: white;
+    border: none;
+    font-weight: bold;
+    padding: 10px 26px;
+    cursor: pointer;
+    /* border-radius: 5px; */
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+
+}
+#quizContainer {
+	   
+	  margin-right: 0;
+    margin-left: 7%;
+    width: 89%;
+    z-index: 10;
+    /* padding: 1.1%; */
+    /* background-color: white; */
+    /* border: 1px solid #ddd; */
+    width: 92%;
+}
+.Bulb {
+   position: absolute;
+    left: 2.1%;
+    margin-top: 29px;
+	width: 6%;
+
+}
+.questionContainer {
+    padding: 1%;
+  /*  margin-top: 4.5%;*/
+    background-size: cover;
+    background-position: center;
+}
+
+.question {
+    font-size: 20px;
+    margin-bottom: 0px;
+    /* font-weight: bold; */
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    /* background-color: #f9f9f9; */
+    padding: 2%;
+}
+.redtext{
+	font-size: 20px;
+    color: #df7e00;
+    margin-top: 8px;
+}
+.options {
+	margin-top: 2px;
+	width: 76%;
+    margin-bottom: 20px;
+    margin-left: -1%;
+    display: flex;
+    flex-direction: column;
+}
+
+.answer {
+	padding: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    /* background-color: #f1f1f1; */
+    /* padding: 0.2%; */
+    /* border-radius: 5px; */
+    /* transition: background-color 0.3s ease; */
+    cursor: pointer;
+}
+.Qmark {
+	display:none;
+    position: absolute;
+    top: 33%;
+    right: 5%;
+}
+.answer:hover {
+  /*  background-color: #e1e1e1;*/
+}
+
+.answer input[type="checkbox"] {
+    margin-right: 10px;
+}
+.btn.disabled {
+    opacity: 0.5; /* Adjust opacity as needed */
+    pointer-events: none; /* Prevent clicking */
+}
+.answer label {
+    font-size: 20px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.answer label:hover {
+    color: #007bff;
+}
+.feedback
+{
+	/* padding-top: 25px; */
+	/* font-size: 24px; */
+}.no-select {
+    user-select: none;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
+}
+
+/* Remove pointer cursor */
+.no-pointer {
+  cursor: default !important;
+}
+
+.incorrect
+{		
+		font-size: 20px;
+	    color: white;
+		padding-left: 2.1%;
+		/*padding-top: 1.5%;*/
+		width: 76%;
+		padding: 1%;
+		background-color: #fc7f80;
+		margin-top: 3%;
+		margin-left: 2.5%;
+}
+.correct
+{
+		font-size: 20px;
+	    margin-left: 2.5%;
+	    color: white;
+	    padding-left: 2.1%;
+		width: 76%;
+		padding: 1%;
+		background-color: #08801a;
+		margin-top: 3%;
+}
+.btn {
+	width: 161px;
+	font-family: 'tahoma';
+    position: relative;
+    margin-left: 2.5%;
+    background-color: #F2672E;
+    color: white;
+    border: none;
+    font-weight: bold;
+    padding: 10px 26px;
+    cursor: pointer;
+    /* border-radius: 5px; */
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+}
+
+

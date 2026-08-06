@@ -1,0 +1,129 @@
+<div ng-controller="mainController as mc" class="wholeContainer">
+    <div id="Tmenu" ng-controller="sideBar as sb" class="sideBar" ng-show="sb.showSideBar">
+        <img src="theme/images/logo.png" class="logo">
+		<div style='text-align:center;line-height: 1;'><div class='sideBarHeader1'></div></div>
+        <div id="sideBarHeader">
+		<!-- <hr> -->
+            <div class="tocclickedclscss" id="toc_id" ><span role="button"  ng-click="sb.tocClick('toc')">Menu</span></div>
+            <div id="trans_id" ><span role="button"  ng-click="sb.tocClick('transcript')">Transcript</span></div>
+            <!--div id="glossary_id" ><span role="button"  ng-click="sb.tocClick('glossary')">Glossary</span></div-->
+        </div>
+        <div class="tocData" ng-bind-html="sb.sideBarData" style="line-height:1.5;overflow-y:auto !important;"></div>
+        <div class="line"><hr></div>
+	<!--	<div class="copyright"><a href="https://aristo-tle.com" target="_blank">aristo-tle.com</a></div>-->
+
+    </div>
+    <div class="contentArea" ng-controller="contentController as cc" ng-class="cc.fullScreen == true ? 'fullContentArea' : ''">
+		<div  id="clickableDiv" class="headingArea1"  ng-controller="sideBar as sb" ng-click="sb.tocClick('toggleMenuclose')"> <img title="Menu" id="TmenuIcon" ng-click="sb.tocClick('toggleMenu')" src="theme/images/footer-menu/Menuopen.png" alt="image">
+		<img title="Menu"  style="display:none;" id="TmenuIcon1" ng-click="sb.tocClick('toggleMenu')" src="theme/images/footer-menu/Mclose.png" alt="image"></div>
+        <div class="headingArea" ng-show="cc.showHeader">{{cc.header}}<div id="pagenoHeader"></div> </div>
+        <div class="line2"></div>
+        <div class="pageContent" ng-class="cc.fullScreen == true ? 'fullContentArea' : ''">
+            <div ng-include="cc.pageContent" onload="cc.finishLoading()" ng-if="cc.pageContentType == 'flash'"
+                 style="width:100%;height:100%" id="flashArea"></div>
+			 <div ng-include="cc.pageContent" ng-if="cc.pageContentType == 'html'" style="width:100%;height:100%" id="htmlArea"></div>
+			<video src="{{cc.pageContent}}" 
+       ng-if="cc.pageContentType == 'video'" 
+       style="width:100%;height:100%" 
+       id="vidArea" 
+       onended="onendofvideo()" 
+       controls 
+       onvolumechange="volumechange_fun()" 
+       onpause="onPauseVid()" 
+       controlsList="nodownload" 
+       disablePictureInPicture 
+       onchange="videochange">
+    <track id="englishTrack" kind="captions" src="assets/vtt/En_en_1.vtt" srclang="en" label="English" default>
+</video>
+            <iframe id="captivateFrame" style="" ng-if="cc.pageContentType == 'captivate'"
+                    ng-src="{{cc.pageContent}}" onload="captivateIframeComplete()"></iframe>
+					<!--div id="audscript" style="width:100%;height: 70px;background: rgba(0,0,0,0);bottom:0px;position:absolute;font-size: 20px;/* text-align: center; */padding: 17px;"></div-->
+        </div>
+    </div>
+    <div ng-controller="footerBar as fb" class="footer" ng-show="fb.showFooter">
+       
+        <div title="{{btn.tooltip}}" ng-repeat="btn in fb.navigationBtn" role="{{btn.role}}" ng-click="fb.navigationBtnClick(btn)" id={{btn.id}} ng-class="(btn.display == 'yes') ? btn.class : btn.class + ' hideContent'"  >{{btn.name}}
+        </div>
+        <div ng-repeat="circle in fb.navCircle" class="navCircle" ng-click="fb.navBtnClick($index)" role="button"></div>
+ <div id="ProgressBar" title="Progress Bar" data-radial-indicator="indicatorOption" data-radial-indicator-model="indicatorValue" style="margin-top:10px"></div>
+    </div>
+</div>
+
+<div id="preloader">
+    <div class="preloaderDisplay"></div>
+    <div id="preloaderText"><img src="theme/images/preload.gif">
+        <div id="preloaderCount"></div>
+    </div>
+</div>
+<div id="resourceArea">
+    <div class="preloaderDisplay"></div>
+    <div id="resourceContent">
+	 <div class="Navigation_cls_main" onclick="backToMainPage()" >
+                <img src="theme/images/Navi_close.png" role="button">
+            </div>
+        <div class="leftResourceArea" style="font-size:16px;">
+            <p class="headerResource"style="color:#2aa4ea;">Learning Aids</p>
+<h4><b></b></h4>
+<ul style="list-style-type:'- '">
+  <li ><a style=""target="_blank" href=""></a></li>
+</ul>
+
+            
+        </div>
+       <!-- <div class="rightResourceContent" >
+            <img src="theme/images/bulb.png">
+        </div> -->
+    </div>
+</div>
+<div id="resourceArea1">
+    <div class="preloaderDisplay"></div>
+    <div id="resourceContent1">
+      <div class="Navigation_cls" onclick="backToMainPage1()" >
+                <img src="theme/images/Navi_close.png" role="button">
+            </div>
+            <img src="">
+        </div>
+       <div class="rightResourceContent1" >
+	   
+	     
+		
+    </div>
+	
+	
+</div>
+<div id="exitContainer" style="position: absolute;width: 100%;height:100%;display:none">
+    <div class="preloaderDisplay"></div>
+    <div id="exitArea" style="background-image: url('theme/images/Closepopup.jpg');    border-radius: 5px;
+         width: 316px;
+         height: 167px;
+         z-index: 10003;
+         position: absolute;left:0;right:0;top:0;bottom:0;margin:auto;padding: 3%;">
+
+        <div id="heading" style="    position: absolute;    left: 0px;    top: 4px;    color: #fff;    font-weight: bold;    font-size: 18px;    text-align: center;    width: 100%;">Exit</div>
+        <h3 style="font-weight:bold;text-align: center;     margin-top: 9px; font-size:21px;  ">Are you sure you want to <br>exit the eLearning?</h3>
+        <div style="width: 50%;text-align: center;position: absolute;left: 0px;right: 0px;margin: auto;">
+            <!-- <button class="btn btn-large btn-default text-center" onclick="exitCloseYes()" style="background-color: #444444;color:white;    border: none;">Yes</button> -->
+            <button class="btn btn-large btn-default text-center" onclick="exitCloseYesWBT()" style="background-color: #1e2946;color:white;    border: none;">Yes</button>
+            <button class="btn  btn-large  btn-default text-center" onclick="exitCloseNo()" style="background-color: #1e2946;color:white;margin-left: 10%;    border: none;">No </button>
+        </div>
+    </div>
+</div>
+<div id="searchContainer" style="position: absolute;width: 100%;height:100%;display:none">
+    <div class="preloaderDisplay"></div>
+    <div id="searchArea">
+        <div id="heading" style=" ">Search</div>
+        <div style="width: 100%;text-align: center;position: absolute;left: 0px;right: 0px;margin: auto;">
+			<input type="text" id="searchtext" style="width: 178px;height:30px;border: none;text-align: center;"></input>
+			<button class="btn  btn-large  btn-default text-center" onclick="searchbtnclick()" style="background-color: #444444;color:white;margin-left: 10%;    border: none;">Search </button>
+        </div>
+	<div id="searchcountresult" style="width:87%;position: absolute;top: 77px;left: 20px;"></div>
+	<div id="searchresult" style="width:87%;position: absolute;top: 110px;left: 20px;color:#007a93;"></div>
+    </div>
+</div>
+
+<div id="exitwithoutlogContainer" style="position: absolute;width: 100%;height:100%;display:none">
+    <div class="preloaderDisplay"></div>
+    
+</div>
+
+

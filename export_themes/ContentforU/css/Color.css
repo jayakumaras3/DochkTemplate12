@@ -1,0 +1,115 @@
+/* sidebar CSS *//* custom CSS  MCQ SCQ Quiz  _CR means only used for Color class  need to add in the PHP Also*/ 
+.selectedToc {
+    color: #9E0A07 !important;
+}
+.ID_ColorSet_CR {
+    color: #9E0A07;
+}
+/* custom CSS  _CR means only used for Color class  need to add in the PHP Also*/ 
+.ColorSet_CR{	
+    background-color: #9E0A07;
+}
+.instext
+{
+	color: #9E0A07;
+	/*color: #df7e00;*/
+}
+.Incorrect_CR
+{
+	background-color: #990033;
+}
+.Correct_CR
+{
+	background-color: #33544B;
+}
+.incorrect
+{
+	color: white;
+}
+.correct
+{
+	    color: white;
+}
+/*Quiz header Background */
+.parentquestion_CR {
+   background-color: #404040;
+}
+/* Font Size Need update Here */
+.FSize20
+{
+	font-size: 20px;
+}
+.FSize19
+{
+	font-size: 19px;
+}
+.FSize21
+{
+	font-size: 21px;
+}
+.FSize24
+{
+	font-size: 24px;
+}
+.FSize22
+{
+	font-size: 22px;
+}
+.FSize14
+{
+	font-size: 14px;
+}
+.FSize18
+{
+	font-size: 18px;
+}
+.FSize16
+{
+	font-size: 16px;
+}
+.FSize17
+{
+	font-size: 17px;
+}
+.FSize18
+{
+	font-size: 18px;
+}
+.FSize18
+{
+	font-size: 18px;
+}
+.FSize3_RM
+{
+	font-size: 3rem;
+}
+.FSize38
+{
+	font-size: 38px;
+}
+.leftResourceArea p {
+    font-size: 14px;
+}
+/* Icon Update */
+
+#Imagcertificateid {
+    /*filter: invert(85%) sepia(68%) saturate(597%) hue-rotate(3deg) brightness(96%) contrast(96%);*/
+}
+.prevClass {
+	/* filter: invert(85%) sepia(68%) saturate(597%) hue-rotate(3deg) brightness(96%) contrast(96%);*/
+}
+.nextClass {
+	/* filter: invert(85%) sepia(68%) saturate(597%) hue-rotate(3deg) brightness(96%) contrast(96%);*/
+}
+.resourceClass {
+	 /*filter: invert(85%) sepia(68%) saturate(597%) hue-rotate(3deg) brightness(96%) contrast(96%);*/
+}
+#TmenuIcon {
+	 /*filter: invert(85%) sepia(68%) saturate(597%) hue-rotate(3deg) brightness(96%) contrast(96%);*/
+}
+#resultsHeading
+{
+	font-weight: bold;
+    font-size: 40px;
+}
+ 

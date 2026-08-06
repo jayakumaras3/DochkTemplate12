@@ -1,0 +1,381 @@
+/*body {
+    font-family: 'Calibri', sans-serif;
+    background-color: #ffffff;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+	background-image: url('images/BG.png') !important; 
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center; 
+}*/
+	.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+ /* padding: 1rem;*/
+}
+
+/* Modal content wrapper to center image */
+.modal-content-wrapper {
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal image */
+.modal-img {
+	max-width: 82vw;
+    max-height: 82vh;
+    width: auto;
+    height: auto;
+}
+
+/* Close button */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 57px;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .modal-img {
+    max-width: 95vw;
+    max-height: 80vh;
+  }
+  .close {
+    font-size: 1.5rem;
+    right: 15px;
+    top: 10px;
+  }
+}
+@font-face {
+    font-family: 'tahoma';
+    src: url('../../../fonts/tahoma.ttf') format('truetype');
+}
+body {
+    font-family: "tahoma";
+    background-color: #ffffff;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+    /* display: flex
+; */
+    justify-content: center;
+    /* align-items: center; */
+    height: 100%;
+    width: 100%;
+    /*background-image: url(images/BG.png) !important;*/
+    background-repeat: no-repeat;
+    /* background-size: cover; */
+    /* background-position: center center; */
+}
+#q1
+{
+	padding-left: 4%;
+}
+#timer
+{
+	margin-top: 18px;
+    padding-left: 79%;
+}
+	
+}
+.Startpage_sub
+{
+	width: 63%;
+    font-size: 21px;
+    line-height: 1.25;
+}
+	
+.answer {
+    display: flex;
+    align-items: center; /* Vertically center the items */
+    gap: 19px; /* Optional space between radio/checkbox and label */
+}
+
+/* Increase size of radio buttons and checkboxes */
+input.radioBut, input.checkbox {
+  width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* Ensure label text is centered and aligned with the radio/checkbox */
+label {
+    display: inline-flex;
+    align-items: center; /* Vertically center the label text */
+    justify-content: center; /* Horizontally center the label text */
+
+}
+
+#parentquizContainer {
+    position: absolute;
+    margin: 0;
+    width: 98%;
+    
+    top: 0px;
+}
+.imgbg {
+	display:none;
+    position: relative; /* Sets the element's position to relative */
+    /*background-image: url('images/bg.png') !important; /* Uses the background image */
+    background-repeat: no-repeat;
+    background-size: cover; /* Ensures the image covers the element */
+    background-position: center center; /* Centers the image */
+	    width: 100%;
+    height: 89%;
+}
+.parentquestion {
+	font-size: 18px;
+    margin-bottom: 0px;
+    font-weight: bold;
+    color: #ffffff;
+    /* padding: 7px; */
+    margin-top: 2%;
+    margin-left: 2%;
+    background-color: #615e5e;
+    display: flex
+;
+}
+.results {
+    margin-top: 15%;
+    text-align: center;
+}
+#inste {
+   /* background-color: #fdf1e5;*/
+    /* padding-top: 1%; */
+    /* padding-right: 0%; */
+    /* padding-bottom: 1%; */
+    /* padding-left: 1%; 
+    width: 10.5%;*/
+    padding: 5px;
+    font-size: 20px;
+    color: #D70010;
+    /* font-weight: bold; */
+}
+.headerAss{
+	font-size: 38px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.Startpage {
+    margin-top: 6%;
+    /* text-align: center; */
+	direction: rtl;
+    text-align: right;
+    
+}
+.Startpagebtn {
+	margin-bottom: 2% !important;   
+    position: relative;
+    margin: 4px 2px;
+    padding: 4px;
+    background-color: #D70010;
+    color: white;
+    border: none;
+    /* font-weight: bold; */
+    text-align: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    cursor: pointer;
+    border-radius: 12px;
+    font-size: 25px;
+	font-family: "tahoma";
+	margin-bottom: 21px;
+    /* transition: background-color 0.3s ease; */
+}
+.retrybtn{
+	
+    position: relative;
+    /* margin-left: 29%; */
+    background-color: #D70010;
+    color: white;
+    border: none;
+    font-weight: bold;
+    padding: 10px 26px;
+    cursor: pointer;
+    /* border-radius: 5px; */
+    font-size: 22px;
+    transition: background-color 0.3s ease;
+
+}
+#quizContainer {
+	   
+	  margin-right: 0;
+    margin-left: 0% !important;
+    width: 89%;
+    z-index: 10;
+    /* padding: 1.1%; */
+    /* background-color: white; */
+    /* border: 1px solid #ddd; */
+    width: 94%;
+}
+.Bulb {
+    position: absolute;
+    left: 94%;
+    margin-top: 16px;
+    width: 6%;
+}
+.questionContainer {
+    padding: 1.5%;
+    margin-top: 6%;
+    background-size: cover;
+    background-position: center;
+}
+
+.question {
+	direction: rtl;
+    font-size: 24px;
+    margin-bottom: 0px;
+    /* font-weight: bold; */
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    /* background-color: #f9f9f9; */
+    padding: 2%;
+}
+.redtext{
+	font-size: 20px;
+    color: #df7e00;
+    margin-top: 8px;
+}
+ .redtext1{
+	font-size: 20px;
+    color: #df7e00;
+    margin-top: 8px;
+	width: 50%;
+}		
+.options {
+	margin-top: 2px;
+	width: 76%;
+    margin-bottom: 20px;
+   margin-left: 22%;
+    display: flex;
+    flex-direction: column;
+}
+
+		  .options1 {
+	margin-top: 2px;
+	width: 50%;
+    margin-bottom: 20px;
+    margin-left: 12%;
+    display: flex;
+    flex-direction: column;
+}	  
+.answer {
+	    direction: rtl;
+  min-height: 40px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    /* background-color: #f1f1f1; */
+    /* padding: 0.2%; */
+    /* border-radius: 5px; */
+    /* transition: background-color 0.3s ease; */
+    cursor: pointer;
+}
+.contentWrapper {
+  display: flex;
+}
+.ImageQuestion {
+	
+	width: 418px;
+    height: 264px;
+	object-fit: contain;
+    z-index: 1000;
+    cursor: pointer;
+    margin-left: 12%;
+
+}
+.zoom-in {
+   transition: transform 0.3s ease-in-out;
+    transform: scale(2);
+    z-index: 1000;
+    top: 25%;
+    right: 28%;
+    height: 44%;
+}
+.ImageZoomin{
+	top: 30%;
+    right: 32%;
+    height: 42%;
+}
+.VideoQuestion
+{
+	display: block;
+    top: 30%;
+    right: 5%;
+    height: 40%;
+    width: 36%;
+    object-fit: contain;
+    margin-left: 12%;
+}
+.answer:hover {
+  /*  background-color: #e1e1e1;*/
+}
+
+.answer input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.answer label {
+	direction: rtl;
+    font-size: 20px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.answer label:hover {
+    color: #007bff;
+}
+.feedback
+{
+	/* padding-top: 25px; */
+	/* font-size: 24px; */
+}
+
+.incorrect
+{
+	    color: red;
+}
+.correct
+{
+	    color: green;
+}
+.btn {
+    font-family: 'tahoma';
+    position: relative;
+    margin-left: 76.5%;
+    background-color: #D70010;
+    color: white;
+    border: none;
+    font-weight: bold;
+    padding: 10px 26px;
+    cursor: pointer;
+    /* border-radius: 5px; */
+    font-size: 22px;
+    transition: background-color 0.3s ease;
+}
+
+

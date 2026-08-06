@@ -1,0 +1,15 @@
+{
+  "images": {
+    "bgImage": "bg.png"
+  },
+  "text": {
+    "title": "Certificate of Completion",
+    "completionText": "has successfully completed the eLearning on",
+    "courseTitle": "Warranty & Claim Management in TouchStone",
+    "dateLabel": "Date:",
+    "issuerLeft": "TouchStone",
+    "issuerRight": "TouchStone E<br>IT Training Service",
+    "signatureLeft": "(PC)",
+    "signatureRight": "(VC)"
+  }
+}

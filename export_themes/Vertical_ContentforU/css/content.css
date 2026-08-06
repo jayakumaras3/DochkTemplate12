@@ -1,0 +1,577 @@
+.contentArea {
+    position: relative;
+    float: left;
+    width: 99%;
+    height: 700px;
+    left: 8px;
+    box-shadow: 0px 0px 5px rgb(0 0 0 / 50%);
+}
+#certificateid {
+    float: right;
+    position: relative;
+    right: 10px;
+    bottom: 5px;
+	background-color: white;
+    border: none;
+    
+}
+#Imagcertificateid
+{
+	background-image: url("../images/footer-menu/Certificate.svg");
+    background-size: cover;     /* Optional: ensures the image covers the button */
+    background-repeat: no-repeat;
+}
+#clickNextId
+{
+    position: absolute;
+    z-index: 1005;
+    text-align: left;
+   /* font-size: 20px;*/
+    top: 94%;
+    color: white;
+    right: 0.8%;
+}
+#spanCliContinue{
+	background-color: black;
+    padding: 5px;
+	
+}
+#pagenoHeader
+{
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    top: auto;
+    transform: none;
+    z-index: 1998;
+    float: none;
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+    min-width: 44px;
+    height: auto;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.fullContentArea {
+    width: 1366px !important;
+    height: 768px !important;
+    left: 0 !important;
+}
+/*.headingArea1 {
+	//display:none;
+	position: absolute;
+}
+.headingArea {
+    position: relative;
+    height: 45px;
+    /* background-color: #333333; 
+    background-color: #000;
+    color: white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-size: 19px;
+    font-weight: bold;
+    padding: 8px 20px;
+}*/
+.headingArea1 {
+    position: fixed;
+    right: 18px;
+    top: 20px;
+    z-index: 2002;
+    margin: 0;
+    padding: 0;
+   /* cursor: pointer;*/
+}
+.headingcloser {
+	    margin-top: 0px;
+    position: absolute;
+    height: 109%;
+    width: 88%;
+    z-index: 1001;
+    margin-left: 256px;
+	cursor: pointer;
+}
+.headingArea2 {
+    margin-top: 0px;
+    position: absolute;
+    /* height: 56px; */
+    width: 83%;
+    height: 109%;
+    z-index: 1003;
+    margin-left: 230px;
+}
+#TmenuIcon {
+   /*   width: 38px;
+    height: 23px;
+    cursor: pointer;
+  margin-top: 6px;*/
+  cursor: pointer;
+}
+#TmenuIcon1
+{
+	/*margin-top: 1%;*/
+	cursor: pointer;
+	display: block;
+    margin-left: 210px;
+    height: 29px;
+	
+}
+.headingArea {
+    position: relative;
+    height: 45px;
+    /* left: 4%; */
+    width: 100%;
+    /* background-color: #333333; */
+    background-color: #ffffff;
+    color: #000000;
+    /* border-top-left-radius: 5px; */
+    /* border-top-right-radius: 5px; 
+    font-size: 19px;*/
+    /*font-weight: bold;*/
+    padding: 8px 16px 8px 57px;
+}
+
+.pageContent {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 655px;
+
+	   
+
+}
+
+.showContent {
+    display: block !important;
+}
+
+.hideContent {
+    display: none !important;
+}
+
+#captivateFrame {
+    width: 100%;
+    height: 100%;
+    border-color: #e6e6e6;
+    border-left-width: 0;
+    border-right-width: 0;
+
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+	border-bottom-left-radius:5px;
+	border-bottom-right-radius:5px;
+
+}
+
+video {
+    width: 100%;
+    height: 100%;
+	
+}
+video::cue {
+ 
+  font-size: 24px;
+   line-height: 1.8;       /* Line spacing */
+  padding: 10px;
+}
+
+/* ===== PRELOADER ANIMATIONS ===== */
+@keyframes spinnerRotate {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== BACKGROUND OVERLAY (used in preloader, resource area, exit popup) ===== */
+.preloaderDisplay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.6;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 10001;
+}
+
+/* Override for the page-transition preloader — needs to be fully opaque
+   so dark video frames / canvas don't bleed through */
+#preloader > .preloaderDisplay {
+    background-color: rgba(255, 255, 255, 0.97);
+    opacity: 1;
+}
+
+/* ===== PRELOADER CONTAINER ===== */
+#preloader {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    z-index: 10000;
+    /* Use flexbox so the spinner is always centred regardless of template layout */
+    align-items: center;
+    justify-content: center;
+    /* Fade is driven entirely by PreloadManager via inline opacity */
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* When PreloadManager calls show(), display is set to 'block' via JS.
+   Override it back to flex so the spinner centres correctly. */
+#preloader[style*="block"] {
+    display: flex !important;
+}
+
+.preloaderteempcls {
+    width: 100% !important;
+    height: 100%;
+    position: absolute;
+    left: 0 !important;
+    top: 0;
+    display: none;
+    z-index: 10000;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* ===== SPINNER POSITIONING ===== */
+#preloaderText {
+    /* Centred by the flex parent — no absolute positioning needed */
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    z-index: 10002;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    /* Override any inline marginLeft set by contentController JS */
+    margin: 0 !important;
+}
+
+/* ===== CSS SPINNER ===== */
+.preloader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(180, 180, 180, 0.3);
+    border-top-color: #fa601e;
+    border-radius: 50%;
+    animation: spinnerRotate 0.85s linear infinite;
+    flex-shrink: 0;
+}
+
+/* Loading label below spinner */
+.preloader-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #777;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+}
+
+/* Safety: hide the old GIF if present */
+#preloaderText > img {
+    display: none !important;
+}
+
+#preloaderCount {
+    margin-left: 23.5%;
+    font-weight: bold;
+}
+
+/* ===== PROGRESS BAR VARIANT ===== */
+.preloader-progress-bar {
+    width: 140px;
+    height: 4px;
+    background-color: rgba(200, 200, 200, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.preloader-progress-bar::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #fa601e, transparent);
+    animation: slideProgress 1.5s ease-in-out infinite;
+}
+
+@keyframes slideProgress {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* ===== RESOURCE CONTENT ===== */
+#resourceContent {
+    background-color: white;
+    /* Responsive sizing: max 520px wide, fits within viewport */
+        width: clamp(275px, 80vw, 359px) !important;
+    max-height: calc(100vh - 80px) !important;
+    /* Remove old absolute positioning — overlay flex handles centering */
+    position: relative !important;
+    inset: auto !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+    z-index: 100111 !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+}
+
+#resourceArea {
+    /* Full-viewport overlay */
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    /* Flex: centres the popup in both axes */
+    display: none;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.55) !important;
+    z-index: 10000 !important;
+    box-sizing: border-box !important;
+    padding: 16px !important;
+}
+.Navigation_cls {
+    position: absolute;
+    left: 95%;
+    top: 2%;
+}
+.Navigation_cls_main {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    float: none;
+    z-index: 1;
+    cursor: pointer;
+}
+.rightResourceContent1 {
+    position: relative;
+    float: left;
+    width: 100%;
+    height: 100%;
+    /* top: 28%; */
+    /* left: 5%; */
+}
+#resourceContent1 {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    z-index: 100111;
+    position: absolute;
+    /* left: 221px; */
+    right: 0;
+    /* top: 15px; */
+    /* bottom: 62px; */
+    margin: auto;
+    box-shadow: 0px 0px 15px rgb(0 0 0 / 50%);
+}
+#resourceArea1 {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+}
+
+.leftResourceArea {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    float: none;
+    padding: 20px 10px 10px 10px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.rightResourceContent {
+    position: relative;
+    float: left;
+    width: 30%;
+    height: 40%;
+    top: 28%;
+    left: 5%;;
+}
+
+.rightResourceContent > img {
+    width: 100%;
+    height: 100%;
+
+}
+
+.headerResource {
+    /*font-size: 22px !important;*/
+    font-weight: bold;
+    line-height: 2.5em;
+}
+
+.leftResourceArea p {
+    /*font-size: 14px;*/
+    font-weight: bold;
+    line-height: 1.5em;
+}
+
+
+#searchArea
+{
+	border-radius: 5px;
+	width: 316px;
+	height: 167px;
+	z-index: 10003;
+	position: absolute;
+	left:0;
+	right:0;
+	top:147px;
+	
+	margin:auto;
+	padding: 3%;
+	background: #cfcfcf;
+	box-shadow: 0px 0px 4px rgba(0,0,0,0.5);
+}
+#heading{
+	position: absolute;
+    left: 0px;
+    top: 4px;  
+	color: #000;    
+	font-weight: bold;  
+	font-size: 18px;  
+	text-align: center;  
+	width: 100%;
+}
+
+/* ── Learning Aid popup: force flex-centering when JS sets display:block ── */
+#resourceArea[style*="display: block"],
+#resourceArea[style*="display:block"] {
+    display: flex !important;
+}
+
+/* ── #resourceArea1 (image popup): same fix ── */
+#resourceArea1 {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: none;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.55) !important;
+    z-index: 10000 !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
+}
+#resourceArea1[style*="display: block"],
+#resourceArea1[style*="display:block"] {
+    display: flex !important;
+}
+#resourceContent1 {
+    background-color: white;
+    width: clamp(280px, 80vw, 520px) !important;
+    max-height: calc(100vh - 80px) !important;
+    position: relative !important;
+    inset: auto !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45) !important;
+    z-index: 100111 !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+}
+
+/* ===== ORIENTATION MESSAGE (Portrait-only for phones) ===== */
+#orientationMessage {
+    position: fixed;
+    inset: 0;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000 !important;
+    background-image: linear-gradient(135deg, rgb(20, 20, 20), rgb(0, 0, 0)) !important;
+    z-index: 99999 !important;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    pointer-events: auto;
+}
+
+#orientationMessage[style*="display: flex"],
+#orientationMessage[style*="display:flex"] {
+    display: flex !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Hide body scroll when orientation overlay is visible */
+body:has(#orientationMessage[style*="display: flex"]),
+body:has(#orientationMessage[style*="display:flex"]) {
+    overflow: hidden !important;
+    height: 100vh !important;
+}
+
+.orientationMessageContent {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    max-width: 360px;
+    padding: 0 20px;
+}
+
+.orientationIcon {
+    width: 234px;
+    height: 234px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rotateIcon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(229, 57, 53, 0.3));
+}
+
+.orientationTitle {
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: 0.5px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.orientationSubtext {
+    font-size: 14px;
+    font-weight: 400;
+    color: #b0b0b0;
+    margin: 0;
+    line-height: 1.5;
+    letter-spacing: 0.3px;
+}

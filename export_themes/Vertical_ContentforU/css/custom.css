@@ -1,0 +1,2501 @@
+﻿/* ═══════════════════════════════════════════════════════════════════════
+   GLOBAL RESETS — iOS Safari + Android viewport normalization
+   ─ -webkit-fill-available: iOS Safari ≤15 uses actual visible viewport
+     (excludes URL bar / home indicator) so 100% = true screen real estate.
+   ─ 100dvh: iOS Safari 16+ / modern browsers (shrinks when URL bar hides).
+   ═══════════════════════════════════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    /* iOS Safari ≤15: true visible height (excludes dynamic browser chrome) */
+    height: -webkit-fill-available !important;
+    /* Overridden to 100dvh by the second declaration below in modern browsers */
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    /* Inherit the -webkit-fill-available anchor set on html */
+    min-height: -webkit-fill-available !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+.resume_container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10001;
+}
+
+.preloaderDisplayresume {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(0, 0, 0);
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    z-index: 1;
+ 
+}
+
+.resume_content_container{
+    background-color:#fff; 
+    border-radius: 5px;   
+    width: min(400px, calc(100vw - 24px));
+    min-height: 174px;
+    height: auto;
+    max-height: calc(100vh - 24px);
+    border-radius: 10px;  
+    z-index: 2;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 48px 16px 22px;
+    overflow-y: auto;
+}
+
+.resume_content_header{
+    position: absolute;    
+    left: 0px; 
+    height: 40px; 
+    border-radius: 10px 10px 0px 0px; 
+    padding: 5px;
+    top: 0px;    
+    color: #fff;    
+    font-weight: bold;    
+   /* font-size: 18px;   */ 
+    text-align: center;    
+    width: 100%;
+}
+
+.resume_content_text{
+    font-weight:bold;
+    text-align: center; 
+    margin-top: 4%;
+   /* font-size:17px; */
+    margin-bottom: 12px;
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+.resume_content_container .row {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    margin-top: 7%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.resume_content_container .row > [class*="col-"] {
+    float: none;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.resume_content_container .h-100 {
+    height: auto !important;
+}
+
+.yes-btn{
+    color:white; 
+    border: none;
+}
+
+.no-btn{
+    color:white; 
+    border: none;
+}
+
+.resume_content_container .yes-btn,
+.resume_content_container .no-btn {
+    min-width: 54px;
+    height: 40px;
+    margin: 0;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* Reels-style video layout (compatibility-first, no JS changes) */
+.contentArea.video-mode {
+    position: relative !important;
+    left: 0 !important;
+    width: 100% !important;
+    /*
+     * No subtraction needed: the SCORM player uses a <frameset> and this CSS
+     * runs inside the CONTENT frame. Inside the frame, 100vh/100dvh already
+     * equals the frame height (device height minus the outer 44px nav row).
+     * Subtracting any additional px here creates a black gap at the bottom.
+     *
+     * Layer 1 — base (all browsers, including older iOS Safari)
+     */
+    height: 100vh !important;
+    /* Layer 2 — iOS Safari ≤15: 100% resolves against html's
+       -webkit-fill-available height = true visible area, no URL-bar gap */
+    height: 100% !important;
+    /* Layer 3 — iOS Safari 16+ / Chrome / Firefox: dynamic viewport unit
+       (shrinks when the browser chrome slides away, no jump/reflow) */
+    height: 100dvh !important;
+    box-shadow: none !important;
+    background: #000;
+    overflow: hidden !important;
+    padding-top: 0 !important;
+    margin: 0 !important;
+}
+
+.contentArea.video-mode .headingArea {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 54px !important;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent) !important;
+    backdrop-filter: blur(0px) !important;
+    z-index: 1001 !important;
+    display: flex !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+    padding: 8px 16px 8px 46px !important;
+    border-bottom: none !important;
+}
+
+.contentArea.video-mode .pageContent {
+    position: absolute !important;
+    top: 54px !important;
+    left: 0 !important;
+    right: 0 !important;
+    /* Footer rendered height = 60px base + env(safe-area-inset-bottom) for
+       home indicator on notched iPhones (iPhone X/11/12/13/14/15/16).      */
+    bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+    width: 100% !important;
+    /*
+     * CRITICAL: Do NOT use height:auto here. iOS Safari cannot resolve
+     * percentage heights on children when the parent height is 'auto',
+     * even if top+bottom constraints are set. Remove height entirely so
+     * the top/bottom constraints define the box size unambiguously.
+     */
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #000 !important;
+}
+
+.contentArea.video-mode .vertical-video-layout {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+.contentArea.video-mode .vertical-video-layout:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+}
+
+.contentArea.video-mode .vertical-video-frame {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    background: #000 !important;
+    box-shadow: none !important;
+    z-index: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.contentArea.video-mode #vidArea {
+    /* position:absolute + inset:0 ensures iOS Safari stretches the <video>
+       element to fill its container. height:100% alone is unreliable on
+       iOS Safari when the containing block height is constraint-derived.  */
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    object-fit: contain !important;
+    border-radius: 0 !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.contentArea.video-mode #vidArea::cue {
+    font-size: 20px;
+    line-height: 1.6;
+    padding: 8px 10px;
+}
+
+/* ── contentArea.video-mode footer: right-side flex column (matches reels-wrapper) ── */
+.contentArea.video-mode + .footer {
+    position: fixed !important;
+    right: 18px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    z-index: 2200 !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+}
+
+.contentArea.video-mode + .footer > div {
+    float: none !important;
+    position: static !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* All nav buttons: static within the flex column */
+.contentArea.video-mode + .footer #prev,
+.contentArea.video-mode + .footer .prevClass,
+.contentArea.video-mode + .footer #next,
+.contentArea.video-mode + .footer .nextClass,
+.contentArea.video-mode + .footer .nextClassHighlight,
+.contentArea.video-mode + .footer .resourceClass {
+    position: static !important;
+    width: 4rem !important;
+    height: 4rem !important;
+    min-width: 4rem !important;
+    min-height: 4rem !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background-color: transparent !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    box-shadow: none !important;
+    cursor: pointer !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}}
+
+.contentArea.video-mode + .footer #prev,
+.contentArea.video-mode + .footer .prevClass {
+    background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
+    order: 1 !important;
+}
+
+.contentArea.video-mode + .footer #next,
+.contentArea.video-mode + .footer .nextClass,
+.contentArea.video-mode + .footer .nextClassHighlight {
+    background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
+    order: 2 !important;
+}
+
+.contentArea.video-mode + .footer .resourceClass {
+    background-image: url("../images/footer-menu/Resource.png") !important;
+  /*  background-color: rgba(10,15,30,0.6) !important;*/
+    background-size: contain !important;
+    order: 3 !important;
+}
+
+.contentArea.video-mode + .footer #ProgressBar {
+    display: none !important;
+}
+
+.contentArea.video-mode #clickNextId {
+    position: absolute !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    right: auto !important;
+    top: auto !important;
+    transform: translateX(-50%) !important;
+    z-index: 1007 !important;
+}
+
+/* ===== Shorts / Reels UI Redesign ===== */
+.contentArea.video-mode {
+    position: relative !important;
+    left: 0 !important;
+    width: 100% !important;
+    /* Same three-layer height fallback chain — no subtraction (inside frame) */
+    height: 100vh !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    background: radial-gradient(circle at center, #1b1d22 0%, #111318 58%, #090b0f 100%);
+}
+
+.contentArea.video-mode .headingArea {
+    height: 52px;
+    background: rgba(16, 18, 24, 0.5) !important;
+    backdrop-filter: blur(8px);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px 8px 56px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.contentArea.video-mode .headingArea > span {
+    max-width: calc(100% - 120px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.contentArea.video-mode #pagenoHeader {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    float: none;
+    min-width: 44px;
+    height: auto;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.45) !important;
+    border: none !important;
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1998;
+}
+
+.contentArea.video-mode .shorts-container {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: unset !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    animation: shortsVideoPop .35s ease;
+    background: #000 !important;
+}
+
+.contentArea.video-mode .shorts-video-frame {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    aspect-ratio: 9 / 16 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    background: #000 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.contentArea.video-mode .shorts-bottom-gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 36%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0));
+    pointer-events: none;
+}
+
+.contentArea.video-mode #vidArea {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+    border-radius: 0 !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+.contentArea.video-mode #vidArea::cue {
+    font-size: 20px;
+    line-height: 1.7;
+    padding: 8px 10px;
+}
+
+.contentArea.video-mode .action-bar {
+    display: none !important;
+}
+
+.contentArea.video-mode .action-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none !important;
+    background-color: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+}
+
+.contentArea.video-mode .action-btn:hover,
+.contentArea.video-mode .action-btn:focus-visible {
+    transform: scale(1.06);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 3px rgba(126, 165, 255, 0.2), 0 10px 24px rgba(0, 0, 0, 0.35);
+    outline: none;
+}
+
+.contentArea.video-mode .action-btn.like {
+    background-image: url("../images/footer-menu/Resource.png");
+}
+
+.contentArea.video-mode .action-btn.comment {
+    background-image: url("../images/footer-menu/CC.png");
+}
+
+.contentArea.video-mode .action-btn.share {
+    background-image: url("../images/footer-menu/next.svg");
+}
+
+.contentArea.video-mode .action-btn.bookmark {
+    background-image: url("../images/footer-menu/Certificate.svg");
+}
+
+/* Duplicate footer rules removed — consolidated above */
+
+@keyframes shortsFadeIn {
+    from { opacity: .0; }
+    to { opacity: 1; }
+}
+
+@keyframes shortsVideoPop {
+    from { opacity: .0; transform: scale(.97); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ===== App-style Vertical Reel Layout (All page types) ===== */
+
+/* HARD RESET */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#mainPage {
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #0b1220 !important;
+    transform: none !important;
+    left: 0 !important;
+    top: 0 !important;
+    position: relative !important;
+}
+
+#mainPage {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+}
+
+
+/* =======================================================================
+   REELS PRESENTATION LAYER — RESPONSIVE ASPECT-RATIO ARCHITECTURE
+   Professional reels layout that works in portrait, landscape, and iframe.
+   Uses dynamic viewport units and aspect-ratio for perfect visibility.
+   ======================================================================= */
+
+/*  1. Viewport root — full dynamic viewport with fallback  */
+html, body {
+    width: 100% !important;
+    height: 100vh !important; /* Fallback */
+    height: 100dvh !important;
+    min-height: 100vh !important; /* Fallback */
+    min-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    overflow-x: hidden !important; /* Prevent horizontal scroll */
+    background: #0a0d14 !important;
+    position: relative !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+/*  2. Root container — flex-centered app shell  */
+.wholeContainer.reels-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    height: 100vh !important; /* Fallback */
+    height: 100dvh !important;
+    min-height: 100vh !important; /* Fallback */
+    min-height: 100dvh !important;
+    display: flex !important;
+    /*
+     * align-items: stretch — children fill the full cross-axis height.
+     * align-items: center (old value) caused the reels-wrapper-shell to
+     * shrink to its content height and get centered with black bars above
+     * and below it.
+     */
+    align-items: stretch !important;
+    /*
+     * justify-content: center — ensures the 9:16 content column is always
+     * horizontally centred in the viewport on all display sizes (1080p,
+     * 2K, 4K). Using flex-start previously relied solely on margin:0 auto
+     * on the contentArea child, which could fail in some edge cases on
+     * ultra-wide viewports. center + margin:0 auto = doubly safe.
+     */
+    justify-content: center !important;
+    overflow: hidden !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    box-sizing: border-box !important;
+    touch-action: pan-y !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+/* Portrait orientation: full height, auto width based on 9:16 aspect ratio */
+@media (orientation: portrait) {
+    html, body {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+        background: #000 !important; /* Hide any SCORM background elements */
+    }
+    
+    .wholeContainer.reels-wrapper {
+        background: #000 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+}
+
+/* Landscape orientation: centered with dark stage */
+@media (orientation: landscape) {
+    body {
+        background: radial-gradient(circle at 50% 40%, #1a1f2e 0%, #0d1018 60%, #06080c 100%) !important;
+    }
+    
+    .wholeContainer.reels-wrapper {
+        background: #000 !important;
+    }
+}
+
+/* Desktop: add shadow for depth */
+@media (min-width: 769px) and (orientation: landscape) {
+    .wholeContainer.reels-wrapper {
+        box-shadow: 0 0 60px rgba(0,0,0,0.8) !important;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   2K / 4K LARGE DISPLAY SAFE CENTERING
+   On ultra-wide viewports (2560px, 3840px) the JavaScript resize.js
+   function attempts to set body.style.left / body.style.transform to
+   scale & offset the page. Those inline styles are intentionally
+   nullified by the transform:none + left:0 rules above.
+   The rules below act as an explicit safety net ensuring the entire
+   design stays centred and never clips on either edge.
+   ───────────────────────────────────────────────────────────────────── */
+@media (min-width: 1920px) {
+    html, body {
+        /* Reinforce: no JS-injected offset can clip the centred layout */
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+        overflow-x: hidden !important;
+    }
+
+    .wholeContainer.reels-wrapper {
+        /* Explicit centring on ultra-wide: belt-AND-suspenders with
+           justify-content:center already set on the flex container     */
+        justify-content: center !important;
+        align-items: stretch !important;
+        overflow: hidden !important;
+        /* Prevent the dark stage from having unwanted left/right offset */
+        margin-left: auto !important;
+        margin-right: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Content column: cap to 480px and stay centred */
+    .wholeContainer.reels-wrapper .contentArea {
+        max-width: 480px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
+/* 4K specific — same rules, wider guard */
+@media (min-width: 2560px) {
+    .wholeContainer.reels-wrapper .contentArea {
+        max-width: 480px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    /* Keep footer buttons anchored to the content column right edge */
+    .wholeContainer.reels-wrapper .footer,
+    .wholeContainer.reels-wrapper .headingArea1,
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        position: fixed !important;
+        right: calc(50% - 222px) !important; /* 240px - 18px = stays 18px inside content */
+    }
+}
+
+/*  3. Sidebar overlay — positioned absolutely within app shell  */
+.wholeContainer.reels-wrapper .sideBar {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: auto !important;
+    height: 100% !important;
+    background: rgba(0,0,0,0.55) !important;
+    z-index: 3000 !important;
+    display: none !important;    
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    float: none !important;
+}
+
+/* Keep menu full-width start on portrait screens */
+@media (orientation: portrait) {
+    .wholeContainer.reels-wrapper .sideBar {
+        left: 0 !important;
+    }
+}
+
+/* Align menu start to centered 9:16 content column in landscape */
+@media (orientation: landscape) {
+    .wholeContainer.reels-wrapper .sideBar {
+        left: calc((100vw - min(480px, calc(100dvh * 9 / 16))) / 2) !important;
+    }
+
+    /*
+     * In landscape, the 9:16 content column is narrower than the viewport
+     * and centred. The nav buttons must sit adjacent to the column's RIGHT
+     * edge, not at the viewport's right edge (which on 2K/4K could place
+     * them 1000+ px away in dead space).
+     *
+     * Formula explanation:
+     *   content_right_from_left = 50% + content_half_width
+     *   Desired right edge of button (18px inside content): content_right - 18px
+     *   CSS `right` = viewport - desired_position = 50% - content_half_width + 18px
+     *
+     *   content_half_width = min(240px, calc(100dvh * 9 / 32))
+     *     (half of min(480px, calc(100dvh * 9 / 16)))
+     *
+     * Result: on any screen size the buttons sit 18px inside the right
+     * edge of the content column — identical to how they sit on portrait
+     * (where the column IS the full viewport).
+     */
+    /* Keep headingArea1 and pagenoHeader aligned with footer on landscape.
+     * position:fixed → bottom-right with responsive spacing
+     */
+    .wholeContainer.reels-wrapper .headingArea1,
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        position: fixed !important;
+        right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 20px) !important;
+    }
+
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        bottom: 20px !important;
+        top: auto !important;
+    }
+
+    .wholeContainer.reels-wrapper .footer {
+        position: fixed !important;
+        right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 18px) !important;
+    }
+}
+
+.wholeContainer.reels-wrapper .sideBar[style*="display: block"],
+.wholeContainer.reels-wrapper .sideBar[style*="display:block"] {
+    display: flex !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarPanel {
+    width: clamp(280px, 32vw, 280px) !important;
+    max-width: 88vw !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    background: #fff !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-shadow: 4px 0 30px rgba(0,0,0,0.5) !important;
+}
+
+/* Landscape: narrower sidebar to save space */
+@media (orientation: landscape) and (max-height: 600px) {
+    .wholeContainer.reels-wrapper .sideBarPanel {
+        width: clamp(250px, 30vw, 320px) !important;
+        max-width: 82vw !important;
+    }
+}
+
+.wholeContainer.reels-wrapper .sideBarHeader {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 1 px 16px !important;
+    flex-shrink: 0 !important;
+    border-bottom: 1px solid #eee !important;
+}
+
+.wholeContainer.reels-wrapper .sideBar .logo {
+    max-width: 270px !important;
+    width: 86% !important;
+    height: auto !important;
+    display: block !important;
+}
+
+.wholeContainer.reels-wrapper .sideBar .menu-close-btn {
+    background: transparent !important;
+    border: none !important;
+    color: #333 !important;
+    font-size: 22px !important;
+    cursor: pointer !important;
+    padding: 4px 8px !important;
+    line-height: 1 !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuWrapper {
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+    display: flex !important;
+    min-height: 0 !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuContent {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    padding: 16px !important;
+    min-height: 0 !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader {
+    width: 100% !important;
+    height: auto !important;
+    top: auto !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 0 !important;
+    border-bottom: 1px solid #d9d9d900  !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    gap: 8px !important;
+    position: static !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #toc_id,
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #trans_id {
+    background-color: #fff !important;
+    border: 1px solid transparent !important;
+    border-bottom: 0 !important;
+    margin-bottom: -1px !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #toc_id span,
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader #trans_id span {
+    font-size: 18px !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader .tocclickedclscss {
+    border-color: #d9d9d9 !important;
+    border-bottom-color: #fff !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuContent #sideBarHeader .tocclickedclscss::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 3px;
+    background-color: #0088BB;
+}
+
+.wholeContainer.reels-wrapper .sideBarMenuContent .tocData {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    padding-top: 6px !important;
+}
+
+.wholeContainer.reels-wrapper .sideBarFooter {
+    text-align: center !important;
+    padding: 16px !important;
+    font-size: 13px !important;
+    color: #888 !important;
+    flex-shrink: 0 !important;
+    border-top: 1px solid #eee !important;
+}
+
+.orientation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(18px, env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) max(18px, env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+    background: rgba(8, 11, 18, 0.92);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .28s ease;
+}
+
+.orientation-overlay.is-visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.orientation-overlay__panel {
+    width: min(540px, 100%);
+    text-align: center;
+    color: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
+    padding: clamp(20px, 4vw, 34px);
+    animation: orientationOverlayIn .3s ease;
+}
+
+.orientation-overlay__icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    color: #93c5fd;
+    background: rgba(59, 130, 246, 0.18);
+}
+
+.orientation-overlay__icon svg {
+    width: 36px;
+    height: 36px;
+    fill: currentColor;
+}
+
+.orientation-overlay__title {
+    margin: 0;
+    font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.orientation-overlay__text {
+    margin: 10px 0 0;
+    font-size: clamp(0.95rem, 1.65vw, 1.08rem);
+    line-height: 1.55;
+    color: #dbeafe;
+    font-weight: 500;
+}
+
+@keyframes orientationOverlayIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.985);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .orientation-overlay__icon {
+        width: 56px;
+        height: 56px;
+    }
+
+    .orientation-overlay__icon svg {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orientation-overlay {
+        transition: opacity .2s ease;
+    }
+
+    .orientation-overlay__panel {
+        animation: none;
+    }
+}
+
+/*  4. Content area — aspect-ratio constrained reels frame (ALWAYS CENTERED)  */
+.wholeContainer.reels-wrapper .contentArea {
+    position: relative !important;
+    width: auto !important; /* Auto width - sized by aspect ratio */
+    height: 100vh !important; /* Fallback */
+    height: 100dvh !important;
+    max-height: 100vh !important; /* Fallback */
+    max-height: 100dvh !important;
+    aspect-ratio: 9 / 16 !important; /* Always maintain 9:16 ratio */
+    margin: 0 auto !important; /* Center horizontally */
+    padding: 0 !important;
+    float: none !important;
+    overflow: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: #000 !important;
+    z-index: 1 !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+    max-width: calc(100vh * 9 / 16) !important; /* Fallback */
+    max-width: calc(100dvh * 9 / 16) !important;
+}
+
+/* Portrait: width-driven — content fills viewport width, height auto from aspect-ratio */
+@media (orientation: portrait) {
+    .wholeContainer.reels-wrapper .contentArea {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 100vh !important;  /* Fallback */
+        min-height: 100dvh !important;
+        max-height: none !important;
+        aspect-ratio: 9 / 16 !important;
+        margin: 0 !important;
+    }
+}
+
+/* Landscape: always centered with aspect ratio constraint */
+@media (orientation: landscape) {
+    .wholeContainer.reels-wrapper .contentArea {
+        width: auto !important;
+        max-width: calc(100vh * 9 / 16) !important; /* Fallback */
+        max-width: calc(100dvh * 9 / 16) !important;
+    }
+}
+
+/* Desktop wide screens: limit to reasonable max width but stay centered */
+@media (min-width: 1200px) and (orientation: landscape) {
+    .wholeContainer.reels-wrapper .contentArea {
+        max-width: 480px !important;
+    }
+}
+
+/* Tablet landscape: ensure proper sizing */
+@media (min-width: 768px) and (max-width: 1199px) and (orientation: landscape) {
+    .wholeContainer.reels-wrapper .contentArea {
+        max-width: min(480px, calc(100dvh * 9 / 16)) !important;
+    }
+}
+
+/*  5. Reels shell / scroll container  */
+.wholeContainer.reels-wrapper .reels-wrapper-shell {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.wholeContainer.reels-wrapper .reels-container {
+    width: 100% !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scroll-snap-type: y mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    touch-action: pan-y !important;
+    box-sizing: border-box !important;
+}
+
+.wholeContainer.reels-wrapper .reels-container::-webkit-scrollbar {
+    display: none !important;
+}
+
+/*  6. Individual slide — exactly one viewport tall, clips overflow  */
+.wholeContainer.reels-wrapper .reel-slide {
+    width: 100% !important;
+    /*
+     * MUST be a fixed height (not auto). height:auto makes the slide grow
+     * to fit content; with min-height:100dvh the slide might be 100dvh but
+     * the scroll-snap engine then has no reliable snap-boundary, and iOS
+     * shows the next slide partially. Using height:100dvh makes each slide
+     * exactly one viewport unit — identical to TikTok / Instagram Reels.
+     */
+    height: 100vh !important;   /* Fallback for browsers without dvh */
+    height: 100dvh !important;  /* iOS Safari 16+ / Chrome / Firefox */
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    scroll-snap-align: start !important;
+    scroll-snap-stop: always !important;
+    position: relative !important;
+    overflow: hidden !important; /* Clip video/content to slide boundary */
+    display: flex !important;
+    flex-direction: column !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #0a0d14 !important;
+    box-sizing: border-box !important;
+}
+
+/*  7. Fixed top bar (header row inside slide)  */
+.wholeContainer.reels-wrapper .reel-fixed-top {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    z-index: 1200 !important;
+    pointer-events: none !important;
+    overflow: visible !important; /* Ensure menu icon not clipped */
+    flex-shrink: 0 !important;
+}
+
+.wholeContainer.reels-wrapper .reel-fixed-top > * {
+    pointer-events: auto !important;
+}
+
+/*  8. Header title bar
+ * IMPORTANT: Do NOT set display:none here — #pagenoHeader lives inside
+ * .headingArea and display:none on a parent hides all descendants.
+ * Instead, collapse it to zero size with overflow:visible so its absolutely
+ * positioned child (#pagenoHeader) can still render.
+ */
+.wholeContainer.reels-wrapper .headingArea {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 0 !important;       /* zero width — takes no space */
+    height: 0 !important;      /* zero height — takes no space */
+    overflow: visible !important; /* allow children to escape bounds */
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important; /* Must NOT be none */
+    pointer-events: none !important;
+    z-index: 2003 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    flex: none !important;
+    transform: none !important;
+}
+
+/* Hide all headingArea content except #pagenoHeader */
+.wholeContainer.reels-wrapper .headingArea > span,
+.wholeContainer.reels-wrapper .headingArea > button {
+    display: none !important;
+}
+
+/* Landscape small height: compact icons */
+@media (orientation: landscape) and (max-height: 500px) {
+    .wholeContainer.reels-wrapper .headingArea1 {
+        right: 10px !important;
+        width: 36px !important;
+        height: 36px !important;
+        top: calc(50vh - 110px) !important;
+    }
+
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        right: 10px !important;
+        top: calc(50vh - 134px) !important;
+    }
+    
+    .wholeContainer.reels-wrapper #TmenuIcon {
+        width: 20px !important;
+        height: 20px !important;
+        min-width: 20px !important;
+        min-height: 20px !important;
+    }
+}
+
+.wholeContainer.reels-wrapper .headingArea > span {
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.2px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    line-height: 1.2 !important;
+}
+
+/*
+ * RIGHT PANEL — Page number pill
+ * Uses position:fixed so it is anchored to the viewport, not to the
+ * near-zero-height .reel-fixed-top containing block.
+ *
+ * Page number is positioned at bottom-right corner with consistent spacing:
+ *   pagenoHeader  right: 20px; bottom: 20px
+ *   Creates clear separation from content and other elements
+ */
+.wholeContainer.reels-wrapper #pagenoHeader {
+    position: fixed !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    top: auto !important;
+    left: auto !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 6px 12px !important;
+    border-radius: 12px !important;
+    background: rgba(0, 0, 0, 0.45) !important;
+    border: none !important;
+    color: #fff !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 44px !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+    z-index: 1998 !important;
+    transform: none !important;
+}
+    pointer-events: none !important;
+    backdrop-filter: blur(4px) !important;
+    flex-shrink: 0 !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+}
+
+.wholeContainer.reels-wrapper #certificateid {
+    display: none !important;
+}
+
+.wholeContainer.reels-wrapper .line2 {
+    display: none !important;
+}
+
+/*
+ * 9. Menu icon (hamburger)
+ * Uses position:fixed — viewport-relative, bypasses the near-zero-height
+ * .reel-fixed-top containing block that made position:absolute fail.
+ * Sits directly above the footer nav buttons in the right panel.
+ */
+.wholeContainer.reels-wrapper .headingArea1 {
+    position: fixed !important;
+    right: 18px !important;
+    left: auto !important;
+    top: calc(50vh - 134px) !important; /* 50vh - 78(half-footer) - 12(gap) - 44(self) */
+    width: 44px !important;
+    height: 44px !important;
+    max-width: none !important;
+    transform: none !important;
+    z-index: 2002 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  /*  cursor: pointer !important;*/
+}
+
+.wholeContainer.reels-wrapper #TmenuIcon {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+    display: block !important;
+    cursor: pointer !important;
+    object-fit: contain !important;
+}
+
+
+
+/*  10. Page content — absolute fill behind the sticky header  */
+.wholeContainer.reels-wrapper .pageContent {
+    /*
+     * position:absolute + inset:0 fills reel-slide edge-to-edge.
+     * The sticky/fixed header floats above this layer via z-index.
+     * height:100% is set explicitly because iOS Safari resolves
+     * percentage heights on absolutely positioned elements more reliably
+     * when an explicit height is present alongside top+bottom constraints.
+     */
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    overflow: hidden !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    box-sizing: border-box !important;
+}
+
+/*  11. HTML page — absolute fill so iframe content fills slide  */
+.wholeContainer.reels-wrapper #htmlArea {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    background: transparent !important;
+    color: inherit !important;
+    scrollbar-width: thin !important;
+}
+
+.wholeContainer.reels-wrapper #htmlArea::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+.wholeContainer.reels-wrapper #htmlArea::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.3) !important;
+    border-radius: 3px !important;
+}
+
+.wholeContainer.reels-wrapper #htmlArea::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+/*  12. Video fills slide — absolute inset  */
+.wholeContainer.reels-wrapper .shorts-container {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #000 !important;
+}
+
+.wholeContainer.reels-wrapper .shorts-video-frame {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    aspect-ratio: 9 / 16 !important;
+    overflow: hidden !important;
+    background: #000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.wholeContainer.reels-wrapper video,
+.wholeContainer.reels-wrapper #vidArea {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: #000 !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+.wholeContainer.reels-wrapper .shorts-bottom-gradient {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 35% !important;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%) !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+}
+
+/*  13. Flash / Captivate / HTML frames — absolute fill  */
+.wholeContainer.reels-wrapper #flashArea,
+.wholeContainer.reels-wrapper #captivateFrame {
+    /*
+     * height:auto + min-height:100% fails on iOS: percentage min-heights
+     * don't resolve when the parent height comes from top+bottom constraints
+     * rather than an explicit height property. Use position:absolute;inset:0
+     * instead — this is reliable across all browsers and iOS versions.
+     */
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    box-sizing: border-box !important;
+}
+
+/*  14. Action bar (video)  */
+.wholeContainer.reels-wrapper .action-bar {
+    position: absolute !important;
+    right: 14px !important;
+    bottom: 100px !important;
+    top: auto !important;
+    display: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 14px !important;
+    z-index: 100 !important;
+}
+
+/* Landscape: lower position to avoid crowding */
+@media (orientation: landscape) and (max-height: 600px) {
+    .wholeContainer.reels-wrapper .action-bar {
+        bottom: 70px !important;
+        gap: 10px !important;
+    }
+}
+
+.wholeContainer.reels-wrapper .action-btn {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background: rgba(0,0,0,0.45) !important;
+    cursor: pointer !important;
+    position: relative !important;
+    color: #fff !important;
+}
+
+.wholeContainer.reels-wrapper .action-btn::before {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -52%) !important;
+    color: #fff !important;
+    font-size: 18px !important;
+    line-height: 1 !important;
+}
+
+.wholeContainer.reels-wrapper .action-btn.like::before   { content: "\2665"; }
+.wholeContainer.reels-wrapper .action-btn.comment::before{ content: "\2709"; }
+.wholeContainer.reels-wrapper .action-btn.share::before  { content: "\2197"; }
+.wholeContainer.reels-wrapper .action-btn.bookmark::before{ content: "\2605"; }
+
+/*  15. "Click to continue"  */
+.wholeContainer.reels-wrapper #clickNextId {
+    position: absolute !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+    top: auto !important;
+    z-index: 1200 !important;
+    color: rgba(255,255,255,0.75) !important;
+    font-size: 13px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+/*  16. Original footer — floating reels nav, centred vertically  */
+/*
+ * The footer contains: prev (▲) + next (▼) + resource.
+ * pagenoHeader and headingArea1 (menu) are now positioned ABOVE this group
+ * in the same right-panel column using the same right:18px anchor.
+ * FIXED positioning ensures no shifting when content/pages change.
+ */
+.wholeContainer.reels-wrapper .footer {
+    position: fixed !important;
+    right: 18px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    z-index: 2001 !important;
+    width: auto !important;
+    height: auto !important;
+    left: auto !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Style footer #prev / .prevClass as circular reels-style ▲ button */
+.wholeContainer.reels-wrapper .footer #prev,
+.wholeContainer.reels-wrapper .footer .prevClass {
+    position: static !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background-color: transparent !important;
+    background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    order: 1 !important;
+}
+
+/* Style footer #next / .nextClass as circular reels-style ▼ button */
+.wholeContainer.reels-wrapper .footer #next,
+.wholeContainer.reels-wrapper .footer .nextClass,
+.wholeContainer.reels-wrapper .footer .nextClassHighlight {
+    position: static !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background-color: transparent !important;
+    background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    order: 2 !important;
+}
+
+/* Hover state — removed for prev/next buttons */
+
+/* Active state */
+.wholeContainer.reels-wrapper .footer #prev:active,
+.wholeContainer.reels-wrapper .footer .prevClass:active,
+.wholeContainer.reels-wrapper .footer #next:active,
+.wholeContainer.reels-wrapper .footer .nextClass:active,
+.wholeContainer.reels-wrapper .footer .nextClassHighlight:active {
+    transform: scale(0.95) !important;
+}
+
+/* .hideContent is already display:none from content.css — works automatically */
+
+/* Style footer .resourceClass (Learning Aids) as circular button below next */
+.wholeContainer.reels-wrapper .footer .resourceClass {
+    position: static !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background-image: url("../images/footer-menu/Resource.png") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    order: 3 !important;           /* Below next button (order: 2) */
+}
+
+/* Hover state for Learning Aids — disabled */
+.wholeContainer.reels-wrapper .footer .resourceClass:hover {
+    transform: none !important;
+   /* background-color: rgba(10,15,30,0.6) !important;*/
+}
+
+/* Active state for Learning Aids */
+.wholeContainer.reels-wrapper .footer .resourceClass:active {
+    transform: none !important;
+}
+
+/* Hide all other non-nav footer children (prev, next, resource, menu are exceptions) */
+.wholeContainer.reels-wrapper .footer > div:not([id='prev']):not([id='next']):not(.prevClass):not(.nextClass):not(.nextClassHighlight):not(.resourceClass):not(#clickableDiv) {
+    display: none !important;
+}
+
+/*  17. Floating nav controls — DISABLED: footer buttons now handle navigation  */
+.wholeContainer.reels-wrapper .reels-float-controls {
+    position: absolute !important;
+    right: 18px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    z-index: 1999 !important;    /* below footer z-index: 2001 */
+    pointer-events: none !important; /* disabled — footer buttons handle clicks */
+    opacity: 0.35 !important;        /* visually inactive */
+}
+
+/* ── Responsive nav-button scaling ────────────────────────────── */
+
+/* Portrait: phones up to 844 px wide */
+@media (max-width: 844px) and (orientation: portrait) {
+    .wholeContainer.reels-wrapper .footer {
+        right: 12px !important;
+        gap: 12px !important;
+    }
+
+    .wholeContainer.reels-wrapper .headingArea1 {
+        right: 12px !important;
+    }
+
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        right: 12px !important;
+    }
+
+    .wholeContainer.reels-wrapper .footer #prev,
+    .wholeContainer.reels-wrapper .footer .prevClass,
+    .wholeContainer.reels-wrapper .footer #next,
+    .wholeContainer.reels-wrapper .footer .nextClass,
+    .wholeContainer.reels-wrapper .footer .nextClassHighlight,
+    .wholeContainer.reels-wrapper .footer .resourceClass,
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass,
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight,
+    .contentArea.video-mode + .footer .resourceClass {
+        width: 44px !important;
+        height: 44px !important;
+        background-size: contain !important;
+        margin: 0 !important;
+        top: auto !important;
+        right: auto !important;
+        transform: none !important;
+    }
+}
+
+/* Landscape: phones in landscape orientation */
+@media (max-width: 844px) and (orientation: landscape) {
+    .wholeContainer.reels-wrapper .footer {
+        right: 10px !important;
+        gap: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper .headingArea1 {
+        right: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        right: 10px !important;
+        bottom: 16px !important;
+    }
+
+    .wholeContainer.reels-wrapper .footer #prev,
+    .wholeContainer.reels-wrapper .footer .prevClass,
+    .wholeContainer.reels-wrapper .footer #next,
+    .wholeContainer.reels-wrapper .footer .nextClass,
+    .wholeContainer.reels-wrapper .footer .nextClassHighlight,
+    .wholeContainer.reels-wrapper .footer .resourceClass,
+    .contentArea.video-mode + .footer #prev,
+    .contentArea.video-mode + .footer .prevClass,
+    .contentArea.video-mode + .footer #next,
+    .contentArea.video-mode + .footer .nextClass,
+    .contentArea.video-mode + .footer .nextClassHighlight,
+    .contentArea.video-mode + .footer .resourceClass {
+        width: 40px !important;
+        height: 40px !important;
+        background-size: contain !important;
+        margin: 0 !important;
+        top: auto !important;
+        right: auto !important;
+        transform: none !important;
+    }
+}
+
+/* Landscape small height: smaller buttons */
+@media (orientation: landscape) and (max-height: 500px) {
+    .wholeContainer.reels-wrapper .reels-float-controls {
+        gap: 8px !important;
+    }
+    
+    .wholeContainer.reels-wrapper .reels-nav-btn {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+    }
+}
+
+.wholeContainer.reels-wrapper .reels-nav-btn {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background: rgba(10,15,30,0.6) !important;
+    color: #fff !important;
+    font-size: 18px !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    backdrop-filter: blur(6px) !important;
+    transition: background 0.2s ease, transform 0.15s ease !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+}
+
+.wholeContainer.reels-wrapper .reels-nav-btn:hover {
+    background: rgba(60,90,180,0.7) !important;
+    transform: scale(1.1) !important;
+}
+
+.wholeContainer.reels-wrapper .reels-nav-btn:active {
+    transform: scale(0.95) !important;
+}
+
+/*  18. Progress bar, circles, other footer items — hide  */
+.wholeContainer.reels-wrapper .footer .navCircle,
+.wholeContainer.reels-wrapper .footer .pageClass,
+.wholeContainer.reels-wrapper .footer .replayClass,
+.wholeContainer.reels-wrapper .footer .pauseClass,
+.wholeContainer.reels-wrapper .footer .playClass,
+.wholeContainer.reels-wrapper .footer .muteClass,
+.wholeContainer.reels-wrapper .footer .unmuteClass,
+.wholeContainer.reels-wrapper .footer .exitClass,
+.wholeContainer.reels-wrapper .footer .exitClass1,
+.wholeContainer.reels-wrapper .footer .ccClass,
+.wholeContainer.reels-wrapper .footer .searchClass,
+.wholeContainer.reels-wrapper .footer #slider,
+.wholeContainer.reels-wrapper #ProgressBar {
+    display: none !important;
+}
+
+/*  19. Mobile — identical (already full-width, just tweak spacing)  */
+@media (max-width: 480px) {
+    .wholeContainer.reels-wrapper .headingArea1 {
+        right: 12px !important;
+        left: auto !important;
+    }
+
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        right: 12px !important;
+    }
+    
+    .wholeContainer.reels-wrapper #TmenuIcon {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px !important;
+        min-height: 22px !important;
+    }
+
+    .wholeContainer.reels-wrapper .reels-float-controls {
+        right: 10px !important;
+        gap: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper .reels-nav-btn {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 16px !important;
+    }
+
+    .wholeContainer.reels-wrapper .action-bar {
+        right: 8px !important;
+        bottom: 80px !important;
+        gap: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper .footer {
+        right: 12px !important;
+        gap: 12px !important;
+    }
+
+    .wholeContainer.reels-wrapper .footer #prev,
+    .wholeContainer.reels-wrapper .footer .prevClass,
+    .wholeContainer.reels-wrapper .footer #next,
+    .wholeContainer.reels-wrapper .footer .nextClass,
+    .wholeContainer.reels-wrapper .footer .nextClassHighlight,
+    .wholeContainer.reels-wrapper .footer .resourceClass {
+        width: 44px !important;
+        height: 44px !important;
+        background-size: contain !important;
+        margin: 0 !important;
+        top: auto !important;
+        right: auto !important;
+        transform: none !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 1 — BOOTSTRAP GRID ESCAPE
+   Prevents any .container / .row from constraining slide width.
+   Scoped inside .wholeContainer.reels-wrapper for safety.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.wholeContainer.reels-wrapper .container,
+.wholeContainer.reels-wrapper .container-fluid,
+.wholeContainer.reels-wrapper .container-sm,
+.wholeContainer.reels-wrapper .container-md,
+.wholeContainer.reels-wrapper .container-lg,
+.wholeContainer.reels-wrapper .container-xl,
+.wholeContainer.reels-wrapper .container-xxl,
+.wholeContainer.reels-wrapper .row,
+.wholeContainer.reels-wrapper .main-wrapper,
+.wholeContainer.reels-wrapper .content-wrapper {
+    max-width: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    float: none !important;
+}
+
+/* Bootstrap columns — keep padding for readability */
+.wholeContainer.reels-wrapper [class*="col-"] {
+    float: none !important;
+    max-width: none !important;
+    width: 100% !important;
+    flex: 0 0 100% !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 3 — BLOCK body FLEX-CENTERING injected by ng-include HTML pages
+   Belt-and-suspenders: the source HTML is already fixed, but this guard
+   ensures no future content asset can re-break layout via body flex.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+body {
+    display: block !important;
+    justify-content: unset !important;
+    align-items: unset !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 6 — REMOVE MOBILE-FRAME CONSTRAINTS inside HTML slides
+   assets/html/*/index.html uses .mobile-layout { max-width: 430px }
+   and similar phone-frame wrappers. Override them to fill the slide.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── All first-level wrappers inside the HTML slide fill the frame ── */
+.wholeContainer.reels-wrapper #htmlArea > *,
+.wholeContainer.reels-wrapper #htmlArea .mobile-layout,
+.wholeContainer.reels-wrapper #htmlArea .page-wrapper,
+.wholeContainer.reels-wrapper #htmlArea .slide-wrapper,
+.wholeContainer.reels-wrapper #htmlArea .app-wrapper,
+.wholeContainer.reels-wrapper #htmlArea .screen-wrapper,
+.wholeContainer.reels-wrapper #htmlArea .phone-frame,
+.wholeContainer.reels-wrapper #htmlArea .card-wrapper {
+    max-width: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.wholeContainer.reels-wrapper #htmlArea .mobile-layout {
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: none !important;
+    /* belt-and-suspenders: kill any centering flex on the wrapper itself */
+    justify-content: unset !important;
+    align-self: stretch !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 7 & 8 — HEADER GLOBAL + REMOVE PARENT FLEX CENTERING
+   Ensure no ancestor flex-centers the slides or the header.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Step 4 slide-inner equivalent: reel-slide fills identically for
+      both video and HTML content types. pageContent is the slide-inner. ── */
+.wholeContainer.reels-wrapper .reel-slide,
+.wholeContainer.reels-wrapper .contentArea,
+.wholeContainer.reels-wrapper .reels-wrapper-shell,
+.wholeContainer.reels-wrapper .reels-container {
+    /* No flex-centering anywhere in the scroll stack */
+    justify-content: unset !important;
+    align-items: unset !important;
+}
+
+/* Step 5: pageContent rule — see section "10. Page content" above which
+   is now the single authoritative rule (position:absolute; inset:0; height:100%). */
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 4 — NEUTRALISE LEGACY contentArea.video-mode RULES
+   The old .contentArea.video-mode blocks (lines ~108-505) have equal or
+   higher specificity than the reels rules and set:
+     • height: calc(100vh - 63px)  → black gap at bottom
+     • display: flex; align-items/justify-content: center  → centers content
+     • .pageContent: flex, padding, height:auto  → breaks full-height fill
+     • .shorts-container: aspect-ratio 9/16  → constrains video to a box
+   These must be killed with identical-or-higher specificity inside .reels-wrapper.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* --- contentArea itself: allow aspect-ratio centering, no legacy constraints --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode,
+.wholeContainer.reels-wrapper .contentArea {
+    /* DO NOT set position: absolute or width: 100% - breaks flex centering */
+    /* DO NOT set left: 0 or inset: 0 - prevents aspect-ratio layout */
+    min-height: unset !important;
+    max-height: none !important;
+    display: block !important;
+    flex-direction: unset !important;
+    align-items: unset !important;
+    justify-content: unset !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    float: none !important;
+    transform: none !important;
+}
+
+/* --- headingArea inside reels: full-width overlay, no flex-shrink --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode .headingArea,
+.wholeContainer.reels-wrapper .contentArea .headingArea {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 52px !important;
+    display: flex !important;
+    align-items: center !important;
+    flex: unset !important;
+    flex-shrink: 0 !important;
+   /* background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 100%) !important;*/
+    backdrop-filter: none !important;
+    border-radius: 0 !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    z-index: 1200 !important;
+}
+
+/* --- pageContent: absolute fill, no flex centering, no padding, no height:auto --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode .pageContent,
+.wholeContainer.reels-wrapper .contentArea .pageContent {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: unset !important;
+    max-height: none !important;
+    flex: unset !important;
+    display: block !important;
+    align-items: unset !important;
+    justify-content: unset !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    float: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    animation: none !important;
+    box-sizing: border-box !important;
+}
+
+/* --- shorts-container: absolute fill (not aspect-ratio box) --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode .shorts-container,
+.wholeContainer.reels-wrapper .shorts-container {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: none !important;
+    aspect-ratio: unset !important;
+    display: block !important;
+    align-items: unset !important;
+    justify-content: unset !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    animation: none !important;
+}
+
+/* --- shorts-video-frame: absolute fill --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode .shorts-video-frame,
+.wholeContainer.reels-wrapper .shorts-video-frame {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    background: #000 !important;
+    box-shadow: none !important;
+}
+
+/* --- video / vidArea: absolute fill with contain (no cropping in any container shape) --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode #vidArea,
+.wholeContainer.reels-wrapper .contentArea.video-mode video,
+.wholeContainer.reels-wrapper #vidArea,
+.wholeContainer.reels-wrapper video {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+    border-radius: 0 !important;
+    background: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* --- htmlArea: absolute fill, zero padding --- */
+.wholeContainer.reels-wrapper .contentArea.video-mode ~ * #htmlArea,
+.wholeContainer.reels-wrapper #htmlArea {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    display: block !important;
+}
+
+/* --- Quiz / SCQ slides: #contentContainer must fill the htmlArea --- */
+.wholeContainer.reels-wrapper #htmlArea #contentContainer {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    overflow: hidden !important;
+    display: block !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   STEP 5 — MAKE QUIZ SLIDE BACKGROUND MATCH REELS DARK THEME
+   Quiz HTML is loaded as pageContentType 'html'. The white background
+   comes from the quiz template's own body/html styles. Override via the
+   slide background so any uncovered area is dark, not white.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.wholeContainer.reels-wrapper .reel-slide {
+    background: #0d1017 !important;
+}
+
+/* Quiz slides tend to have white backgrounds — give them a white slide bg
+   so the quiz content merges cleanly. The dark bg only shows if quiz
+   content doesn't fill full height. */
+.wholeContainer.reels-wrapper .reel-slide:has(#htmlArea) {
+    background: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   END OF LEGACY NEUTRALISATION BLOCK
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+   iOS SAFARI PORTRAIT — HEADER VISIBILITY FIX
+   Problem 1: .reel-fixed-top is position:sticky but has zero computed
+              height (all children are position:absolute, out of flow).
+              iOS Safari does not reliably paint zero-height sticky nodes
+              above a sibling position:absolute;inset:0 element.
+   Problem 2: env(safe-area-inset-top) not applied → header clips behind
+              iPhone notch / Dynamic Island on newer devices.
+   Fix:       Switch .reel-fixed-top to position:fixed (portrait mobile
+              only) — fixed elements always paint above all stacking
+              contexts. Add safe-area inset. Push .pageContent below.
+   Scope:     ONLY @media (max-width: 768px) and (orientation: portrait).
+              Desktop, landscape, JS, animations — untouched.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) and (orientation: portrait) {
+
+    /* 1 ── Fixed header: immune to stacking-context + sticky height bugs  */
+    .wholeContainer.reels-wrapper .reel-fixed-top {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        /* Reserve space for notch + 44px bar */
+        height: calc(44px + env(safe-area-inset-top, 0px)) !important;
+        z-index: 9100 !important;
+        /* Own stacking context — children always paint above page content */
+        isolation: isolate !important;
+    }
+
+    /* 2 ── headingArea on iOS portrait: must stay zero-size (not restored to full-width) */
+    .wholeContainer.reels-wrapper .headingArea {
+        width: 0 !important;
+        height: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        display: block !important; /* pagenoHeader inside must render */
+    }
+
+    /* 3 ── Hamburger icon: keep in right panel (position:fixed, viewport-relative) */
+    .wholeContainer.reels-wrapper .headingArea1 {
+        z-index: 9200 !important;
+        right: 12px !important;
+        left: auto !important;
+    }
+
+    .wholeContainer.reels-wrapper #pagenoHeader {
+        right: 12px !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   GLOBAL — Hide page title, right-align page number (all page types)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Hide the page title (header text) */
+.headingArea > span {
+    display: none !important;
+}
+
+/* Global page number right-align fallback (non-reels pages) */
+#pagenoHeader {
+    margin-left: auto !important;
+    text-align: center !important;
+}
+
+/* Inside .headingArea (non-reels): keep original alignment */
+.headingArea #pagenoHeader {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+}
+
+/* In reels-wrapper: pagenoHeader is absolute-positioned in right panel —
+   margin:auto no longer applies */
+.wholeContainer.reels-wrapper #pagenoHeader {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Force custom previous/next assets for reels nav buttons (all views) */
+.wholeContainer.reels-wrapper .footer #prev,
+.wholeContainer.reels-wrapper .footer .prevClass,
+.contentArea.video-mode + .footer #prev,
+.contentArea.video-mode + .footer .prevClass {
+    background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-color: transparent !important;
+}
+
+.wholeContainer.reels-wrapper .footer #next,
+.wholeContainer.reels-wrapper .footer .nextClass,
+.wholeContainer.reels-wrapper .footer .nextClassHighlight,
+.contentArea.video-mode + .footer #next,
+.contentArea.video-mode + .footer .nextClass,
+.contentArea.video-mode + .footer .nextClassHighlight {
+    background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-color: transparent !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   PORTRAIT VIDEO FIX — LANDSCAPE / WIDE SCREENS
+   WHY: The legacy neutralisation block above (no media query) forces
+        display:block + position:absolute inset:0 + object-fit:cover.
+        In landscape that crops the portrait (9:16) video severely.
+
+   HOW: Use width-only conditions (reliable inside SCORM iframes where
+        the CSS `orientation` media feature can mismatch).
+        • (min-width:1024px)             → iPad landscape, laptops, desktop
+        • (min-width:768px)+(max-height:900px) → smaller landscape tablets
+
+   Specificity is identical to the override block. Being later in the
+   file means this block wins when either media condition is true.
+   ════════════════════════════════════════════════════════════════════ */
+@media (min-width: 1024px),
+       (min-width: 768px) and (max-height: 900px) {
+
+    /* 1. Container → flex centring stage (override display:block) */
+    .wholeContainer.reels-wrapper .contentArea.video-mode .shorts-container,
+    .wholeContainer.reels-wrapper .shorts-container {
+        position: absolute !important;
+        inset: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #000 !important;
+        overflow: hidden !important;
+    }
+
+    /* 2. Frame → portrait-shaped, height-bound, no absolute stretch */
+    .wholeContainer.reels-wrapper .contentArea.video-mode .shorts-video-frame,
+    .wholeContainer.reels-wrapper .shorts-video-frame {
+        position: relative !important;
+        inset: auto !important;
+        height: 100% !important;
+        width: auto !important;
+        aspect-ratio: 9 / 16 !important;
+        max-width: 100% !important;
+        flex-shrink: 0 !important;
+        overflow: hidden !important;
+        background: #000 !important;
+    }
+
+    /* 3. Video element → contain (no cropping) */
+    .wholeContainer.reels-wrapper .contentArea.video-mode #vidArea,
+    .wholeContainer.reels-wrapper .contentArea.video-mode video,
+    .wholeContainer.reels-wrapper #vidArea,
+    .wholeContainer.reels-wrapper video {
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        display: block !important;
+        background: #000 !important;
+    }
+}
+
+/* =====================================================================
+   GLOBAL RIGHT NAV PANEL (single reusable layout system)
+   Order: Menu -> Prev -> Next -> Page Number
+   ===================================================================== */
+.wholeContainer.reels-wrapper .rightNavPanel {
+    position: fixed !important;
+    top: 50% !important;
+    right: 18px !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: auto !important;
+    height: auto !important;
+    z-index: 2200 !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    overflow: visible !important;
+}
+
+/* Keep panel anchored to content column on landscape/wide displays */
+@media (orientation: landscape) {
+    .wholeContainer.reels-wrapper .rightNavPanel {
+        right: calc(50% - min(240px, calc(100dvh * 9 / 32)) + 18px) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .wholeContainer.reels-wrapper .rightNavPanel {
+        right: 12px !important;
+    }
+}
+
+/* 1) Menu */
+.wholeContainer.reels-wrapper .rightNavPanel .headingArea1 {
+    order: 1 !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 4rem !important;
+    height: 4rem !important;
+    border-radius: 50% !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel #TmenuIcon {
+    width: 4rem !important;
+    height: 4rem !important;
+    filter: none !important;
+}
+
+/* 2) Prev/Next stack */
+.wholeContainer.reels-wrapper .rightNavPanel .footer {
+    order: 2 !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    float: none !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .footer > div {
+    position: static !important;
+    float: none !important;
+    margin: 0 !important;
+}
+
+/* Keep only menu, nav buttons, and page number — hide everything else (navCircles etc) */
+.wholeContainer.reels-wrapper .rightNavPanel .footer > div:not(#clickableDiv):not(#prev):not(#next):not(#resource):not(#resource1):not(#pagenoHeader) {
+    display: none !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .footer #prev,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .prevClass,
+.wholeContainer.reels-wrapper .rightNavPanel .footer #next,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .nextClass,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .nextClassHighlight,
+.wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
+.wholeContainer.reels-wrapper .rightNavPanel .footer #resource1,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .resourceClass {
+    position: static !important;
+    width: 4rem !important;
+    height: 4rem !important;
+    min-width: 4rem !important;
+    min-height: 4rem !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background-color: transparent !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    box-shadow: none !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .footer #prev,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .prevClass {
+    order: 2 !important;
+    background-image: url("../images/footer-menu/set%202_up%20btn.png") !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .footer #next,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .nextClass,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .nextClassHighlight {
+    order: 3 !important;
+    background-image: url("../images/footer-menu/set%202_down%20btn.png") !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
+.wholeContainer.reels-wrapper .rightNavPanel .footer #resource1,
+.wholeContainer.reels-wrapper .rightNavPanel .footer .resourceClass {
+    order: 4 !important;
+    background-image: url("../images/footer-menu/Resource.png") !important;
+    /*background-size: 20px 20px !important;*/
+}
+
+/* 3) Page number */
+.wholeContainer.reels-wrapper .rightNavPanel .headingArea {
+    order: 3 !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    display: block !important;
+    pointer-events: none !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel .headingArea > span,
+.wholeContainer.reels-wrapper .rightNavPanel .headingArea > button,
+.wholeContainer.reels-wrapper .rightNavPanel .line2 {
+    display: none !important;
+}
+
+.wholeContainer.reels-wrapper .rightNavPanel #pagenoHeader {
+    order: 5 !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 45px !important;
+    padding: 6px 12px !important;
+    border-radius: 12px !important;
+    background: rgba(0,0,0,18%) !important;
+    color: #fff !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    pointer-events: none !important;
+    flex-shrink: 0 !important;
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    .wholeContainer.reels-wrapper .rightNavPanel {
+        gap: 10px !important;
+    }
+
+    .wholeContainer.reels-wrapper .rightNavPanel .headingArea1,
+    .wholeContainer.reels-wrapper .rightNavPanel .footer #prev,
+    .wholeContainer.reels-wrapper .rightNavPanel .footer #next,
+    .wholeContainer.reels-wrapper .rightNavPanel .footer #resource,
+    .wholeContainer.reels-wrapper .rightNavPanel .footer #resource1 {
+        width: 4rem !important;
+        height: 4rem !important;
+        background-size: contain !important;
+    }
+
+    .wholeContainer.reels-wrapper .rightNavPanel #TmenuIcon {
+        width: 4rem !important;
+        height: 4rem !important;
+        min-width: 4rem !important;
+        min-height: 4rem !important;
+        filter: none !important;
+    }
+
+    .wholeContainer.reels-wrapper .rightNavPanel #pagenoHeader {
+        font-size: 10px !important;
+        min-width: 36px !important;
+        padding: 3px 8px !important;
+    }
+}

@@ -1,0 +1,11 @@
+@media (min-width: 600px) {
+  /*.question {
+    font-size: 14px;
+  }*/
+}
+
+@media (min-width: 1200px) {
+/*.question {
+    font-size: 10px;
+  }*/
+}
