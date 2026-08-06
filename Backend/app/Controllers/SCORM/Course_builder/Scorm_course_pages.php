@@ -1096,7 +1096,7 @@ class Scorm_course_pages extends BaseController
                     $this->exportQuestion($eachpage['page_id'], $data['scourse_id'], $eachpage['type'], $eachpage['language']);
                 } elseif ($eachpage['type'] == '4') {
                     $this->exportQuizQuestion($eachpage['page_id'], $data['scourse_id'], $eachpage['type'], $eachpage['language']);
-                } elseif ($eachpage['type'] == '10') {
+                } elseif ($eachpage['type'] == '10' || $eachpage['type'] == '11' || $eachpage['type'] == '12') {
                     $this->exportTextPage($eachpage, $data['scourse_id']);
                 }
                 if ($eachpage['type'] == '1') {
@@ -1122,7 +1122,7 @@ class Scorm_course_pages extends BaseController
                     $pathfilename = "Screen_01.html";
                     $functionName = "functionName";
                     $onendnextscrn = ($eachpage['type'] == '5' || $eachpage['type'] == '6' || $eachpage['type'] == '4') ? 'captivate' : 'captivate';
-                } elseif ($eachpage['type'] == '10') {
+                } elseif ($eachpage['type'] == '10' || $eachpage['type'] == '11' || $eachpage['type'] == '12') {
                     $type = 'captivate';
                     $path = "assets/html/" . $eachpage['page_id'] . "/Screen_01.html";
                     $pathfilename = "Screen_01.html";
@@ -1291,6 +1291,41 @@ class Scorm_course_pages extends BaseController
             session()->setFlashdata('error', lang('Messages.Error_0001'));
             return redirect()->to(base_url() . '/SCORM/course_builder/Scorm_course_pages/page_pdf_view');
         }
+    }
+    private function exportTextPage($eachpage, $scourse_id)
+    {
+        $timestamp = $eachpage['createdon'];
+        $htmlFolder = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $scourse_id . '/' . $timestamp . '/assets/html/' . $eachpage['page_id'];
+        if (!is_dir($htmlFolder)) {
+            mkdir($htmlFolder, 0777, true);
+        }
+
+        $imageTag = '';
+        if (!empty($eachpage['page_image'])) {
+            $sourceImage = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $scourse_id . '/' . $timestamp . '/assets/page_images/' . $eachpage['page_image'];
+            if (file_exists($sourceImage)) {
+                copy($sourceImage, $htmlFolder . '/' . $eachpage['page_image']);
+                $alt = htmlspecialchars($eachpage['image_alt'] ?? '', ENT_QUOTES);
+                $imageTag = '<img src="' . $eachpage['page_image'] . '" alt="' . $alt . '" style="max-width:100%;height:auto;">';
+            }
+        }
+
+        $content = $eachpage['content'] ?? '';
+        $type = (int) $eachpage['type'];
+
+        if ($type == 11 && $imageTag !== '') {
+            $body = '<div class="text-page-row"><div class="text-page-image">' . $imageTag . '</div><div class="text-page-content">' . $content . '</div></div>';
+        } elseif ($type == 12 && $imageTag !== '') {
+            $body = '<div class="text-page-row"><div class="text-page-content">' . $content . '</div><div class="text-page-image">' . $imageTag . '</div></div>';
+        } else {
+            $body = '<div class="text-page-content">' . $content . '</div>';
+        }
+
+        $html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
+            . '<style>body{font-family:Arial,sans-serif;padding:20px;}.text-page-row{display:flex;gap:20px;align-items:flex-start;}.text-page-row>div{flex:1;min-width:0;}.text-page-image img{max-width:100%;height:auto;}</style>'
+            . '</head><body>' . $body . '</body></html>';
+
+        file_put_contents($htmlFolder . '/Screen_01.html', $html);
     }
     function exportQuestion($page_id, $scourse_id, $type, $langauge)
     {
@@ -1996,14 +2031,17 @@ class Scorm_course_pages extends BaseController
 
         if ($this->request->getPost()) {
             $newdata = [
-                'text_content' => $this->request->getPost('text_content'),
-                'text_layout' => (int) $this->request->getPost('text_layout'),
+                'content' => $this->request->getPost('content'),
             ];
+            if ($this->request->getPost('image_alt') !== null) {
+                $newdata['image_alt'] = $this->request->getPost('image_alt');
+            }
 
             $file = $this->request->getFile('image');
             if ($file && $file->isValid() && !$file->hasMoved()) {
                 $rules = [
-                    'image' => 'is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png]|max_size[image,2048]',
+                    // JPG/JPEG/PNG only, max 1 MB
+                    'image' => 'is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png]|max_size[image,1024]',
                 ];
                 if (!$this->validate($rules)) {
                     $data['promovalidation'] = $this->validator;
@@ -2015,19 +2053,21 @@ class Scorm_course_pages extends BaseController
                 $pagejsonfile = $this->scorm_page_model->getpagedata($data['page_id']);
                 $timestamp = $pagejsonfile[0]['createdon'];
                 $extension = $file->getExtension();
-                $filename = 'page_' . $data['page_id'] . '.' . $extension;
-                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/text_images/';
+                // Unique per upload (not just per page) so replacing an image never collides with a cached copy of the old one.
+                $filename = 'page_' . $data['page_id'] . '_' . time() . '.' . $extension;
+                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/page_images/';
 
                 if (!is_dir($imageFolderPath)) {
                     mkdir($imageFolderPath, 0777, true);
                 }
 
-                if (file_exists($imageFolderPath . $filename)) {
-                    unlink($imageFolderPath . $filename);
-                }
-
                 if ($file->move($imageFolderPath, $filename)) {
-                    $newdata['text_image'] = $filename;
+                    // Remove the previous image file so uploads don't accumulate on disk.
+                    $previousFilename = $pagejsonfile[0]['page_image'] ?? '';
+                    if ($previousFilename !== '' && file_exists($imageFolderPath . $previousFilename)) {
+                        unlink($imageFolderPath . $previousFilename);
+                    }
+                    $newdata['page_image'] = $filename;
                 }
             }
 
@@ -2041,6 +2081,29 @@ class Scorm_course_pages extends BaseController
                 session()->setFlashdata('alert-class', 'alert-danger');
             }
         }
+        return redirect()->to(base_url('SCORM/course_builder/Editor'));
+    }
+    public function deleteTextImage()
+    {
+        if ($response =  $this->requireRole(['5', '44', '46'])) {
+            return $response;
+        }
+
+        $page_id = $_POST['page_id'] ?? null;
+        if ($page_id) {
+            $pagejsonfile = $this->scorm_page_model->getpagedata($page_id);
+            if (!empty($pagejsonfile) && !empty($pagejsonfile[0]['page_image'])) {
+                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $pagejsonfile[0]['fk_course_id'] . '/' . $pagejsonfile[0]['createdon'] . '/assets/page_images/';
+                $filePath = $imageFolderPath . $pagejsonfile[0]['page_image'];
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+
+                $this->scorm_page_model->edituploadpagedetails(['page_image' => null, 'image_alt' => null], $page_id);
+                session()->setFlashdata('success', lang('Messages.Success_0005'));
+            }
+        }
+
         return redirect()->to(base_url('SCORM/course_builder/Editor'));
     }
     function uploadHTML()

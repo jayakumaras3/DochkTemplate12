@@ -154,6 +154,15 @@ class Quickaccess extends BaseController
             ]);
         }
 
+        // Quickaccess/demo users may have been provisioned without the base "Normal Users" (3) role.
+        // Auto-assign it here so they're not blocked from normal-user pages after logging in.
+        $userLevelArray = array_filter(array_map('trim', explode(',', (string) ($user[0]['userlevel'] ?? ''))));
+        if (!in_array('3', $userLevelArray)) {
+            $this->login_model->updateUserlevel($user[0]['id_user'], 3);
+            $userLevelArray[] = '3';
+        }
+        $user[0]['userlevel'] = implode(', ', $userLevelArray);
+
         $currdate = date('Y-m-d');
         if ($user[0]['validity'] >= $currdate || $user[0]['validity'] == '0000-00-00' || $user[0]['validity'] == '') {
             $userData = [
@@ -169,6 +178,7 @@ class Quickaccess extends BaseController
                 'default_dashboard' => $user[0]['default_dashboard'],
                 'users_default_dashboard' => $user[0]['users_default_dashboard'],
                 'accessmenu' => '',
+                'session_version' => (int) ($user[0]['session_version'] ?? 1),
             ];
 
             $menu = $this->settings_model->menu_view($user[0]['client']);
@@ -180,7 +190,8 @@ class Quickaccess extends BaseController
 
             session()->set([
                 'isLoggedIn' => true,
-                'userData' => $userData
+                'userData' => $userData,
+                'session_version' => $userData['session_version'],
             ]);
 
             return $this->response->setStatusCode(200)->setJSON([
@@ -224,6 +235,16 @@ class Quickaccess extends BaseController
                 $username =  $this->request->getVar('username');
                 $user = $this->login_model->login_view($username);
                 $totaltaskcount =  0;
+
+                // Quickaccess/demo users may have been provisioned without the base "Normal Users" (3) role.
+                // Auto-assign it here so they're not blocked from normal-user pages after logging in.
+                $userLevelArray = array_filter(array_map('trim', explode(',', (string) ($user[0]['userlevel'] ?? ''))));
+                if (!in_array('3', $userLevelArray)) {
+                    $this->login_model->updateUserlevel($user[0]['id_user'], 3);
+                    $userLevelArray[] = '3';
+                }
+                $user[0]['userlevel'] = implode(', ', $userLevelArray);
+
                 $currdate = date('Y-m-d');
                 if ($user[0]['validity'] >= $currdate || $user[0]['validity'] == '0000-00-00' || $user[0]['validity'] == '') {
                     $user['id_user'] = $user[0]['id_user'];
@@ -237,9 +258,11 @@ class Quickaccess extends BaseController
                     $user['totaltaskcount'] = $totaltaskcount;
                     $user['default_dashboard'] = $user[0]['default_dashboard'];
                     $user['users_default_dashboard'] = $user[0]['users_default_dashboard'];
+                    $user['session_version'] = (int) ($user[0]['session_version'] ?? 1);
                     $menu = $this->settings_model->menu_view($user[0]['client']);
                     $user['accessmenu']   = $menu[0]['accessmenu'];
                     $this->setUserSession($user); //get user data from users table
+                    session()->set('session_version', $user['session_version']);
                     return redirect()->to(base_url('my_training'));
                 }
             }
@@ -262,6 +285,9 @@ class Quickaccess extends BaseController
             'accessmenu' => $user['accessmenu'] ?? '',
             'timezone' => $user['timezone'] ?? '',
             'timezone_pname' => $user['timezone_pname'] ?? '',
+            // Required by App\Filters\SessionVersionFilter (applied globally, including to my_training) —
+            // without this the session is destroyed and the user is bounced back to login on the very next request.
+            'session_version' => (int) ($user['session_version'] ?? 1),
             'demoaccess' => $user['demoaccess'] ?? '',
             'totaltaskcount' => $user['totaltaskcount'] ?? 0,
             'default_dashboard' => $user['default_dashboard'] ?? '',
@@ -349,6 +375,33 @@ class Quickaccess extends BaseController
                 'message' => 'User not found'
             ]);
         }
+        $loginAllowedRoles = [3, 6, 44];
+
+        $userLevels = array_map(
+            'intval',
+            explode(',', $userData['userlevel'])
+        );
+
+        if (empty(array_intersect($userLevels, $loginAllowedRoles))) {
+
+            $updated = $this->login_model->updateUserlevel(
+                $userData['id_user'],
+                '3'
+            );
+
+            if ($updated) {
+
+                $userData['userlevel'] = '3';
+
+                session()->set('userData', $userData);
+            } else {
+
+                return $this->response->setStatusCode(500)->setJSON([
+                    'success' => false,
+                    'message' => 'Unable to update user role.'
+                ]);
+            }
+        }
 
         // Check user validity
         $totaltaskcount = 0;
@@ -378,6 +431,28 @@ class Quickaccess extends BaseController
 
             // Set user session
             $this->setUserSession($userData);
+            $redirectMap = [
+                1 => 'etrack/dashboard',
+                2 => 'etrack/attendance/view',
+                3 => 'Task/Task_manage/my_task',
+                4 => 'Task/Task_manage/team_tasks_allocate',
+                5 => 'Project_Manage/PM_ucn',
+                6 => 'Project_Manage/PM_projects',
+                7 => 'marketplace/dashboard',
+                8 => 'SCORM/Scorm_client/reviews'
+            ];
+            if ($user['client'] == 85) {
+                $redirect = base_url('Certification/Certification_Portal');
+            } else {
+                $redirect = base_url(
+                    $redirectMap[$userData['landing_page']] ?? 'my_training'
+                );
+            }
+
+            session()->set(
+                'home_page',
+                $userData['landing_page'] ?? 0
+            );
 
             // Return success response
             return $this->response->setStatusCode(200)->setJSON([
@@ -390,7 +465,7 @@ class Quickaccess extends BaseController
                     'client' => $userData['client'],
                     'userlevel' => $userData['userlevel'],
                 ],
-                'redirectUrl' => base_url('my_training')
+                'redirect_url' => $redirect
             ]);
         }
 

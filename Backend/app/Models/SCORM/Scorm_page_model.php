@@ -164,7 +164,7 @@ class Scorm_page_model extends Model
     {
         $this->db->query("SET SESSION group_concat_max_len = 1000000");
         $builder = $this->db->table('page as p');
-        $builder->select('p.page_id,c.language,p.page_name as title,p.page_name as header, GROUP_CONCAT(IFNULL(pt.audio, " ")  ORDER BY pt.page_sequense SEPARATOR "|") AS transcript,c.createdon,p.type,ANY_VALUE(v.filename) as filename,p.page_number,c.createdon,c.course_name,p.text_content,p.text_image,p.text_layout');
+        $builder->select('p.page_id,c.language,p.page_name as title,p.page_name as header, GROUP_CONCAT(IFNULL(pt.audio, " ")  ORDER BY pt.page_sequense SEPARATOR "|") AS transcript,c.createdon,p.type,ANY_VALUE(v.filename) as filename,p.page_number,c.createdon,c.course_name,p.content,p.page_image,p.image_alt');
         $builder->join('page_content as pt', 'pt.page_id = p.page_id and pt.status =1', 'left');
         $builder->join('page_video_vtt as v', 'v.page_id = p.page_id and v.type=1 and v.status =1', 'left');
         $builder->join('scorm_courses as c', 'c.scourse_id = p.fk_course_id and c.status =1', 'left');
@@ -814,6 +814,12 @@ class Scorm_page_model extends Model
                             $type = '8';
                         } elseif (strtoupper($type) == 'Audio Version') {
                             $type = '9';
+                        } elseif (strtoupper($type) == 'TEXT ONLY') {
+                            $type = '10';
+                        } elseif (strtoupper($type) == 'IMAGE + TEXT') {
+                            $type = '11';
+                        } elseif (strtoupper($type) == 'TEXT + IMAGE') {
+                            $type = '12';
                         } else {
                             $type = '2';
                             // $type = '112';

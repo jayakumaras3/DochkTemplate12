@@ -191,7 +191,9 @@
 										<option value="2" <?php echo ($row['type'] == 2) ? 'selected' : ''; ?>>Video</option>
 										<option value="8" <?php echo ($row['type'] == 8) ? 'selected' : ''; ?>>Video Sub Page</option>
 										<option value="3" <?php echo ($row['type'] == 3) ? 'selected' : ''; ?>>Html</option>
-										<option value="10" <?php echo ($row['type'] == 10) ? 'selected' : ''; ?>>Text</option>
+										<option value="10" <?php echo ($row['type'] == 10) ? 'selected' : ''; ?>>Text Only</option>
+										<option value="11" <?php echo ($row['type'] == 11) ? 'selected' : ''; ?>>Image + Text</option>
+										<option value="12" <?php echo ($row['type'] == 12) ? 'selected' : ''; ?>>Text + Image</option>
 										<!--<option value="4" <?php echo ($row['type'] == 4) ? 'selected' : ''; ?>>Quiz</option>
 									 <option value="5" <?php echo ($row['type'] == 5) ? 'selected' : ''; ?>>SCQ</option>
 										<option value="6" <?php echo ($row['type'] == 6) ? 'selected' : ''; ?>>MCQ</option> -->

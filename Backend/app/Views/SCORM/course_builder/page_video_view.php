@@ -670,28 +670,32 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                                 Your browser does not support iframes.
                             </iframe>
                         </div>
-                    <?php } elseif ($row['type'] == 10) {
-                        $textLayout = isset($row['text_layout']) ? (int) $row['text_layout'] : 0;
-                        $textImageFile = $row['text_image'] ?? '';
-                        $textImageUrl = '';
-                        $hasTextImage = false;
-                        if ($textImageFile !== '') {
-                            $textImageDiskPath = FCPATH . "assets/assets/uploads/SCORM_course_document/" . $course_id . "/" . $coursedetails[0]['createdon'] . "/assets/text_images/" . $textImageFile;
-                            if (file_exists($textImageDiskPath)) {
-                                $hasTextImage = true;
-                                $textImageUrl = base_url() . "assets/assets/uploads/SCORM_course_document/" . $course_id . "/" . $coursedetails[0]['createdon'] . "/assets/text_images/" . $textImageFile;
+                    <?php } elseif ($row['type'] == 10 || $row['type'] == 11 || $row['type'] == 12) {
+                        $pageImageFile = $row['page_image'] ?? '';
+                        $imageAlt = $row['image_alt'] ?? '';
+                        $pageImageUrl = '';
+                        $hasPageImage = false;
+                        if ($pageImageFile !== '') {
+                            $pageImageDiskPath = FCPATH . "assets/assets/uploads/SCORM_course_document/" . $course_id . "/" . $coursedetails[0]['createdon'] . "/assets/page_images/" . $pageImageFile;
+                            if (file_exists($pageImageDiskPath)) {
+                                $hasPageImage = true;
+                                $pageImageUrl = base_url() . "assets/assets/uploads/SCORM_course_document/" . $course_id . "/" . $coursedetails[0]['createdon'] . "/assets/page_images/" . $pageImageFile;
                             }
                         }
                         ?>
                         <div class="text-page-container" style="padding: 30px; overflow-y: auto; height: 86vh;">
-                            <?php if ($textLayout == 1 && $hasTextImage) { ?>
-                                <div class="mb-3"><img src="<?php echo $textImageUrl; ?>" class="img-fluid rounded"></div>
-                                <div><?php echo $row['text_content'] ?? ''; ?></div>
-                            <?php } elseif ($textLayout == 2 && $hasTextImage) { ?>
-                                <div class="mb-3"><?php echo $row['text_content'] ?? ''; ?></div>
-                                <div><img src="<?php echo $textImageUrl; ?>" class="img-fluid rounded"></div>
+                            <?php if ($row['type'] == 11 && $hasPageImage) { ?>
+                                <div class="row align-items-start">
+                                    <div class="col-md-6"><img src="<?php echo $pageImageUrl; ?>" alt="<?php echo esc($imageAlt); ?>" class="img-fluid rounded"></div>
+                                    <div class="col-md-6"><?php echo $row['content'] ?? ''; ?></div>
+                                </div>
+                            <?php } elseif ($row['type'] == 12 && $hasPageImage) { ?>
+                                <div class="row align-items-start">
+                                    <div class="col-md-6"><?php echo $row['content'] ?? ''; ?></div>
+                                    <div class="col-md-6"><img src="<?php echo $pageImageUrl; ?>" alt="<?php echo esc($imageAlt); ?>" class="img-fluid rounded"></div>
+                                </div>
                             <?php } else { ?>
-                                <div><?php echo $row['text_content'] ?? ''; ?></div>
+                                <div><?php echo $row['content'] ?? ''; ?></div>
                             <?php } ?>
                         </div>
                     <?php } ?>

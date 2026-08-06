@@ -1,17 +1,44 @@
 <?php
-$textLayout = isset($row['text_layout']) ? (int) $row['text_layout'] : 0;
-$textContent = $row['text_content'] ?? '';
-$textImageFile = $row['text_image'] ?? '';
+$needsImage = ($row['type'] == 11 || $row['type'] == 12);
+$content = $row['content'] ?? '';
+$pageImageFile = $row['page_image'] ?? '';
+$imageAlt = $row['image_alt'] ?? '';
 
-$textImageUrl = '';
-$hasTextImage = false;
-if ($textImageFile !== '') {
-    $textImageDiskPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $course_id . '/' . $coursedetails[0]['createdon'] . '/assets/text_images/' . $textImageFile;
-    if (file_exists($textImageDiskPath)) {
-        $hasTextImage = true;
-        $textImageUrl = base_url() . 'assets/assets/uploads/SCORM_course_document/' . $course_id . '/' . $coursedetails[0]['createdon'] . '/assets/text_images/' . $textImageFile;
+$pageImageUrl = '';
+$hasPageImage = false;
+if ($pageImageFile !== '') {
+    $pageImageDiskPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $course_id . '/' . $coursedetails[0]['createdon'] . '/assets/page_images/' . $pageImageFile;
+    if (file_exists($pageImageDiskPath)) {
+        $hasPageImage = true;
+        $pageImageUrl = base_url() . 'assets/assets/uploads/SCORM_course_document/' . $course_id . '/' . $coursedetails[0]['createdon'] . '/assets/page_images/' . $pageImageFile;
     }
 }
+
+$imageColumn = '<div class="mb-2">'
+    . '<label>Image' . ($hasPageImage ? '' : ' <span class="text-danger">*</span>') . '</label>';
+if ($hasPageImage) {
+    // Image already uploaded: show it + Delete only. The upload input reappears once it's deleted.
+    $imageColumn .= '<div class="mb-2">'
+        . '<img src="' . $pageImageUrl . '" alt="' . esc($imageAlt) . '" class="rounded border d-block mb-2 img-fluid">'
+        . '<button type="submit" form="deleteTextImageForm" class="btn btn-outline-danger waves-effect btn-xs waves-light rounded-pill" onclick="return confirm(\'' . lang('Alert.Aler_003') . '\')">'
+        . '<span class="mdi mdi-trash-can-outline"></span> Delete Image</button>'
+        . '</div>';
+} else {
+    $imageColumn .= '<input type="file" name="image" id="pageImageInput" class="form-control" accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG" />'
+        . '<small class="form-text text-muted">JPG, JPEG or PNG. Max 1 MB.</small>';
+}
+$imageColumn .= '</div>';
+if (!$hasPageImage) {
+    $imageColumn .= '<div class="mb-2">'
+        . '<label>Image Alt Text</label>'
+        . '<input type="text" name="image_alt" class="form-control" value="' . esc($imageAlt) . '" placeholder="Describe the image for accessibility">'
+        . '</div>';
+}
+
+$editorColumn = '<div class="mb-2">'
+    . '<label>Content</label>'
+    . '<textarea class="ckeditor" name="content">' . $content . '</textarea>'
+    . '</div>';
 ?>
 <div class="row">
     <div class="col-12 col-md-12 col-lg-12">
@@ -24,29 +51,21 @@ if ($textImageFile !== '') {
                         <input type="hidden" name="course_id" value="<?php echo $course_id ?>">
                         <input type="hidden" name="page_id" value="<?php echo $page_id ?>">
 
-                        <div class="form-group col-md-12 mb-2">
-                            <label>Layout</label>
-                            <select name="text_layout" class="form-control" id="textLayoutSelect">
-                                <option value="0" <?php echo $textLayout == 0 ? 'selected' : ''; ?>>Plain Text</option>
-                                <option value="1" <?php echo $textLayout == 1 ? 'selected' : ''; ?>>Image + Text</option>
-                                <option value="2" <?php echo $textLayout == 2 ? 'selected' : ''; ?>>Text + Image</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-12 mb-2">
-                            <label>Content</label>
-                            <textarea class="ckeditor" name="text_content"><?php echo $textContent; ?></textarea>
-                        </div>
-
-                        <div class="form-group col-md-6 mb-2" id="textImageField" style="<?php echo $textLayout == 0 ? 'display:none;' : ''; ?>">
-                            <label>Image<?php echo $hasTextImage ? '' : ' <span class="text-danger">*</span>'; ?></label>
-                            <input type="file" name="image" accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG" />
-                            <?php if ($hasTextImage) { ?>
-                                <div class="mt-2">
-                                    <img src="<?php echo $textImageUrl; ?>" style="max-width:220px;max-height:140px;" class="rounded border">
-                                </div>
-                            <?php } ?>
-                        </div>
+                        <?php if ($row['type'] == 11) { ?>
+                            <!-- Editing layout mirrors the final rendering: image on the left, content on the right. -->
+                            <div class="row">
+                                <div class="col-md-5"><?= $imageColumn ?></div>
+                                <div class="col-md-7"><?= $editorColumn ?></div>
+                            </div>
+                        <?php } elseif ($row['type'] == 12) { ?>
+                            <!-- Editing layout mirrors the final rendering: content on the left, image on the right. -->
+                            <div class="row">
+                                <div class="col-md-7"><?= $editorColumn ?></div>
+                                <div class="col-md-5"><?= $imageColumn ?></div>
+                            </div>
+                        <?php } else { ?>
+                            <?= $editorColumn ?>
+                        <?php } ?>
 
                         <div class="form-group col-md-12 mb-2">
                             <?php if (isset($promovalidation)): ?>
@@ -61,34 +80,20 @@ if ($textImageFile !== '') {
                                 id="saveTextButton">Save</button>
                         </div>
                     </form>
-                <?php } ?>
 
-                <hr>
-                <h5>Preview</h5>
-                <div class="text-page-preview">
-                    <?php if ($textLayout == 1 && $hasTextImage) { ?>
-                        <div class="mb-3"><img src="<?php echo $textImageUrl; ?>" class="img-fluid rounded"></div>
-                        <div><?php echo $textContent; ?></div>
-                    <?php } elseif ($textLayout == 2 && $hasTextImage) { ?>
-                        <div class="mb-3"><?php echo $textContent; ?></div>
-                        <div><img src="<?php echo $textImageUrl; ?>" class="img-fluid rounded"></div>
-                    <?php } else { ?>
-                        <div><?php echo $textContent; ?></div>
+                    <?php if ($needsImage && $hasPageImage) { ?>
+                        <form action="<?php echo base_url('SCORM/course_builder/scorm_course_pages/deleteTextImage'); ?>"
+                            method="post" id="deleteTextImageForm"><?= csrf_field() ?>
+                            <input type="hidden" name="page_id" value="<?php echo $page_id ?>">
+                        </form>
                     <?php } ?>
-                </div>
+                <?php } ?>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    var textLayoutSelect = document.getElementById('textLayoutSelect');
-    if (textLayoutSelect) {
-        textLayoutSelect.addEventListener('change', function() {
-            document.getElementById('textImageField').style.display = (this.value === '0') ? 'none' : 'block';
-        });
-    }
-
     var saveTextForm = document.getElementById('saveTextForm');
     if (saveTextForm) {
         saveTextForm.addEventListener('submit', function() {

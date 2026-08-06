@@ -193,7 +193,13 @@ foreach ($pagesDetails as $item) {
                                             echo 'Audio Version';
                                             break;
                                         case 10:
-                                            echo 'Text';
+                                            echo 'Text Only';
+                                            break;
+                                        case 11:
+                                            echo 'Image + Text';
+                                            break;
+                                        case 12:
+                                            echo 'Text + Image';
                                             break;
                                     }
 

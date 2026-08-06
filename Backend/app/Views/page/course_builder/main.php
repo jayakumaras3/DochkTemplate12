@@ -142,7 +142,13 @@ $userlevel = session('userlevel');
                                     echo 'Audio Version';
                                     break;
                                 case 10:
-                                    echo 'Text';
+                                    echo 'Text Only';
+                                    break;
+                                case 11:
+                                    echo 'Image + Text';
+                                    break;
+                                case 12:
+                                    echo 'Text + Image';
                                     break;
                             }
                             ?>)</h4>
@@ -315,7 +321,7 @@ $userlevel = session('userlevel');
                             $typePartials = [
                                 1 => 'articulate', 2 => 'video', 3 => 'html', 4 => 'quiz',
                                 5 => 'cyu', 6 => 'cyu', 8 => 'video', 9 => 'video',
-                                10 => 'text',
+                                10 => 'text', 11 => 'text', 12 => 'text',
                             ];
                             $typePartialName = $typePartials[$row['type']] ?? null;
 

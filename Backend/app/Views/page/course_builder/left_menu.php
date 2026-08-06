@@ -210,7 +210,9 @@ $client = session()->get('client');
                                                 <option value="6">MCQ Check your understanding</option>
                                                 <option value="4">Quiz</option>
                                                 <option value="3">Html</option>
-                                                <option value="10">Text</option>
+                                                <option value="10">Text Only</option>
+                                                <option value="11">Image + Text</option>
+                                                <option value="12">Text + Image</option>
                                             </select>
                                         </div>
                                         <div class="mb-1">
@@ -293,6 +295,12 @@ $client = session()->get('client');
                                                             break;
                                                         case 10:
                                                             $typeIcon = 'mdi-text-box-outline';
+                                                            break;
+                                                        case 11:
+                                                            $typeIcon = 'mdi-image-text';
+                                                            break;
+                                                        case 12:
+                                                            $typeIcon = 'mdi-text-box-multiple-outline';
                                                             break;
                                                     }
                                                 ?>
