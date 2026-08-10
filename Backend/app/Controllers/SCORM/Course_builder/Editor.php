@@ -70,11 +70,105 @@ class Editor extends BaseController
             return redirect()->to(base_url() . 'my_training/read_more');
         }
         $data['courseDetails'] = $this->scorm_course_model->getCourseDetails($data['scourse_id']);
-        $data['pagesDetails'] = $this->scorm_page_model->getPageDetails($data['scourse_id']);
-        // $data['questiondata'] = $this->scorm_page_model->getAssessmentquestion($data['scourse_id']);
+        // Lite version: the left menu only ever reads page_id/number/name/type, so it doesn't
+        // need getPageDetails()'s 10-table join + GROUP BY (see page_content() below, which
+        // still uses the full page row for the currently viewed page).
+        $data['pagesDetails'] = $this->scorm_page_model->getpageDetailsLite($data['scourse_id']);
+
+        // Same course_id/page_number resolution page_content() uses below, done here too so the
+        // left menu can highlight the active page and so a page-switch POST (from left_menu's
+        // per-page forms) persists the chosen page_number to the session before the browser's
+        // follow-up AJAX call to page_content() reads it back out.
+        if (isset($_POST['course_id'])) {
+            $course_id = $_POST['course_id'];
+        } elseif (isset($_SESSION['crid'])) {
+            $course_id = $_SESSION['crid'];
+        } elseif (isset($_SESSION['course_id'])) {
+            $course_id = $_SESSION['course_id'];
+        } elseif (isset($_SESSION['scourse_id'])) {
+            $course_id = $_SESSION['scourse_id'];
+        } else {
+            return redirect()->to(base_url() . 'SCORM/course_builder/Editor');
+        }
+
+        if (isset($_POST['page_number'])) {
+            $page_number = $_POST['page_number'];
+            $_SESSION['page_number'] = $page_number;
+        } elseif (isset($_SESSION['page_number'])) {
+            $page_number = $_SESSION['page_number'];
+        } else {
+            $page_number = isset($data['pagesDetails'][0]['page_number']) ? $data['pagesDetails'][0]['page_number'] : '';
+        }
+
+        // page_number isn't guaranteed unique within a course (e.g. right after a manual edit
+        // collides with an existing page), so page_id - which left_menu's per-page forms already
+        // send - is the authoritative key for "which page is this". page_content() below
+        // resolves the same way, from the same session values.
+        if (isset($_POST['page_id'])) {
+            $page_id = $_POST['page_id'];
+            $_SESSION['page_id'] = $page_id;
+        } elseif (isset($_SESSION['page_id'])) {
+            $page_id = $_SESSION['page_id'];
+        } else {
+            $page_id = isset($data['pagesDetails'][0]['page_id']) ? $data['pagesDetails'][0]['page_id'] : '';
+            if ($page_id !== '') {
+                $_SESSION['page_id'] = $page_id;
+            }
+        }
+
+        // The page previously viewed/selected (via session) may since have been deleted (its
+        // status set to 0, e.g. from the Edit Page modal) - getpageDetailsLite() already
+        // excludes those, so if it's no longer in this list, fall back to the first page that
+        // still exists instead of leaving the left menu with nothing highlighted and
+        // page_content() below resolving to no page at all.
+        $pageStillExists = false;
+        foreach ($data['pagesDetails'] as $eachPage) {
+            if ((string) $eachPage['page_id'] === (string) $page_id) {
+                $pageStillExists = true;
+                break;
+            }
+        }
+        if (!$pageStillExists) {
+            $page_id = isset($data['pagesDetails'][0]['page_id']) ? $data['pagesDetails'][0]['page_id'] : '';
+            $page_number = isset($data['pagesDetails'][0]['page_number']) ? $data['pagesDetails'][0]['page_number'] : '';
+            $_SESSION['page_id'] = $page_id;
+            $_SESSION['page_number'] = $page_number;
+        }
+
+        if (isset($_POST['tab'])) {
+            $_SESSION['tab'] = $_POST['tab'];
+        }
+
+        $data['current_page_id'] = $page_id;
+
+        // "Courses" breadcrumb link: points back to wherever the user actually came from
+        // (My Courses, Marketplace, Learning Plan, Demos, ...) - see BaseController::coursesBreadcrumbLink().
+        $coursesBreadcrumb = $this->coursesBreadcrumbLink();
+        $data['courses_link'] = $coursesBreadcrumb['link'];
+        $data['courses_link_label'] = $coursesBreadcrumb['label'];
+        $data['scourse_id'] = $course_id;
+
+        // The rest of the page (page content, question/assessment data, ~15 more queries) is
+        // fetched by the browser right after this renders, via the page_content() endpoint
+        // below - so the header/left menu paint immediately instead of waiting on all of it.
+        echo view('templates/header_view', $data);
+        echo view('page/course_builder/left_menu', $data);
+        echo view('page/course_builder/main_loading', $data);
+        echo view('templates/footer_view');
+    }
+
+    // AJAX-only: renders the main content pane (current page's content, question/assessment
+    // data) for the page_number/course_id already resolved and stashed in session by index()
+    // above. Split out so index() can paint the header/left menu without waiting on this -
+    // see main_loading.php, which fetches this right after the shell loads.
+    public function page_content()
+    {
+        if ($response =  $this->requireRole(['6', '5', '46', '67', '44'])) {
+            return $response;
+        }
+        helper(['form']);
 
         $page_data = [];
-        helper(['form']);
         if (isset($_POST['course_id'])) {
             $page_data['course_id'] = $_POST['course_id'];
         } elseif (isset($_SESSION['crid'])) {
@@ -93,7 +187,31 @@ class Editor extends BaseController
         } elseif (isset($_SESSION['page_number'])) {
             $page_data['page_number'] = $_SESSION['page_number'];
         } else {
-            $page_data['page_number'] = isset($data['pagesDetails'][0]['page_number']) ? $data['pagesDetails'][0]['page_number'] : '';
+            $page_data['page_number'] = '';
+        }
+
+        // page_id - sent by left_menu's per-page forms - is the authoritative key for which
+        // page to show; page_number alone is ambiguous whenever two pages share a number (see
+        // getpagedata_by_id() in Scorm_page_model.php). Only fall back to a page_number lookup
+        // when no page_id is known at all (e.g. this endpoint reached without index() having
+        // run first in this session).
+        if (isset($_POST['page_id'])) {
+            $page_data['page_id'] = $_POST['page_id'];
+            $_SESSION['page_id'] = $page_data['page_id'];
+        } elseif (isset($_SESSION['page_id'])) {
+            $page_data['page_id'] = $_SESSION['page_id'];
+        } else {
+            $page_data['page_id'] = '';
+        }
+
+        if ($page_data['page_id'] === '' || $page_data['page_number'] === '') {
+            $pagesDetails = $this->scorm_page_model->getpageDetailsLite($page_data['course_id']);
+            if ($page_data['page_number'] === '') {
+                $page_data['page_number'] = isset($pagesDetails[0]['page_number']) ? $pagesDetails[0]['page_number'] : '';
+            }
+            if ($page_data['page_id'] === '') {
+                $page_data['page_id'] = isset($pagesDetails[0]['page_id']) ? $pagesDetails[0]['page_id'] : '';
+            }
         }
 
         $page_data['getAssessmentSettings'] = $this->assessment_training_model->get_assessmentCourselevel_settings($page_data['course_id']);
@@ -129,23 +247,42 @@ class Editor extends BaseController
         $page_data['video_link'] = 'SCORM/course_builder/Scorm_course_pages/addpage';
         $page_data['vtt_link'] = 'SCORM/course_builder/scorm_course_pages/uploadvtt';
 
-        // "Courses" breadcrumb link: points back to wherever the user actually came from
-        // (My Courses, Marketplace, Learning Plan, Demos, ...) - see BaseController::coursesBreadcrumbLink().
-        $coursesBreadcrumb = $this->coursesBreadcrumbLink();
-        $page_data['courses_link'] = $coursesBreadcrumb['link'];
-        $page_data['courses_link_label'] = $coursesBreadcrumb['label'];
-
         $page_data['coursedetails'] = $this->scorm_lanuch_model->coursedetails($page_data['course_id']);
 
-        $pagedata = $this->scorm_page_model->getpagedata_number($page_data['page_number'], $page_data['course_id']);
+        // Resolve by page_id whenever we have one - page_number can collide between pages
+        // within a course, which would otherwise show whichever matching page the query
+        // happens to return first instead of the one actually clicked.
+        if ($page_data['page_id'] !== '') {
+            $pagedata = $this->scorm_page_model->getpagedata_by_id($page_data['page_id'], $page_data['course_id']);
+        } else {
+            $pagedata = $this->scorm_page_model->getpagedata_number($page_data['page_number'], $page_data['course_id']);
+        }
+
+        // The page previously selected (via session) may since have been deleted (e.g. from the
+        // Edit Page modal's Status field) - fall back to the first page that still exists rather
+        // than rendering an empty "no page" pane, which otherwise left this stuck looking like it
+        // never finished loading with no way to tell why.
+        if (empty($pagedata)) {
+            $fallbackPages = $this->scorm_page_model->getpageDetailsLite($page_data['course_id']);
+            if (!empty($fallbackPages)) {
+                $page_data['page_id'] = $fallbackPages[0]['page_id'];
+                $page_data['page_number'] = $fallbackPages[0]['page_number'];
+                $_SESSION['page_id'] = $page_data['page_id'];
+                $_SESSION['page_number'] = $page_data['page_number'];
+                $pagedata = $this->scorm_page_model->getpagedata_by_id($page_data['page_id'], $page_data['course_id']);
+            }
+        }
+
         if (!empty($pagedata)) {
 
             $page_data['row'] = $pagedata[0];
             $page_data['page_id'] = $page_data['row']['page_id'];
-            $data['current_page_id'] = $page_data['page_id'];
             $page_data['page_name'] = $page_data['row']['page_name'];
+            // Keep this authoritative once the row is known, rather than whatever value (POST/
+            // session/guess) was used to look it up.
+            $page_data['page_number'] = $page_data['row']['page_number'];
 
-            $page_data['page_content'] = $this->scorm_page_model->getpagecontent($page_data['page_number'], $page_data['course_id']);
+            $page_data['page_content'] = $this->scorm_page_model->getpagecontentbyid($page_data['page_id']);
 
             $currentpagenum = $page_data['row']['page_number'];
             $fk_course_id = $page_data['row']['fk_course_id'];
@@ -165,12 +302,12 @@ class Editor extends BaseController
 
 
             if (isset($_POST['tab'])) {
-                $data['tab'] = $_POST['tab'];
-                $_SESSION['tab'] = $data['tab'];
+                $page_data['tab'] = $_POST['tab'];
+                $_SESSION['tab'] = $page_data['tab'];
             } else if (isset($_SESSION['tab'])) {
-                $data['tab'] = $_SESSION['tab'];
+                $page_data['tab'] = $_SESSION['tab'];
             } else {
-                $data['tab'] = 1;
+                $page_data['tab'] = 1;
             }
             $page_data['main_header'] = 'Course Detail';
             $page_data['main_header_link'] = 'my_training/read_more';
@@ -198,27 +335,17 @@ class Editor extends BaseController
             $page_data['typeval'] = 8;
 
 
-            // print_r($_SESSION['page_number']);
-            // exit();
             $page_data['pagerow'] = $pagedata[0];
-            // print_r($data['pagerow']);
-            // exit();
             $getQuestiondatax = $this->assessment_training_model->getQuestionDetails_byQID($page_data['pagerow']['page_id'], $page_data['course_id']);
-            // print_r($getQuestiondatax);
-            // exit();
-            $data['pagetype'] = $this->assessment_training_model->getpagetype($page_data['pagerow']['page_id']);
+            $page_data['pagetype'] = $this->assessment_training_model->getpagetype($page_data['pagerow']['page_id']);
             if (!empty($getQuestiondatax)) {
                 $page_data['question_id'] = $getQuestiondatax[0]['q_id'];
 
                 $getQuestiondata = $this->assessment_training_model->geteditquestiondetails($page_data['question_id']);
                 $page_data['qrow'] = $getQuestiondata[0];
-                // print_r($data['qrow']);
-                // exit();
                 $page_data['allcategories'] = $this->scorm_course_model->getAllMetadata(12);
                 $page_data['getoptiondata'] = $this->assessment_training_model->getoptiondaata($page_data['question_id']);
                 $page_data['CategoryData'] = $this->dropdown_model->getCountrylist(20);
-
-                $page_data['page_content'] = $this->scorm_page_model->getpagecontent($page_data['page_number'], $page_data['course_id']);
 
                 $page_data['page_id'] = $getQuestiondata[0]['page_id'];
 
@@ -236,12 +363,7 @@ class Editor extends BaseController
             $page_data['AssessmentSettings']['68'] = $this->scorm_course_model->getpageAssignmetadatabyID($page_data['course_id'], $page_data['pagerow']['page_id'], 68);
         }
 
-
-
-        echo view('templates/header_view', $data);
-        echo view('page/course_builder/left_menu', $page_data);
         echo view('page/course_builder/main', $page_data);
-        echo view('templates/footer_view');
     }
 
     public function settings()
@@ -257,7 +379,9 @@ class Editor extends BaseController
         } else {
             return redirect()->to(base_url() . 'SCORM/course_builder/Editor');
         }
-        $data['pagesDetails'] = $this->scorm_page_model->getPageDetails($data['scourse_id']);
+        // course_settings.php only reads page_id/number/name/type/status/sub_page_main - see
+        // getpageDetailsLite() in Scorm_page_model.php.
+        $data['pagesDetails'] = $this->scorm_page_model->getpageDetailsLite($data['scourse_id']);
         echo view('templates/header_view', $data);
         echo view('page/course_builder/course_settings', $data);
         echo view('templates/footer_view');

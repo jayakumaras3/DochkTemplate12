@@ -195,4 +195,10 @@ return [
     'General' => 'ಸಾಮಾನ್ಯ',
     'Learning_Objectives' => 'ಕಲಿಕಾ ಉದ್ದೇಶಗಳು',
 
+    //Course Builder
+    'CB_Create_Sub_Page' => 'ಉಪ ಪುಟ ರಚಿಸಿ',
+    'CB_Add_Page' => 'ಪುಟ ಸೇರಿಸಿ',
+    'CB_Assign_Task' => 'ಕಾರ್ಯ ನಿಯೋಜಿಸಿ',
+    'CB_Retry' => 'ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ',
+    'CB_Save' => 'ಉಳಿಸಿ',
 ];

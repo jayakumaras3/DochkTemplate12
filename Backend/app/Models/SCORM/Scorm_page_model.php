@@ -36,6 +36,23 @@ class Scorm_page_model extends Model
         $data = $builder->get()->getResultArray();
         return $data;
     }
+
+    // Lighter-weight version of getpageDetails() for callers that only need the plain page
+    // row (id/number/name/type/status/sub_page_main) - e.g. the course builder left menu,
+    // which never reads the joined transcript/video/vtt/question columns getpageDetails()
+    // computes via 5 LEFT JOINs (each further joined to users) + a GROUP BY over every page
+    // in the course. Keep using getpageDetails() wherever those joined columns are actually
+    // read (e.g. storyboarding()).
+    public function getpageDetailsLite($course_id)
+    {
+        $builder = $this->db->table('page as p');
+        $builder->select('p.page_id, p.page_name, p.type, p.page_number, p.status, p.sub_page_main, p.fk_course_id');
+        $builder->where('p.fk_course_id', $course_id);
+        $builder->where('p.status !=', '0');
+        $builder->orderBy('page_number');
+        return $builder->get()->getResultArray();
+    }
+
     public function getAssessmentquestion($course_id)
     {
         $builder = $this->db->table('assessment_questions as q');
@@ -64,6 +81,12 @@ class Scorm_page_model extends Model
                     'page_id' => $data['page_id'],
                     'quiz_type' => 'SCQ',
                     'question' => 'Question',
+                    // Default feedback so a freshly-created SCQ/MCQ question isn't blank until
+                    // someone fills in the Feedback & Explanations panel - correct/incorrect2/
+                    // incorrect map to "Correct"/"Wrong - Attempt 1"/"Wrong - Attempt 2" there.
+                    'correct' => 'Great job! That\'s the correct answer.',
+                    'incorrect2' => 'Not quite. Take another look at the options and try again.',
+                    'incorrect' => 'That\'s not the correct answer. The correct option is now highlighted for you to review.',
                     'status' => '1',
                     'last_updated_by' => session()->get('id_user'),
                     'last_updated_on' => time(),
@@ -73,6 +96,23 @@ class Scorm_page_model extends Model
                     $builder = $this->db->table('assessment_questions');
                     $builder->insert($postdata);
                     $data['question_id'] = $db->insertID();
+
+                    // Every SCQ/MCQ question needs at least one option, and at least one
+                    // correct option, to be answerable - seed one with placeholder text marked
+                    // correct rather than leaving the question unanswerable until the user adds
+                    // one themselves. Mirrors the same "at least one correct" rule enforced in
+                    // Assessment_training_model::updateoptioneditableformat() when the user
+                    // later edits/deletes options.
+                    $optiondata = [
+                        'scourse_id' => $newdata['fk_course_id'],
+                        'question_id' => $data['question_id'],
+                        'values' => 'Option 1',
+                        'truefalse' => 1,
+                        'status' => 1,
+                        'last_updated_by' => session()->get('id_user'),
+                        'last_updated_on' => time(),
+                    ];
+                    $this->db->table('assessment_options')->insert($optiondata);
                 }
 
                 // if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $coursedata[0]['scourse_id'] . '/' . $coursedata[0]['createdon'] . '/shared/assets/content/english/pages/' . $data['page_id'])) {
@@ -221,6 +261,24 @@ class Scorm_page_model extends Model
         // exit();
         return $data;
     }
+
+    // Same shape as getpagedata_number() (adds c.createdon/c.course_name, which callers like
+    // Editor::page_content() rely on) but keyed by the unique page_id instead of page_number -
+    // page_number is not guaranteed unique within a course (two pages can share one, e.g. right
+    // after a manual edit collides with an existing page), so looking it up by number alone can
+    // resolve to the wrong page. Prefer this whenever a page_id is already known.
+    function getpagedata_by_id($page_id, $course_id)
+    {
+        $builder = $this->db->table('page as p');
+        $builder->select('p.*,c.createdon,c.course_name');
+        $builder->join('scorm_courses as c', 'c.scourse_id = p.fk_course_id and c.status !=0', 'left');
+        $builder->where('p.page_id', $page_id);
+        $builder->where('p.fk_course_id', $course_id);
+        $builder->where('p.status !=', 0);
+
+        return $builder->get()->getResultArray();
+    }
+
     function getpagedata($page_id)
     {
         $builder = $this->db->table('page as p');
@@ -251,6 +309,20 @@ class Scorm_page_model extends Model
         return $data;
     }
 
+    // Same as getpagecontent() but skips its internal page_number -> page_id lookup - useful
+    // when the caller already resolved a specific page_id (see getpagedata_by_id() above),
+    // since re-deriving it from page_number would reintroduce the same ambiguity when two
+    // pages share a number.
+    function getpagecontentbyid($page_id)
+    {
+        $builder = $this->db->table('page_content as p');
+        $builder->select('p.*');
+        $builder->where('p.page_id', $page_id);
+        $builder->where('p.status !=', 0);
+        $builder->orderBy('page_sequense');
+        return $builder->get()->getResultArray();
+    }
+
     function getSubpagecontent($page_id, $fk_course_id)
     {
         $builder = $this->db->table('page as p');
@@ -264,24 +336,55 @@ class Scorm_page_model extends Model
 
     function get_full_sb($course_id)
     {
-
-        $db = \Config\Database::connect();
         $builder = $this->db->table('page as p');
-        $builder->select('p.*,ANY_VALUE(pc.audio) as audio, ANY_VALUE(pc.on_screen_text) as on_screen_text, ANY_VALUE(pc.production_notes) as production_notes,ANY_VALUE(c.course_name) as course_name,ANY_VALUE(c.language) as language');
-        $builder->join('page_content as pc', 'pc.page_id = p.page_id and pc.status != 0', 'left');
-        // $builder->where('pc.status !=', 0);
+        $builder->select('p.*, c.course_name, c.language');
         $builder->join('scorm_courses as c', 'c.scourse_id = p.fk_course_id and c.status =1', 'left');
-        $builder->join('assessment_questions as q', 'q.page_id  = p.page_id and q.status =1', 'left');
-        $builder->join('users as u4', 'u4.id_user = q.createdby', 'left');
-        $builder->groupby('p.page_id');
         $builder->where('p.fk_course_id', $course_id);
         $builder->where('p.status !=', '0');
+        $builder->orderBy('p.page_number');
+        $pages = $builder->get()->getResultArray();
 
-        $builder->orderBy('page_number');
-        $data = $builder->get()->getResultArray();
-        // echo $this->db->getLastQuery();
-        // exit();
-        return $data;
+        if (empty($pages)) {
+            return [];
+        }
+
+        // A page can contain several storyboard rows. Fetch them separately instead of
+        // grouping with ANY_VALUE(), which drops every audio/on-screen/notes value except
+        // one arbitrary row.
+        $contentBuilder = $this->db->table('page_content as pc');
+        $contentBuilder->select('pc.page_id, pc.audio, pc.on_screen_text, pc.production_notes');
+        $contentBuilder->join('page as p', 'p.page_id = pc.page_id', 'inner');
+        $contentBuilder->where('p.fk_course_id', $course_id);
+        $contentBuilder->where('p.status !=', 0);
+        $contentBuilder->where('pc.status !=', 0);
+        $contentBuilder->orderBy('pc.page_id');
+        $contentBuilder->orderBy('pc.page_sequense');
+        $contentRows = $contentBuilder->get()->getResultArray();
+
+        $contentByPage = [];
+        foreach ($contentRows as $row) {
+            $contentByPage[$row['page_id']][] = $row;
+        }
+
+        $combineContent = static function (array $rows, string $field): string {
+            $values = [];
+            foreach ($rows as $row) {
+                if (isset($row[$field]) && trim((string) $row[$field]) !== '') {
+                    $values[] = $row[$field];
+                }
+            }
+            return implode('<hr class="my-2">', $values);
+        };
+
+        foreach ($pages as &$page) {
+            $rows = $contentByPage[$page['page_id']] ?? [];
+            $page['audio'] = $combineContent($rows, 'audio');
+            $page['on_screen_text'] = $combineContent($rows, 'on_screen_text');
+            $page['production_notes'] = $combineContent($rows, 'production_notes');
+        }
+        unset($page);
+
+        return $pages;
     }
 
 
@@ -323,6 +426,121 @@ class Scorm_page_model extends Model
             $builder->update();
             $i++;
         }
+    }
+
+    // Makes room for a page being inserted/moved to $fromNumber: every other page in the
+    // course whose page_number is already at or past that slot moves up by $increment, in a
+    // single atomic UPDATE (the WHERE clause is evaluated once against the pre-update values,
+    // so shifting can't cause pages to collide with each other mid-update). A sub-page's
+    // number is its parent's number plus a small fraction (e.g. 2.10 under page 2), so it
+    // naturally shifts together with its parent whenever both are >= $fromNumber - no separate
+    // handling needed for the common "insert a new page" case. $excludePageIds lets a caller
+    // (e.g. editing a page's own number) keep specific pages out of the shift.
+    function shiftPageNumbersFrom($course_id, $fromNumber, $increment = 1, $excludePageIds = [])
+    {
+        $builder = $this->db->table('page');
+        $builder->where('fk_course_id', $course_id);
+        $builder->where('page_number >=', $fromNumber);
+        $builder->where('status !=', 0);
+        if (!empty($excludePageIds)) {
+            $builder->whereNotIn('page_id', $excludePageIds);
+        }
+        $builder->set('page_number', 'page_number + (' . (float) $increment . ')', false);
+        $result = $builder->update();
+
+        // A sub-page points at its parent via sub_page_main = parent's page_number (not the
+        // parent's page_id, per this schema) - so any parent that just shifted needs its
+        // children's sub_page_main shifted the same amount, or they'd silently detach from it.
+        $subBuilder = $this->db->table('page');
+        $subBuilder->where('fk_course_id', $course_id);
+        $subBuilder->where('sub_page_main >=', $fromNumber);
+        $subBuilder->where('sub_page_main !=', 0);
+        $subBuilder->where('status !=', 0);
+        if (!empty($excludePageIds)) {
+            $subBuilder->whereNotIn('page_id', $excludePageIds);
+        }
+        $subBuilder->set('sub_page_main', 'sub_page_main + (' . (float) $increment . ')', false);
+        $subBuilder->update();
+
+        return $result;
+    }
+
+    // Handles moving an EXISTING page to a new number (editpage()'s "page number changed"
+    // case), which is a fundamentally different shape from shiftPageNumbersFrom(): inserting
+    // or deleting a page actually changes how many pages exist from that point on, so
+    // "everything from here onward moves by one" is correct there. Moving a page just
+    // reorders the existing set - the total stays the same - so only pages strictly between
+    // the old and new slot should shift, by exactly one, to open/close the gap; anything
+    // outside that range (e.g. page 5 when moving page 4 to slot 2) must stay put. Using
+    // shiftPageNumbersFrom() here (an unbounded ">= new number" shift) was dragging those
+    // untouched later pages along too.
+    function movePageNumberRange($course_id, $oldNumber, $newNumber, $excludePageIds = [])
+    {
+        if ((float) $oldNumber === (float) $newNumber) {
+            return true;
+        }
+
+        if ($newNumber < $oldNumber) {
+            // Moving earlier: [newNumber, oldNumber) shifts forward one to make room.
+            $lowOperator = '>=';
+            $rangeLow = $newNumber;
+            $highOperator = '<';
+            $rangeHigh = $oldNumber;
+            $increment = 1;
+        } else {
+            // Moving later: (oldNumber, newNumber] shifts back one to close the gap left behind.
+            $lowOperator = '>';
+            $rangeLow = $oldNumber;
+            $highOperator = '<=';
+            $rangeHigh = $newNumber;
+            $increment = -1;
+        }
+
+        $builder = $this->db->table('page');
+        $builder->where('fk_course_id', $course_id);
+        $builder->where('status !=', 0);
+        $builder->where('page_number ' . $lowOperator, $rangeLow);
+        $builder->where('page_number ' . $highOperator, $rangeHigh);
+        if (!empty($excludePageIds)) {
+            $builder->whereNotIn('page_id', $excludePageIds);
+        }
+        $builder->set('page_number', 'page_number + (' . (float) $increment . ')', false);
+        $result = $builder->update();
+
+        // Same reasoning as shiftPageNumbersFrom(): a page that shifts within this range needs
+        // its own children's sub_page_main (which stores the parent's page_number) shifted too.
+        $subBuilder = $this->db->table('page');
+        $subBuilder->where('fk_course_id', $course_id);
+        $subBuilder->where('status !=', 0);
+        $subBuilder->where('sub_page_main !=', 0);
+        $subBuilder->where('sub_page_main ' . $lowOperator, $rangeLow);
+        $subBuilder->where('sub_page_main ' . $highOperator, $rangeHigh);
+        if (!empty($excludePageIds)) {
+            $subBuilder->whereNotIn('page_id', $excludePageIds);
+        }
+        $subBuilder->set('sub_page_main', 'sub_page_main + (' . (float) $increment . ')', false);
+        $subBuilder->update();
+
+        return $result;
+    }
+
+    // When a specific page's own number is edited (not the bulk "make room" shift above), its
+    // existing sub-pages need to be repointed at the new number and moved by the same delta -
+    // shiftPageNumbersFrom() alone won't do this since the parent isn't moving by a uniform
+    // "everything past this point" amount, it's jumping straight to $newParentNumber.
+    function relinkSubpages($course_id, $oldParentNumber, $newParentNumber)
+    {
+        if ((float) $oldParentNumber === (float) $newParentNumber) {
+            return true;
+        }
+        $delta = $newParentNumber - $oldParentNumber;
+        $builder = $this->db->table('page');
+        $builder->where('fk_course_id', $course_id);
+        $builder->where('sub_page_main', $oldParentNumber);
+        $builder->where('status !=', 0);
+        $builder->set('sub_page_main', $newParentNumber);
+        $builder->set('page_number', 'page_number + (' . (float) $delta . ')', false);
+        return $builder->update();
     }
     function addtrancript($newdata)
     {

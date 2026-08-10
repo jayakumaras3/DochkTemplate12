@@ -202,4 +202,11 @@ return [
     'Save_Changes' => 'Guardar Cambios',
     'General' => 'General',
     'Learning_Objectives' => 'Objetivos de Aprendizaje',
+
+    //Course Builder
+    'CB_Create_Sub_Page' => 'Crear Subpágina',
+    'CB_Add_Page' => 'Agregar Página',
+    'CB_Assign_Task' => 'Asignar Tarea',
+    'CB_Retry' => 'Reintentar',
+    'CB_Save' => 'Guardar',
 ];

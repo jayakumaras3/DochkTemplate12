@@ -1,138 +1,203 @@
+<?php $userlevel = session()->get('userlevel');
+$array = array_map('intval', str_split($userlevel));
+$quizType = isset($row['quiz_type']) ? (string) $row['quiz_type'] : '';
+?>
 <style>
-    /* Style the table */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        /* Removes space between cells */
-        font-family: Arial, sans-serif;
-        /* background-color: #f9f9f9; */
-        box-shadow: none;
-        /* Remove the box shadow */
+    .cyu-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        background: var(--ct-tertiary-bg);
+        color: #6658dd;
+        flex-shrink: 0;
     }
 
-    /* Style the table headers */
-    th {
-        padding: 12px 15px;
-        text-align: left;
-        background-color: rgb(128, 128, 120);
-        /* Green background */
-        color: white;
-        font-weight: bold;
+    .cyu-icon-primary {
+        background: rgba(102, 88, 221, 0.12);
     }
 
-    /* Style the table rows */
-    td {
-        padding: 10px 15px;
-        text-align: left;
-        vertical-align: middle;
-        background-color: #ffffff;
-
-        /* White background for cells */
-    }
-
-    /* Add alternating row colors for better readability */
-    tbody tr:nth-child(odd) {
-        background-color: #f1f1f1;
-        border: 1px solid;
-        /* Light gray background for odd rows */
-    }
-
-    tbody tr:nth-child(even) {
-        background-color: #ffffff;
-        border: 1px solid;
-        /* White background for even rows */
-    }
-
-    /* Hover effect for rows */
-    tbody tr:hover {
-        background-color: #e0e0e0;
-
-        /* Light gray background when hovering over row */
-    }
-
-    /* Style buttons inside table */
-    button.collapsible {
-        background-color: rgb(217, 232, 241);
-        /* Green background */
-        color: white;
-        padding: 6px 12px;
+    .cyu-card {
+        border-radius: 16px;
         border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
     }
 
-    button.collapsible:hover {
-        background-color: rgb(135, 199, 229);
-        /* Darker green on hover */
+    [data-bs-theme="dark"] .cyu-card {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
     }
 
-    /* Remove borders around editable cells */
-    td[contenteditable="true"] {
-        background-color: #f7f7f7;
-        /* Light background for editable cells */
-        outline: none;
-        /* Remove the default outline around editable cells */
+    .cyu-card-title {
+        font-weight: 700;
+        margin-bottom: 2px;
     }
 
-    /* Show collapsible content (Correct option area) */
-    .contented {
-        display: none;
-        /* Hidden by default */
-        background-color: #e9e9e9;
-        /* Light background for collapsible content */
-        padding: 10px;
-        border-radius: 4px;
-        margin-top: 5px;
+    .cyu-card-subtitle {
+        font-size: 12.5px;
+        color: var(--ct-secondary-color);
     }
 
-    button.collapsible:active+.contented {
-        display: block;
-        /* Show when button is clicked */
+    .cyu-question-textarea {
+        min-height: 90px;
+        resize: vertical;
     }
 
-    /* Add spacing for form inputs */
-    .form-check-inline {
-        margin-right: 10px;
-    }
-
-    .form-check-label {
-        font-size: 14px;
-    }
-
-    .collapsible {
-
-        /* color: white; */
-        cursor: pointer;
-        /* background-color: rgba(0, 0, 0, 0.4); */
-        width: 100%;
-        border: none;
-        text-align: center;
-        outline: none;
+    .cyu-char-count {
         font-size: 12px;
-        padding: 2px;
+        color: var(--ct-secondary-color);
+        white-space: nowrap;
     }
 
-    .contented {
-        /* color: white; */
-        padding: 0 58px;
-        display: none;
-        overflow: hidden;
-        /* background-color: rgba(0, 0, 0, 0.4); */
-
+    .cyu-option-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(102, 88, 221, 0.12);
+        color: #6658dd;
+        font-weight: 600;
+        font-size: 12.5px;
     }
 
-    /* Add some styling to the "Add New Entry" button */
-    #addRowBtn {
+    .cyu-option-text {
+        border: 1px solid var(--ct-border-color);
+        border-radius: 8px;
+        padding: 8px 12px;
+        min-height: 40px;
+        background: var(--ct-form-control-bg);
+        color: var(--ct-body-color);
+    }
+
+    .cyu-option-text:focus {
+        outline: none;
+        border-color: #6658dd;
+        box-shadow: 0 0 0 0.15rem rgba(102, 88, 221, 0.15);
+    }
+
+    .cyu-option-score {
+        border: 1px solid var(--ct-border-color);
+        border-radius: 8px;
+        padding: 8px 10px;
+        min-height: 40px;
+        background: var(--ct-form-control-bg);
+        color: var(--ct-body-color);
+        text-align: center;
+    }
+
+    .cyu-option-score:focus {
+        outline: none;
+        border-color: #6658dd;
+        box-shadow: 0 0 0 0.15rem rgba(102, 88, 221, 0.15);
+    }
+
+    .cyu-saving-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11.5px;
+        color: var(--ct-secondary-color);
+        margin-top: 4px;
+    }
+
+    .cyu-toggle {
+        position: relative;
+        display: inline-block;
+        width: 42px;
+        height: 22px;
+        margin: 0;
+    }
+
+    .cyu-toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .cyu-toggle-slider {
+        position: absolute;
         cursor: pointer;
+        inset: 0;
+        background-color: #fa5c7c;
+        border-radius: 22px;
+        transition: background-color .2s ease;
     }
 
-    #addRowBtn:hover {
-        background-color: #45a049;
+    .cyu-toggle-slider::before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        top: 3px;
+        background-color: #fff;
+        border-radius: 50%;
+        transition: transform .2s ease;
+    }
+
+    .cyu-toggle input:checked+.cyu-toggle-slider {
+        background-color: #0acf97;
+    }
+
+    .cyu-toggle input:checked+.cyu-toggle-slider::before {
+        transform: translateX(20px);
+    }
+
+    .cyu-toggle input:focus-visible+.cyu-toggle-slider {
+        box-shadow: 0 0 0 0.15rem rgba(102, 88, 221, 0.3);
+    }
+
+    .cyu-toggle-label {
+        font-size: 11.5px;
+        font-weight: 600;
+    }
+
+    .cyu-action-btn {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .cyu-add-option-btn {
+        border: 1.5px dashed rgba(102, 88, 221, 0.4);
+        color: #6658dd;
+        background: rgba(102, 88, 221, 0.04);
+        border-radius: 10px;
+        padding: 10px;
+        font-weight: 600;
+        margin-top: 12px;
+    }
+
+    .cyu-add-option-btn:hover {
+        background: rgba(102, 88, 221, 0.1);
+        color: #6658dd;
+    }
+
+    .quiz-nav-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background-color: rgba(var(--ct-primary-rgb), 0.1);
+        color: rgb(var(--ct-primary-rgb));
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        border: none;
+    }
+
+    .quiz-nav-btn:hover {
+        background-color: rgba(var(--ct-primary-rgb), 0.18);
     }
 </style>
-<?php $userlevel = session()->get('userlevel');
-$array = array_map('intval', str_split($userlevel)); ?>
+
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
@@ -146,889 +211,436 @@ $array = array_map('intval', str_split($userlevel)); ?>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="form-group col-md-5 mb-2">
+
+<div class="row mb-2">
+    <div class="col-12 d-flex align-items-center gap-2">
         <?php if ($prev_page) { ?>
-            <form class="form-horizontal" action="<?php echo base_url('Assessment/trainings/add_quiz_option_view') ?>"
-                method="POST"><?= csrf_field() ?>
-                <?= csrf_field() ?>
+            <form class="d-inline" action="<?php echo base_url('Assessment/trainings/add_quiz_option_view') ?>" method="POST"><?= csrf_field() ?>
                 <input type="hidden" name="question_id" value="<?php echo $prev_page[0]['q_id'] ?>">
                 <input type="hidden" name="page_id" value="<?php echo $prev_page[0]['page_id'] ?>">
                 <input type="hidden" name="type" value="<?php echo $type ?>">
-                <button type="submit" alt="Next" class="" style="all: unset; cursor: pointer;"><i
-                        class="mdi mdi-arrow-left-circle-outline font-22"></i></button>
+                <button type="submit" title="Previous Question" class="quiz-nav-btn waves-effect"><i class="mdi mdi-arrow-left"></i></button>
             </form>
         <?php } ?>
-    </div>
-    <div class="form-group col-md-3 mb-2">
-        <form class="form-horizontal" action="<?php echo base_url('Assessment/trainings/review_quiz') ?>" method="POST"><?= csrf_field() ?>
-            <?= csrf_field() ?>
-            <input type="hidden" name="scourse_id" value="<?php echo $row['scourse_id']; ?>">
-            <input type="hidden" name="page_id" value="<?php echo $row['page_id'] ?>">
-            <div class="form-group">
-                <button type="submit"
-                    class="btn btn-outline-primary  btn-xs rounded-pill waves-effect waves-light">Review Quiz</button>
-            </div>
-        </form>
-    </div>
-    <div class="form-group col-md-4 mb-2 ribbon ribbon-blue float-start">
         <?php if ($next_page) { ?>
-            <form class="form-horizontal  float-end mt-0"
-                action="<?php echo base_url('Assessment/trainings/add_quiz_option_view') ?>" method="POST"><?= csrf_field() ?>
-                <?= csrf_field() ?>
+            <form class="d-inline" action="<?php echo base_url('Assessment/trainings/add_quiz_option_view') ?>" method="POST"><?= csrf_field() ?>
                 <input type="hidden" name="question_id" value="<?php echo $next_page[0]['q_id'] ?>">
                 <input type="hidden" name="page_id" value="<?php echo $next_page[0]['page_id'] ?>">
                 <input type="hidden" name="type" value="<?php echo $type ?>">
-                <button type="submit" alt="Next" style="all: unset; cursor: pointer;"><i
-                        class="mdi mdi-arrow-right-circle-outline font-22"></i></button>
+                <button type="submit" title="Next Question" class="quiz-nav-btn waves-effect"><i class="mdi mdi-arrow-right"></i></button>
             </form>
-        <?php } else {
-        } ?>
+        <?php } ?>
+        <form class="d-inline ms-2" action="<?php echo base_url('Assessment/trainings/review_quiz') ?>" method="POST"><?= csrf_field() ?>
+            <input type="hidden" name="scourse_id" value="<?php echo $row['scourse_id']; ?>">
+            <input type="hidden" name="page_id" value="<?php echo $row['page_id'] ?>">
+            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill waves-effect waves-light">
+                <i class="mdi mdi-eye-outline"></i> Review Quiz
+            </button>
+        </form>
     </div>
-
 </div>
+
 <div class="row">
     <div class="col-md-8">
-        <div class="card">
+        <!-- Question -->
+        <div class="card cyu-card mb-3">
             <div class="card-body">
-                <div class="x_panel">
-                    <form class="form-horizontal" action="<?php echo base_url($editquestion) ?>" method="POST"><?= csrf_field() ?>
-                        <?= csrf_field() ?>
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-10">
-                                    <label>Question</label>
-                                    <!-- <input type="text" class="form-control col-md-12" name="question" placeholder="Question" value="<?php echo isset($row['question']) ? htmlspecialchars($row['question']) : '' ?>" /> -->
-                                    <textarea class="form-control col-md-12" name="question" placeholder="Question"
-                                        value="<?php echo isset($row['question']) ? htmlspecialchars($row['question']) : '' ?>"
-                                        required><?php echo isset($row['question']) ? htmlspecialchars($row['question']) : '' ?></textarea>
-                                </div>
-                                <div class="col-md-2">
-                                    <?php if (isset($coursevalidation)): ?>
-                                        <div class=col-12 col-sm-4>
-                                            <div class="alert alert-danger" role="alert">
-                                                <?= $coursevalidation->listErrors() ?>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?><br />
-                                    <input type="hidden" name="q_id" value="<?php echo $row['q_id']; ?>">
-                                    <input type="hidden" name="typeval" value="<?php echo $typeval; ?>">
-                                    <input type="hidden" name="returnUrl" value="1">
-                                    <button type="submit"
-                                        class="btn btn-outline-warning waves-effect btn-sm waves-light">
-                                        Update
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <form class="form-horizontal" id="quizQuestionForm" action="<?php echo base_url($editquestion) ?>" method="POST"><?= csrf_field() ?>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="cyu-icon cyu-icon-primary"><i class="mdi mdi-help-circle-outline"></i></span>
+                        <label class="fw-bold mb-0">Question</label>
+                    </div>
+
+                    <textarea class="form-control cyu-question-textarea" id="quizQuestionText" name="question" maxlength="500"
+                        placeholder="Type your question here&hellip;" required
+                        oninput="document.getElementById('quizQuestionCount').textContent = this.value.length + ' / 500';"
+                        onblur="quizSaveQuestion(this)"><?php echo isset($row['question']) ? htmlspecialchars($row['question']) : '' ?></textarea>
+                    <span class="cyu-saving-indicator" id="quizQuestionSaving" style="display:none;"><i class="mdi mdi-loading mdi-spin"></i> Saving&hellip;</span>
+
+                    <div class="d-flex justify-content-end mt-2">
+                        <span class="cyu-char-count" id="quizQuestionCount"><?php echo isset($row['question']) ? mb_strlen($row['question']) : 0; ?> / 500</span>
+                    </div>
+
+                    <?php if (isset($coursevalidation)): ?>
+                        <div class="alert alert-danger mt-2"><?= $coursevalidation->listErrors() ?></div>
+                    <?php endif; ?>
+
+                    <input type="hidden" name="q_id" value="<?php echo $row['q_id']; ?>">
+                    <input type="hidden" name="typeval" value="<?php echo $typeval; ?>">
+                </form>
             </div>
         </div>
 
-
-
-        <div class="card">
+        <div class="card cyu-card mb-3">
             <div class="card-body">
+                <ul class="nav nav-pills nav-fill navtab-bg mb-3" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a href="#quizOptionsTab" data-bs-toggle="tab" aria-expanded="true" role="tab" class="nav-link active">Options</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="#quizSettingsTab" data-bs-toggle="tab" aria-expanded="false" role="tab" class="nav-link">Settings</a>
+                    </li>
+                </ul>
 
+                <div class="tab-content">
+                    <!-- Options -->
+                    <div class="tab-pane fade show active" id="quizOptionsTab" role="tabpanel">
+                        <p class="cyu-card-subtitle mb-3">Add options, set a score, and mark the correct answer(s).</p>
 
-                <!-- <h5><?php echo $row['question']; ?></h5> -->
+                        <div class="table-responsive">
+                            <table class="table cyu-options-table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">#</th>
+                                        <th>Option Text</th>
+                                        <th width="12%" class="text-center">Score</th>
+                                        <th width="15%" class="text-center">Correct</th>
+                                        <th width="12%" class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    <?php
+                                    $j = 0;
+                                    $optionCount = !empty($getoptiondata) ? count($getoptiondata) : 0;
+                                    if (!empty($getoptiondata)) {
+                                        foreach ($getoptiondata as $eachoptiondata) {
+                                            $j++;
+                                    ?>
+                                            <tr>
+                                                <td><span class="cyu-option-num"><?php echo $j; ?></span></td>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 10%">#</th>
-                            <th>Options</th>
-                            <th style="width: 10%">Score</th>
-                            <th style="width: 10%">Correct</th>
-                            <th style="width: 10%">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        <?php
-                        $j = 0;
-                        if ($getoptiondata != '') {
-                            foreach ($getoptiondata as $eachoptiondata) {
-                                $j = $j + 1;
-                                if ($eachoptiondata['truefalse'] == 1) {
-                                    $answer = '<span class="mdi mdi-check-bold"></span>';
-                                } else {
-                                    $answer = '<span class="mdi mdi-close-thick"></span>';
-                                }
-                        ?>
-                                <tr>
-                                    <td><?php echo $j; ?></td>
+                                                <td>
+                                                    <div class="cyu-option-text" contenteditable="true"
+                                                        onBlur="updateDate(this,'values','<?php echo $eachoptiondata['o_id'] ?>')"><?php echo $eachoptiondata['values'] ?></div>
+                                                    <span class="cyu-saving-indicator" style="display:none;"><i class="mdi mdi-loading mdi-spin"></i> Saving&hellip;</span>
+                                                </td>
 
-                                    <td contenteditable="true"
-                                        onBlur="updateDate(this,'values','<?php echo $eachoptiondata['o_id'] ?>')">
-                                        <?php echo $eachoptiondata['values'] ?>
-                                    </td>
-                                    <td contenteditable="true"
-                                        onBlur="updateDate(this,'score','<?php echo $eachoptiondata['o_id'] ?>')">
-                                        <?php echo ($eachoptiondata['score'] != 0) ? $eachoptiondata['score'] : '' ?>
-                                    </td>
-                                    <td>
-                                        <?php
-                                        if ($eachoptiondata['truefalse'] == 1) {
-                                        ?>
-                                            <div class="class=" form-check mb-2 form-check-success">
-                                                <input class="form-check-input  form-check-success" onclick="updateDate('2','truefalse','<?php echo $eachoptiondata['o_id'] ?>')" type="checkbox" value="" id="customckeck15" checked="checked">
-                                            </div>
-                                        <?php
-                                        } else {
-                                        ?>
-                                            <input class="form-check-input " onclick="updateDate('1','truefalse','<?php echo $eachoptiondata['o_id'] ?>')" type="checkbox" value="" id="customckeck15">
+                                                <td>
+                                                    <div class="cyu-option-score" contenteditable="true"
+                                                        onBlur="updateDate(this,'score','<?php echo $eachoptiondata['o_id'] ?>')"><?php echo ($eachoptiondata['score'] != 0) ? $eachoptiondata['score'] : '' ?></div>
+                                                </td>
 
-                                        <?php }
-                                        ?>
-                                    </td>
-                                    <td contenteditable="true"
-                                        onBlur="updateDate(this,'status','<?php echo $eachoptiondata['o_id'] ?>')">
-                                        <button type="button"
-                                            onclick="updateDate('0','status','<?php echo $eachoptiondata['o_id'] ?>')"
-                                            class="btn btn-outline-danger waves-effect btn-xs waves-light"><span class="mdi mdi-trash-can-outline"></span></button>
-                                    </td>
-                                </tr>
-                        <?php }
-                        } ?>
-                    </tbody>
-                </table>
-                <br>
-                <span style="color:red; font-size:12px">Enter values for options and score and click outside the table to update the values.</span>
-                <br> <button type="submit" id="addRowBtn" class="btn btn-outline-info waves-effect btn-sm waves-light">+ Add New Option</button><br /><br />
+                                                <td class="text-center">
+                                                    <?php
+                                                    $truefalse = $eachoptiondata['truefalse'];
+                                                    $optionId = $eachoptiondata['o_id'];
+                                                    $isCorrect = $truefalse == 1;
+                                                    ?>
+                                                    <div class="d-flex flex-column align-items-center gap-1">
+                                                        <?php if ($quizType === '112') { ?>
+                                                            <label class="cyu-toggle" title="<?php echo $isCorrect ? 'Correct' : 'Wrong'; ?>">
+                                                                <input type="checkbox" <?php echo $isCorrect ? 'checked' : ''; ?>
+                                                                    onchange="toggleTrueFalse(this, '<?php echo $optionId; ?>')"
+                                                                    data-question-id="<?php echo $eachoptiondata['question_id']; ?>"
+                                                                    data-current="<?php echo $truefalse; ?>">
+                                                                <span class="cyu-toggle-slider"></span>
+                                                            </label>
+                                                        <?php } else { ?>
+                                                            <label class="cyu-toggle" title="<?php echo $isCorrect ? 'Correct' : 'Wrong'; ?>">
+                                                                <input type="checkbox" <?php echo $isCorrect ? 'checked' : ''; ?>
+                                                                    onchange="updateDate(this.checked ? '1' : '2','truefalse','<?php echo $optionId; ?>')">
+                                                                <span class="cyu-toggle-slider"></span>
+                                                            </label>
+                                                        <?php } ?>
+                                                        <span class="cyu-toggle-label <?php echo $isCorrect ? 'text-success' : 'text-danger'; ?>"><?php echo $isCorrect ? 'Correct' : 'Wrong'; ?></span>
+                                                    </div>
+                                                </td>
 
+                                                <td>
+                                                    <div class="d-flex justify-content-center gap-1">
+                                                        <?php if ($optionCount <= 1) { ?>
+                                                            <button type="button" class="btn btn-outline-danger waves-effect waves-light rounded-circle cyu-action-btn" title="A question must have at least one option" disabled><i class="mdi mdi-trash-can-outline"></i></button>
+                                                        <?php } else { ?>
+                                                            <button type="button" class="btn btn-outline-danger waves-effect waves-light rounded-circle cyu-action-btn" title="Delete"
+                                                                onclick="updateDate('0','status','<?php echo $eachoptiondata['o_id'] ?>')"><i class="mdi mdi-trash-can-outline"></i></button>
+                                                        <?php } ?>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                    <?php
+                                        }
+                                    } ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button type="button" id="addRowBtn" class="btn cyu-add-option-btn w-100" onclick="quizAddOption()">
+                            <i class="mdi mdi-plus-circle-outline"></i> Add New Option
+                        </button>
+                    </div>
+                    <!-- /Options tab -->
+
+                    <!-- Settings -->
+                    <div class="tab-pane fade" id="quizSettingsTab" role="tabpanel">
+                        <p class="cyu-card-subtitle mb-3">Choose whether learners can select one or multiple correct options.</p>
+
+                        <div class="mb-2" style="max-width:320px;">
+                            <label class="fw-semibold mb-1">Quiz Type</label>
+                            <select name="quiz_type" class="form-control" id="quizTypeSelect" onchange="quizSaveType(this)">
+                                <?php if (!empty($AssessmentQuestionType)) {
+                                    foreach ($AssessmentQuestionType as $eachQuizType) { ?>
+                                        <option value="<?php echo $eachQuizType['id_d'] ?>" <?php echo ($quizType === (string) $eachQuizType['id_d']) ? 'selected' : ''; ?>>
+                                            <?php echo $eachQuizType['name'] ?>
+                                        </option>
+                                <?php }
+                                } ?>
+                            </select>
+                            <span class="cyu-saving-indicator" id="quizTypeSaving" style="display:none;"><i class="mdi mdi-loading mdi-spin"></i> Saving&hellip;</span>
+                        </div>
+
+                        <?php if (isset($coursevalidation)): ?>
+                            <div class="alert alert-danger mt-2"><?= $coursevalidation->listErrors() ?></div>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
     <div class="col-md-4">
-        <div class="card">
+        <div class="card cyu-card mb-3">
             <div class="card-body">
-                <div class="x_panel">
-                    <form class="form-horizontal"
-                        action="<?php echo base_url('Assessment/trainings/edit_attempts_question') ?>" method="POST"><?= csrf_field() ?>
-                        <?= csrf_field() ?>
-                        <div class="col-md-12">
-                            <?php if ($type == 5 || $type == 6) { ?>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label>Correct feedback</label>
-                                        <input type="text" class="form-control col-md-12" name="correct" placeholder=""
-                                            value="<?php echo $row['correct'] ?>" />
-                                    </div><br><br><br><br>
-                                    <div class="col-md-12">
-                                        <label>Incorrect feedback 1 (System Generated)</label><br>
-                                        <label>Sorry! That is not the correct answer. Click Try Again.</label>
-                                    </div><br><br><br>
-                                    <div class="col-md-12">
-                                        <label>Incorrect feedback 2</label>
-                                        <input type="text" class="form-control col-md-12" name="incorrect" placeholder=""
-                                            value="<?php echo $row['incorrect'] ?>" />
-                                    </div>
-                                    <!-- <div class="col-md-12">
-                                        <label>Incorrect feedback 2</label>
-                                        <input type="text" class="form-control col-md-12" name="noAttempts" placeholder="" value="<?php echo $row['noAttempts'] ?>" />
-                                    </div> -->
-                                    <input type="hidden" name="noAttempts" value="2">
-                                    <input type="hidden" name="returnUrl" value="1">
-                                </div><br />
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="cyu-icon cyu-icon-primary"><i class="mdi mdi-image-multiple-outline"></i></span>
+                    <label class="fw-bold mb-0">Image / Video</label>
+                </div>
+                <p class="cyu-card-subtitle mb-3">JPG, PNG or MP4. Unique file name. Max size 100 MB.</p>
 
-                            <?php } ?>
-                            <?php if ($type == 4) { ?>
-                                <div class="row">
-                                    <!-- <div class="col-md-4">
-                                        <label>Category</label>
-                                        <select name="category" class="form-control col-md-12">
-                                            <?php if (!empty($allcategories)) {
-                                                foreach ($allcategories as $eachcategories) {
-                                                    // print_r($eachcategories);
-                                                    if ($row['category'] == $eachcategories['sc_mcid']) { ?>
-                                                        <option selected='selected' value="<?php echo $eachcategories['sc_mcid'] ?>"><?php echo $eachcategories['description'] ?></option>
-                                                    <?php } else { ?>
-                                                        <option value="<?php echo $eachcategories['sc_mcid'] ?>"><?php echo $eachcategories['description'] ?></option>
-                                            <?php }
-                                                }
-                                            }
-                                            ?>
-                                        </select>
-                                    </div> -->
-                                    <!-- <div class="col-md-4">
-                                        <label>Score</label>
-                                        <input type="text" class="form-control col-md-12" name="score" placeholder="Score" value="<?php echo $row['score'] ?>" />
-                                    </div> -->
+                <?php
+                $base = base_url();
+                if ($base == 'http://localhost:8888/projects_dochek/projects_dochek') {
+                    $baseloc = '/Users/pchandran/Sites/projects_dochek/projects_dochek/';
+                }
+                if ($base == 'http://172.16.2.218/DOCHEK/') {
+                    $baseloc = '/var/www/DOCHEK/';
+                }
+                if ($base == 'https://dochek.com/') {
+                    $baseloc = '/var/www/html/';
+                }
+                if ($base == 'https://staging.dochek.com/') {
+                    $baseloc = '/var/www/html/DOCHEK/';
+                }
+                if ($base == 'http://localhost/DOCHEKDOTCOM/') {
+                    $baseloc = 'D:/wampp/www/DOCHEKDOTCOM/';
+                }
+                if ($base == 'http://localhost/DOCHEK/') {
+                    $baseloc = 'C:/wamp64/www/DOCHEK/';
+                }
 
-                                    <div class="col-md-4">
-                                        <select name="quiz_type" class="form-control col-md-12">
-                                            <?php if (!empty($AssessmentQuestionType)) {
-                                                foreach ($AssessmentQuestionType as $quiz_type) {
-                                                    if ($row['quiz_type'] == $quiz_type['id_d']) { ?>
-                                                        <option selected='selected' value="<?php echo $quiz_type['id_d'] ?>">
-                                                            <?php echo $quiz_type['name'] ?></option>
-                                                    <?php } else { ?>
-                                                        <option value="<?php echo $quiz_type['id_d'] ?>">
-                                                            <?php echo $quiz_type['name'] ?></option>
-                                            <?php }
-                                                }
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <input type="hidden" name="returnUrl" value="2">
-                                <?php } ?>
+                $fileloc = "";
+                $imagename = isset($question_attachment_image[0]['doc_name']) ? $question_attachment_image[0]['doc_name'] : 'stest';
+                $videoname = isset($question_attachment_video[0]['doc_name']) ? $question_attachment_video[0]['doc_name'] : 'stest';
+                $imagefileloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_image/' . $imagename;
+                $videofileloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_video/' . $videoname;
 
-                                <div class="col-md-4">
-                                    <label>&nbsp;</label>
-                                    <?php if (isset($coursevalidation)): ?>
-                                        <div class=col-12 col-sm-4>
-                                            <div class="alert alert-danger" role="alert">
-                                                <?= $coursevalidation->listErrors() ?>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?>
-                                    <input type="hidden" name="q_id" value="<?php echo $row['q_id']; ?>">
-                                    <input type="hidden" name="typeval" value="<?php echo $typeval; ?>">
-                                    <input type="hidden" name="page_id" value="<?php echo $page_id; ?>">
-
-                                    <button type="submit"
-                                        class="btn btn-outline-warning waves-effect btn-sm waves-light ">
-                                        Update Type
+                if ($imagename != 'stest') {
+                    $folderloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_image';
+                    if (!empty($question_attachment_image) && is_dir($folderloc)) {
+                        foreach ($question_attachment_image as $key => $value) {
+                            $fileloc = $folderloc . '/' . $value['doc_name'];
+                            if (file_exists($fileloc)) {
+                ?>
+                                <div class="text-center mb-2">
+                                    <img style="max-height:120px;" src="<?php echo base_url() ?>/assets/assets/uploads/SCORM_course_document/<?php echo $row['scourse_id']; ?>/<?php echo $getCourseData[0]['createdon']; ?>/assets/Quiz/<?php echo $row['page_id']; ?>/assessment_image/<?php echo $value['doc_name'] ?>"
+                                        class="rounded border img-fluid" />
+                                </div>
+                                <form action="<?php echo base_url('Assessment/trainings/delquestion_file'); ?>" method="POST"><?= csrf_field() ?>
+                                    <input type="hidden" name="qa_id" value="<?php echo isset($question_attachment_image[0]['qa_id']) ? $question_attachment_image[0]['qa_id'] : '' ?>">
+                                    <input type="hidden" name="file_name" value="<?php echo $value['doc_name']; ?>">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill waves-effect waves-light w-100"
+                                        onclick="return confirm('<?php echo lang('Alert.Aler_003') ?>')">
+                                        <span class="mdi mdi-trash-can-outline"></span> Delete Image
                                     </button>
-                                </div>
-                                </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-
-                <div class="row">
-                    <h4>Upload Image / Video :</h4>
-                    <div class="col-md-12">
-                        <ul style="color:indianred;padding:5px">
-                            <li>File name should be unique; allowed file type: JPG, PNG and mp4; file size limit: 100 MB.</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-12">
-
-                    <div class="x_panel">
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <?php
-
-                                $base = base_url();
-                                // print_r($base);
-                                if ($base == 'http://localhost:8888/projects_dochek/projects_dochek') {
-                                    $baseloc = '/Users/pchandran/Sites/projects_dochek/projects_dochek/';
-                                }
-                                if ($base == 'http://172.16.2.218/DOCHEK/') {
-                                    $baseloc = '/var/www/DOCHEK/';
-                                }
-                                if ($base == 'https://dochek.com/') {
-                                    $baseloc = '/var/www/html/';
-                                }
-                                if ($base == 'https://staging.dochek.com/') {
-                                    $baseloc = '/var/www/html/DOCHEK/';
-                                }
-                                if ($base == 'https://staging.dochek.com/') {
-                                    $baseloc = '/var/www/html/DOCHEK/';
-                                }
-                                if ($base == 'http://localhost/DOCHEKDOTCOM/') {
-                                    $baseloc = 'D:/wampp/www/DOCHEKDOTCOM/';
-                                }
-                                if ($base == 'http://localhost/DOCHEK/') {
-                                    $baseloc = 'C:/wamp64/www/DOCHEK/';
-                                }
-                                if ($base == 'http://172.16.2.218/DOCHEK/') {
-                                    $baseloc = '/var/www/DOCHEK/';
-                                }
-
-                                // $folderloc = $baseloc . 'assets/assets/uploads/assessment_image/' . $row['q_id'];
-                                $folderloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_image';
-                                // print_r($question_attachment_image);
-                                // exit();
-
-                                $fileloc = "";
-                                $imagename = isset($question_attachment_image[0]['doc_name']) ? $question_attachment_image[0]['doc_name'] : 'stest';
-                                $videoname = isset($question_attachment_video[0]['doc_name']) ? $question_attachment_video[0]['doc_name'] : 'stest';
-                                $imagefileloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_image/' . $imagename;
-                                $videofileloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_video/' . $videoname;
-                                // print_r($imagefileloc);
-                                // print_r($videofileloc);
-                                if ($imagename != 'stest') {
-                                    if (!empty($question_attachment_image)) {
-
-                                        if (is_dir($folderloc)) {
-                                            // $files2 = scandir($folderloc, SCANDIR_SORT_DESCENDING);
-                                            $sno = 0;
-                                            echo '<table class="table  table-sm">';
-                                            echo '<tr><th>#</th><th>Folder</th><th>Del</th></tr>';
-                                            foreach ($question_attachment_image as $key => $value) {
-                                                $fileloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_image/' . $value['doc_name'];
-
-                                                if (file_exists($fileloc)) {
-                                                    $sno++;
-                                                    echo '<tr><td>';
-                                                    echo $sno;
-                                                    echo '</td><td>';
-
-                                ?>
-                                                    <div class="head bg-dot30 np tac">
-                                                        <!-- <img style="max-height:100px;" src="<?php echo base_url() ?>/assets/assets/uploads/assessment_image/<?php echo $row['q_id']; ?>/<?php echo $value['doc_name'] ?>" class="img-squre img-thumbnail" /> -->
-                                                        <img style="max-height:100px;"
-                                                            src="<?php echo base_url() ?>/assets/assets/uploads/SCORM_course_document/<?php echo $row['scourse_id']; ?>/<?php echo $getCourseData[0]['createdon']; ?>/assets/Quiz/<?php echo $row['page_id']; ?>/assessment_image/<?php echo $value['doc_name'] ?>"
-                                                            class="img-squre img-thumbnail" />
-                                                    </div><br />
-                                                    <?php
-
-                                                    // echo '</td><td>';
-                                                    // $file_creation_date = filectime($folderloc . '/' . $value['doc_name']);
-                                                    // echo date('Y-m-d H:i:s', $file_creation_date);
-                                                    echo '</td><td>';
-                                                    //if ($row['thumbnail']!=$value) {
-                                                    ?>
-
-                                                    <form class="form-horizontal" action="<?php echo base_url('Assessment/trainings/delquestion_file'); ?>" method="POST"><?= csrf_field() ?>
-                                                        <?= csrf_field() ?>
-                                                        <input type="hidden" name="qa_id" value="<?php echo isset($question_attachment_image[0]['qa_id']) ? $question_attachment_image[0]['qa_id'] : '' ?>">
-                                                        <input type="hidden" name="file_name" value="<?php echo $value['doc_name']; ?>">
-                                                        <button type="submit" class="btn btn-outline-danger btn-xs"
-                                                            onclick="return confirm('<?php echo lang('Alert.Aler_003') ?>')">
-                                                            <span class="mdi mdi-trash-can-outline"></span>
-                                                        </button>
-                                                    </form>
-
-
-                                    <?php
-                                                    //	}
-
-                                                    echo '</td><tr>';
-                                                }
-                                            }
-                                            echo '</table>';
-                                        } else {
-                                            echo 'No Files';
-                                        }
-                                    } else {
-                                        echo 'No Files';
-                                    }
-                                } elseif ($videoname != 'stest') { ?>
-                                    <?php
-
-                                    // $folderloc = $baseloc . 'assets/assets/uploads/assessment_video/' . $row['q_id'];
-                                    $fileloc = "";
-                                    $folderloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_video';
-                                    if (!empty($question_attachment_video)) {
-                                        if (is_dir($folderloc)) {
-                                            $files2 = scandir($folderloc, SCANDIR_SORT_DESCENDING);
-                                            $sno = 0;
-                                            echo '<table class="table  table-sm">';
-                                            echo '<tr><th>#</th><th>Folder</th><th>Del</th></tr>';
-                                            foreach ($question_attachment_video as $key => $value) {
-                                                $fileloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_video/' . $value['doc_name'];
-
-                                                if (file_exists($fileloc)) {
-                                                    $sno++;
-                                                    echo '<tr><td>';
-                                                    echo $sno;
-                                                    echo '</td><td>';
-                                                    echo $value['doc_name'];
-
-                                                    // echo '</td><td>';
-                                                    // $file_creation_date = filectime($folderloc . '/' . $value);
-                                                    // echo date('Y-m-d H:i:s', $file_creation_date);
-                                                    echo '</td><td>';
-                                                    //if ($row['thumbnail']!=$value) {
-                                    ?>
-                                                    <form class="form-horizontal deleteAssementvideo" method="POST"><?= csrf_field() ?>
-                                                        <?= csrf_field() ?>
-                                                        <input type="hidden" name="fileloc"
-                                                            value="<?php echo $folderloc . '/' . $value['doc_name']; ?>">
-                                                        <input type="hidden" name="q_id" value="<?php echo $row['q_id'] ?>">
-                                                        <input type="hidden" name="qa_id"
-                                                            value="<?php echo isset($question_attachment_video[0]['qa_id']) ? $question_attachment_video[0]['qa_id'] : '' ?>">
-                                                        <button type="submit" class="btn btn-outline-danger waves-effect btn-xs waves-light"
-                                                            onclick="return confirm('<?php echo lang('Alert.Aler_003') ?>')"><span
-                                                                class="mdi mdi-trash-can-outline"></span></button>
-                                                    </form>
-
-                                    <?php
-                                                    // }
-
-                                                    echo '</td><tr>';
-                                                }
-                                            }
-
-                                            echo '</table>';
-                                        } else {
-                                            echo 'No Files';
-                                        }
-                                    } else {
-                                        echo 'No Files';
-                                    } ?>
-
-
-                                <?php } else {
-                                    echo 'No Files';
-                                } ?>
-                            </div>
-                            <?php if (file_exists($imagefileloc) || file_exists($videofileloc)) { ?>
-                                <div class="col-md-12">
-                                    <div class="form-row" style="border: 1px solid grey;padding :10px">
-                                        <b>Note : Delete existing Image or Video files to upload new</b>
-                                    </div>
-                                </div>
-                            <?php } else {
-                            ?>
-                                <div class="col-md-12">
-                                    <div class="form-row">
-                                        <form class="form-horizontal1" enctype="multipart/form-data"
-                                            action="<?php echo base_url($form_url_1) ?>" method="POST"><?= csrf_field() ?>
-                                            <div class="form-group col-md-12 mb-2">
-                                                <input type="file" name="file" accept=".jpg,.png,.jpeg,.mp4" required />
-                                            </div>
-
-                                            <div class="form-group col-md-12 mb-2">
-                                                <input type="hidden" name="scourse_id" value="<?php echo $row['scourse_id'] ?>">
-                                                <input type="hidden" name="createdon"
-                                                    value="<?php echo $getCourseData[0]['createdon'] ?>">
-                                                <input type="hidden" name="page_id" value="<?php echo $row['page_id'] ?>">
-                                                <input type="hidden" name="q_id" value="<?php echo $row['q_id'] ?>">
-                                                <input type="hidden" name="type" value="1">
-                                                <button type="submit"
-                                                    class="btn btn-outline-info waves-effect btn-sm waves-light col-md-8">Upload
-                                                    Image / Video</button>
-                                            </div>
-                                        </form>
-
-
-                                    </div>
-                                </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                    <!-- <div class="x_panel">
-                    <div class="row">
-                        <h6>Upload Video <span style="color:burlywood">(<b>Note:</b> Video file name should be unique; allowed file type: mp4; file size limit: 100 MB)</span></h6>
-                        <div class="col-md-6">
-                            <?php
-
-                            // $folderloc = $baseloc . 'assets/assets/uploads/assessment_video/' . $row['q_id'];
-                            $fileloc = "";
-                            $folderloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_video';
-                            if (!empty($question_attachment_video)) {
-                                if (is_dir($folderloc)) {
-                                    $files2 = scandir($folderloc, SCANDIR_SORT_DESCENDING);
-                                    $sno = 0;
-                                    echo '<table class="table  table-sm">';
-                                    echo '<tr><th>#</th><th>Folder</th><th>Del</th></tr>';
-                                    foreach ($question_attachment_video as $key => $value) {
-                                        $fileloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_video/' . $value['doc_name'];
-
-                                        if (file_exists($fileloc)) {
-                                            $sno++;
-                                            echo '<tr><td>';
-                                            echo $sno;
-                                            echo '</td><td>';
-                                            echo $value['doc_name'];
-
-                                            // echo '</td><td>';
-                                            // $file_creation_date = filectime($folderloc . '/' . $value);
-                                            // echo date('Y-m-d H:i:s', $file_creation_date);
-                                            echo '</td><td>';
-                                            //if ($row['thumbnail']!=$value) {
-                            ?>
-                                            <form class="form-horizontal deleteAssementvideo" method="POST"><?= csrf_field() ?>
-                                                <input type="hidden" name="fileloc" value="<?php echo $folderloc . '/' . $value['doc_name']; ?>">
-                                                <input type="hidden" name="q_id" value="<?php echo $row['q_id'] ?>">
-                                                <input type="hidden" name="qa_id" value="<?php echo isset($question_attachment_video[0]['qa_id']) ? $question_attachment_video[0]['qa_id'] : '' ?>">
-                                                <button type="submit" class="btn btn-outline-primary waves-effect btn-xs waves-light" onclick="return confirm('Are you sure !! Do you want to delete this file?')"><span class="mdi mdi-trash-can-outline"></span></button>
-                                            </form>
-
-                            <?php
-                                            // }
-
-                                            echo '</td><tr>';
-                                        }
-                                    }
-
-                                    echo '</table>';
-                                } else {
-                                    echo 'No Files';
-                                }
-                            } else {
-                                echo 'No Files';
-                            } ?>
-                        </div>
-                        <?php if (file_exists($imagefileloc) || file_exists($videofileloc)) { ?>
-                            <div class="col-md-6">
-                                <div class="form-row" style="border: 1px solid grey;padding :10px">
-                                    <b>Note : Delete existing Video or Image files to upload new</b>
-                                </div>
-                            </div>
-                        <?php } else {
-                        ?>
-                            <div class="col-md-6">
-                                <div class="form-row">
-                                    <form class="form-horizontal2" enctype="multipart/form-data" action=<?php echo base_url($form_url_3); ?> method="POST"><?= csrf_field() ?>
-                                        <div class="form-group col-md-6 mb-2">
-                                            <input type="file" name="file" accept=".mp4" required />
-                                        </div>
-                                        <div class="form-group col-md-6 mb-2">
-                                            <input type="hidden" name="scourse_id" value="<?php echo $row['scourse_id'] ?>">
-                                            <input type="hidden" name="createdon" value="<?php echo $getCourseData[0]['createdon'] ?>">
-                                            <input type="hidden" name="page_id" value="<?php echo $row['page_id'] ?>">
-                                            <input type="hidden" name="q_id" value="<?php echo $row['q_id'] ?>">
-                                            <input type="hidden" name="type" value="3">
-                                            <button type="submit" class="btn btn-outline-success waves-effect btn-sm waves-light col-md-8">Upload Video</button>
-                                        </div>
-                                        <?php if (isset($videovalidation)): ?>
-                                            <div class="form-group col-md-12">
-                                                <div class="alert alert-danger" role="alert">
-                                                    <?= $videovalidation->listErrors() ?>
-                                                </div>
-                                            </div>
-                                        <?php endif; ?>
-                                    </form>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div> -->
-                    <!-- <div class="x_panel">
-                    <h6>Upload PDF</h6>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?php
-
-                            $folderloc = $baseloc . 'assets/assets/uploads/assessment_pdf/' . $row['q_id'];
-                            // $folderloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_image';
-
-                            if (is_dir($folderloc)) {
-                                $files2 = scandir($folderloc, SCANDIR_SORT_DESCENDING);
-                                $sno = 0;
-                                echo '<table class="table  table-sm">';
-                                echo '<tr><th>#</th><th>Folder</th><th>Created</th><th>Del</th></tr>';
-                                foreach ($files2 as $key => $value) {
-                                    if (strlen($value) > 3) {
-
-                                        $dontshow = 0;
-                                        $file_parts = pathinfo($value);
-                                        if ($file_parts['extension'] != 'DS_Store') {
-                                            $sno++;
-                                            echo '<tr><td>';
-                                            echo $sno;
-                                            echo '</td><td>';
-                                            echo $value;
-
-                                            echo '</td><td>';
-                                            $file_creation_date = filectime($folderloc . '/' . $value);
-                                            echo date('Y-m-d H:i:s', $file_creation_date);
-                                            echo '</td><td>';
-                                            // if ($row['thumbnail'] != $value) {
-                            ?>
-
-                            <?php
-                                            // }
-
-                                            echo '</td><tr>';
-                                        }
-                                    }
-                                }
-                                echo '</table>';
-                            } else {
-                                echo 'No Files';
-                            } ?>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-row">
-                                <form class="form-horizontal2" enctype="multipart/form-data" action=<?php echo base_url($form_url_2); ?> method="POST"><?= csrf_field() ?>
-                                    <div class="form-group col-md-6 mb-2">
-                                        <input type="file" name="file" />
-                                    </div>
-                                    <div class="form-group col-md-6 mb-2">
-                                        <input type="hidden" name="scourse_id" value="<?php echo $row['scourse_id'] ?>">
-                                        <input type="hidden" name="q_id" value="<?php echo $row['q_id'] ?>">
-                                        <input type="hidden" name="type" value="2">
-                                        <button type="submit" class="btn btn-warning btn-sm form-control">Upload PDF Document</button>
-                                    </div>
-                                    <?php if (isset($pdfvalidation)): ?>
-                                        <div class="form-group col-md-12">
-                                            <div class="alert alert-danger" role="alert">
-                                                <?= $pdfvalidation->listErrors() ?>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?>
                                 </form>
-                            </div>
+                <?php
+                            }
+                        }
+                    }
+                } elseif ($videoname != 'stest') {
+                    $folderloc = $baseloc . 'assets/assets/uploads/SCORM_course_document/' . $row['scourse_id'] . '/' . $getCourseData[0]['createdon'] . '/assets/Quiz/' . $row['page_id'] . '/assessment_video';
+                    if (!empty($question_attachment_video) && is_dir($folderloc)) {
+                        foreach ($question_attachment_video as $key => $value) {
+                            $fileloc = $folderloc . '/' . $value['doc_name'];
+                            if (file_exists($fileloc)) {
+                ?>
+                                <div class="mb-2"><i class="mdi mdi-file-video-outline"></i> <?php echo $value['doc_name']; ?></div>
+                                <form action="<?php echo base_url('Assessment/trainings/delquestion_file'); ?>" method="POST"><?= csrf_field() ?>
+                                    <input type="hidden" name="qa_id" value="<?php echo isset($question_attachment_video[0]['qa_id']) ? $question_attachment_video[0]['qa_id'] : '' ?>">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill waves-effect waves-light w-100"
+                                        onclick="return confirm('<?php echo lang('Alert.Aler_003') ?>')">
+                                        <span class="mdi mdi-trash-can-outline"></span> Delete Video
+                                    </button>
+                                </form>
+                <?php
+                            }
+                        }
+                    }
+                }
+
+                if (file_exists($imagefileloc) || file_exists($videofileloc)) { ?>
+                    <div class="cyu-card-subtitle mt-2">Delete the existing image or video to upload a new one.</div>
+                <?php } else { ?>
+                    <form enctype="multipart/form-data" action="<?php echo base_url($form_url_1) ?>" method="POST"><?= csrf_field() ?>
+                        <div class="mb-2">
+                            <input type="file" name="file" class="form-control" accept=".jpg,.png,.jpeg,.mp4" required />
                         </div>
-                    </div>
-                </div> -->
-                </div>
-                </div>
-
-
-
-                
+                        <input type="hidden" name="scourse_id" value="<?php echo $row['scourse_id'] ?>">
+                        <input type="hidden" name="createdon" value="<?php echo $getCourseData[0]['createdon'] ?>">
+                        <input type="hidden" name="page_id" value="<?php echo $row['page_id'] ?>">
+                        <input type="hidden" name="q_id" value="<?php echo $row['q_id'] ?>">
+                        <input type="hidden" name="type" value="1">
+                        <button type="submit" class="btn btn-outline-info waves-effect btn-sm waves-light w-100">
+                            <i class="mdi mdi-upload"></i> Upload Image / Video
+                        </button>
+                    </form>
+                <?php } ?>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Button to add new entry -->
-<!-- <button type="button" id="addRowBtn" class="btn btn-sm btn-primary">+ Add New Option</button><br /> -->
-
-
-
-
 <script>
-    document.querySelectorAll('[contenteditable="true"]').forEach(cell => {
-        cell.addEventListener('input', function() {
-            console.log(cell.innerText); // Or save the content to your server
-        });
-    });
+    function toggleTrueFalse(checkbox, optionId) {
+        const questionId = checkbox.getAttribute('data-question-id');
+        const currentStatus = checkbox.getAttribute('data-current');
+        const newStatus = currentStatus === '1' ? '2' : '1';
 
-    function updateScoreValue(newValue) {
-        document.getElementById("scoreInput").value = newValue;
-    }
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const scoreInput = document.getElementById("scoreInput");
-        const trueFalseRadioYes = document.querySelector("input[value='1']");
-        const submitButton = document.getElementById("submitButton");
+        if (newStatus === '1') {
+            const checkboxes = document.querySelectorAll(`input[data-question-id="${questionId}"]`);
+            const alreadyCorrect = Array.from(checkboxes).some(cb =>
+                cb.getAttribute('data-current') === '1'
+            );
 
-        function updateScoreValue(value) {
-            scoreInput.value = value;
+            if (alreadyCorrect) {
+                alert("Only one correct answer is allowed for this single-choice question. Please unselect the current answer before selecting a new one.");
+                checkbox.checked = false;
+                return;
+            }
         }
 
-        submitButton.addEventListener("click", function(event) {
-            const enteredScore = parseFloat(scoreInput.value);
-            const trueFalseChecked = trueFalseRadioYes.checked;
-
-            if (!trueFalseChecked && enteredScore > 0) {
-                alert("Please enter a non-positive value for the score.");
-                event.preventDefault(); // Prevent form submission
-            }
-        });
-    });
-</script>
-<script>
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
-
-    for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var contented = this.nextElementSibling;
-            if (contented.style.display === "block") {
-                contented.style.display = "none";
-            } else {
-                contented.style.display = "block";
-
-            }
-        });
+        updateDate(newStatus, 'truefalse', optionId);
     }
 
+    // fetch(), not $.ajax(): jQuery's AJAX transport fails to construct its own XHR in this
+    // app's environment ("Cannot read properties of undefined (reading 'open')", status 0 -
+    // the request never reaches the network at all), so this silently did nothing on click.
     function updateDate(element, column, id) {
-        if (column == 'truefalse' || column == 'status') {
-            var value = element;
-        } else {
-            var value = element.innerText;
+        var value = (column == 'truefalse' || column == 'status') ? element : element.innerText;
+
+        var savingIndicator = null;
+        if (column === 'values' && element && element.parentNode) {
+            savingIndicator = element.parentNode.querySelector('.cyu-saving-indicator');
+            if (savingIndicator) savingIndicator.style.display = 'inline-flex';
         }
-        console.log(value + column + id);
 
-        ///conole.log($(this).find(':selected').data('id'));
-        $.ajax({
-            url: '<?php echo base_url('Assessment/trainings/updatedateformat') ?>',
-            type: 'post',
-            data: {
-                value: value,
-                column: column,
-                id: id
-            },
-            success: function(data) {
-                var obj = JSON.parse(data);
-
-                console.log(obj);
-
-                if (obj.status === 'OK') {
-                    console.log('inside on condition');
-                    location.reload(true);
-
-
-                } else {
-                    alert(obj.status, 'Something Went Wrong! Please contact Site Admin!');
-                }
-                location.reload(true);
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                console.log('request failed');
-            }
-
-        })
-
-    }
-
-    function addDate(element, column, id) {
-        if (column == 'truefalse') {
-            var value = element;
-        } else {
-            var value = element.innerText;
-        }
-        console.log(value + column + id);
         let scourse_id = '<?php echo $row['scourse_id'] ?>';
         let question_id = '<?php echo $row['q_id'] ?>';
-        // /conole.log($(this).find(':selected').data('id'));
-        $.ajax({
-            url: '<?php echo base_url('Assessment/trainings/adddateformat') ?>',
-            type: 'post',
-            data: {
-                value: value,
-                column: column,
-                id: id,
-                scourse_id: scourse_id,
-                question_id: question_id
-            },
-            success: function(data) {
-                var obj = JSON.parse(data);
 
-                console.log(obj);
-
-                if (obj.status === 'OK') {
-                    console.log('inside on condition');
-                    location.reload(true);
-
-
-                } else {
-                    alert(obj.status, 'Something Went Wrong! Please contact Site Admin!');
+        fetch('<?php echo base_url('Assessment/trainings/updatedateformat') ?>', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    value: value,
+                    column: column,
+                    id: id,
+                    scourse_id: scourse_id,
+                    question_id: question_id
+                }),
+                credentials: 'same-origin'
+            })
+            .then(function(response) {
+                if (!response.ok) throw new Error('Request failed with status ' + response.status);
+                return response.text();
+            })
+            .then(function(text) {
+                try {
+                    var obj = JSON.parse(text);
+                    if (obj && obj.status && obj.status !== 'OK') {
+                        alert(obj.status);
+                    }
+                } catch (e) {
+                    console.log('Could not parse updatedateformat response as JSON:', text);
                 }
-                location.reload(true);
-            },
-            error: function(xhr, textStatus, errorThrown) {
+                location.reload();
+            })
+            .catch(function() {
+                if (savingIndicator) savingIndicator.style.display = 'none';
                 console.log('request failed');
-            }
-
-        })
-
+            });
     }
-</script>
-<script>
-    // Function to add a new row to the table
-    document.getElementById('addRowBtn').addEventListener('click', function() {
-        var tableBody = document.getElementById('table-body');
 
-        // Get the current row number by counting existing rows
-        var rowCount = tableBody.getElementsByTagName('tr').length + 1;
+    // Creates a real (empty) option row server-side, then reloads so it comes back fully
+    // rendered - simpler and less fragile than hand-building a temporary row.
+    function quizAddOption() {
+        let scourse_id = '<?php echo $row['scourse_id'] ?>';
+        let question_id = '<?php echo $row['q_id'] ?>';
+        let page_type = '<?php echo $type ?>';
+        fetch('<?php echo base_url('Assessment/trainings/adddateformat') ?>', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    value: '',
+                    column: 'values',
+                    id: 'new',
+                    scourse_id: scourse_id,
+                    question_id: question_id,
+                    page_type: page_type
+                }),
+                credentials: 'same-origin'
+            })
+            .then(function(response) {
+                if (!response.ok) throw new Error('Request failed with status ' + response.status);
+                location.reload();
+            })
+            .catch(function() {
+                console.log('request failed');
+            });
+    }
 
-        // Create a new row
-        var newRow = document.createElement('tr');
+    // Auto-saves the Question text on blur (clicking/tabbing away) instead of requiring a
+    // separate "Update" button.
+    function quizSaveQuestion(textarea) {
+        var form = document.getElementById('quizQuestionForm');
+        var savingIndicator = document.getElementById('quizQuestionSaving');
+        if (savingIndicator) savingIndicator.style.display = 'inline-flex';
 
-        // Add cells to the new row (similar to the structure of your existing rows)
-        newRow.innerHTML = `
-            <td>${rowCount}</td>
-           
-            <td contenteditable="true" onBlur="addDate(this,'values','new')"></td>
-            <td contenteditable="true" onBlur="addDate(this,'score','new')"></td>
-             <td>
-                <button type="button" class="collapsible" title="toggle" class="nav-link" data-widget="pushmenu">&nbsp;&nbsp;</button>
-                <div class="contented">
-                    <label>Correct</label>&nbsp;
-                     <div class="form-check-inline">
-                        <label class="form-check-label">
-                            <input type="radio" name="truefalse" class="form-check-input" value="2" checked onclick="updateDate('2','truefalse','new')" id="radioNo"> No
-                        </label>
-                    </div>
-                      <div class="form-check-inline">
-                        <label class="form-check-label">
-                            <input type="radio" name="truefalse" class="form-check-input" value="1" onclick="updateDate('1','truefalse','new')"> Yes
-                        </label>
-                    </div>
-                </div>
-            </td>
-        `;
+        fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                credentials: 'same-origin'
+            })
+            .then(function(response) {
+                if (!response.ok) throw new Error('Request failed with status ' + response.status);
+                location.reload();
+            })
+            .catch(function() {
+                if (savingIndicator) savingIndicator.style.display = 'none';
+                alert('Unable to save the question. Please try again.');
+            });
+    }
 
-        // Append the new row to the table body
-        tableBody.appendChild(newRow);
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        // Bind submit event to each individual delete form
-        $('.deleteAssementimage').on('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+    // Auto-saves the Quiz Type selector on change - only "quiz_type" is sent, so (after the
+    // matching backend fix) it never touches this question's other fields.
+    function quizSaveType(select) {
+        var savingIndicator = document.getElementById('quizTypeSaving');
+        if (savingIndicator) savingIndicator.style.display = 'inline-flex';
 
-            var dataString = new FormData(this); // 'this' refers to the form that was submitted
-
-            // Ensure the form is being submitted correctly
-            if (typeof FormData !== 'undefined') {
-                $.ajax({
-                    url: '<?php echo base_url('Assessment/trainings/delquestion_file'); ?>',
-                    type: "POST",
-                    data: dataString,
-                    async: false,
-                    processData: false,
-                    contentType: false,
-                    success: function(data) {
-                        var obj = JSON.parse(data);
-                        console.log(obj);
-                        if (obj.status === 'OK') {
-                            console.log('File deleted successfully!');
-                            // Optionally, remove the image from the DOM without reloading the page
-                            $(event.target).closest('form').remove(); // Remove the form from DOM
-                            location.reload();
-                        } else {
-                            alert('Error: Something went wrong! Please contact the Site Admin.');
-                        }
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        console.log('Request failed');
-                    }
-                });
-            } else {
-                alert("Your Browser Doesn't support FormData API! Use IE 10 or Above!");
-            }
-        });
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        // Bind submit event to each individual delete form
-        $('.deleteAssementvideo').on('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            var dataString = new FormData(this); // 'this' refers to the form that was submitted
-
-            // Ensure the form is being submitted correctly
-            if (typeof FormData !== 'undefined') {
-                $.ajax({
-                    url: '<?php echo base_url('Assessment/trainings/delquestion_file'); ?>',
-                    type: "POST",
-                    data: dataString,
-                    async: false,
-                    processData: false,
-                    contentType: false,
-                    success: function(data) {
-                        var obj = JSON.parse(data);
-                        console.log(obj);
-                        if (obj.status === 'OK') {
-                            console.log('File deleted successfully!');
-                            // Optionally, remove the image from the DOM without reloading the page
-                            $(event.target).closest('form').remove(); // Remove the form from DOM
-                            location.reload();
-                        } else {
-                            alert('Error: Something went wrong! Please contact the Site Admin.');
-                        }
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        console.log('Request failed');
-                    }
-                });
-            } else {
-                alert("Your Browser Doesn't support FormData API! Use IE 10 or Above!");
-            }
-        });
-    });
+        fetch('<?php echo base_url('Assessment/trainings/edit_attempts_question') ?>', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    quiz_type: select.value,
+                    q_id: '<?php echo $row['q_id'] ?>',
+                    typeval: '<?php echo $typeval ?>',
+                    page_id: '<?php echo $row['page_id'] ?>',
+                    returnUrl: '2'
+                }),
+                credentials: 'same-origin'
+            })
+            .then(function(response) {
+                if (!response.ok) throw new Error('Request failed with status ' + response.status);
+                location.reload();
+            })
+            .catch(function() {
+                if (savingIndicator) savingIndicator.style.display = 'none';
+                alert('Unable to save the quiz type. Please try again.');
+            });
+    }
 </script>

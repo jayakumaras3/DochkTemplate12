@@ -292,15 +292,11 @@ $arrayuserlevel  = array_map('intval', explode(',', $userlevel));
                                                     <input class="form-control" type="text" name="last_name" maxlength="50" value="<?php echo $row['last_name']; ?>">
                                                 </div>
                                             </div>
-                                            <!-- <div class="row mb-2">
-                                                <label for="inputEmail3"><?php echo lang('UI_Text.Email') ?></label>
-                                                <input class="form-control" type="text" name="email" value="<?php echo $row['email']; ?>" placeholder="Email">
-                                            </div> -->
                                             <div class="mb-3">
-                                                <label for="inputEmail3" class="form-label fw-semibold"><?php echo lang('UI_Text.Username') ?> <span class="text-danger">*</span></label>
+                                                <label for="inputEmail3" class="form-label fw-semibold"><?php echo lang('UI_Text.Email') ?> <span class="text-danger">*</span></label>
                                                 <div class="input-icon-group">
                                                     <i class="mdi mdi-email-outline"></i>
-                                                    <input class="form-control" type="text" id="username" name="username" value="<?php echo $row['user']; ?>" placeholder="<?php echo lang('UI_Text.Username') ?>">
+                                                    <input class="form-control" type="text" id="username" name="email" value="<?php echo $row['email']; ?>" placeholder="<?php echo lang('UI_Text.Email') ?>">
                                                 </div>
                                             </div>
                                             <?php if (isset($validationEditUsers)) : ?>
@@ -650,13 +646,6 @@ $arrayuserlevel  = array_map('intval', explode(',', $userlevel));
                                     <div class="input-icon-group">
                                         <i class="mdi mdi-email-outline"></i>
                                         <input class="form-control" type="text" name="email" value="<?php echo $row['email']; ?>" placeholder="<?php echo lang('UI_Text.Email') ?>">
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="inputEmail3" class="form-label fw-semibold"><?php echo lang('UI_Text.Username') ?></label>
-                                    <div class="input-icon-group">
-                                        <i class="mdi mdi-account-outline"></i>
-                                        <input class="form-control" type="text" name="username" value="<?php echo $row['user']; ?>" placeholder="<?php echo lang('UI_Text.Username') ?>">
                                     </div>
                                 </div>
                                 <?php if (isset($validationEditUsers)) : ?>

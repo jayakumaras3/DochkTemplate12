@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
 <body>
     <div style="margin-bottom: 20px;">
         <img src="<?php echo $logo; ?>" alt="Header Image" class="header-img" height="40px" />
@@ -77,3 +82,4 @@
         <?php }
     } ?>
 </body>
+</html>

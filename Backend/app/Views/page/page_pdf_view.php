@@ -46,6 +46,10 @@ function formatSizeExact($bytes)
 		border: none;
 	}
 
+	[data-bs-theme="dark"] .pdfv-card {
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.2);
+	}
+
 	.pdfv-card-icon {
 		width: 40px;
 		height: 40px;
@@ -61,11 +65,15 @@ function formatSizeExact($bytes)
 
 	.pdfv-export-tabs {
 		border: none;
-		background-color: #fff;
+		background-color: var(--ct-secondary-bg);
 		border-radius: 16px;
 		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
 		padding: 6px;
 		gap: 6px;
+	}
+
+	[data-bs-theme="dark"] .pdfv-export-tabs {
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.2);
 	}
 
 	.pdfv-export-tabs .nav-item {
@@ -75,7 +83,7 @@ function formatSizeExact($bytes)
 	.pdfv-export-tabs .nav-link {
 		border: none;
 		border-radius: 10px;
-		color: #495057;
+		color: var(--ct-body-color);
 		font-weight: 600;
 		font-size: 14px;
 		padding: 14px 10px;
@@ -97,7 +105,7 @@ function formatSizeExact($bytes)
 	.pdfv-table thead th {
 		font-weight: 700;
 		font-size: 13px;
-		color: #495057;
+		color: var(--ct-body-color);
 		background-color: rgba(var(--ct-primary-rgb), 0.06);
 		border: none;
 		padding: 12px 16px;
@@ -107,7 +115,7 @@ function formatSizeExact($bytes)
 		vertical-align: middle;
 		font-size: 13.5px;
 		padding: 12px 16px;
-		border-color: rgba(0, 0, 0, 0.06);
+		border-color: var(--ct-border-color-translucent);
 	}
 
 	.pdfv-empty-state {
@@ -130,12 +138,12 @@ function formatSizeExact($bytes)
 
 	.pdfv-empty-title {
 		font-weight: 700;
-		color: #343a40;
+		color: var(--ct-body-color);
 		margin-bottom: 4px;
 	}
 
 	.pdfv-empty-text {
-		color: #868e96;
+		color: var(--ct-secondary-color);
 		font-size: 13.5px;
 	}
 
@@ -147,7 +155,7 @@ function formatSizeExact($bytes)
 		border-radius: 10px;
 		padding: 14px 18px;
 		font-size: 13.5px;
-		color: #495057;
+		color: var(--ct-body-color);
 	}
 
 	.pdfv-info-bar i {
@@ -158,14 +166,14 @@ function formatSizeExact($bytes)
 	.pdfv-form-label {
 		font-weight: 600;
 		font-size: 13.5px;
-		color: #343a40;
+		color: var(--ct-body-color);
 		display: flex;
 		align-items: center;
 		gap: 6px;
 	}
 
 	.pdfv-form-label i {
-		color: #adb5bd;
+		color: var(--ct-secondary-color);
 		font-size: 14px;
 	}
 
@@ -220,7 +228,7 @@ function formatSizeExact($bytes)
 
 	.pdfv-about-box p {
 		font-size: 13px;
-		color: #868e96;
+		color: var(--ct-secondary-color);
 		margin-bottom: 0;
 	}
 </style>
@@ -708,7 +716,7 @@ function formatSizeExact($bytes)
 													required />
 											</div>
 											<div class="mb-3">
-												<input type="file" name="file" accept="application/pdf" required />
+												<input type="file" name="file" class="form-control" accept="application/pdf" required />
 											</div>
 											<div class="mb-3">
 												<input type="hidden" name="tab" value="3">

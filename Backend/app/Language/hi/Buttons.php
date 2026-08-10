@@ -194,4 +194,10 @@ return [
     'General' => 'सामान्य',
     'Learning_Objectives' => 'सीखने के उद्देश्य',
 
+    //Course Builder
+    'CB_Create_Sub_Page' => 'उप-पृष्ठ बनाएं',
+    'CB_Add_Page' => 'पृष्ठ जोड़ें',
+    'CB_Assign_Task' => 'कार्य असाइन करें',
+    'CB_Retry' => 'पुनः प्रयास करें',
+    'CB_Save' => 'सहेजें',
 ];

@@ -1,73 +1,8 @@
-<?php $isModernTheme = isset($coursedetails) && isset($coursedetails[0]['theme']) && $coursedetails[0]['theme'] == '8'; ?>
 </div>
 </div>
 </body>
 
 </html>
-<?php if ($isModernTheme): ?>
-<script>
-    function toggleModernSidebar() {
-        var panel = document.getElementById('Tmenu');
-        var wasOpen = panel && panel.style.display === 'block';
-
-        // Prefer the theme's own menu controller (jMain.js).
-        try {
-            if (typeof TtoggleMenu === 'function') {
-                TtoggleMenu();
-            }
-        } catch (e) {
-            // Parts of jMain.js reach into Angular scope, which Preview never
-            // bootstraps. Swallow and fall through to the manual toggle below.
-        }
-
-        // Fallback: if the theme's controller did not flip the panel, do it here
-        // using the theme's own CSS hooks (no new styling introduced).
-        if (panel && (panel.style.display === 'block') === wasOpen) {
-            var open = !wasOpen;
-            panel.style.display = open ? 'block' : 'none';
-            var whole = document.querySelector('.wholeContainer');
-            if (whole) {
-                whole.classList.toggle('menu-open', open);
-            }
-            document.body.classList.toggle('menu-open-body', open);
-            document.documentElement.classList.toggle('menu-open-body', open);
-            if (typeof Tmenu !== 'undefined') {
-                Tmenu = open;
-            }
-        }
-
-        var v = document.getElementById('vidArea');
-        if (v) {
-            var nowOpen = panel && panel.style.display === 'block';
-            nowOpen ? v.pause() : v.play();
-        }
-    }
-    document.addEventListener('DOMContentLoaded', function () {
-        var tocTab = document.getElementById('toc_id');
-        var transTab = document.getElementById('trans_id');
-        var menuPanel = document.getElementById('menu');
-        var transcriptPanel = document.getElementById('transcript');
-        if (tocTab && transTab && menuPanel && transcriptPanel) {
-            tocTab.addEventListener('click', function () {
-                menuPanel.style.display = 'block';
-                transcriptPanel.style.display = 'none';
-                tocTab.setAttribute('aria-selected', 'true');
-                tocTab.classList.add('tocclickedclscss');
-                transTab.setAttribute('aria-selected', 'false');
-                transTab.classList.remove('tocclickedclscss');
-            });
-            transTab.addEventListener('click', function () {
-                menuPanel.style.display = 'none';
-                transcriptPanel.style.display = 'block';
-                transTab.setAttribute('aria-selected', 'true');
-                transTab.classList.add('tocclickedclscss');
-                tocTab.setAttribute('aria-selected', 'false');
-                tocTab.classList.remove('tocclickedclscss');
-            });
-        }
-    });
-</script>
-<?php endif; ?>
 
 <script>
     $(document).ready(function() {

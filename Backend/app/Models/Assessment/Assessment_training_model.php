@@ -19,7 +19,7 @@ class Assessment_training_model extends Model
     public function getQuestiondata($scourse_id, $page_id)
     {
         $builder = $this->db->table('assessment_questions as q');
-        $builder->select('q.*, d.description as categoryname');
+        $builder->select('q.*, d.description as categoryname, (SELECT COUNT(*) FROM assessment_options o WHERE o.question_id = q.q_id AND o.status != 0) as option_count');
         $builder->join('scorm_meta_category as d', 'd.sc_mcid = q.category', 'left');
         // $builder->join('assessment_options as o', 'o.question_id = q.q_id', 'left');
         // $builder->join('assessment_options as o1', 'o1.question_id = q.q_id and o1.truefalse = 1', 'left');
@@ -410,8 +410,7 @@ class Assessment_training_model extends Model
     {
         $builder = $this->db->table('assessment_settings');
         $builder->insert($tempdata);
-        // $data = $builder->get()->getResultArray();
-        return true;
+        return $this->db->insertID();
     }
     function delete_old_settings($settings_id, $change_quiz_settings_inactive)
     {
@@ -764,6 +763,43 @@ class Assessment_training_model extends Model
     }
     public function updateoptioneditableformat($value, $column, $id, $question_id, $quiz_type)
     {
+        // A question needs at least one option to be answerable, and at least one of its
+        // options must stay marked correct - refuse changes that would leave either at zero.
+        // Checked here (rather than only client-side) since this is the authoritative save path.
+        if ($column === 'status' && (int) $value === 0) {
+            $activeCount = $this->db->table('assessment_options')
+                ->where('question_id', $question_id)
+                ->where('status !=', 0)
+                ->countAllResults();
+            if ($activeCount <= 1) {
+                $data['status'] = 'A question must have at least one option - add another before deleting this one.';
+                return $data;
+            }
+
+            $otherCorrectCount = $this->db->table('assessment_options')
+                ->where('question_id', $question_id)
+                ->where('o_id !=', $id)
+                ->where('status !=', 0)
+                ->where('truefalse', 1)
+                ->countAllResults();
+            if ($otherCorrectCount === 0) {
+                $data['status'] = 'A question must have at least one correct option - mark another option correct before deleting this one.';
+                return $data;
+            }
+        }
+
+        if ($column === 'truefalse' && (int) $value === 2) {
+            $otherCorrectCount = $this->db->table('assessment_options')
+                ->where('question_id', $question_id)
+                ->where('o_id !=', $id)
+                ->where('status !=', 0)
+                ->where('truefalse', 1)
+                ->countAllResults();
+            if ($otherCorrectCount === 0) {
+                $data['status'] = 'A question must have at least one correct option - mark another option correct before changing this one to wrong.';
+                return $data;
+            }
+        }
 
         $builder = $this->db->table('assessment_options as dtd');
         $builder->set($column, $value);
@@ -787,7 +823,7 @@ class Assessment_training_model extends Model
         // }
         return $data;
     }
-    public function addoptioneditableformat($value, $column, $id, $scourse_id, $question_id)
+    public function addoptioneditableformat($value, $column, $id, $scourse_id, $question_id, $pageType = null)
     {
         $newdata = [
             'scourse_id' => $scourse_id,
@@ -797,6 +833,21 @@ class Assessment_training_model extends Model
             'last_updated_by' => session()->get('id_user'),
             'last_updated_on' => time()
         ];
+
+        // For a brand-new SCQ question, default its first option to "Correct" so the
+        // question isn't left with zero correct answers until the user manually picks one -
+        // every option after that (and edits to this one) still default/stay "Wrong" as
+        // before, matching the existing toggle behaviour.
+        if ($column === 'values' && (string) $pageType === '5') {
+            $existingCount = $this->db->table('assessment_options')
+                ->where('question_id', $question_id)
+                ->where('status !=', 0)
+                ->countAllResults();
+            if ($existingCount === 0) {
+                $newdata['truefalse'] = 1;
+            }
+        }
+
         $builder = $this->db->table('assessment_options');
         $builder->insert($newdata);
         // $data = $builder->get()->getResultArray();

@@ -278,7 +278,7 @@ class Users extends BaseController
             $rules = [
                 'name' => 'required|min_length[1]|max_length[32]',
                 'last_name' => 'required|min_length[1]|max_length[32]',
-                'username' => 'required|max_length[50]|is_unique[users.username,id_user,' . $id_user . ']',
+                'username' => 'required|max_length[50]|is_unique[users.username,id_user,' . $id_user . ']|is_unique[users.email,id_user,' . $id_user . ']',
 
             ];
             if (!$this->validate($rules)) {
@@ -287,12 +287,12 @@ class Users extends BaseController
                 $id_user = $this->request->getVar('id_user');
                 $last_name = $this->request->getVar('last_name');
                 $last_name = isset($last_name) ? $last_name : '';
+                $username = $this->request->getVar('username');
                 $newdata = [
                     'name' => $this->request->getVar('name'),
                     'last_name' => $last_name,
-                    'email' => $this->request->getVar('email'),
-                    // 'username' => $this->request->getVar('email'),
-                    'password' => trim(password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)),
+                    'email' => $username,
+                    'username' => $username,
                     'timezone' => $this->request->getVar('timezone'),
                     'last_updated_by' => session()->get('id_user'),
                     'last_updated_on' => time(),

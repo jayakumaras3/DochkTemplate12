@@ -849,7 +849,7 @@ class Client_users extends BaseController
             $rules = [
                 'name' => 'required|min_length[1]|max_length[32]',
                 'last_name' => 'required|min_length[1]|max_length[32]',
-                'username' => 'required|max_length[50]|is_unique[users.username,id_user,' . $userencrptid . ']',
+                'email' => 'required|valid_email|is_unique[users.email,id_user,' . $userencrptid . ']|is_unique[users.username,id_user,' . $userencrptid . ']',
             ];
             if (!$this->validate($rules)) {
                 $data['validationEditUsers'] = $this->validator;
@@ -857,11 +857,12 @@ class Client_users extends BaseController
                 $id_user  = $this->request->getVar('id_user');
                 $last_name =  $this->request->getVar('last_name');
                 $last_name = isset($last_name) ? $last_name : '';
+                $email = htmlspecialchars($this->request->getVar('email'), ENT_QUOTES, 'UTF-8');
                 $newdata = [
                     'name' => htmlspecialchars($this->request->getVar('name'), ENT_QUOTES, 'UTF-8'),
                     'last_name' => htmlspecialchars($last_name, ENT_QUOTES, 'UTF-8'),
-                    'email' => htmlspecialchars($this->request->getVar('email'), ENT_QUOTES, 'UTF-8'),
-                    'username' => htmlspecialchars($this->request->getVar('username'), ENT_QUOTES, 'UTF-8'),
+                    'email' => $email,
+                    'username' => $email,
                     'last_updated_by' =>  session()->get('id_user'),
                     'last_updated_on' => time(),
                 ];

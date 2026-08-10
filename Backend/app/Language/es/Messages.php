@@ -54,6 +54,7 @@ return [
     'Success_0052' => '¡Usuario inscrito exitosamente!',
     'Success_0053' => '¡Usuarios inscritos exitosamente!',
     'Success_0054' => '¡Curso duplicado exitosamente!',
+    'Success_0055' => 'Archivo subido con éxito',
 
     'Error_0001' => '¡Error! Contacta al administrador.',
     'Error_0002' => 'No se agregaron cursos del grupo.',

@@ -103,6 +103,21 @@ $current_subsubpage = explode('/', uri_string())[2] ?? '';
         }
     </style>
 
+    <!-- Site-wide decorative background: soft wavy gradient (light theme only) in place of
+         the flat --ct-body-bg color. Built as an inline SVG data URI rather than an image
+         asset - a few gradient-filled wave paths, no file to host or keep in sync. Left alone
+         in dark mode so it doesn't fight [data-bs-theme="dark"]'s dark --ct-body-bg above. -->
+    <style>
+        [data-bs-theme="light"] body {
+            background-color: #eef0fb;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900' preserveAspectRatio='xMidYMid slice'%3E%3Crect width='1600' height='900' fill='%23f3f4fb'/%3E%3Cpath d='M0,140 C220,50 420,190 680,120 C940,50 1180,170 1600,70 L1600,0 L0,0 Z' fill='%23dfe2f5'/%3E%3Cpath d='M0,200 C240,100 460,240 720,160 C980,80 1220,220 1600,120 L1600,0 L0,0 Z' fill='%23eceef9' opacity='0.75'/%3E%3Cpath d='M0,900 C260,760 480,860 760,780 C1040,700 1300,820 1600,720 L1600,900 Z' fill='%23dbdef4'/%3E%3Cpath d='M0,900 C220,820 440,900 700,840 C980,770 1260,880 1600,800 L1600,900 Z' fill='%23cbcff1' opacity='0.7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center top;
+            background-attachment: fixed;
+        }
+    </style>
+
     <!-- Topbar quick links (Courses / Learning Plan / Marketplace) -->
     <style>
         .topbar-quicklinks {
@@ -735,8 +750,14 @@ $current_subsubpage = explode('/', uri_string())[2] ?? '';
             // Show again the moment the user submits a form or clicks a navigation link -
             // being on top of everything (see #loading-screen z-index) is what blocks clicks
             // underneath while it's shown, so nothing extra is needed for that part.
+            //
+            // Forms marked data-download="1" are excluded: their response is a file download
+            // (Content-Disposition: attachment), which never actually navigates the browser
+            // away from this page - so 'load'/'pageshow' would never fire to clear
+            // "navigating" again, leaving the overlay stuck spinning forever (only a manual
+            // refresh, which does navigate, was clearing it).
             document.addEventListener('submit', function(event) {
-                if (event.target && event.target.tagName === 'FORM') {
+                if (event.target && event.target.tagName === 'FORM' && event.target.getAttribute('data-download') !== '1') {
                     navigating = true;
                     showOverlay();
                 }
@@ -745,6 +766,7 @@ $current_subsubpage = explode('/', uri_string())[2] ?? '';
             document.addEventListener('click', function(event) {
                 var link = event.target.closest ? event.target.closest('a[href]') : null;
                 if (!link || link.hasAttribute('data-bs-toggle') || link.hasAttribute('data-bs-dismiss')) return;
+                if (link.getAttribute('data-download') === '1') return;
                 var href = link.getAttribute('href');
                 if (!href || href.charAt(0) === '#' || href.toLowerCase().indexOf('javascript:') === 0) return;
                 if (link.target && link.target !== '' && link.target !== '_self') return;

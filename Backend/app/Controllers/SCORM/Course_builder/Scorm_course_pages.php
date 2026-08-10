@@ -147,7 +147,12 @@ class Scorm_course_pages extends BaseController
         if ($response =  $this->requireRole(['5', '44', '67', '46'])) {
             return $response;
         }
-        $dompdf = new Dompdf();
+
+        // The installed Dompdf release emits PHP 8.4 compatibility deprecations. If PHP is
+        // configured to display them, those messages are inserted before the PDF bytes and
+        // corrupt the downloaded file. Keep real warnings/errors enabled for this request.
+        error_reporting(error_reporting() & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+
         $data = [];
         helper(['form']);
         if (isset($_POST['scourse_id'])) {
@@ -163,6 +168,9 @@ class Scorm_course_pages extends BaseController
 
 
         $data['full_sb'] = $this->scorm_page_model->get_full_sb($data['scourse_id']);
+        if (empty($data['full_sb'])) {
+            return redirect()->back()->with('error', 'No storyboard content is available to export.');
+        }
 
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
@@ -172,7 +180,6 @@ class Scorm_course_pages extends BaseController
         $data['logo'] = $this->imageToBase64(ROOTPATH . 'assets/assets/img/TS_Logo.svg');
 
         $html = view('page/pdf_transcript_view', $data);
-        $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
@@ -184,12 +191,13 @@ class Scorm_course_pages extends BaseController
         $y = 820;
         $canvas->page_text(558, $y, "{PAGE_NUM}", $font, $fontSize, [0, 0, 0]);
 
+        $filename = preg_replace('/[\\\\\/:*?"<>|]+/', '_', $data['full_sb'][0]['course_name']);
+        $filename = ($filename !== '' ? $filename : 'audio-transcript') . '.pdf';
 
-        $dompdf->getOptions()->set('isHtml5ParserEnabled', true);
-        $dompdf->getOptions()->set('isPhpEnabled', true);
-        $dompdf->loadHtml($html);
-
-        $dompdf->stream($data['full_sb'][0]['course_name'] . '.pdf', ['Attachment' => true]);
+        return $this->response
+            ->setHeader('Content-Type', 'application/pdf')
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->setBody($dompdf->output());
     }
     private function imageToBase64($path)
     {
@@ -294,6 +302,13 @@ class Scorm_course_pages extends BaseController
                 $type = $this->request->getVar('type');
                 $page_number = $this->request->getVar('page_number');
                 $page_name = $this->request->getVar('page_name');
+
+                // Make room for the new page: any existing page (and its own sub-pages) at or
+                // past this slot shifts up by one, so inserting "in between" existing pages -
+                // or reusing a number that's already taken - can't leave two pages sharing a
+                // page_number (which otherwise made left-menu navigation land on the wrong one).
+                $this->scorm_page_model->shiftPageNumbersFrom($data['scourse_id'], $page_number, 1);
+
                 $newdata = [
                     'fk_course_id' => $data['scourse_id'],
                     'page_name' => $this->request->getVar('page_name'),
@@ -553,12 +568,43 @@ class Scorm_course_pages extends BaseController
             if (!$this->validate($rules)) {
                 $data['coursevalidation'] = $this->validator;
             } else {
+                $newPageNumber = $this->request->getVar('page_number');
+                $newStatus = $this->request->getVar('status');
+
+                $existingPage = $this->scorm_page_model->getpagedata($data['page_id']);
+                if (!empty($existingPage)) {
+                    $courseId = $existingPage[0]['fk_course_id'];
+                    $oldPageNumber = $existingPage[0]['page_number'];
+                    $oldStatus = $existingPage[0]['status'];
+
+                    // If the page number actually changed, shift only the pages the move
+                    // actually passes over (between the old and new slot) and carry this
+                    // page's own sub-pages along with it - otherwise editing a number to match
+                    // (or pass) another page would leave two pages sharing a number (breaking
+                    // left-menu navigation) or strand this page's sub-pages under its old,
+                    // now-reassigned number. movePageNumberRange() (not
+                    // shiftPageNumbersFrom(), which is for insert/delete where the page count
+                    // itself changes) keeps pages outside that range untouched.
+                    if ($newPageNumber !== null && $newPageNumber !== '' && (float) $oldPageNumber !== (float) $newPageNumber) {
+                        $this->scorm_page_model->movePageNumberRange($courseId, $oldPageNumber, $newPageNumber, [$data['page_id']]);
+                        $this->scorm_page_model->relinkSubpages($courseId, $oldPageNumber, $newPageNumber);
+                    }
+
+                    // If this edit is deleting the page (status -> 0 via the Status field),
+                    // close the gap it leaves behind: every later page shifts down by one so
+                    // numbering stays contiguous, mirroring the shift the other direction when
+                    // inserting/moving a page above.
+                    if ((int) $oldStatus !== 0 && (int) $newStatus === 0) {
+                        $this->scorm_page_model->shiftPageNumbersFrom($courseId, $oldPageNumber, -1, [$data['page_id']]);
+                    }
+                }
+
                 $newdata = [
                     'page_name' => $this->request->getVar('page_name'),
                     'sub_page_main' => $this->request->getVar('sub_page_main'),
                     'type' => $this->request->getVar('type'),
                     'status' => $this->request->getVar('status'),
-                    'page_number' => $this->request->getVar('page_number'),
+                    'page_number' => $newPageNumber,
                     'last_update_by' => session()->get('id_user'),
                     'last_update_on' => time(),
 
@@ -633,8 +679,20 @@ class Scorm_course_pages extends BaseController
             $this->emptyDir($dir);
             rmdir($dir);
         }
+
+        $newStatus = $this->request->getVar('status');
+
+        // If this is deleting the page (status -> 0), close the gap it leaves behind: every
+        // later page shifts down by one so numbering stays contiguous - same as editpage().
+        if ((int) $newStatus === 0) {
+            $existingPage = $this->scorm_page_model->getpagedata($data['page_id']);
+            if (!empty($existingPage) && (int) $existingPage[0]['status'] !== 0) {
+                $this->scorm_page_model->shiftPageNumbersFrom($existingPage[0]['fk_course_id'], $existingPage[0]['page_number'], -1, [$data['page_id']]);
+            }
+        }
+
         $newdata = [
-            'status' => $this->request->getVar('status'),
+            'status' => $newStatus,
             'last_update_by' => session()->get('id_user'),
             'last_update_on' => time(),
 
@@ -1098,6 +1156,7 @@ class Scorm_course_pages extends BaseController
                     $this->exportQuizQuestion($eachpage['page_id'], $data['scourse_id'], $eachpage['type'], $eachpage['language']);
                 } elseif ($eachpage['type'] == '10' || $eachpage['type'] == '11' || $eachpage['type'] == '12') {
                     $this->exportTextPage($eachpage, $data['scourse_id']);
+                    $this->exportTextPageJson($eachpage, $data['scourse_id']);
                 }
                 if ($eachpage['type'] == '1') {
                     $type = 'captivate';
@@ -1326,6 +1385,92 @@ class Scorm_course_pages extends BaseController
             . '</head><body>' . $body . '</body></html>';
 
         file_put_contents($htmlFolder . '/Screen_01.html', $html);
+    }
+    private function exportTextPageJson($eachpage, $scourse_id)
+    {
+        $timestamp = $eachpage['createdon'];
+        $htmlFolder = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $scourse_id . '/' . $timestamp . '/assets/html/' . $eachpage['page_id'];
+        if (!is_dir($htmlFolder)) {
+            mkdir($htmlFolder, 0777, true);
+        }
+
+        $type = (int) $eachpage['type'];
+        if ($type == 11) {
+            $layoutType = 'image-left';
+        } elseif ($type == 12) {
+            $layoutType = 'image-right';
+        } else {
+            $layoutType = 'text-only';
+        }
+
+        $hasImage = !empty($eachpage['page_image']);
+
+        $pagejson = [
+            "meta" => [
+                "pageId" => (string) $eachpage['page_id'],
+                "lang" => $eachpage['language'] ?? 'en'
+            ],
+            "theme" => [
+                "primary" => "#1A56DB",
+                "primaryDark" => "#1341B0",
+                "primaryLight" => "#EBF2FF",
+                "accent" => "#06B6D4",
+                "text" => "#0F172A",
+                "text2" => "#475569",
+                "text3" => "#94A3B8",
+                "bg" => "#F1F5F9",
+                "surface" => "#FFFFFF",
+                "surface2" => "#F8FAFC",
+                "border" => "#E2E8F0",
+                "radiusBase" => "0px",
+                "radiusLg" => "0px",
+                "radiusXl" => "0px"
+            ],
+            "layout" => [
+                "type" => $layoutType,
+                "mediaRatio" => $hasImage ? "46%" : "0%",
+                "contentRatio" => $hasImage ? "54%" : "100%",
+                "gap" => "52px",
+                "cardPadding" => "52px",
+                "maxWidth" => $hasImage ? "1120px" : "860px"
+            ],
+            "header" => [
+                "visible" => false,
+                "eyebrow" => "",
+                "title" => $eachpage['title'] ?? '',
+                "align" => "left",
+                "accentBar" => true
+            ],
+            "media" => [
+                "visible" => $hasImage,
+                "type" => "image",
+                "src" => $hasImage ? $eachpage['page_image'] : '',
+                "alt" => $eachpage['image_alt'] ?? '',
+                "caption" => "",
+                "aspectRatio" => "4/3",
+                "borderRadius" => "0px"
+            ],
+            "content" => [
+                "visible" => true,
+                "heading" => $eachpage['title'] ?? '',
+                "headingTag" => "h2",
+                "body" => $eachpage['content'] ?? '',
+                "components" => []
+            ],
+            "navigation" => [
+                "visible" => false,
+                "prevLabel" => "",
+                "prevHref" => "",
+                "nextLabel" => "",
+                "nextHref" => "#",
+                "showProgress" => false,
+                "currentPage" => (int) ($eachpage['page_number'] ?? 1),
+                "totalPages" => 0
+            ]
+        ];
+
+        $pagejsonEncoded = json_encode($pagejson, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        file_put_contents($htmlFolder . '/page.json', $pagejsonEncoded);
     }
     function exportQuestion($page_id, $scourse_id, $type, $langauge)
     {
@@ -2030,9 +2175,13 @@ class Scorm_course_pages extends BaseController
         }
 
         if ($this->request->getPost()) {
-            $newdata = [
-                'content' => $this->request->getPost('content'),
-            ];
+            $newdata = [];
+            // Content and image now save from independent forms (Text-Image page type) - only
+            // touch a column when its form actually posted it, so saving the image doesn't
+            // wipe out content (and vice versa).
+            if ($this->request->getPost('content') !== null) {
+                $newdata['content'] = $this->request->getPost('content');
+            }
             if ($this->request->getPost('image_alt') !== null) {
                 $newdata['image_alt'] = $this->request->getPost('image_alt');
             }

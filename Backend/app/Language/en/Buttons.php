@@ -198,4 +198,10 @@ return [
     'General' => 'General',
     'Learning_Objectives' => 'Learning Objectives',
 
+    //Course Builder
+    'CB_Create_Sub_Page' => 'Create Sub Page',
+    'CB_Add_Page' => 'Add Page',
+    'CB_Assign_Task' => 'Assign Task',
+    'CB_Retry' => 'Retry',
+    'CB_Save' => 'Save',
 ];

@@ -19,24 +19,8 @@
         overflow: hidden;
     }
 
-    .sb-columns-header {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        padding: 14px 20px;
-        background-color: rgba(var(--ct-primary-rgb), 0.06);
-        font-weight: 700;
-        font-size: 13px;
-        color: #495057;
-    }
-
-    .sb-columns-header i {
-        color: rgb(var(--ct-primary-rgb));
-        margin-right: 4px;
-    }
-
-    .sb-col-page {
-        flex: 0 0 220px;
+    [data-bs-theme="dark"] .sb-card {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
     .sb-col-audio {
@@ -53,7 +37,7 @@
     }
 
     .sb-page-block {
-        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        border-top: 1px solid var(--ct-border-color-translucent);
     }
 
     .sb-page-block:first-child {
@@ -86,13 +70,13 @@
 
     .sb-page-title {
         font-weight: 700;
-        color: #343a40;
+        color: var(--ct-body-color);
     }
 
     .sb-page-type {
         margin-left: auto;
         font-size: 13.5px;
-        color: #495057;
+        color: var(--ct-body-color);
     }
 
     .sb-page-type strong {
@@ -129,7 +113,7 @@
 
     .sb-col-text {
         font-size: 13.5px;
-        color: #495057;
+        color: var(--ct-body-color);
     }
 
     .sb-col-text p {
@@ -167,6 +151,7 @@
 <div class="row">
     <div class="col-12 text-end mb-2">
         <a href="<?php echo base_url('SCORM/course_builder/Scorm_course_pages/generate_transcript_pdf'); ?>"
+            data-download="1"
             class="btn btn-outline-warning btn-sm rounded-pill waves-effect waves-light">
             <i class="mdi mdi-file-pdf-box"></i> Export Audio Transcript PDF
         </a>
@@ -176,13 +161,7 @@
 <div class="row">
     <div class="col-12">
         <div class="card sb-card">
-            <div class="sb-columns-header">
-                <div class="sb-col-page"><i class="mdi mdi-file-outline"></i> Page</div>
-                <div class="sb-col-audio"><i class="mdi mdi-microphone-outline"></i> Audio Text / Transcript</div>
-                <div class="sb-col-onscreen"><i class="mdi mdi-monitor"></i> On Screen</div>
-                <div class="sb-col-notes"><i class="mdi mdi-file-document-edit-outline"></i> Production Notes</div>
-                <div class="sb-col-edit"><i class="mdi mdi-cog-outline"></i> Edit</div>
-            </div>
+
 
             <div id="storyboardAccordion">
                 <?php foreach ($full_sb as $content):
@@ -229,7 +208,7 @@
                         </div>
                         <div class="collapse" id="<?php echo $collapseId; ?>" data-bs-parent="#storyboardAccordion">
                             <div class="sb-page-content">
-                                <div class="sb-col-page"></div>
+                                
                                 <div class="sb-col-audio">
                                     <div class="sb-col-label"><i class="mdi mdi-microphone-outline"></i> Audio Text/Transcript</div>
                                     <div class="sb-col-text"><?php echo $content['audio']; ?></div>

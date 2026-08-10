@@ -54,6 +54,7 @@ return [
     'Success_0052' => 'User enrolled successfully!',
     'Success_0053' => 'Users enrolled successfully!',
     'Success_0054' => 'Course duplicated successfully!',
+    'Success_0055' => 'File Uploaded Successfully',
 
     'Error_0001' => 'Error! Contact admin.',
     'Error_0002' => 'No courses from the group got added.',

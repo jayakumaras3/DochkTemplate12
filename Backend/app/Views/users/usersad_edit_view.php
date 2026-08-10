@@ -36,9 +36,9 @@ $cid = session()->set($data); ?>
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="inputEmail3" class="col-4 col-xl-3 col-form-label"><?php echo lang('UI_Text.Username') ?></label>
+                        <label for="inputEmail3" class="col-4 col-xl-3 col-form-label"><?php echo lang('UI_Text.Email') ?></label>
                         <div class="col-8 col-xl-9">
-                            <input class="form-control" type="text" id="username" name="username" value="<?php echo $row['user']; ?>" placeholder="user">
+                            <input class="form-control" type="text" id="username" name="username" value="<?php echo $row['user']; ?>" placeholder="email">
                         </div>
                     </div>
                     <div class="row mb-3">

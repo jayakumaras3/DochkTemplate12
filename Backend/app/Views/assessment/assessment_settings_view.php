@@ -1,11 +1,117 @@
+<style>
+	.qs-section-icon {
+		width: 34px;
+		height: 34px;
+		border-radius: 9px;
+		background: rgba(var(--ct-primary-rgb), 0.12);
+		color: rgb(var(--ct-primary-rgb));
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 16px;
+		flex-shrink: 0;
+	}
+
+	.qs-header-icon {
+		width: 48px;
+		height: 48px;
+		border-radius: 12px;
+		background: rgba(var(--ct-primary-rgb), 0.12);
+		color: rgb(var(--ct-primary-rgb));
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 24px;
+		flex-shrink: 0;
+	}
+
+	.qs-card {
+		border-radius: 16px;
+		border: none;
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+	}
+
+	[data-bs-theme="dark"] .qs-card {
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+	}
+
+	.qs-card-title {
+		font-weight: 700;
+	}
+
+	.qs-field-label {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-weight: 600;
+		font-size: 13.5px;
+		margin-bottom: 8px;
+	}
+
+	.qs-field-icon {
+		color: rgb(var(--ct-primary-rgb));
+		font-size: 15px;
+	}
+
+	.qs-field-status {
+		display: inline-block;
+		font-size: 11.5px;
+		margin-top: 4px;
+		min-height: 15px;
+	}
+
+	.qs-behavior-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		border: 1px solid var(--ct-border-color-translucent);
+		border-radius: 12px;
+		padding: 14px 16px;
+	}
+
+	.qs-behavior-icon {
+		width: 38px;
+		height: 38px;
+		border-radius: 10px;
+		background: rgba(var(--ct-primary-rgb), 0.12);
+		color: rgb(var(--ct-primary-rgb));
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 18px;
+		flex-shrink: 0;
+	}
+
+	.qs-behavior-title {
+		font-weight: 600;
+		font-size: 14px;
+	}
+
+	.qs-behavior-desc {
+		font-size: 12px;
+		color: var(--ct-secondary-color);
+	}
+
+	.qs-info-bar {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		background: rgba(var(--ct-primary-rgb), 0.06);
+		border-radius: 10px;
+		padding: 12px 16px;
+		font-size: 13.5px;
+		color: var(--ct-body-color);
+	}
+</style>
+
 <div class="row">
 	<div class="col-12">
 		<div class="page-title-box">
 			<div class="page-title-right">
 				<ol class="breadcrumb m-0">
 					<li class="breadcrumb-item"><a href="<?php echo base_url($main_header_link) ?>"><?php echo $main_header ?></a></li>
-					<li class="breadcrumb-item"><a href="<?php echo base_url($header_link) ?>">Pages</a></li>
-					<li class="breadcrumb-item"><a href="<?php echo base_url($header_link_1) ?>"><?php echo $header_1 ?></a></li>
+					<li class="breadcrumb-item"><a href="<?php echo base_url('SCORM/course_builder/Editor') ?>"><?php echo lang('UI_Text.CB_Course_Builder'); ?></a></li>
 
 				</ol>
 			</div>
@@ -17,12 +123,12 @@
 	<ul class="nav nav-pills nav-fill navtab-bg">
 		<li class="nav-item">
 			<a href="#Settings" data-bs-toggle="tab" aria-expanded="true" class="nav-link <?php if ($tab == 1) echo "active"; ?>">
-				Assessment Quiz Settings
+				<?php echo lang('UI_Text.CB_General_Settings'); ?>
 			</a>
 		</li>
 		<li class="nav-item">
 			<a href="#Template" data-bs-toggle="tab" aria-expanded="false" class="nav-link <?php if ($tab == 2) echo "active"; ?>">
-				Assessment Quiz Template
+				<?php echo lang('UI_Text.CB_Template_Settings'); ?>
 			</a>
 		</li>
 	</ul>
@@ -30,119 +136,146 @@
 	$array  = array_map('intval', str_split($userlevel)); ?>
 	<div class="tab-content">
 		<div class="tab-pane <?php if ($tab == 1) echo "show active"; ?>" id="Settings">
-			<div class="card">
+			<?php
+			// Every field always renders, even before its first save - looked up by type from
+			// $getAssessmentSettings rather than iterating it directly, so a setting that's
+			// never been touched still shows with a sensible default instead of disappearing
+			// from the page.
+			$qsByType = [];
+			foreach ($getAssessmentSettings as $eachSetting) {
+				$qsByType[$eachSetting['type']] = $eachSetting;
+			}
+			$qsAttempts    = $qsByType[24]['value'] ?? '';
+			$qsAttemptsSid = $qsByType[24]['s_id'] ?? 0;
+			$qsPassing     = $qsByType[23]['value'] ?? '';
+			$qsPassingSid  = $qsByType[23]['s_id'] ?? 0;
+			$qsMaxQ        = $qsByType[22]['value'] ?? '';
+			$qsMaxQSid     = $qsByType[22]['s_id'] ?? 0;
+			$qsDuration    = $qsByType[21]['value'] ?? '';
+			$qsDurationSid = $qsByType[21]['s_id'] ?? 0;
+
+			$qsPreAttempt       = (($qsByType[4]['value'] ?? 'Disabled') === 'Enabled');
+			$qsPreAttemptSid    = $qsByType[4]['s_id'] ?? 0;
+			$qsPreTest          = (($qsByType[3]['value'] ?? 'Disabled') === 'Enabled');
+			$qsPreTestSid       = $qsByType[3]['s_id'] ?? 0;
+			$qsRandOptions      = (($qsByType[2]['value'] ?? 'Disabled') === 'Enabled');
+			$qsRandOptionsSid   = $qsByType[2]['s_id'] ?? 0;
+			$qsRandQuestions    = (($qsByType[1]['value'] ?? 'Disabled') === 'Enabled');
+			$qsRandQuestionsSid = $qsByType[1]['s_id'] ?? 0;
+			?>
+
+			<div class="card qs-card mb-3">
 				<div class="card-body">
-					<table class="table  table-sm table-bordered table-striped table-hover">
-						<thead>
-							<tr>
-								<th width=5%>#</th>
-								<th>Item</th>
-								<th>Current Values</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-							$i = 0;
+					<div class="row g-3">
+						<div class="col-6 col-lg-3">
+							<div class="qs-field-label"><i class="mdi mdi-target qs-field-icon"></i> <?php echo lang('UI_Text.CB_Attempts_Allowed'); ?></div>
+							<div class="input-group">
+								<input type="number" min="0" class="form-control qs-auto-save" id="qsAttempts" data-type="24" data-sid="<?php echo (int) $qsAttemptsSid; ?>" value="<?php echo esc($qsAttempts); ?>" onblur="qsSaveSetting(this)">
+								<span class="input-group-text"><?php echo lang('UI_Text.CB_Attempts'); ?></span>
+							</div>
+							<span id="qsAttemptsStatus" class="qs-field-status"></span>
+						</div>
+						<div class="col-6 col-lg-3">
+							<div class="qs-field-label"><i class="mdi mdi-target qs-field-icon"></i> <?php echo lang('UI_Text.CB_Passing_Percentage'); ?></div>
+							<div class="input-group">
+								<input type="number" min="0" max="100" class="form-control qs-auto-save" id="qsPassing" data-type="23" data-sid="<?php echo (int) $qsPassingSid; ?>" value="<?php echo esc($qsPassing); ?>" onblur="qsSaveSetting(this)">
+								<span class="input-group-text">%</span>
+							</div>
+							<span id="qsPassingStatus" class="qs-field-status"></span>
+						</div>
+						<div class="col-6 col-lg-3">
+							<div class="qs-field-label"><i class="mdi mdi-format-list-bulleted qs-field-icon"></i> <?php echo lang('UI_Text.CB_Maximum_Questions'); ?></div>
+							<div class="input-group">
+								<input type="number" min="0" class="form-control qs-auto-save" id="qsMaxQ" data-type="22" data-sid="<?php echo (int) $qsMaxQSid; ?>" value="<?php echo esc($qsMaxQ); ?>" onblur="qsSaveSetting(this)">
+								<span class="input-group-text"><?php echo lang('UI_Text.CB_Questions'); ?></span>
+							</div>
+							<span id="qsMaxQStatus" class="qs-field-status"></span>
+						</div>
+						<div class="col-6 col-lg-3">
+							<div class="qs-field-label"><i class="mdi mdi-clock-outline qs-field-icon"></i> <?php echo lang('UI_Text.CB_Duration'); ?></div>
+							<div class="input-group">
+								<input type="number" min="0" max="300" class="form-control qs-auto-save" id="qsDuration" data-type="21" data-sid="<?php echo (int) $qsDurationSid; ?>" value="<?php echo esc($qsDuration); ?>" onblur="qsSaveSetting(this)">
+								<span class="input-group-text"><?php echo lang('UI_Text.CB_Minutes'); ?></span>
+							</div>
+							<span id="qsDurationStatus" class="qs-field-status"></span>
+						</div>
+					</div>
+				</div>
+			</div>
 
+			<div class="card qs-card mb-3">
+				<div class="card-body">
+					<div class="d-flex align-items-center gap-2 mb-3">
+						<span class="qs-section-icon"><i class="mdi mdi-shuffle-variant"></i></span>
+						<h5 class="qs-card-title mb-0"><?php echo lang('UI_Text.CB_Quiz_Behavior'); ?></h5>
+					</div>
+					<div class="row g-3">
+						<div class="col-md-6">
+							<div class="qs-behavior-item">
+								<div class="d-flex align-items-center gap-3">
+									<span class="qs-behavior-icon"><i class="mdi mdi-monitor"></i></span>
+									<div>
+										<div class="qs-behavior-title"><?php echo lang('UI_Text.CB_Pre_Attempt_Post_Attempt'); ?></div>
+										<div class="qs-behavior-desc"><?php echo lang('UI_Text.CB_Pre_Attempt_Post_Attempt_Desc'); ?></div>
+									</div>
+								</div>
+								<div class="form-check form-switch mb-0">
+									<input class="form-check-input qs-auto-save" type="checkbox" id="qsPreAttempt" data-type="4" data-sid="<?php echo (int) $qsPreAttemptSid; ?>" <?php echo $qsPreAttempt ? 'checked' : ''; ?> onchange="qsSaveSetting(this)">
+								</div>
+							</div>
+							<span id="qsPreAttemptStatus" class="qs-field-status"></span>
+						</div>
+						<div class="col-md-6">
+							<div class="qs-behavior-item">
+								<div class="d-flex align-items-center gap-3">
+									<span class="qs-behavior-icon"><i class="mdi mdi-monitor"></i></span>
+									<div>
+										<div class="qs-behavior-title"><?php echo lang('UI_Text.CB_Pre_Test_Post_Test'); ?></div>
+										<div class="qs-behavior-desc"><?php echo lang('UI_Text.CB_Pre_Test_Post_Test_Desc'); ?></div>
+									</div>
+								</div>
+								<div class="form-check form-switch mb-0">
+									<input class="form-check-input qs-auto-save" type="checkbox" id="qsPreTest" data-type="3" data-sid="<?php echo (int) $qsPreTestSid; ?>" <?php echo $qsPreTest ? 'checked' : ''; ?> onchange="qsSaveSetting(this)">
+								</div>
+							</div>
+							<span id="qsPreTestStatus" class="qs-field-status"></span>
+						</div>
+						<div class="col-md-6">
+							<div class="qs-behavior-item">
+								<div class="d-flex align-items-center gap-3">
+									<span class="qs-behavior-icon"><i class="mdi mdi-shuffle-variant"></i></span>
+									<div>
+										<div class="qs-behavior-title"><?php echo lang('UI_Text.CB_Randomize_Options'); ?></div>
+										<div class="qs-behavior-desc"><?php echo lang('UI_Text.CB_Randomize_Options_Desc'); ?></div>
+									</div>
+								</div>
+								<div class="form-check form-switch mb-0">
+									<input class="form-check-input qs-auto-save" type="checkbox" id="qsRandOptions" data-type="2" data-sid="<?php echo (int) $qsRandOptionsSid; ?>" <?php echo $qsRandOptions ? 'checked' : ''; ?> onchange="qsSaveSetting(this)">
+								</div>
+							</div>
+							<span id="qsRandOptionsStatus" class="qs-field-status"></span>
+						</div>
+						<div class="col-md-6">
+							<div class="qs-behavior-item">
+								<div class="d-flex align-items-center gap-3">
+									<span class="qs-behavior-icon"><i class="mdi mdi-format-list-bulleted"></i></span>
+									<div>
+										<div class="qs-behavior-title"><?php echo lang('UI_Text.CB_Randomize_Questions'); ?></div>
+										<div class="qs-behavior-desc"><?php echo lang('UI_Text.CB_Randomize_Questions_Desc'); ?></div>
+									</div>
+								</div>
+								<div class="form-check form-switch mb-0">
+									<input class="form-check-input qs-auto-save" type="checkbox" id="qsRandQuestions" data-type="1" data-sid="<?php echo (int) $qsRandQuestionsSid; ?>" <?php echo $qsRandQuestions ? 'checked' : ''; ?> onchange="qsSaveSetting(this)">
+								</div>
+							</div>
+							<span id="qsRandQuestionsStatus" class="qs-field-status"></span>
+						</div>
+					</div>
 
-							// $preTestEnabled = false;
-							// foreach ($getAssessmentSettings as $setting) {
-							// 	if ($setting['type'] == 3 && $setting['value'] == 'Enabled') {
-							// 		$preTestEnabled = true;
-							// 		break;
-							// 	}
-							// }
-
-							$i = 0;
-							foreach ($getAssessmentSettings as $value) {
-								$type = $value['type'];
-								if ($type == 5) continue;
-								if ($type >= 31) continue;
-								if ($type == 25) continue;
-
-								$i++;
-								if ($type < 20) {
-
-									echo '<tr role="row" class="odd">';
-									echo '<td class="dtr-control sorting_1" tabindex="0">' . $i . '</td>';
-									echo '<td>';
-									switch ($type) {
-										case 1:
-											echo "Randomize Questions (Default: Randomize Questions Disabled)";
-											break;
-										case 2:
-											echo "Randomize Options (Default: Randomize Options Disabled)";
-											break;
-										case 3:
-											echo "Pre-Test / Post-Test <b>(Note: When the toggle is ON, the Quiz is in Post-Test mode.
-																	<br/>When the toggle is OFF, the Quiz is in Pre-Test mode.)</b>";
-											break;
-										case 4:
-											echo "Pre-Attempt / Post-Attempt <b>(Note: When the toggle is ON, the Quiz is in Post-Attempt mode.
-																	<br/>When the toggle is OFF, the Quiz is in Pre-Attempt mode.)</b>";
-											break;
-									}
-									echo '</td>';
-									echo '</td>';
-									echo '<td>';
-									echo '<form  action="' . base_url('Assessment/trainings/change_settings') . '" method="post"" >';
-									echo' <?= csrf_field() ?>';
-									echo '<input type="hidden" name="quiz_settings_type" value="' . $value['type'] . '"/>';
-									echo '<input type="hidden" name="quiz_settings_id" value="' . $value['s_id'] . '"/>';
-									echo '<input type="hidden" name="scourse_id" value="' . $value['scourse_id'] . '"/>';
-									echo '<input type="hidden" name="page_id" value="' . $page_id . '"/>';
-									echo '<input type="hidden" name="tab" value="1">';
-									if ($value['value'] == 'Enabled') {
-										echo '<input type="hidden" name="value" value="Disabled"/>';
-										echo '<button type="submit" class="btn btn-success btn-sm"><i class="fa fa-toggle-on"></li></button>';
-									} else {
-										echo '<input type="hidden" name="value" value="Enabled"/>';
-										echo '<button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-toggle-off"></li></button>';
-									}
-									echo '</form>';
-									echo '</td></tr>';
-								} else {
-
-									echo '<tr role="row" class="odd">';
-									echo '<td class="dtr-control sorting_1" tabindex="0">' . $i . '</td>';
-									echo '<td>';
-
-									switch ($type) {
-										case 21:
-											echo "Duration (min)";
-											break;
-										case 22:
-											echo "Max Questions";
-											break;
-										case 23:
-											echo "Passing %";
-											break;
-										case 24:
-											echo "Attempts Allowed";
-											break;
-									}
-									echo '</td>';
-									echo '</td>';
-									echo '<td>';
-									echo '<form  action="' . base_url('Assessment/trainings/change_settings') . '" method="post"" id="submitForm" >';
-									echo' <?= csrf_field() ?>';
-									echo '<input type="hidden" name="quiz_settings_type" value="' . $value['type'] . '"/>';
-									echo '<input type="hidden" name="quiz_settings_id" value="' . $value['s_id'] . '"/>';
-									echo '<input type="hidden" name="scourse_id" value="' . $value['scourse_id'] . '"/>
-							<input type="hidden" name="page_id" value="' . $page_id . '"/><div class="row"><div class="col-lg-6"><input type="hidden" name="tab" value="1">';
-									echo '<input type="number" class="form-control" maxlength="3"  min="0" max="300" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" name="value" value="' . $value['value'] . '" required/>&nbsp;&nbsp;';
-									echo '</div><div class="col-lg-6"><button type="submit" class="btn btn-outline-info btn-xs rounded-pill waves-effect waves-ligh submitButton">Save</button></div></div>';
-									echo '</form>';
-									echo '</td></tr>';
-								}
-								// }
-							}
-
-							?>
-						</tbody>
-					</table>
-
-
+					<div class="qs-info-bar mt-3">
+						<i class="mdi mdi-information-outline"></i>
+						<span><?php echo lang('UI_Text.CB_Changes_Apply_Future_Attempts'); ?></span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -303,20 +436,77 @@
 </div>
 
 <script>
-	// Use event delegation or loop through all forms
+	// Template tab forms only now - the Settings tab's number/toggle fields save themselves via
+	// qsSaveSetting() below instead of a form submit. Guarded on the button existing at all,
+	// since not every form here necessarily has one.
 	document.querySelectorAll('form').forEach(function(form) {
 		form.addEventListener('submit', function(e) {
-			var button = form.querySelector('.submitButton'); // Use class instead of ID
+			var button = form.querySelector('.submitButton') || form.querySelector('button[type="submit"]');
+			if (!button) return;
 
-			// Check if the button is already disabled (indicating the form is being submitted)
 			if (button.disabled) {
-				e.preventDefault(); // Prevent the form from being submitted again
+				e.preventDefault();
 				return false;
 			}
 
-			// Disable the submit button and change its text to 'Submitting...'
 			button.disabled = true;
 			button.innerHTML = 'Submitting...';
 		});
 	});
+
+	// Auto-saves every General Settings field / Quiz Behavior toggle on blur/change - no page
+	// reload, so the row's s_id (stored on the element itself) is kept in sync with each
+	// response, otherwise a second edit to the same field without a reload would deactivate a
+	// row that's no longer the current one.
+	function qsSaveSetting(el) {
+		var type = el.dataset.type;
+		var sid = parseInt(el.dataset.sid || '0', 10);
+		var value = (el.type === 'checkbox') ? (el.checked ? 'Enabled' : 'Disabled') : el.value;
+		var statusEl = document.getElementById(el.id + 'Status');
+
+		if (statusEl) {
+			statusEl.textContent = '<?php echo lang('UI_Text.CB_Saving_Ellipsis'); ?>';
+			statusEl.className = 'qs-field-status text-muted';
+		}
+
+		var formData = new FormData();
+		formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+		formData.append('quiz_settings_type', type);
+		formData.append('quiz_settings_id', sid);
+		formData.append('scourse_id', '<?php echo $scourse_id; ?>');
+		formData.append('page_id', '<?php echo $page_id; ?>');
+		formData.append('tab', '1');
+		formData.append('value', value);
+
+		fetch('<?php echo base_url('Assessment/trainings/change_settings') ?>', {
+				method: 'POST',
+				body: formData,
+				credentials: 'same-origin'
+			})
+			.then(function(response) {
+				if (!response.ok) throw new Error('save failed');
+				return response.json();
+			})
+			.then(function(obj) {
+				if (obj.status === 'OK') {
+					if (obj.s_id) el.dataset.sid = obj.s_id;
+					if (statusEl) {
+						statusEl.textContent = '<?php echo lang('UI_Text.CB_Saved'); ?>';
+						statusEl.className = 'qs-field-status text-success';
+						setTimeout(function() {
+							statusEl.textContent = '';
+						}, 2000);
+					}
+				} else if (statusEl) {
+					statusEl.textContent = '<?php echo lang('UI_Text.CB_Failed_To_Save'); ?>';
+					statusEl.className = 'qs-field-status text-danger';
+				}
+			})
+			.catch(function() {
+				if (statusEl) {
+					statusEl.textContent = '<?php echo lang('UI_Text.CB_Failed_To_Save'); ?>';
+					statusEl.className = 'qs-field-status text-danger';
+				}
+			});
+	}
 </script>
