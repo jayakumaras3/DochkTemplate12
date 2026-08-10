@@ -148,7 +148,9 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
 
 <?php // if ($typeOfLaunch == 2) { 
 ?>
+<?php if ($theme !== 'ModernTheme'): ?>
 <div class="col-sm-12 only_course" id="target">
+<?php endif; ?>
     <?php //} else { 
     ?>
     <!--   <div class="col-sm-9 course_with_feedback" id="capture"> -->
@@ -188,6 +190,70 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
     }
     ?>
 
+    <?php
+    $currentpage = round($row['page_number']);
+    $totalPage = count($pagedetails);
+    $prev_page_number = $currentpage - 1;
+    $next_page_number = $currentpage + 1;
+    ?>
+    <?php if ($theme === 'ModernTheme'): ?>
+        <div id="Tmenu" class="sideBar">
+            <img class="logo" src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/logo.svg'); ?>" alt="logo">
+            <div id="sideBarHeader" role="tablist" aria-label="Sidebar tabs">
+                <div id="toc_id" class="tocclickedclscss" role="tab" aria-selected="true"><span><?php echo $MenuName ?></span></div>
+                <div id="trans_id" role="tab" aria-selected="false"><span><?php echo $TranscriptName ?></span></div>
+            </div>
+            <div class="tocData">
+                <div id="menu" style="display:block;">
+                    <ol id="tocData">
+                        <?php foreach ($pagedetails as $page) {
+                            if ($page['sub_page_main'] == 0) {
+                                $isvisited = array_search(abs($page['page_number']), $scorm_suspend_data_arr);
+                                $isCurrentPage = (round($page['page_number']) == round($row['page_number']));
+                                $rowClass = 'toc-row-item' . ($isCurrentPage ? ' selectedToc' : (strlen($isvisited) > 0 ? ' visitedTOC' : ''));
+                        ?>
+                                <span style="display:contents;">
+                                    <li>
+                                        <span class="<?php echo $rowClass; ?>">
+                                            <form
+                                                action="<?php echo base_url('SCORM/Course_builder/review_course/launcher/1/' . $page['page_number']); ?>"
+                                                method="POST" style="display:contents;"><?= csrf_field() ?>
+                                                <input type="hidden" name="course_id" value="<?php echo $page['fk_course_id']; ?>" />
+                                                <input type="hidden" name="page_number" value="<?php echo $page['page_number']; ?>" />
+                                                <input type="hidden" name="typeOfLaunch" value="<?php echo $typeOfLaunch ?>" />
+                                                <button type="submit" style="all:unset; display:flex; align-items:center; width:100%; cursor:pointer; color:inherit; font:inherit;">
+                                                    <span class="toc-item-text"><span class="menu-title"><?php echo $page['page_name']; ?></span></span>
+                                                </button>
+                                            </form>
+                                        </span>
+                                    </li>
+                                </span>
+                        <?php }
+                        } ?>
+                    </ol>
+                </div>
+                <div id="transcript" style="display:none;">
+                    <p><?php if (isset($transcript)) {
+                            foreach ($transcript as $script) { ?>
+                    <div class="transcript-item" style="font-size:12px;">
+                        <?php echo $script['audio']; ?>
+                    </div>
+            <?php }
+                        } ?></p>
+                </div>
+            </div>
+            <div class="copyright">&copy; <?php echo date('Y'); ?> Touchstone</div>
+        </div>
+        <div class="contentArea">
+            <div id="clickableDiv" class="headingArea1">
+                <img id="TmenuIcon" src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/footer-menu/Menuopen.svg'); ?>"
+                    alt="Menu" role="button" tabindex="0" style="cursor:pointer;" onclick="toggleModernSidebar()">
+            </div>
+            <div class="headingArea">
+                <span class="pageHeaderText"><?php echo $row['page_name']; ?></span>
+                <div id="pagenoHeader"><?php echo $currentpage; ?> / <?php echo $totalPage; ?></div>
+            </div>
+    <?php else: ?>
     <div class="hide_menu" id="menu-bg" style="display:none;"></div>
     <!-- <div class="next_instruction" id="next_instruction_id" style="display:none;">Click Next to Continue.</div> -->
     <div class="next_instruction" id="close_instruction_id" style="display:none;">Click Close to Continue.</div>
@@ -208,12 +274,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                     <?php echo $row['page_name']; ?>
                 </span>
                 <span style="float: right;">
-                    <?php
-                    $currentpage = round($row['page_number']);
-                    $totalPage = count($pagedetails);
-                    $prev_page_number = $currentpage - 1;
-                    $next_page_number = $currentpage + 1;
-                    echo $currentpage ?> / <?php echo $totalPage; ?>
+                    <?php echo $currentpage ?> / <?php echo $totalPage; ?>
                 </span>
             </h5>
 
@@ -278,6 +339,10 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                 </div>
             </div>
         </div>
+    <?php endif; ?>
+        <?php if ($theme === 'ModernTheme'): ?>
+        <div class="pageContent">
+        <?php endif; ?>
         <?php
         $subpage = $row['sub_page_main'];
         if ($subpage != 0) {
@@ -699,6 +764,38 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                             <?php } ?>
                         </div>
                     <?php } ?>
+    <?php if ($theme === 'ModernTheme'): ?>
+    </div>
+    </div>
+    <div class="footer">
+        <?php $subpage = $row['sub_page_main'];
+        if ($subpage == 0) { ?>
+            <?php if ($currentpage > 1) { ?>
+                <div id="prev">
+                    <form action="<?php echo base_url('SCORM/Course_builder/review_course/launcher/1/' . $prev_page_number); ?>"
+                        method="POST" style="display:contents;"><?= csrf_field() ?>
+                        <button type="submit" style="all: unset; display:contents; cursor: pointer;">
+                            <img style="height:20px"
+                                src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/footer-menu/previous.svg'); ?>"
+                                title="<?php echo $Prevtitle; ?>">
+                        </button>
+                    </form>
+                </div>
+            <?php } ?>
+            <?php if ($next_page_number <= $totalPage) { ?>
+                <div id="next">
+                    <form action="<?php echo base_url('SCORM/Course_builder/review_course/launcher/1/' . $next_page_number); ?>"
+                        method="POST" style="display:contents;"><?= csrf_field() ?>
+                        <button type="submit" style="all: unset; display:contents; cursor: pointer;">
+                            <img style="height:20px"
+                                src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/footer-menu/next.svg'); ?>"
+                                title="<?php echo $NextTitle; ?>">
+                        </button>
+                    </form>
+                </div>
+            <?php } ?>
+        <?php } ?>
+    <?php else: ?>
     </div>
     <div class="row nav-btn-container">
         <?php $subpage = $row['sub_page_main'];
@@ -735,6 +832,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
         <?php } ?>
     </div>
 </div>
+    <?php endif; ?>
 
 <?php if ($typeOfLaunch != 2) { ?>
     <!--            <div class="col-sm-3 feedbackwindow">

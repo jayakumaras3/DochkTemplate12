@@ -42,12 +42,23 @@ if (isset($coursedetails)) {
 
     <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/bootstrap.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/custom.css" rel="stylesheet">
+    <?php if ($theme !== 'ModernTheme'): ?>
     <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/Color.css" rel="stylesheet">
+    <?php endif; ?>
     <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/content.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/footer.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/mobile.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/toc.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/certification.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/<?php echo ($theme === 'ModernTheme') ? 'certificate.css' : 'certification.css'; ?>" rel="stylesheet">
+    <?php if ($theme === 'ModernTheme'): ?>
+    <?php /* Color.css is this theme's authoritative override layer (mobile.css's own
+             header comment states it expects Color.css to load after it). Loading it
+             3rd let content.css's `.headingArea1 { z-index: 1002 }` override
+             Color.css's 1006, so the opaque-white `.headingArea` (same z-index, later
+             in DOM) painted over the menu button and hid it. Loading it last restores
+             the cascade the theme was authored for. */ ?>
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/Color.css" rel="stylesheet">
+    <?php endif; ?>
     <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/angular-1.5.8/angular.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/angular-1.5.8/angular-route.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/angular-1.5.8/angular-sanitize.min.js"></script>
@@ -823,8 +834,48 @@ if (isset($coursedetails)) {
             }
         }
     </script>
+    <?php if ($theme === 'ModernTheme'): ?>
+    <style>
+        .pageContent .iframe-container, .pageContent .responsive-iframe,
+        .pageContent #vidArea, .pageContent video,
+        .pageContent .question_bg, .pageContent .table-center,
+        .pageContent .text-page-container { height: 100% !important; }
+
+        /* jMain.js opens the drawer by setting an inline `display: block`, which beats
+           Color.css's unscoped `display: flex` and would render the sidebar as a plain
+           block box (its .tocData flex/scroll rules then do nothing). Color.css already
+           ships this exact guard for <=1024px (see its @media block); this extends the
+           same rule to wider viewports. */
+        #Tmenu.sideBar[style*="display: block"] {
+            display: flex !important;
+            flex-direction: column !important;
+        }
+    </style>
+    <script>
+        (function () {
+            var isTouch = (navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+            if (isTouch && window.innerWidth <= 1366) {
+                document.documentElement.classList.add('is-touch-device');
+            }
+        })();
+
+        /* jMain.js's shouldMenuBeForcedClosedForAudioPage() reads the global
+           AudioVersionEnable, which the theme declares in scripts/scormFunctions.js --
+           a SCORM API wrapper this Preview deliberately does not load. Without the
+           declaration that read throws a ReferenceError inside TtoggleMenu(), so the
+           menu button did nothing. Declaring it false (no audio-version flow) satisfies
+           the reference without pulling in any SCORM code. */
+        if (typeof window.AudioVersionEnable === 'undefined') {
+            window.AudioVersionEnable = false;
+        }
+    </script>
+    <?php endif; ?>
 </head>
 
 <body>
+    <?php if ($theme === 'ModernTheme'): ?>
+    <div class="wholeContainer">
+    <?php else: ?>
     <div class="container-fluid full-view">
         <div class="row content">
+    <?php endif; ?>
