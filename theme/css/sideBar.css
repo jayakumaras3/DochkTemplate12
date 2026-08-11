@@ -70,7 +70,7 @@
     color: #9CA3AF;
     text-align: center;
     background: #ffffff;
-    border-top: 1px solid #E5E7EB;
+    border-top: 1px solid #E5E5E5;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -132,7 +132,7 @@
 }
 
 .sideBar li span:hover {
-    color: #5097ab;
+    color: #005356;
 }
 
 .sideBar {

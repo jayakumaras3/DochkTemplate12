@@ -56,7 +56,7 @@
     flex: 1;
     min-width: 0;
     margin: 0;
-    color: #333333;
+    color: #1E1E1E;
     font-family: inherit;
     /* Match the .answer card's fluid size so the label text scales with it. */
     font-size: clamp(14px, 0.9vw, 17px);
@@ -70,8 +70,9 @@
 }
 
 /* --- Hover (not while disabled) -------------------------------------------
-   Kept visually lighter than the selected state below so a hovered,
-   unselected row can never be mistaken for the actual selection.
+   Zydus hover treatment (#F5FAFA surface + #006366 border). It stays
+   distinguishable from the selected state below, which is filled with the
+   accent tint AND carries a full accent ring, not just an outline.
    Scoped to non-touch (html:not(.is-touch-device), same convention used
    elsewhere for touch vs. desktop): touch devices have no real "hover"
    intent, and WebKit applies :hover on tap without a matching mouseleave,
@@ -81,8 +82,8 @@
    hover feedback, so simplest fix is to never apply it on touch at all;
    the real selection still shows via aria-checked below. */
 html:not(.is-touch-device) .answer:not(.no-pointer):hover {
-    background: #F5F9FC;
-    border-color: #BBD6EF;
+    background: #F5FAFA;
+    border-color: #006366;
 }
 
 /* --- Selected ------------------------------------------------------------
@@ -90,19 +91,19 @@ html:not(.is-touch-device) .answer:not(.no-pointer):hover {
 .answer[aria-checked="true"],
 html:not(.is-touch-device) .answer[aria-checked="true"]:not(.no-pointer):hover,
 .highlight {
-    background: #EAF4FF;
- /*   border-color: #2A78C8;*/
-    box-shadow: inset 0 0 0 1px #2A78C8;
+    background: rgba(0, 160, 165, 0.06);
+ /*   border-color: #00A0A5;*/
+    box-shadow: inset 0 0 0 1px #00A0A5;
 }
 
 .answer[aria-checked="true"] label {
-    color: #333333;
+    color: #1E1E1E;
   /*  font-weight: 600;*/
 }
 
 /* --- Keyboard focus ------------------------------------------------------ */
 .answer:focus-visible {
-    outline: 2px solid #2A78C8;
+    outline: 2px solid #00A0A5;
     outline-offset: 2px;
 }
 
@@ -141,7 +142,7 @@ input.checkbox {
     margin: 0;
     flex: 0 0 20px;
     box-sizing: border-box;
-    accent-color: #2A78C8;
+    accent-color: #00A0A5;
     cursor: pointer;
     outline: none;
     -webkit-tap-highlight-color: transparent;
@@ -159,8 +160,8 @@ input.checkbox {
 }
 
 input.checkbox:checked {
-    border-color: #2A78C8;
-    background-color: #2A78C8;
+    border-color: #00A0A5;
+    background-color: #00A0A5;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.2L3.5 6.8L9 1.2' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
@@ -169,7 +170,7 @@ input.checkbox:checked {
 
 input.radioBut:focus-visible,
 input.checkbox:focus-visible {
-    outline: 2px solid #2A78C8;
+    outline: 2px solid #00A0A5;
     outline-offset: 1px;
 }
 
@@ -210,7 +211,7 @@ input.checkbox:focus-visible {
     padding: 10px 26px;
     border: none;
     border-radius: 4px;
-    background: #006B8F;
+    background: #006366;
     color: #FFFFFF;
     font-family: Tahoma, Verdana, sans-serif;
     /* Fluid label so the Submit/action buttons scale with the rest of the UI
@@ -229,7 +230,7 @@ input.checkbox:focus-visible {
 #submitBtn:hover,
 .Startpagebtn:hover,
 .retrybtn:hover {
-    background: #00587A;
+    background: #005356;
     box-shadow: none;
 }
 

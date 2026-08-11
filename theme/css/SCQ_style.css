@@ -96,7 +96,7 @@ label {
     margin-right: 48%;
 }
 #inste {
-    background-color: #fdf1e5;
+    background-color: #B8ECEA;
     /* padding-top: 1%; */
     /* padding-right: 0%; */
     /* padding-bottom: 1%; */
@@ -180,14 +180,14 @@ label {
     /*font-size: 20px;*/
     margin-bottom: 0px;
     /* font-weight: bold; */
-    color: #333;
+    color: #1E1E1E;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     /* background-color: #f9f9f9; */
     padding: 2%;
 }
 .redtext{
 	/*font-size: 20px;*/
-    color: #df7e00;
+    color: #006366;
     margin-top: 8px;
 }
 .options {
@@ -246,17 +246,17 @@ label {
 }
 
 :root {
-    --quiz-accent: #870D0D;
-    --quiz-accent-dark: #5f0909;
-    --quiz-accent-soft: #f8e6e2;
-    --quiz-accent-border: #dcb8b2;
+    --quiz-accent: #006366;
+    --quiz-accent-dark: #005356;
+    --quiz-accent-soft: #B8ECEA;
+    --quiz-accent-border: #D9D9D9;
     --quiz-surface: rgba(255, 255, 255, 0.97);
-    --quiz-shadow: 0 18px 40px rgba(135, 13, 13, 0.12);
+    --quiz-shadow: 0 18px 40px rgba(0, 99, 102, 0.12);
 }
 
 body {
     background: #ffffff;
-    color: #2f2524;
+    color: #1E1E1E;
     overflow-x: hidden;
     overflow-y: auto;
     display: flex;
@@ -275,7 +275,7 @@ body {
 
 #quizContainer {
     background: #ffffff;
-    border: 1px solid #efe7e4;
+    border: 1px solid #E5E5E5;
     border-radius: 0;
     box-shadow: 0 8px 22px rgba(41, 28, 28, 0.05);
     box-sizing: border-box;
@@ -305,14 +305,14 @@ body {
 
 .questionContainer {
     background: #ffffff;
-    border: 1px solid #f3e8e4;
+    border: 1px solid #E5E5E5;
     border-radius: 0;
     box-shadow: 0 10px 24px rgba(41, 28, 28, 0.04);
     padding: 20px;
 }
 
 .question {
-    color: #241d1c;
+    color: #1E1E1E;
     font-weight: bold;
     /* Explicit desktop base size, kept identical to the Quiz (Mixed) template
        so all three question headings match. The legacy .question rule above
@@ -569,7 +569,7 @@ html:not(.is-touch-device) body {
         overflow-y: auto;
         overflow-x: hidden;
         scrollbar-width: thin;
-      /*  scrollbar-color: rgba(135, 13, 13, 0.35) rgba(0, 0, 0, 0.05);*/
+      /*  scrollbar-color: rgba(0, 99, 102, 0.35) rgba(0, 0, 0, 0.05);*/
     }
 
     html:not(.is-touch-device) .questionContainer::-webkit-scrollbar {
@@ -577,7 +577,7 @@ html:not(.is-touch-device) body {
     }
 
     html:not(.is-touch-device) .questionContainer::-webkit-scrollbar-thumb {
-        background: rgba(135, 13, 13, 0.35);
+        background: rgba(0, 99, 102, 0.35);
         border-radius: 0;
     }
 }

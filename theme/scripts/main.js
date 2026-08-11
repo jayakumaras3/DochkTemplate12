@@ -705,7 +705,7 @@ function generateResourceList(data) {
             </svg>
           </a>
         `).join('')
-        : '<p style="color:#637083;text-align:center;padding:20px 0;font-size:14px;">No resources available</p>'
+        : '<p style="color:#666666;text-align:center;padding:20px 0;font-size:14px;">No resources available</p>'
       }
     </div>
   `;
