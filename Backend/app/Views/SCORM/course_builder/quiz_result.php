@@ -1,3 +1,5 @@
+<?php $isModernTheme = isset($coursedetails) && isset($coursedetails[0]['theme']) && $coursedetails[0]['theme'] == '8'; ?>
+<?php if (!$isModernTheme): ?>
 <style>
     body {
         margin: 0;
@@ -21,8 +23,24 @@
         margin: 0 0 10px 0;
     }
 </style>
+<?php else: ?>
+<style>
+    /* Structure only: #quizContainer is a flex child of .wholeContainer (opened in
+       header.php), so it needs a definite height to centre the results card. The
+       legacy body flex-centering above is skipped for this theme. */
+    .result_table { width: 100%; text-align: center; }
+</style>
+<?php endif; ?>
+<?php if ($isModernTheme): ?>
+    <?php /* quiz.js hides #parentquizContainer on the results screen, and Quiz_style.css
+             centres the card via `#quizContainer:has(.results)` -- so quiz-start-view must
+             NOT be set here (that class belongs to the start page). */ ?>
+    <div id="parentquizContainer" style="display:none;"></div>
+    <div id="quizContainer" class="<?php echo ($course_lang == 'Arabic') ? 'rtl' : ''; ?>">
+<?php else: ?>
 <div class="quiz_bg <?php echo ($course_lang == 'Arabic') ? 'rtl' : ''; ?>">
     <div class="quiz_area">
+<?php endif; ?>
         <?php if ($getAssessmentSettings) {
             foreach ($getAssessmentSettings as $value) {
                 $type = $value['type'];
@@ -58,8 +76,29 @@
         $viewresultDescrip = (isset($viewresultDescrip) &&  $viewresultDescrip != '') ? $viewresultDescrip : $assessment_sets['47'];
         $contactdescription = (isset($contactdescription) &&  $contactdescription != '') ? $contactdescription : $assessment_sets['67'];
         ?>
+        <?php if ($isModernTheme) {
+            /* Mirrors the card ModernTheme's own quiz.js builds for the results screen:
+               #Startpageid.Startpage (white card) > p.headerAss (heading) >
+               .Startpage_sub (body lines) > button.retrybtn.ColorSet_CR (teal action).
+               Text, score and the Retry form/action are unchanged. */
+            $quiz_question_path = base_url() . "SCORM/Course_builder/Review_course/quizQuestions/" . $course_id . "/" . $page_id . "/0";
+        ?>
+            <div class="results FSize20">
+                <p id="resultsHeading" role="text" tabindex="0"><?php echo $Completeddescrip ?></p>
+                <?php if ($Result == 'Passed') { ?>
+                    <p tabindex="0"><?php echo $yourscoredescrip ?> : <span><?php echo $percentage . '%'; ?></span></p>
+                    <p tabindex="0"><?php echo $congratstDescrip ?></p>
+                <?php } elseif ($Result == 'Failed') { ?>
+                    <p tabindex="0"><?php echo $yourscoredescrip ?> <span><?php echo $percentage . '%'; ?></span></p>
+                    <p tabindex="0"><?php echo $faileddescrip ?></p>
+                    <form action="<?php echo $quiz_question_path; ?>" method="POST"><?= csrf_field() ?>
+                        <button id="start-quiz-btn" class="retrybtn ColorSet_CR FSize20" onclick="start_quiz()"><?php echo $retrydescrip ?></button>
+                    </form>
+                <?php } ?>
+            </div>
+        <?php } ?>
         <?php
-        if ($Result == 'Passed') {
+        if (!$isModernTheme && $Result == 'Passed') {
 
         ?>
             <table width="100%" class="result_table" style="margin-top:15%;color:black">
@@ -94,7 +133,7 @@
             </table>
         <?php
         }
-        if ($Result == 'Failed') {
+        if (!$isModernTheme && $Result == 'Failed') {
             $quiz_question_path = base_url() . "SCORM/Course_builder/Review_course/quizQuestions/" . $course_id . "/" . $page_id . "/0";
         ?>
             <table width="100%" class="result_table" style="margin-top:15%;">
@@ -139,4 +178,9 @@
         }
         ?>
     </div>
+<?php if ($isModernTheme): ?>
+<?php /* closes .wholeContainer opened in header.php (this view renders no footer.php) */ ?>
 </div>
+<?php else: ?>
+</div>
+<?php endif; ?>

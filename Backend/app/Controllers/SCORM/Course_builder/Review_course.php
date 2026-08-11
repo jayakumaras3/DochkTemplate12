@@ -305,6 +305,16 @@ class Review_course extends BaseController
         // print_r($data['getcourseAssessmentSettings']);
         // exit();
 
+        /* Learning Aids (footer resource icon). Exactly the same model call and the same
+           non-empty test the Export already uses to decide whether that control exists
+           (Scorm_course_pages::exportCoursePackage - $getAllFileOwner, then
+           $resource = (!empty($getAllFileOwner)) ? 'true' : 'false'), so Preview shows the
+           icon under precisely the condition Export does. No new query, no new data source.
+           getCourseData supplies 'createdon', which the PDFs' live upload path is keyed on -
+           same model method quizQuestions() already uses for the same purpose. */
+        $data['getAllFileOwner'] = $this->scorm_course_model->getAllFileOwner($data['course_id']);
+        $data['getCourseData'] = $this->scorm_course_model->getCourseDetails($data['course_id']);
+
         echo view('SCORM/course_builder/header', $data);
         echo view('SCORM/course_builder/page_video_view', $data);
         echo view('SCORM/course_builder/footer', $data);
@@ -414,6 +424,10 @@ class Review_course extends BaseController
         $data['getcourseAssessmentSettings'] = $this->assessment_training_model->get_assessmentCourselevel_settings($course_id);
         $data['course_id'] = $course_id;
         $data['page_id'] = $page_id;
+        // header.php resolves the theme from coursedetails; without it this view fell back
+        // to the Default theme's CSS. Same model call launcher() already uses.
+        $data['coursedetails'] = $this->scorm_lanuch_model->coursedetails($course_id);
+        $data['isQuizPage'] = true;
         echo view('SCORM/course_builder/header', $data);
         echo view('SCORM/course_builder/quiz_start_page', $data);
     }
@@ -524,6 +538,10 @@ class Review_course extends BaseController
         // exit();
         $data['getAssessmentSettings'] = $this->assessment_training_model->get_question_settings($course_id, $page_id);
         $data['getcourseAssessmentSettings'] = $this->assessment_training_model->get_assessmentCourselevel_settings($data['course_id']);
+        // header.php resolves the theme from coursedetails; without it this view fell back
+        // to the Default theme's CSS. Same model call launcher() already uses.
+        $data['coursedetails'] = $this->scorm_lanuch_model->coursedetails($course_id);
+        $data['isQuizPage'] = true;
         echo view('SCORM/course_builder/header', $data);
         echo view('SCORM/course_builder/quiz_questions', $data);
     }
@@ -668,6 +686,10 @@ class Review_course extends BaseController
             ];
         }
         $this->assessment_training_model->updateLMSData($newdata, $scid);
+        // header.php resolves the theme from coursedetails; without it this view fell back
+        // to the Default theme's CSS. Same model call launcher() already uses.
+        $data['coursedetails'] = $this->scorm_lanuch_model->coursedetails($course_id);
+        $data['isQuizPage'] = true;
         echo view('SCORM/course_builder/header', $data);
         echo view('SCORM/course_builder/quiz_result', $data);
     }

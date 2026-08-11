@@ -1,3 +1,13 @@
+<?php
+/* Computed here (not further down with the rest of the ModernTheme mapping) because the
+   legacy .form-check rules below have to be gated before they are emitted. They force
+   align-items:flex-start and nudge .form-check-input down 10px, both of which override the
+   theme's .answer { align-items:center } (QuestionOptions.css) and knock the radio/checkbox
+   out of line with the label text -- the exact conflict already found and gated the same
+   way in page_video_view.php for SCQ/MCQ, just never mirrored into this file. */
+$isModernTheme = isset($coursedetails) && isset($coursedetails[0]['theme']) && $coursedetails[0]['theme'] == '8';
+?>
+<?php if (!$isModernTheme): ?>
 <style>
     .form-check {
         display: flex;
@@ -22,7 +32,9 @@
         line-height: 2;
         word-break: break-word;
     }
-
+</style>
+<?php endif; ?>
+<style>
     /*Image Zoom in */
     /* Image Zoom In */
     .image-modal {
@@ -88,8 +100,11 @@
     }
     
 </style>
-<div class="quiz_option_bg <?php echo ($course_lang == 'Arabic') ? 'rtl' : ''; ?>">
-    <div class="quiz_area">
+<?php /* ModernTheme mapping: additive classes only, so every JS hook (.form-check-input,
+         #submit-quiz-btn) and the form/POST payload stay exactly as they are. $isModernTheme
+         is computed at the top of this file, before the gated legacy <style> block above. */ ?>
+<div class="quiz_option_bg<?php echo $isModernTheme ? ' mtQuizRoot' : ''; ?> <?php echo ($course_lang == 'Arabic') ? 'rtl' : ''; ?>">
+    <div class="quiz_area<?php echo $isModernTheme ? ' mtQuizArea' : ''; ?>">
         <?php if ($getAssessmentSettings) {
             foreach ($getAssessmentSettings as $value) {
                 $type = $value['type'];
@@ -132,16 +147,39 @@
         $minutesdescrip = (isset($minutesdescrip) &&  $minutesdescrip != '') ? $minutesdescrip : $assessment_sets['71'];
 
         ?>
+        <?php /* The theme keeps the dark question bar in #parentquizContainer and the card in a
+                 separate #quizContainer sibling. #quizContainer is what Quiz_style.css hangs the
+                 grey field, flex centring and max-width on
+                 (`#quizContainer:not(.quiz-start-view):not(:has(.results)) .questionContainer
+                 { width: min(100%,1280px); margin: 0 auto }`), so without it the card sat hard
+                 against the left edge on a white background instead of centred on grey. */ ?>
+        <?php
+        if ($next_sequence != 'NoQuestions') {
+            $questionCounterText = $questionDescrip . ' ' . $next_sequence . ' ' . $ofdescrip . ' ' . $totalQuestions;
+        } else {
+            $questionCounterText = $questionDescrip . ' ' . $totalQuestions . ' ' . $ofdescrip . ' ' . $totalQuestions;
+        }
+        ?>
+        <?php if ($isModernTheme): ?>
+        <div id="parentquizContainer">
+            <?php /* Mirrors quiz.js's own .parentquestion markup exactly (id="q1" + a
+                     #timer sibling) so Quiz_style.css's `.parentquestion #q1 { font-size:16px;
+                     font-weight:600; line-height:1.2 }` rule -- which targets that id, not the
+                     .parentquestion class itself -- actually matches. This flow has no quiz-timer
+                     feature, so #timer stays empty/hidden exactly like the theme's own duration=0
+                     state, matching Export's rendering without inventing a timer. */ ?>
+            <div class="parentquestion FSize18 parentquestion_CR">
+                <p id="q1"><?php echo $questionCounterText; ?></p>
+                <div id="timer" style="display:none;"></div>
+            </div>
+        </div>
+        <div id="quizContainer">
+        <?php else: ?>
         <div class="question-number"><strong>
-                <?php
-                if ($next_sequence != 'NoQuestions') {
-                    echo $questionDescrip . ' ' . $next_sequence . ' ' . $ofdescrip . ' ' . $totalQuestions;
-                } else {
-                    echo $questionDescrip . ' ' . $totalQuestions . ' ' . $ofdescrip . ' ' . $totalQuestions;
-                }
-                ?>
+                <?php echo $questionCounterText; ?>
             </strong>
         </div>
+        <?php endif; ?>
         <table style="width: 100%;">
             <tr>
                 <!-- Optional: Bulb Icon (first column) -->
@@ -153,8 +191,9 @@
 
                 <!-- Main Content Column -->
                 <td style="vertical-align: top;width:95%">
+                    <?php if ($isModernTheme): ?><div class="questionContainer"><?php endif; ?>
                     <!-- Question Text -->
-                    <div class="quiz_stem mb-2" style="width:90%;">
+                    <div class="quiz_stem mb-2<?php echo $isModernTheme ? ' question FSize16' : ''; ?>"<?php echo $isModernTheme ? '' : ' style="width:90%;"'; ?>>
                         <?php
                         if ($course_lang == 'Arabic') {
                             echo $QuizQuestions[0]['question']; // Assuming the Arabic version of the question is already loaded here
@@ -166,7 +205,7 @@
 
 
                     <!-- Instructions -->
-                    <div class="quiz_instructions">
+                    <div class="quiz_instructions<?php echo $isModernTheme ? ' redtext instext FSize16' : ''; ?>">
                         <?php
                         $quiz_type = $QuizQuestions[0]['quiz_type'];
                         echo ($quiz_type == 115) ? $selectcorrectmcqdescrip : $selectcorrectdescrip;
@@ -174,10 +213,16 @@
                     </div>
 
                     <!-- Options and Image Side by Side -->
-                    <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                    <div class="<?php echo $isModernTheme ? 'contentWrapper' : ''; ?>" style="display: flex; flex-wrap: wrap; gap: 5px;">
                         <!-- Options Block -->
-                        <div style="flex: 2 1 45%;">
-                            <form action="<?php echo base_url('SCORM/Course_builder/Review_course/questionSubmitted/' . $course_id . '/' . $page_id . '/' . $next_sequence); ?>" method="POST"><?= csrf_field() ?>
+                        <div class="<?php echo $isModernTheme ? 'options' : ''; ?>" style="flex: 2 1 45%;">
+                            <?php /* display:contents makes the .answer rows real children of
+                                     .options, so QuestionOptions.css's `gap: 12px` (the only
+                                     thing that spaces them - .answer itself has
+                                     margin-bottom: 0) actually applies. It is a rendering
+                                     property only: the form and its POST payload are
+                                     unchanged. */ ?>
+                            <form action="<?php echo base_url('SCORM/Course_builder/Review_course/questionSubmitted/' . $course_id . '/' . $page_id . '/' . $next_sequence); ?>" method="POST"<?php echo $isModernTheme ? ' style="display:contents;"' : ''; ?>><?= csrf_field() ?>
                                 <?php
                                 if (isset($optionsval)) {
                                     if ($RandomizeOptions == 'Enabled') {
@@ -189,9 +234,13 @@
                                         if (!empty($values)) {
                                             $inputType = ($quiz_type == 115) ? 'checkbox' : 'radio';
                                 ?>
-                                            <div class="form-check mb-2">
-                                                <input type="<?php echo $inputType; ?>" class="form-check-input" name="optionID[]" value="<?php echo $options['o_id']; ?>">
-                                                <label class="form-check-label"><?php echo $values; ?></label>
+                                            <div class="form-check mb-2<?php echo $isModernTheme ? ' answer' : ''; ?>">
+                                                <?php /* QuestionOptions.css styles input.radioBut (native round radio) and
+                                                         input.checkbox (custom-drawn square tick) completely differently --
+                                                         must match the real $inputType, same as the SCQ/MCQ mapping already
+                                                         does in page_video_view.php, not a fixed 'checkbox' for every question. */ ?>
+                                                <input type="<?php echo $inputType; ?>" class="form-check-input<?php echo $isModernTheme ? ($inputType == 'radio' ? ' radioBut clicken' : ' checkbox') : ''; ?>" name="optionID[]" value="<?php echo $options['o_id']; ?>"<?php echo $isModernTheme ? ' id="qopt' . $options['o_id'] . '"' : ''; ?>>
+                                                <label class="form-check-label<?php echo $isModernTheme ? ' clicken' : ''; ?>"<?php echo $isModernTheme ? ' for="qopt' . $options['o_id'] . '"' : ''; ?>><?php echo $values; ?></label>
                                             </div>
                                 <?php
                                         }
@@ -208,8 +257,10 @@
                                 <input type="hidden" name="questionId" value="<?php echo $QuizQuestions[0]['q_id']; ?>">
                                 <input type="hidden" name="attempt" value="<?php echo $attempt; ?>">
 
-                                <br>
-                                <button id="submit-quiz-btn" class="submit-quiz-btn btn btn-primary mt-2"
+                                <?php /* With the form as display:contents this <br> would become a
+                                         flex item of .options and add a stray gap above Submit. */ ?>
+                                <?php if (!$isModernTheme) { echo '<br>'; } ?>
+                                <button id="submit-quiz-btn" class="<?php echo $isModernTheme ? 'btn btn1 ColorSet_CR FSize16' : 'submit-quiz-btn btn btn-primary mt-2'; ?>"
                                     <?php echo ($quiz_type != 115) ? 'disabled' : ''; ?>>
                                     <?php echo ($next_sequence != 'NoQuestions') ? $submitdescrip : $viewresultDescrip; ?>
                                 </button>
@@ -230,7 +281,7 @@
                                 <?php if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) { ?>
                                     <div style="text-align: center;">
                                         <img src="<?php echo $file_path; ?>" alt="<?php echo $file; ?>" id="zoomableImage" class="zoomable-image" style="max-width: 100%; max-height: 250px; cursor: zoom-in;">
-                                        <div style="padding-top:10px; color: #e1251a;"><?php echo $imagedescrip; ?></div>
+                                        <div class="<?php echo $isModernTheme ? 'instext' : ''; ?>" style="padding-top:10px;<?php echo $isModernTheme ? '' : ' color: #e1251a;'; ?>"><?php echo $imagedescrip; ?></div>
                                     </div>
                                     <div id="imageModal" class="image-modal">
                                         <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -250,9 +301,11 @@
                         <?php } ?>
 
                     </div>
+                    <?php if ($isModernTheme): ?></div><?php endif; ?>
                 </td>
             </tr>
         </table>
+        <?php if ($isModernTheme): ?></div><?php /* closes #quizContainer */ ?><?php endif; ?>
 
     </div>
 </div>
