@@ -32,7 +32,13 @@
         fetch('<?= base_url('SCORM/course_builder/Editor/page_content') ?>', {
                 method: 'POST',
                 body: formData,
-                credentials: 'same-origin'
+                credentials: 'same-origin',
+                headers: {
+                    // Mark the fragment request as AJAX so CodeIgniter does not append a
+                    // second Debug Toolbar loader to the HTML that is re-executed below.
+                    // Re-running that loader wraps XMLHttpRequest again and breaks uploads.
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
             })
             .then(function(response) {
                 if (!response.ok) throw new Error('Failed to load page content');
@@ -43,8 +49,12 @@
                 temp.innerHTML = html;
 
                 var scripts = Array.prototype.slice.call(temp.querySelectorAll('script'));
+                var scriptsToRun = [];
                 scripts.forEach(function(oldScript) {
                     oldScript.parentNode.removeChild(oldScript);
+                    // Defensive fallback for an HTML response produced without the AJAX
+                    // header above: the Debug Toolbar loader must never be executed twice.
+                    if (oldScript.id !== 'debugbar_loader') scriptsToRun.push(oldScript);
                 });
 
                 var parent = container.parentNode;
@@ -53,7 +63,7 @@
                 });
                 parent.removeChild(container);
 
-                scripts.forEach(function(oldScript) {
+                scriptsToRun.forEach(function(oldScript) {
                     var newScript = document.createElement('script');
                     for (var i = 0; i < oldScript.attributes.length; i++) {
                         newScript.setAttribute(oldScript.attributes[i].name, oldScript.attributes[i].value);

@@ -885,8 +885,6 @@ class Scorm_page_model extends Model
     }
     public function insertFileuploaddata($scormFile)
     {
-        $db = \Config\Database::connect();
-
         $builder = $this->db->table(tableName: 'page_package as x');
         $builder->select(select: 'x.*');
         $builder->where(key: 'x.page_id', value: $scormFile['page_id']);
@@ -901,15 +899,12 @@ class Scorm_page_model extends Model
             $builder->where(key: 'p.page_id', value: $scormFile['page_id']);
             $builder->where(key: 'p.folder', value: $scormFile['folder']);
             $builder->where(key: 'p.language', value: $scormFile['language']);
-            $builder->update(set: $scormFile);
-            $data = $builder->get()->getResultArray();
-        } else {
-            $builder = $this->db->table('page_package');
-            $builder->insert($scormFile);
-            $data = $builder->get()->getResultArray();
+            $builder->where(key: 'p.status', value: 1);
+            return $builder->update(set: $scormFile);
         }
 
-        return $data;
+        $builder = $this->db->table('page_package');
+        return $builder->insert($scormFile);
     }
     function getcoursestage($scourse_id)
     {

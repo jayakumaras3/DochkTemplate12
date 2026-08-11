@@ -7,10 +7,10 @@ $imageAlt = $row['image_alt'] ?? '';
 $pageImageUrl = '';
 $hasPageImage = false;
 if ($pageImageFile !== '') {
-    $pageImageDiskPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $course_id . '/' . $coursedetails[0]['createdon'] . '/assets/html/' . $page_id . '/' . $pageImageFile;
+    $pageImageDiskPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $course_id . '/' . $coursedetails[0]['createdon'] . '/assets/page_images/' . $pageImageFile;
     if (file_exists($pageImageDiskPath)) {
         $hasPageImage = true;
-        $pageImageUrl = base_url() . 'assets/assets/uploads/SCORM_course_document/' . $course_id . '/' . $coursedetails[0]['createdon'] . '/assets/html/' . $page_id . '/' . $pageImageFile;
+        $pageImageUrl = base_url() . 'assets/assets/uploads/SCORM_course_document/' . $course_id . '/' . $coursedetails[0]['createdon'] . '/assets/page_images/' . $pageImageFile;
     }
 }
 
@@ -24,10 +24,11 @@ if ($hasPageImage) {
         . '<span class="mdi mdi-trash-can-outline"></span> ' . lang('UI_Text.CB_Delete_Image') . '</button>'
         . '</div>';
 } else {
-    $imageColumn .= '<h6 class="fw-semibold mb-1"><i class="mdi mdi-image-outline"></i> ' . lang('UI_Text.CB_No_Image_Uploaded') . '</h6>'
+    $imageColumn .= '<input type="hidden" name="image_required" value="1">'
+        . '<h6 class="fw-semibold mb-1"><i class="mdi mdi-image-outline"></i> ' . lang('UI_Text.CB_No_Image_Uploaded') . '</h6>'
         . '<p class="text-muted mb-2">' . lang('UI_Text.CB_Upload_Image_File_Sub') . '</p>'
         . '<label>' . lang('UI_Text.CB_Image') . ' <span class="text-danger">*</span></label>'
-        . '<input type="file" name="image" id="pageImageInput" class="form-control" accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG" />'
+        . '<input type="file" name="image" id="pageImageInput" class="form-control" accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG" required />'
         . '<small class="form-text text-muted">' . lang('UI_Text.CB_JPG_JPEG_PNG_Max_1MB') . '</small>';
 }
 $imageColumn .= '</div>';
@@ -48,95 +49,56 @@ $editorColumn = '<div class="mb-2">'
         <div class="card">
             <div class="card-body">
                 <?php if ($row['status'] != 8) { ?>
-                    <?php if ($row['type'] == 12) { ?>
-                        <!-- Text-Image: content and image save from independent forms/buttons -
-                             editing one never requires re-submitting (or risks clobbering) the other. -->
-                        <div class="row">
-                            <div class="col-md-7">
-                                <form class="form-horizontal2"
-                                    action="<?php echo base_url('SCORM/course_builder/scorm_course_pages/saveTextPage'); ?>"
-                                    method="post" id="saveTextContentForm"><?= csrf_field() ?>
-                                    <input type="hidden" name="course_id" value="<?php echo $course_id ?>">
-                                    <input type="hidden" name="page_id" value="<?php echo $page_id ?>">
-                                    <?= $editorColumn ?>
-                                    <?php if (isset($promovalidation)): ?>
-                                        <div class="form-group col-md-12">
-                                            <div class="alert alert-white" role="alert">
-                                                <?= $promovalidation->listErrors() ?>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?>
-                                    <div class="d-flex justify-content-end pt-3 mt-2 border-top">
-                                        <button type="submit"
-                                            class="btn btn-primary rounded-pill px-4 waves-effect waves-light"
-                                            id="saveTextContentButton"><?php echo lang('UI_Text.CB_Save_Content'); ?></button>
-                                    </div>
-                                </form>
+                    <form class="form-horizontal2" enctype="multipart/form-data"
+                        action="<?php echo base_url('SCORM/course_builder/scorm_course_pages/saveTextPage'); ?>"
+                        method="post" id="saveTextForm"><?= csrf_field() ?>
+                        <input type="hidden" name="course_id" value="<?php echo $course_id ?>">
+                        <input type="hidden" name="page_id" value="<?php echo $page_id ?>">
+
+                        <?php if ($row['type'] == 11) { ?>
+                            <!-- Image-Text: image on the left, content on the right. -->
+                            <div class="row">
+                                <div class="col-md-5"><?= $imageColumn ?></div>
+                                <div class="col-md-7"><?= $editorColumn ?></div>
                             </div>
-                            <div class="col-md-5">
-                                <?php if ($hasPageImage) { ?>
-                                    <?= $imageColumn ?>
-                                <?php } else { ?>
-                                    <form class="form-horizontal2" enctype="multipart/form-data"
-                                        action="<?php echo base_url('SCORM/course_builder/scorm_course_pages/saveTextPage'); ?>"
-                                        method="post" id="saveTextImageForm"><?= csrf_field() ?>
-                                        <input type="hidden" name="course_id" value="<?php echo $course_id ?>">
-                                        <input type="hidden" name="page_id" value="<?php echo $page_id ?>">
-                                        <?= $imageColumn ?>
-                                        <div class="d-flex justify-content-end pt-3 mt-2 border-top">
-                                            <button type="submit"
-                                                class="btn btn-primary rounded-pill px-4 waves-effect waves-light"
-                                                id="saveTextImageButton"><?php echo lang('UI_Text.CB_Save_Image'); ?></button>
-                                        </div>
-                                    </form>
-                                <?php } ?>
+                        <?php } else if ($row['type'] == 12) { ?>
+                            <!-- Text-Image: content on the left, image on the right. -->
+                            <div class="row">
+                                <div class="col-md-7"><?= $editorColumn ?></div>
+                                <div class="col-md-5"><?= $imageColumn ?></div>
                             </div>
+                        <?php } else { ?>
+                            <?= $editorColumn ?>
+                        <?php } ?>
+
+                        <?php if (isset($promovalidation)): ?>
+                            <div class="form-group col-md-12">
+                                <div class="alert alert-white" role="alert">
+                                    <?= $promovalidation->listErrors() ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="d-flex justify-content-center pt-3 mt-2 border-top">
+                            <button type="submit"
+                                class="btn btn-primary rounded-pill px-4 waves-effect waves-light"
+                                id="saveTextButton"><?php
+                                    if ($row['type'] == 11) {
+                                        echo lang('UI_Text.CB_Save_Image_And_Content');
+                                    } elseif ($row['type'] == 12) {
+                                        echo lang('UI_Text.CB_Save_Content_And_Image');
+                                    } else {
+                                        echo lang('Buttons.CB_Save');
+                                    }
+                                ?></button>
                         </div>
+                    </form>
 
-                        <?php if ($hasPageImage) { ?>
-                            <form action="<?php echo base_url('SCORM/course_builder/scorm_course_pages/deleteTextImage'); ?>"
-                                method="post" id="deleteTextImageForm"><?= csrf_field() ?>
-                                <input type="hidden" name="page_id" value="<?php echo $page_id ?>">
-                            </form>
-                        <?php } ?>
-                    <?php } else { ?>
-                        <form class="form-horizontal2" enctype="multipart/form-data"
-                            action="<?php echo base_url('SCORM/course_builder/scorm_course_pages/saveTextPage'); ?>"
-                            method="post" id="saveTextForm"><?= csrf_field() ?>
-                            <input type="hidden" name="course_id" value="<?php echo $course_id ?>">
+                    <?php if ($needsImage && $hasPageImage) { ?>
+                        <form action="<?php echo base_url('SCORM/course_builder/scorm_course_pages/deleteTextImage'); ?>"
+                            method="post" id="deleteTextImageForm"><?= csrf_field() ?>
                             <input type="hidden" name="page_id" value="<?php echo $page_id ?>">
-
-                            <?php if ($row['type'] == 11) { ?>
-                                <!-- Editing layout mirrors the final rendering: image on the left, content on the right. -->
-                                <div class="row">
-                                    <div class="col-md-5"><?= $imageColumn ?></div>
-                                    <div class="col-md-7"><?= $editorColumn ?></div>
-                                </div>
-                            <?php } else { ?>
-                                <?= $editorColumn ?>
-                            <?php } ?>
-
-                            <?php if (isset($promovalidation)): ?>
-                                <div class="form-group col-md-12">
-                                    <div class="alert alert-white" role="alert">
-                                        <?= $promovalidation->listErrors() ?>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
-
-                            <div class="d-flex justify-content-end pt-3 mt-2 border-top">
-                                <button type="submit"
-                                    class="btn btn-primary rounded-pill px-4 waves-effect waves-light"
-                                    id="saveTextButton"><?php echo lang('Buttons.CB_Save'); ?></button>
-                            </div>
                         </form>
-
-                        <?php if ($needsImage && $hasPageImage) { ?>
-                            <form action="<?php echo base_url('SCORM/course_builder/scorm_course_pages/deleteTextImage'); ?>"
-                                method="post" id="deleteTextImageForm"><?= csrf_field() ?>
-                                <input type="hidden" name="page_id" value="<?php echo $page_id ?>">
-                            </form>
-                        <?php } ?>
                     <?php } ?>
                 <?php } ?>
             </div>
@@ -194,6 +156,4 @@ $editorColumn = '<div class="mb-2">'
         }
     }
     bindSavingIndicator('saveTextForm', 'saveTextButton');
-    bindSavingIndicator('saveTextContentForm', 'saveTextContentButton');
-    bindSavingIndicator('saveTextImageForm', 'saveTextImageButton');
 </script>

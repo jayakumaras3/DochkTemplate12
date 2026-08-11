@@ -353,7 +353,7 @@ $quizType = isset($row['quiz_type']) ? (string) $row['quiz_type'] : '';
                                                             <button type="button" class="btn btn-outline-danger waves-effect waves-light rounded-circle cyu-action-btn" title="A question must have at least one option" disabled><i class="mdi mdi-trash-can-outline"></i></button>
                                                         <?php } else { ?>
                                                             <button type="button" class="btn btn-outline-danger waves-effect waves-light rounded-circle cyu-action-btn" title="Delete"
-                                                                onclick="updateDate('0','status','<?php echo $eachoptiondata['o_id'] ?>')"><i class="mdi mdi-trash-can-outline"></i></button>
+                                                                onclick="if (confirm('<?php echo lang('Alert.Aler_002') ?>')) updateDate('0','status','<?php echo $eachoptiondata['o_id'] ?>')"><i class="mdi mdi-trash-can-outline"></i></button>
                                                         <?php } ?>
                                                     </div>
                                                 </td>

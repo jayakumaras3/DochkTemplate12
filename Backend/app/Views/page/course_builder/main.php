@@ -349,7 +349,7 @@ $userlevel = session('userlevel');
             $baseloc = '/var/www/html/DOCHEK/';
         }
         if ($base == 'http://localhost/DOCHEK/') {
-            $baseloc = 'D:/wampp/www//DOCHEK/';
+            $baseloc = 'C:/wamp64/www/DOCHEK/';
         }
         if ($base == 'http://172.16.2.218/DOCHEK/') {
             $baseloc = '/var/www/DOCHEK/';

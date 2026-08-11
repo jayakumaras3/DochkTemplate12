@@ -588,7 +588,7 @@ return [
     'CB_Audio_Transcript' => 'ಆಡಿಯೋ ಪ್ರತಿಲಿಪಿ',
     'CB_Uploading' => 'ಅಪ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ...',
     'CB_No_HTML_Package_Uploaded' => 'ಯಾವುದೇ HTML ಪ್ಯಾಕೇಜ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿಲ್ಲ',
-    'CB_Upload_HTML_Package_Sub' => 'ಕೆಳಗೆ HTML ಜಿಪ್ ಪ್ಯಾಕೇಜ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ. ಪುಟವು index.html ಅನ್ನು ಲೋಡ್ ಮಾಡುತ್ತದೆ - index.html ಜಿಪ್ ಪ್ಯಾಕೇಜ್‌ನ ಮೂಲದಲ್ಲಿ ಲಭ್ಯವಿದೆ ಎಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.',
+    'CB_Upload_HTML_Package_Sub' => 'ಕೆಳಗೆ HTML ZIP ಪ್ಯಾಕೇಜ್ ಅನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ. ಪುಟವು ZIP ಪ್ಯಾಕೇಜ್‌ನ ರೂಟ್‌ನಿಂದ index.html, Screen_01.html ಅಥವಾ ಒಂದೇ HTML ಫೈಲ್ ಅನ್ನು ಲೋಡ್ ಮಾಡುತ್ತದೆ.',
     'CB_HTML_Zip_Package' => 'HTML ಜಿಪ್ ಪ್ಯಾಕೇಜ್',
     'CB_Upload_HTML_Zip_Package' => 'HTML ಜಿಪ್ ಪ್ಯಾಕೇಜ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',
     'CB_Browser_No_Iframe_Support' => 'ನಿಮ್ಮ ಬ್ರೌಸರ್ iframe ಗಳನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ.',
@@ -607,6 +607,8 @@ return [
     'CB_JPG_JPEG_PNG_Max_1MB' => 'JPG, JPEG ಅಥವಾ PNG. ಗರಿಷ್ಠ 1 MB.',
     'CB_Save_Content' => 'ವಿಷಯ ಉಳಿಸಿ',
     'CB_Save_Image' => 'ಚಿತ್ರ ಉಳಿಸಿ',
+    'CB_Save_Content_And_Image' => 'ವಿಷಯ ಮತ್ತು ಚಿತ್ರ ಉಳಿಸಿ',
+    'CB_Save_Image_And_Content' => 'ಚಿತ್ರ ಮತ್ತು ವಿಷಯ ಉಳಿಸಿ',
     'CB_Saving' => 'ಉಳಿಸಲಾಗುತ್ತಿದೆ...',
 
     //Course Builder - SCQ/MCQ

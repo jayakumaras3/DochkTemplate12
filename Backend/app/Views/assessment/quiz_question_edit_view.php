@@ -51,7 +51,7 @@
                         </div>
                         <div class="form-group col-md-12">
                             <label>Score</label>
-                            <input type="text" class="form-control col-md-12" name="score" placeholder="Score" value="<?php echo $row['score'] ?>" />
+                            <input type="number" min="0" max="100" class="form-control col-md-12" name="score" placeholder="Score" value="<?php echo $row['score'] ?>" oninput="clampScoreInput(this)" />
                         </div>
                         <?php if ($type == 5 || $type == 6) {
                         } else { ?>
@@ -104,3 +104,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    // min/max on a number input only affect the spinner arrows and form-level validation -
+    // typing or pasting a value directly bypasses them, so clamp on input too.
+    function clampScoreInput(el) {
+        if (el.value === '') return;
+        var value = parseInt(el.value, 10);
+        if (isNaN(value)) {
+            el.value = '';
+            return;
+        }
+        var min = el.min !== '' ? parseInt(el.min, 10) : null;
+        var max = el.max !== '' ? parseInt(el.max, 10) : null;
+        if (min !== null && value < min) value = min;
+        if (max !== null && value > max) value = max;
+        el.value = value;
+    }
+</script>

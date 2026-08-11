@@ -1237,7 +1237,7 @@ class Scorm_course_pages extends BaseController
             $pagejson = json_encode($pagesData, JSON_UNESCAPED_SLASHES);
             $tocjson = '{"0": ' . $pagejson . '}';
             if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json')) {
-                mkdir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json', 0777, true);
+                mkdir('assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json', 0777, true);
             }
             $path = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json';
             $fp = fopen($path . "/toc.json", 'w');
@@ -1337,7 +1337,7 @@ class Scorm_course_pages extends BaseController
 
 
             if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json')) {
-                mkdir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json', 0777, true);
+                mkdir('assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json', 0777, true);
             }
             $path = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json';
             $fp = fopen($path . "/Template.json", 'w');
@@ -1360,9 +1360,13 @@ class Scorm_course_pages extends BaseController
         }
 
         $imageTag = '';
-        if (!empty($eachpage['page_image']) && file_exists($htmlFolder . '/' . $eachpage['page_image'])) {
-            $alt = htmlspecialchars($eachpage['image_alt'] ?? '', ENT_QUOTES);
-            $imageTag = '<img src="' . $eachpage['page_image'] . '" alt="' . $alt . '" style="max-width:100%;height:auto;">';
+        if (!empty($eachpage['page_image'])) {
+            $sourceImage = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $scourse_id . '/' . $timestamp . '/assets/page_images/' . $eachpage['page_image'];
+            if (file_exists($sourceImage)) {
+                copy($sourceImage, $htmlFolder . '/' . $eachpage['page_image']);
+                $alt = htmlspecialchars($eachpage['image_alt'] ?? '', ENT_QUOTES);
+                $imageTag = '<img src="' . $eachpage['page_image'] . '" alt="' . $alt . '" style="max-width:100%;height:auto;">';
+            }
         }
 
         $content = $eachpage['content'] ?? '';
@@ -1399,7 +1403,7 @@ class Scorm_course_pages extends BaseController
             $layoutType = 'text-only';
         }
 
-        $hasImage = !empty($eachpage['page_image']) && file_exists($htmlFolder . '/' . $eachpage['page_image']);
+        $hasImage = !empty($eachpage['page_image']);
 
         $pagejson = [
             "meta" => [
@@ -1955,9 +1959,9 @@ class Scorm_course_pages extends BaseController
                 if ($file->isValid() && !$file->hasMoved()) {
                     $filename = $file->getName();
                     $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                    if (strtolower($extension) === 'zip') {
+                    if ($extension == 'zip') {
                         if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/Articulate/' . $data['page_id'])) {
-                            mkdir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/Articulate/' . $data['page_id'], 0777, true);
+                            mkdir('assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/Articulate/' . $data['page_id'], 0777, true);
                         }
                         if (file_exists(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/Articulate/' . $data['page_id'])) {
                             $dirPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/Articulate/' . $data['page_id'];
@@ -2000,10 +2004,7 @@ class Scorm_course_pages extends BaseController
                 }
             }
         }
-        // This endpoint is only ever called via AJAX from articulate.php's upload form - a
-        // redirect response here isn't valid JSON, so the browser-side JSON.parse throws and
-        // the upload button is left stuck disabled. Always answer with JSON instead.
-        return $this->response->setJSON(['status' => 'Error']);
+        return redirect()->to(base_url('SCORM/course_builder/Editor'));
     }
     public function del_folder()
     {
@@ -2201,9 +2202,9 @@ class Scorm_course_pages extends BaseController
                 $pagejsonfile = $this->scorm_page_model->getpagedata($data['page_id']);
                 $timestamp = $pagejsonfile[0]['createdon'];
                 $extension = $file->getExtension();
-                // Unique per upload so replacing an image never collides with a cached copy of the old one.
+                // Unique per upload (not just per page) so replacing an image never collides with a cached copy of the old one.
                 $filename = 'page_' . $data['page_id'] . '_' . time() . '.' . $extension;
-                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'] . '/';
+                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/page_images/';
 
                 if (!is_dir($imageFolderPath)) {
                     mkdir($imageFolderPath, 0777, true);
@@ -2241,7 +2242,7 @@ class Scorm_course_pages extends BaseController
         if ($page_id) {
             $pagejsonfile = $this->scorm_page_model->getpagedata($page_id);
             if (!empty($pagejsonfile) && !empty($pagejsonfile[0]['page_image'])) {
-                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $pagejsonfile[0]['fk_course_id'] . '/' . $pagejsonfile[0]['createdon'] . '/assets/html/' . $page_id . '/';
+                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $pagejsonfile[0]['fk_course_id'] . '/' . $pagejsonfile[0]['createdon'] . '/assets/page_images/';
                 $filePath = $imageFolderPath . $pagejsonfile[0]['page_image'];
                 if (file_exists($filePath)) {
                     unlink($filePath);
@@ -2256,138 +2257,269 @@ class Scorm_course_pages extends BaseController
     }
     function uploadHTML()
     {
-        if ($response =  $this->requireRole(['5', '44', '46'])) {
+        if ($response =  $this->requireRole(['5', '44', '67', '46'])) {
             return $response;
         }
 
-        $data = [];
+        try {
+            return $this->uploadHTMLInner();
+        } catch (\Throwable $e) {
+            log_message('error', 'uploadHTML failed: {exception}', ['exception' => $e]);
+            return $this->response->setJSON(['status' => 'ERROR', 'message' => lang('Messages.Error_0025')]);
+        }
+    }
+
+    private function uploadHTMLInner()
+    {
         helper(['filesystem']);
-        if (isset($_POST['course_id'])) {
-            $data['course_id'] = $_POST['course_id'];
-            $_SESSION['course_id'] = $data['course_id'];
-        } else if (isset($_GET['course_id'])) {
-            $data['course_id'] = $_GET['course_id'];
-        } else if (isset($_SESSION['course_id'])) {
-            $data['course_id'] = $_SESSION['course_id'];
-        } else {
-            return redirect()->to(base_url() . '/SCORM/course_builder/Editor');
+
+        if (!$this->request->is('post')) {
+            return $this->response->setJSON(['status' => 'ERROR', 'message' => lang('Messages.Error_0005')]);
         }
 
-        if (isset($_POST['page_id'])) {
-            $data['page_id'] = $_POST['page_id'];
-            $_SESSION['page_id'] = $data['page_id'];
-        } else if (isset($_GET['page_id'])) {
-            $data['page_id'] = $_GET['page_id'];
-        } else if (isset($_SESSION['page_id'])) {
-            $data['page_id'] = $_SESSION['page_id'];
+        if (empty($_POST) && empty($_FILES)) {
+            // $_POST and $_FILES are both wiped by PHP when the upload exceeds post_max_size.
+            return $this->response->setJSON(['status' => 'ERROR', 'message' => lang('Messages.Error_0007')]);
         }
 
-        sleep(2);
-        if ($this->request->getPost()) {
-            //    echo $this->request->getFile('zip_file');
-            //    exit();
-            $pagejsonfile = $this->scorm_page_model->getpagedata($data['page_id']);
-            // print_r($pagejsonfile);
-            $timestamp = $pagejsonfile[0]['createdon'];
-            $page_number = $pagejsonfile[0]['page_number'];
-            if ($file = $this->request->getFile('zip_file')) {
-                if ($file->isValid() && !$file->hasMoved()) {
-                    $filename = $file->getName();
-                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                    if ($page_number == 1) {
-                        if (strtolower($extension) === 'zip') {
-                            if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'])) {
-                                mkdir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'], 0777, true);
-                            }
-                            if (file_exists(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'])) {
-                                $dirPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'];
-                                $dir = $dirPath . DIRECTORY_SEPARATOR;
-                                $this->emptyDir($dir);
-                                rmdir($dir);
-                                $targetzip = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'] . '/' . $filename;
-                                $filenoext = basename($filename, '.zip');  // absolute path to the directory where zipper.php is in (lowercase)
-                                $filenoext = basename($filenoext, '.ZIP');  // absolute path to the directory where zipper.php is in (when uppercase)
-                                //$targetdir = $path . $filenoext; // target directory
+        $courseId = $this->request->getPost('course_id');
+        $pageId = $this->request->getPost('page_id');
+        $language = (int) ($this->request->getPost('language') ?? 1);
 
-                                if ($file->move(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'], $filename)) {
-                                    $zip = new ZipArchive();
-                                    $x = $zip->open($targetzip);
-                                    if ($x === true) {
-                                        $zip->extractTo(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id']); // place in the directory with same name  
-                                        $zip->close();
-                                        unlink($targetzip);
-                                    }
-                                }
-                                $newdata = [
-                                    'video_upload' => $filename,
-                                ];
-                                $result = $this->scorm_page_model->edituploadpagedetails($newdata, $data['page_id']);
-                                $fileupload = [
-                                    'language' => $_POST['language'],
-                                    'page_id' => $data['page_id'],
-                                    'folder' => 'page1',
-                                    'status' => 1,
-                                    'createdby' => session()->get('id_user'),
-                                    'createdon' => time(),
-                                ];
-                                $this->scorm_page_model->insertFileuploaddata($fileupload);
-                                return json_encode($result);
-                            }
-                        } else {
-                            session()->setFlashdata('error', lang('Messages.Error_0001'));
-                            session()->setFlashdata('alert-class', 'alert-danger');
-                        }
-                    } else {
-                        if (strtolower($extension) === 'zip') {
-                            if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'])) {
-                                mkdir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'], 0777, true);
-                            }
-                            if (file_exists(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'])) {
-                                $dirPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'];
-                                $dir = $dirPath . DIRECTORY_SEPARATOR;
-                                $this->emptyDir($dir);
-                                rmdir($dir);
-                                $targetzip = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'] . '/' . $filename;
-                                $filenoext = basename($filename, '.zip');  // absolute path to the directory where zipper.php is in (lowercase)
-                                $filenoext = basename($filenoext, '.ZIP');  // absolute path to the directory where zipper.php is in (when uppercase)
-                                //$targetdir = $path . $filenoext; // target directory
+        if (!ctype_digit((string) $courseId) || !ctype_digit((string) $pageId)) {
+            return $this->response->setJSON(['status' => 'ERROR', 'message' => lang('Messages.Error_0005')]);
+        }
 
-                                if ($file->move(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'], $filename)) {
-                                    $zip = new ZipArchive();
-                                    $x = $zip->open($targetzip);
-                                    if ($x === true) {
-                                        $zip->extractTo(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id']); // place in the directory with same name  
-                                        $zip->close();
-                                        unlink($targetzip);
-                                    }
-                                }
-                                $newdata = [
-                                    'video_upload' => $filename,
-                                ];
-                                $result = $this->scorm_page_model->edituploadpagedetails($newdata, $data['page_id']);
-                                $fileupload = [
-                                    'language' => $_POST['language'],
-                                    'page_id' => $data['page_id'],
-                                    'folder' => $data['page_id'],
-                                    'status' => 1,
-                                    'createdby' => session()->get('id_user'),
-                                    'createdon' => time(),
-                                ];
-                                $this->scorm_page_model->insertFileuploaddata($fileupload);
-                                return json_encode($result);
-                            }
-                        } else {
-                            session()->setFlashdata('error', lang('Messages.Error_0001'));
-                            session()->setFlashdata('alert-class', 'alert-danger');
-                        }
-                    }
+        $_SESSION['course_id'] = $courseId;
+        $_SESSION['page_id'] = $pageId;
+
+        $pageRows = $this->scorm_page_model->getpagedata($pageId);
+        if (empty($pageRows) || (string) $pageRows[0]['fk_course_id'] !== (string) $courseId) {
+            return $this->response->setJSON(['status' => 'ERROR', 'message' => lang('Messages.Error_0024')]);
+        }
+
+        $file = $this->request->getFile('zip_file');
+        if (!$file || !$file->isValid()) {
+            $message = $file ? $file->getErrorString() : lang('Messages.Error_0005');
+            return $this->response->setJSON(['status' => 'ERROR', 'message' => $message]);
+        }
+
+        $filename = basename($file->getClientName() ?: $file->getName());
+        if (strtolower(pathinfo($filename, PATHINFO_EXTENSION)) !== 'zip') {
+            return $this->response->setJSON(['status' => 'ERROR', 'message' => 'Please upload a valid ZIP package.']);
+        }
+
+        $zip = new ZipArchive();
+        $openResult = $zip->open($file->getTempName());
+        if ($openResult !== true) {
+            return $this->response->setJSON(['status' => 'ERROR', 'message' => 'The ZIP package is invalid or could not be opened.']);
+        }
+        $zipIsOpen = true;
+
+        $rootHtmlFiles = [];
+        for ($index = 0; $index < $zip->numFiles; $index++) {
+            $entry = $zip->getNameIndex($index);
+            if ($entry === false) {
+                continue;
+            }
+
+            $normalizedEntry = str_replace('\\', '/', $entry);
+            if (str_starts_with($normalizedEntry, '/')
+                || preg_match('/^[A-Za-z]:\//', $normalizedEntry)
+                || preg_match('~(^|/)\.\.(/|$)~', $normalizedEntry)) {
+                $zip->close();
+                $zipIsOpen = false;
+                return $this->response->setJSON(['status' => 'ERROR', 'message' => 'The ZIP package contains an unsafe file path.']);
+            }
+
+            $isDirectoryEntry = str_ends_with($normalizedEntry, '/');
+            $normalizedEntry = rtrim($normalizedEntry, '/');
+            if (!$isDirectoryEntry && $normalizedEntry !== '' && !str_contains($normalizedEntry, '/')) {
+                $extension = strtolower(pathinfo($normalizedEntry, PATHINFO_EXTENSION));
+                if (in_array($extension, ['html', 'htm'], true)) {
+                    $rootHtmlFiles[] = $normalizedEntry;
                 }
             }
         }
-        // This endpoint is only ever called via AJAX from html.php's upload form - a redirect
-        // response here isn't valid JSON, so the browser-side JSON.parse throws and the upload
-        // button is left stuck disabled. Always answer with JSON instead.
-        return $this->response->setJSON(['status' => 'Error']);
+
+        $knownEntryPoint = false;
+        foreach ($rootHtmlFiles as $rootHtmlFile) {
+            if (in_array(strtolower($rootHtmlFile), ['index.html', 'screen_01.html'], true)) {
+                $knownEntryPoint = true;
+                break;
+            }
+        }
+
+        if (!$knownEntryPoint && count($rootHtmlFiles) !== 1) {
+            $zip->close();
+            $zipIsOpen = false;
+            return $this->response->setJSON([
+                'status' => 'ERROR',
+                'message' => 'The ZIP package must contain index.html, Screen_01.html, or one HTML file at its root.',
+            ]);
+        }
+
+        $timestamp = $pageRows[0]['createdon'];
+        $pageNumber = $pageRows[0]['page_number'];
+        $packageParent = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $courseId . '/' . $timestamp . '/assets/html';
+        $targetDirectory = $packageParent . DIRECTORY_SEPARATOR . $pageId;
+        $stagingDirectory = $packageParent . DIRECTORY_SEPARATOR . '.html_upload_' . $pageId . '_' . bin2hex(random_bytes(6));
+        $backupDirectory = null;
+        $packageInstalled = false;
+        $databaseCommitted = false;
+        $removeDirectory = function (string $directory, string $description): bool {
+            try {
+                if (!is_dir($directory)) {
+                    return true;
+                }
+
+                $this->emptyDir($directory);
+                if (is_dir($directory) && !rmdir($directory)) {
+                    log_message('error', 'Unable to remove {description}: {path}', [
+                        'description' => $description,
+                        'path' => $directory,
+                    ]);
+                    return false;
+                }
+
+                return !is_dir($directory);
+            } catch (\Throwable $cleanupError) {
+                log_message('error', 'Unable to remove {description} at {path}: {exception}', [
+                    'description' => $description,
+                    'path' => $directory,
+                    'exception' => $cleanupError,
+                ]);
+                return false;
+            }
+        };
+        $restoreBackup = function (string $backup, string $target): bool {
+            try {
+                if (!rename($backup, $target)) {
+                    log_message('error', 'Unable to restore HTML package backup from {backup} to {target}', [
+                        'backup' => $backup,
+                        'target' => $target,
+                    ]);
+                    return false;
+                }
+
+                return true;
+            } catch (\Throwable $restoreError) {
+                log_message('error', 'Unable to restore HTML package backup from {backup} to {target}: {exception}', [
+                    'backup' => $backup,
+                    'target' => $target,
+                    'exception' => $restoreError,
+                ]);
+                return false;
+            }
+        };
+
+        try {
+            if (!is_dir($packageParent) && !mkdir($packageParent, 0777, true) && !is_dir($packageParent)) {
+                throw new \RuntimeException('Unable to create the HTML package directory.');
+            }
+            if (!mkdir($stagingDirectory, 0777, true)) {
+                throw new \RuntimeException('Unable to create the HTML package staging directory.');
+            }
+
+            $extracted = $zip->extractTo($stagingDirectory);
+            $zip->close();
+            $zipIsOpen = false;
+            if (!$extracted) {
+                throw new \RuntimeException('Unable to extract the HTML package.');
+            }
+
+            if (is_dir($targetDirectory)) {
+                $backupDirectory = $targetDirectory . '.backup_' . bin2hex(random_bytes(6));
+                if (!rename($targetDirectory, $backupDirectory)) {
+                    throw new \RuntimeException('Unable to preserve the existing HTML package.');
+                }
+            } elseif (file_exists($targetDirectory)) {
+                throw new \RuntimeException('The HTML package destination is not a directory.');
+            }
+
+            if (!rename($stagingDirectory, $targetDirectory)) {
+                if ($backupDirectory !== null && is_dir($backupDirectory)) {
+                    if (!$restoreBackup($backupDirectory, $targetDirectory)) {
+                        throw new \RuntimeException(
+                            'Unable to install the new HTML package or restore the existing package. '
+                            . 'The backup remains at ' . $backupDirectory
+                        );
+                    }
+                    $backupDirectory = null;
+                }
+                throw new \RuntimeException('Unable to install the HTML package.');
+            }
+            $stagingDirectory = null;
+            $packageInstalled = true;
+
+            $database = \Config\Database::connect();
+            if (!$database->transBegin()) {
+                throw new \RuntimeException('Unable to start the HTML package database transaction.');
+            }
+            try {
+                $result = $this->scorm_page_model->edituploadpagedetails(
+                    ['video_upload' => $filename],
+                    $pageId
+                );
+                $uploadedBy = session()->get('id_user');
+                $uploadedAt = time();
+                $packageRowSaved = $this->scorm_page_model->insertFileuploaddata([
+                    'language' => in_array($language, [1, 2, 3], true) ? $language : 1,
+                    'page_id' => $pageId,
+                    'folder' => ((float) $pageNumber === 1.0) ? 'page1' : $pageId,
+                    'status' => 1,
+                    'createdby' => $uploadedBy,
+                    'createdon' => $uploadedAt,
+                    'last_update_by' => $uploadedBy,
+                    'last_update_on' => $uploadedAt,
+                ]);
+                if ($packageRowSaved === false) {
+                    throw new \RuntimeException('Unable to save the HTML package record.');
+                }
+
+                if (!$database->transStatus()) {
+                    throw new \RuntimeException('Unable to save the HTML package details.');
+                }
+                if (!$database->transCommit()) {
+                    throw new \RuntimeException('Unable to commit the HTML package details.');
+                }
+                $databaseCommitted = true;
+            } catch (\Throwable $databaseError) {
+                $database->transRollback();
+                throw $databaseError;
+            }
+        } catch (\Throwable $e) {
+            if ($zipIsOpen) {
+                $zip->close();
+                $zipIsOpen = false;
+            }
+
+            // Never compensate the filesystem after the database commit. At that
+            // point the newly installed package is the authoritative copy.
+            if (!$databaseCommitted) {
+                if ($stagingDirectory !== null && is_dir($stagingDirectory)) {
+                    $removeDirectory($stagingDirectory, 'HTML package staging directory');
+                }
+                if ($packageInstalled && is_dir($targetDirectory)) {
+                    $removeDirectory($targetDirectory, 'failed HTML package installation');
+                    $packageInstalled = is_dir($targetDirectory);
+                }
+                if ($backupDirectory !== null && is_dir($backupDirectory) && !is_dir($targetDirectory)) {
+                    if ($restoreBackup($backupDirectory, $targetDirectory)) {
+                        $backupDirectory = null;
+                    }
+                }
+            }
+            throw $e;
+        }
+
+        // Backup deletion is post-commit housekeeping. A cleanup failure must not
+        // roll back or remove a package whose database changes are already durable.
+        if ($backupDirectory !== null && is_dir($backupDirectory)) {
+            $removeDirectory($backupDirectory, 'old HTML package backup');
+        }
+
+        return $this->response->setJSON($result);
     }
     function uploadvtt()
     {

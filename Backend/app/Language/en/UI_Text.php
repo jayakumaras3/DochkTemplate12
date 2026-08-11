@@ -596,7 +596,7 @@ return [
     'CB_Audio_Transcript' => 'Audio Transcript',
     'CB_Uploading' => 'Uploading...',
     'CB_No_HTML_Package_Uploaded' => 'No HTML Package Uploaded',
-    'CB_Upload_HTML_Package_Sub' => 'Upload an HTML zip package below. Page will load index.html - make sure index.html is available at the root of the zip package.',
+    'CB_Upload_HTML_Package_Sub' => 'Upload an HTML zip package below. The page will load index.html, Screen_01.html, or a single HTML file from the root of the zip package.',
     'CB_HTML_Zip_Package' => 'HTML Zip Package',
     'CB_Upload_HTML_Zip_Package' => 'Upload HTML Zip Package',
     'CB_Browser_No_Iframe_Support' => 'Your browser does not support iframes.',
@@ -615,6 +615,8 @@ return [
     'CB_JPG_JPEG_PNG_Max_1MB' => 'JPG, JPEG or PNG. Max 1 MB.',
     'CB_Save_Content' => 'Save Content',
     'CB_Save_Image' => 'Save Image',
+    'CB_Save_Content_And_Image' => 'Save Content and Image',
+    'CB_Save_Image_And_Content' => 'Save Image and Content',
     'CB_Saving' => 'Saving...',
 
     //Course Builder - SCQ/MCQ (types/cyu.php)

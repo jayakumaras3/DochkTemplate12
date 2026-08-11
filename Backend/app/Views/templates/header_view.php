@@ -755,9 +755,12 @@ $current_subsubpage = explode('/', uri_string())[2] ?? '';
             // (Content-Disposition: attachment), which never actually navigates the browser
             // away from this page - so 'load'/'pageshow' would never fire to clear
             // "navigating" again, leaving the overlay stuck spinning forever (only a manual
-            // refresh, which does navigate, was clearing it).
+            // refresh, which does navigate, was clearing it). Forms marked data-ajax="1" are
+            // also excluded because their submit handler deliberately stays on this page.
             document.addEventListener('submit', function(event) {
-                if (event.target && event.target.tagName === 'FORM' && event.target.getAttribute('data-download') !== '1') {
+                if (event.target && event.target.tagName === 'FORM'
+                    && event.target.getAttribute('data-download') !== '1'
+                    && event.target.getAttribute('data-ajax') !== '1') {
                     navigating = true;
                     showOverlay();
                 }

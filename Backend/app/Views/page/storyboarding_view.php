@@ -193,6 +193,15 @@
                         case 9:
                             $typeLabel = 'Audio Version';
                             break;
+                        case 10:
+                            $typeLabel = 'Text Only';
+                            break;
+                        case 11:
+                            $typeLabel = 'Image-Text';
+                            break;
+                        case 12:
+                            $typeLabel = 'Text-Image';
+                            break;
                         default:
                             $typeLabel = '-';
                     }

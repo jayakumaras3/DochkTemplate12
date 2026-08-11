@@ -586,7 +586,7 @@ return [
     'CB_Audio_Transcript' => 'ऑडियो ट्रांसक्रिप्ट',
     'CB_Uploading' => 'अपलोड हो रहा है...',
     'CB_No_HTML_Package_Uploaded' => 'कोई HTML पैकेज अपलोड नहीं हुआ',
-    'CB_Upload_HTML_Package_Sub' => 'नीचे एक HTML ज़िप पैकेज अपलोड करें। पृष्ठ index.html लोड करेगा - सुनिश्चित करें कि index.html ज़िप पैकेज के रूट में उपलब्ध है।',
+    'CB_Upload_HTML_Package_Sub' => 'नीचे HTML ZIP पैकेज अपलोड करें। पेज ZIP पैकेज के रूट से index.html, Screen_01.html या एकमात्र HTML फ़ाइल लोड करेगा।',
     'CB_HTML_Zip_Package' => 'HTML ज़िप पैकेज',
     'CB_Upload_HTML_Zip_Package' => 'HTML ज़िप पैकेज अपलोड करें',
     'CB_Browser_No_Iframe_Support' => 'आपका ब्राउज़र iframes का समर्थन नहीं करता।',
@@ -605,6 +605,8 @@ return [
     'CB_JPG_JPEG_PNG_Max_1MB' => 'JPG, JPEG या PNG। अधिकतम 1 MB।',
     'CB_Save_Content' => 'सामग्री सहेजें',
     'CB_Save_Image' => 'छवि सहेजें',
+    'CB_Save_Content_And_Image' => 'सामग्री और छवि सहेजें',
+    'CB_Save_Image_And_Content' => 'छवि और सामग्री सहेजें',
     'CB_Saving' => 'सहेजा जा रहा है...',
 
     //Course Builder - SCQ/MCQ

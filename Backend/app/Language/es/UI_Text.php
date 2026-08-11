@@ -587,7 +587,7 @@ return [
     'CB_Audio_Transcript' => 'Transcripción de Audio',
     'CB_Uploading' => 'Subiendo...',
     'CB_No_HTML_Package_Uploaded' => 'No se ha subido ningún paquete HTML',
-    'CB_Upload_HTML_Package_Sub' => 'Sube un paquete zip HTML a continuación. La página cargará index.html - asegúrate de que index.html esté disponible en la raíz del paquete zip.',
+    'CB_Upload_HTML_Package_Sub' => 'Sube un paquete ZIP HTML. La página cargará index.html, Screen_01.html o un único archivo HTML desde la raíz del paquete ZIP.',
     'CB_HTML_Zip_Package' => 'Paquete Zip HTML',
     'CB_Upload_HTML_Zip_Package' => 'Subir Paquete Zip HTML',
     'CB_Browser_No_Iframe_Support' => 'Tu navegador no soporta iframes.',
@@ -606,6 +606,8 @@ return [
     'CB_JPG_JPEG_PNG_Max_1MB' => 'JPG, JPEG o PNG. Máx. 1 MB.',
     'CB_Save_Content' => 'Guardar Contenido',
     'CB_Save_Image' => 'Guardar Imagen',
+    'CB_Save_Content_And_Image' => 'Guardar Contenido e Imagen',
+    'CB_Save_Image_And_Content' => 'Guardar Imagen y Contenido',
     'CB_Saving' => 'Guardando...',
 
     //Course Builder - SCQ/MCQ

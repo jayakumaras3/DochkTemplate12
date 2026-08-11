@@ -465,8 +465,8 @@ $array  = array_map('intval', str_split($userlevel)); ?>
                                         ?>
 
                                     </td>
-                                    <td contenteditable="true" onBlur="updateDate(this,'status','<?php echo $eachoptiondata['o_id'] ?>')">
-                                        <button type="button" onclick="updateDate('0','status','<?php echo $eachoptiondata['o_id'] ?>')" class="btn btn-outline-danger waves-effect btn-xs waves-light"><span class="mdi mdi-trash-can-outline"></span> Delete</button>
+                                    <td>
+                                        <button type="button" onclick="if (confirm('<?php echo lang('Alert.Aler_002') ?>')) updateDate('0','status','<?php echo $eachoptiondata['o_id'] ?>')" class="btn btn-outline-danger waves-effect btn-xs waves-light"><span class="mdi mdi-trash-can-outline"></span> Delete</button>
                                     </td>
                                 </tr>
                         <?php }
@@ -551,7 +551,7 @@ $array  = array_map('intval', str_split($userlevel)); ?>
                                             </div>
                                             <div class="col-md-4">
                                                 <label>Score</label>
-                                                <input type="text" class="form-control col-md-12" name="score" placeholder="Score" value="<?php echo $row['score'] ?>" />
+                                                <input type="number" min="0" max="100" class="form-control col-md-12" name="score" placeholder="Score" value="<?php echo $row['score'] ?>" oninput="clampScoreInput(this)" />
                                             </div>
 
                                             <div class="col-md-4">
@@ -753,6 +753,22 @@ $array  = array_map('intval', str_split($userlevel)); ?>
 <script>
     function updateScoreValue(newValue) {
         document.getElementById("scoreInput").value = newValue;
+    }
+
+    // min/max on a number input only affect the spinner arrows and form-level validation -
+    // typing or pasting a value directly bypasses them, so clamp on input too.
+    function clampScoreInput(el) {
+        if (el.value === '') return;
+        var value = parseInt(el.value, 10);
+        if (isNaN(value)) {
+            el.value = '';
+            return;
+        }
+        var min = el.min !== '' ? parseInt(el.min, 10) : null;
+        var max = el.max !== '' ? parseInt(el.max, 10) : null;
+        if (min !== null && value < min) value = min;
+        if (max !== null && value > max) value = max;
+        el.value = value;
     }
 </script>
 <script>

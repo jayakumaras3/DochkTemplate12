@@ -806,7 +806,7 @@ class Assessment_training_model extends Model
         $builder->where('dtd.o_id', $id);
         $builder->update();
 
-        if ($column == 'truefalse' && $value = '2' && $quiz_type == '112') {
+        if ($column == 'truefalse' && (int) $value === 1 && $quiz_type == '112') {
             $builder = $this->db->table('assessment_options as dtd');
             $builder->set('truefalse', 2);
             $builder->where('dtd.o_id !=', $id);
