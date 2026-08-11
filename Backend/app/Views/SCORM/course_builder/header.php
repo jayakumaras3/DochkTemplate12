@@ -847,6 +847,28 @@ if (isset($coursedetails)) {
     </script>
     <?php if ($theme === 'ModernTheme'): ?>
     <style>
+        /* Footer Prev/Next/Learning-Aids keyboard focus. The controls were already
+           Tab-reachable and Enter/Space-activatable (they are real <button type="submit">
+           elements, and #resource1 has role=button + tabindex=0 with its own key handler) --
+           what was missing was a VISIBLE focus indicator, i.e. WCAG 2.4.7. Cause: the
+           buttons carried an inline `all: unset`, which resets outline-style to none. Being
+           an inline style it also outranked any stylesheet rule, so the ring could not be
+           restored from CSS without !important; the inline declaration was therefore
+           narrowed (in page_video_view.php) to only the resets actually needed
+           (background/border/padding/margin), leaving `outline` alone. No !important needed.
+           Values below are the theme's own focus treatment, copied from its #TmenuIcon rule
+           (Color.css:136-140) so the footer matches the header's existing convention rather
+           than introducing a new one. Note .footer > div applies
+           filter: contrast(1.15) brightness(0.62), which darkens the ring slightly - it is
+           inherited by descendants and cannot be escaped without moving the indicator off
+           the control, so it is accepted rather than fought. */
+        .footer > div > form > button:focus-visible,
+        #resource1:focus-visible {
+            outline: 2px solid #2456d6;
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
         /* Color.css sizes .pageContent as a flex child (height:0; flex:1), but the
            content blocks below were written for the legacy fixed-header shell and
            hardcode 86vh/70vh. Neutralise those inside .pageContent only. */

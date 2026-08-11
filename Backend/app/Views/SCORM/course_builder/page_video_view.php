@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /* Computed here (not further down with $theme) because the legacy <style> block below has
    to be gated before it is emitted. It nudges .form-check-input down 10px and forces
    .form-check to align-items:flex-start, both of which override the theme's
@@ -910,7 +910,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                     <form action="<?php echo base_url('SCORM/Course_builder/review_course/launcher/1/' . $prev_page_number); ?>"
                         method="POST" style="display:contents;"><?= csrf_field() ?>
                         <button type="submit" title="<?php echo $Prevtitle; ?>" aria-label="<?php echo $Prevtitle; ?>"
-                            style="all: unset; display:block; width:100%; height:100%; cursor: pointer;"></button>
+                            style="display:block; width:100%; height:100%; margin:0; padding:0; background:none; border:0; cursor: pointer;"></button>
                     </form>
                 </div>
             <?php } ?>
@@ -919,7 +919,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                     <form action="<?php echo base_url('SCORM/Course_builder/review_course/launcher/1/' . $next_page_number); ?>"
                         method="POST" style="display:contents;"><?= csrf_field() ?>
                         <button type="submit" title="<?php echo $NextTitle; ?>" aria-label="<?php echo $NextTitle; ?>"
-                            style="all: unset; display:block; width:100%; height:100%; cursor: pointer;"></button>
+                            style="display:block; width:100%; height:100%; margin:0; padding:0; background:none; border:0; cursor: pointer;"></button>
                     </form>
                 </div>
             <?php } ?>
