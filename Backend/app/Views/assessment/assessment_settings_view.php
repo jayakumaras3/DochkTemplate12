@@ -170,7 +170,7 @@
 						<div class="col-6 col-lg-3">
 							<div class="qs-field-label"><i class="mdi mdi-target qs-field-icon"></i> <?php echo lang('UI_Text.CB_Attempts_Allowed'); ?></div>
 							<div class="input-group">
-								<input type="number" min="0" class="form-control qs-auto-save" id="qsAttempts" data-type="24" data-sid="<?php echo (int) $qsAttemptsSid; ?>" value="<?php echo esc($qsAttempts); ?>" onblur="qsSaveSetting(this)">
+								<input type="number" min="0" max="100" class="form-control qs-auto-save" id="qsAttempts" data-type="24" data-sid="<?php echo (int) $qsAttemptsSid; ?>" value="<?php echo esc($qsAttempts); ?>" oninput="qsClampNumber(this)" onblur="qsSaveSetting(this)">
 								<span class="input-group-text"><?php echo lang('UI_Text.CB_Attempts'); ?></span>
 							</div>
 							<span id="qsAttemptsStatus" class="qs-field-status"></span>
@@ -178,7 +178,7 @@
 						<div class="col-6 col-lg-3">
 							<div class="qs-field-label"><i class="mdi mdi-target qs-field-icon"></i> <?php echo lang('UI_Text.CB_Passing_Percentage'); ?></div>
 							<div class="input-group">
-								<input type="number" min="0" max="100" class="form-control qs-auto-save" id="qsPassing" data-type="23" data-sid="<?php echo (int) $qsPassingSid; ?>" value="<?php echo esc($qsPassing); ?>" onblur="qsSaveSetting(this)">
+								<input type="number" min="0" max="100" class="form-control qs-auto-save" id="qsPassing" data-type="23" data-sid="<?php echo (int) $qsPassingSid; ?>" value="<?php echo esc($qsPassing); ?>" oninput="qsClampNumber(this)" onblur="qsSaveSetting(this)">
 								<span class="input-group-text">%</span>
 							</div>
 							<span id="qsPassingStatus" class="qs-field-status"></span>
@@ -186,7 +186,7 @@
 						<div class="col-6 col-lg-3">
 							<div class="qs-field-label"><i class="mdi mdi-format-list-bulleted qs-field-icon"></i> <?php echo lang('UI_Text.CB_Maximum_Questions'); ?></div>
 							<div class="input-group">
-								<input type="number" min="0" class="form-control qs-auto-save" id="qsMaxQ" data-type="22" data-sid="<?php echo (int) $qsMaxQSid; ?>" value="<?php echo esc($qsMaxQ); ?>" onblur="qsSaveSetting(this)">
+								<input type="number" min="0" max="500" class="form-control qs-auto-save" id="qsMaxQ" data-type="22" data-sid="<?php echo (int) $qsMaxQSid; ?>" value="<?php echo esc($qsMaxQ); ?>" oninput="qsClampNumber(this)" onblur="qsSaveSetting(this)">
 								<span class="input-group-text"><?php echo lang('UI_Text.CB_Questions'); ?></span>
 							</div>
 							<span id="qsMaxQStatus" class="qs-field-status"></span>
@@ -194,7 +194,7 @@
 						<div class="col-6 col-lg-3">
 							<div class="qs-field-label"><i class="mdi mdi-clock-outline qs-field-icon"></i> <?php echo lang('UI_Text.CB_Duration'); ?></div>
 							<div class="input-group">
-								<input type="number" min="0" max="300" class="form-control qs-auto-save" id="qsDuration" data-type="21" data-sid="<?php echo (int) $qsDurationSid; ?>" value="<?php echo esc($qsDuration); ?>" onblur="qsSaveSetting(this)">
+								<input type="number" min="0" max="300" class="form-control qs-auto-save" id="qsDuration" data-type="21" data-sid="<?php echo (int) $qsDurationSid; ?>" value="<?php echo esc($qsDuration); ?>" oninput="qsClampNumber(this)" onblur="qsSaveSetting(this)">
 								<span class="input-group-text"><?php echo lang('UI_Text.CB_Minutes'); ?></span>
 							</div>
 							<span id="qsDurationStatus" class="qs-field-status"></span>
@@ -454,11 +454,28 @@
 		});
 	});
 
+	// Number inputs' min/max attributes only affect the spinner arrows and form-level
+	// validation - typing or pasting a value directly bypasses them, so clamp on input too.
+	function qsClampNumber(el) {
+		if (el.value === '') return;
+		var value = parseInt(el.value, 10);
+		if (isNaN(value)) {
+			el.value = '';
+			return;
+		}
+		var min = el.min !== '' ? parseInt(el.min, 10) : null;
+		var max = el.max !== '' ? parseInt(el.max, 10) : null;
+		if (min !== null && value < min) value = min;
+		if (max !== null && value > max) value = max;
+		el.value = value;
+	}
+
 	// Auto-saves every General Settings field / Quiz Behavior toggle on blur/change - no page
 	// reload, so the row's s_id (stored on the element itself) is kept in sync with each
 	// response, otherwise a second edit to the same field without a reload would deactivate a
 	// row that's no longer the current one.
 	function qsSaveSetting(el) {
+		if (el.type === 'number') qsClampNumber(el);
 		var type = el.dataset.type;
 		var sid = parseInt(el.dataset.sid || '0', 10);
 		var value = (el.type === 'checkbox') ? (el.checked ? 'Enabled' : 'Disabled') : el.value;

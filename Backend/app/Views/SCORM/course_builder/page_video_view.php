@@ -868,10 +868,10 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                         $pageImageUrl = '';
                         $hasPageImage = false;
                         if ($pageImageFile !== '') {
-                            $pageImageDiskPath = FCPATH . "assets/assets/uploads/SCORM_course_document/" . $course_id . "/" . $coursedetails[0]['createdon'] . "/assets/page_images/" . $pageImageFile;
+                            $pageImageDiskPath = FCPATH . "assets/assets/uploads/SCORM_course_document/" . $course_id . "/" . $coursedetails[0]['createdon'] . "/assets/html/" . $page_id . "/" . $pageImageFile;
                             if (file_exists($pageImageDiskPath)) {
                                 $hasPageImage = true;
-                                $pageImageUrl = base_url() . "assets/assets/uploads/SCORM_course_document/" . $course_id . "/" . $coursedetails[0]['createdon'] . "/assets/page_images/" . $pageImageFile;
+                                $pageImageUrl = base_url() . "assets/assets/uploads/SCORM_course_document/" . $course_id . "/" . $coursedetails[0]['createdon'] . "/assets/html/" . $page_id . "/" . $pageImageFile;
                             }
                         }
                         ?>

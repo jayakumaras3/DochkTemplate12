@@ -3,7 +3,7 @@
 		<div class="page-title-box">
 			<div class="page-title-right">
 				<ol class="breadcrumb m-0">
-					<li class="breadcrumb-item"><a href="<?php echo base_url('SCORM/course_builder/Editor'); ?>">Pages</a></li>
+					<li class="breadcrumb-item"><a href="<?php echo base_url('SCORM/course_builder/Editor'); ?>">Course Builder</a></li>
 					<li class="breadcrumb-item"><a href="<?php echo base_url('SCORM/course_builder/scorm_course_pages/page_edit_view'); ?>">Main Page</a></li>
 				</ol>
 			</div>

@@ -1237,7 +1237,7 @@ class Scorm_course_pages extends BaseController
             $pagejson = json_encode($pagesData, JSON_UNESCAPED_SLASHES);
             $tocjson = '{"0": ' . $pagejson . '}';
             if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json')) {
-                mkdir('assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json', 0777, true);
+                mkdir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json', 0777, true);
             }
             $path = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json';
             $fp = fopen($path . "/toc.json", 'w');
@@ -1337,7 +1337,7 @@ class Scorm_course_pages extends BaseController
 
 
             if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json')) {
-                mkdir('assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json', 0777, true);
+                mkdir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json', 0777, true);
             }
             $path = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $timestamp . '/assets/json';
             $fp = fopen($path . "/Template.json", 'w');
@@ -1360,13 +1360,9 @@ class Scorm_course_pages extends BaseController
         }
 
         $imageTag = '';
-        if (!empty($eachpage['page_image'])) {
-            $sourceImage = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $scourse_id . '/' . $timestamp . '/assets/page_images/' . $eachpage['page_image'];
-            if (file_exists($sourceImage)) {
-                copy($sourceImage, $htmlFolder . '/' . $eachpage['page_image']);
-                $alt = htmlspecialchars($eachpage['image_alt'] ?? '', ENT_QUOTES);
-                $imageTag = '<img src="' . $eachpage['page_image'] . '" alt="' . $alt . '" style="max-width:100%;height:auto;">';
-            }
+        if (!empty($eachpage['page_image']) && file_exists($htmlFolder . '/' . $eachpage['page_image'])) {
+            $alt = htmlspecialchars($eachpage['image_alt'] ?? '', ENT_QUOTES);
+            $imageTag = '<img src="' . $eachpage['page_image'] . '" alt="' . $alt . '" style="max-width:100%;height:auto;">';
         }
 
         $content = $eachpage['content'] ?? '';
@@ -1403,7 +1399,7 @@ class Scorm_course_pages extends BaseController
             $layoutType = 'text-only';
         }
 
-        $hasImage = !empty($eachpage['page_image']);
+        $hasImage = !empty($eachpage['page_image']) && file_exists($htmlFolder . '/' . $eachpage['page_image']);
 
         $pagejson = [
             "meta" => [
@@ -1959,9 +1955,9 @@ class Scorm_course_pages extends BaseController
                 if ($file->isValid() && !$file->hasMoved()) {
                     $filename = $file->getName();
                     $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                    if ($extension == 'zip') {
+                    if (strtolower($extension) === 'zip') {
                         if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/Articulate/' . $data['page_id'])) {
-                            mkdir('assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/Articulate/' . $data['page_id'], 0777, true);
+                            mkdir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/Articulate/' . $data['page_id'], 0777, true);
                         }
                         if (file_exists(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/Articulate/' . $data['page_id'])) {
                             $dirPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/Articulate/' . $data['page_id'];
@@ -2004,7 +2000,10 @@ class Scorm_course_pages extends BaseController
                 }
             }
         }
-        return redirect()->to(base_url('SCORM/course_builder/Editor'));
+        // This endpoint is only ever called via AJAX from articulate.php's upload form - a
+        // redirect response here isn't valid JSON, so the browser-side JSON.parse throws and
+        // the upload button is left stuck disabled. Always answer with JSON instead.
+        return $this->response->setJSON(['status' => 'Error']);
     }
     public function del_folder()
     {
@@ -2202,9 +2201,9 @@ class Scorm_course_pages extends BaseController
                 $pagejsonfile = $this->scorm_page_model->getpagedata($data['page_id']);
                 $timestamp = $pagejsonfile[0]['createdon'];
                 $extension = $file->getExtension();
-                // Unique per upload (not just per page) so replacing an image never collides with a cached copy of the old one.
+                // Unique per upload so replacing an image never collides with a cached copy of the old one.
                 $filename = 'page_' . $data['page_id'] . '_' . time() . '.' . $extension;
-                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/page_images/';
+                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'] . '/';
 
                 if (!is_dir($imageFolderPath)) {
                     mkdir($imageFolderPath, 0777, true);
@@ -2242,7 +2241,7 @@ class Scorm_course_pages extends BaseController
         if ($page_id) {
             $pagejsonfile = $this->scorm_page_model->getpagedata($page_id);
             if (!empty($pagejsonfile) && !empty($pagejsonfile[0]['page_image'])) {
-                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $pagejsonfile[0]['fk_course_id'] . '/' . $pagejsonfile[0]['createdon'] . '/assets/page_images/';
+                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $pagejsonfile[0]['fk_course_id'] . '/' . $pagejsonfile[0]['createdon'] . '/assets/html/' . $page_id . '/';
                 $filePath = $imageFolderPath . $pagejsonfile[0]['page_image'];
                 if (file_exists($filePath)) {
                     unlink($filePath);
@@ -2296,9 +2295,9 @@ class Scorm_course_pages extends BaseController
                     $filename = $file->getName();
                     $extension = pathinfo($filename, PATHINFO_EXTENSION);
                     if ($page_number == 1) {
-                        if ($extension == 'zip') {
+                        if (strtolower($extension) === 'zip') {
                             if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'])) {
-                                mkdir('assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'], 0777, true);
+                                mkdir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'], 0777, true);
                             }
                             if (file_exists(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'])) {
                                 $dirPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'];
@@ -2339,9 +2338,9 @@ class Scorm_course_pages extends BaseController
                             session()->setFlashdata('alert-class', 'alert-danger');
                         }
                     } else {
-                        if ($extension == 'zip') {
+                        if (strtolower($extension) === 'zip') {
                             if (!is_dir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'])) {
-                                mkdir('assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'], 0777, true);
+                                mkdir(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'], 0777, true);
                             }
                             if (file_exists(FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'])) {
                                 $dirPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'];
@@ -2385,7 +2384,10 @@ class Scorm_course_pages extends BaseController
                 }
             }
         }
-        return redirect()->to(base_url('SCORM/course_builder/Editor'));
+        // This endpoint is only ever called via AJAX from html.php's upload form - a redirect
+        // response here isn't valid JSON, so the browser-side JSON.parse throws and the upload
+        // button is left stuck disabled. Always answer with JSON instead.
+        return $this->response->setJSON(['status' => 'Error']);
     }
     function uploadvtt()
     {

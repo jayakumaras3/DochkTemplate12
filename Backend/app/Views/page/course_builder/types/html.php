@@ -150,6 +150,14 @@
                 <script>
                     $('.fa').show();
 
+                    function resetUploadButton() {
+                        var button = document.getElementById('uploadButton');
+                        if (button) {
+                            button.disabled = false;
+                            button.innerHTML = '<?php echo lang('UI_Text.CB_Upload_HTML_Zip_Package'); ?>';
+                        }
+                    }
+
                     $('#uploadhtmlfile').on('submit', function(event) {
                         event.preventDefault();
 
@@ -167,18 +175,30 @@
                                     $(".progress").show();
                                 },
                                 success: function(data) {
-                                    $('.my_update_panel').html(data);
-                                    var obj = JSON.parse(data);
+                                    var obj;
+                                    try {
+                                        obj = JSON.parse(data);
+                                    } catch (e) {
+                                        console.error('HTML upload: non-JSON response', data);
+                                        resetUploadButton();
+                                        alert('<?php echo lang('Messages.Error_0025'); ?>');
+                                        return;
+                                    }
 
-if (obj.status === 'OK') {
+                                    if (obj.status === 'OK') {
                                         $('#loading_spinner').hide();
-                                        location.reload();
                                         alert('<?php echo lang('Messages.Success_0055'); ?>');
+                                        location.reload();
                                     } else {
-                                        alert('error', '<?php echo lang('Messages.Error_0025'); ?>');
+                                        console.error('HTML upload failed', obj);
+                                        resetUploadButton();
+                                        alert('<?php echo lang('Messages.Error_0025'); ?>' + (obj.message ? ('\n\n' + obj.message) : ''));
                                     }
                                 },
                                 error: function(xhr, textStatus, errorThrown) {
+                                    console.error('HTML upload: request failed', xhr.status, xhr.responseText);
+                                    resetUploadButton();
+                                    alert('<?php echo lang('Messages.Error_0025'); ?>' + ' (HTTP ' + xhr.status + ')');
                                 },
                                 complete: function() {
                                     $(".progress").hide();

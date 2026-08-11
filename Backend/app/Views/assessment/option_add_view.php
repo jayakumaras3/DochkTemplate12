@@ -332,7 +332,8 @@ $quizType = isset($row['quiz_type']) ? (string) $row['quiz_type'] : '';
                                                                 <input type="checkbox" <?php echo $isCorrect ? 'checked' : ''; ?>
                                                                     onchange="toggleTrueFalse(this, '<?php echo $optionId; ?>')"
                                                                     data-question-id="<?php echo $eachoptiondata['question_id']; ?>"
-                                                                    data-current="<?php echo $truefalse; ?>">
+                                                                    data-current="<?php echo $truefalse; ?>"
+                                                                    data-option-id="<?php echo $optionId; ?>">
                                                                 <span class="cyu-toggle-slider"></span>
                                                             </label>
                                                         <?php } else { ?>
@@ -507,18 +508,60 @@ $quizType = isset($row['quiz_type']) ? (string) $row['quiz_type'] : '';
 
         if (newStatus === '1') {
             const checkboxes = document.querySelectorAll(`input[data-question-id="${questionId}"]`);
-            const alreadyCorrect = Array.from(checkboxes).some(cb =>
+            const currentCorrectCb = Array.from(checkboxes).find(cb =>
                 cb.getAttribute('data-current') === '1'
             );
 
-            if (alreadyCorrect) {
-                alert("Only one correct answer is allowed for this single-choice question. Please unselect the current answer before selecting a new one.");
-                checkbox.checked = false;
+            if (currentCorrectCb) {
+                const oldOptionId = currentCorrectCb.getAttribute('data-option-id');
+                switchCorrectAnswer(oldOptionId, optionId);
                 return;
             }
         }
 
         updateDate(newStatus, 'truefalse', optionId);
+    }
+
+    // Single-choice questions must keep exactly one correct option: mark the newly chosen
+    // option correct before flipping the previously correct one to wrong (the backend refuses
+    // to unmark a "wrong" option if it would leave zero correct options, so doing it in the
+    // other order gets silently rejected), then reload once.
+    function switchCorrectAnswer(oldOptionId, newOptionId) {
+        let scourse_id = '<?php echo $row['scourse_id'] ?>';
+        let question_id = '<?php echo $row['q_id'] ?>';
+        let url = '<?php echo base_url('Assessment/trainings/updatedateformat') ?>';
+
+        fetch(url, {
+                method: 'POST',
+                body: new URLSearchParams({
+                    value: '1',
+                    column: 'truefalse',
+                    id: newOptionId,
+                    scourse_id: scourse_id,
+                    question_id: question_id
+                }),
+                credentials: 'same-origin'
+            })
+            .then(function() {
+                return fetch(url, {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        value: '2',
+                        column: 'truefalse',
+                        id: oldOptionId,
+                        scourse_id: scourse_id,
+                        question_id: question_id
+                    }),
+                    credentials: 'same-origin'
+                });
+            })
+            .then(function() {
+                location.reload();
+            })
+            .catch(function() {
+                console.log('request failed');
+                location.reload();
+            });
     }
 
     // fetch(), not $.ajax(): jQuery's AJAX transport fails to construct its own XHR in this

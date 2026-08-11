@@ -220,7 +220,7 @@ $lastModified = !empty($row['last_updated_on']) ? date('d M Y h:i A', (int) $row
 		color: #4ecb71;
 	}
 </style>
- <div class="row">
+<div class="row">
 	<div class="col-12">
 		<div class="page-title-box">
 			<div class="page-title-right">
@@ -239,7 +239,7 @@ $lastModified = !empty($row['last_updated_on']) ? date('d M Y h:i A', (int) $row
 
 		<div class="d-flex flex-wrap justify-content-between align-items-start mt-2 gap-2">
 			<div>
-				
+
 				<div class="d-flex flex-wrap align-items-center gap-3 font-13 text-muted">
 					<span><i class="mdi mdi-calendar-outline me-1"></i><?= lang('UI_Text.Last_Modified') ?>: <?= esc($lastModified) ?></span>
 				</div>
@@ -376,14 +376,15 @@ $lastModified = !empty($row['last_updated_on']) ? date('d M Y h:i A', (int) $row
 									<div class="col-lg-4 mb-3">
 										<label class="form-label"><?= lang('UI_Text.Course Theme') ?></label>
 										<select name="theme" class="form-select">
-											<option value="1" <?php echo ($row['theme'] == 1) ? 'selected' : ''; ?>>Default</option>
-											<option value="2" <?php echo ($row['theme'] == 2) ? 'selected' : ''; ?>>ContentforU</option>
-											<option value="3" <?php echo ($row['theme'] == 3) ? 'selected' : ''; ?>>Assessment</option>
-											<option value="4" <?php echo ($row['theme'] == 4) ? 'selected' : ''; ?>>Knowledge Works</option>
-											<option value="5" <?php echo ($row['theme'] == 5) ? 'selected' : ''; ?>>Assessment Arabic</option>
-											<option value="6" <?php echo ($row['theme'] == 6) ? 'selected' : ''; ?>>Wabtec Default</option>
-											<option value="7" <?php echo ($row['theme'] == 7) ? 'selected' : ''; ?>>Vertical ContentforU</option>
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Modern Theme</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 1</option>
+											<option value="1" <?php echo ($row['theme'] == 1) ? 'selected' : ''; ?>>Touchstone 2</option>
+											<option value="3" <?php echo ($row['theme'] == 3) ? 'selected' : ''; ?>>Touchstone 3</option>
+											<option value="4" <?php echo ($row['theme'] == 4) ? 'selected' : ''; ?>>Touchstone 4</option>
+											<option value="5" <?php echo ($row['theme'] == 5) ? 'selected' : ''; ?>>Touchstone 5</option>
+											<option value="6" <?php echo ($row['theme'] == 6) ? 'selected' : ''; ?>>Touchstone 6</option>
+											<option value="7" <?php echo ($row['theme'] == 7) ? 'selected' : ''; ?>>Touchstone 7</option>
+											<option value="2" <?php echo ($row['theme'] == 2) ? 'selected' : ''; ?>>Touchstone 8</option>
+											
 										</select>
 									</div>
 									<div class="col-lg-4 mb-3">
@@ -589,7 +590,7 @@ $lastModified = !empty($row['last_updated_on']) ? date('d M Y h:i A', (int) $row
 									}
 								}
 								if ($imagedisplay == 0) {
-								?>
+									?>
 									<form enctype="multipart/form-data" action="<?php echo base_url($form_url_1) ?>"
 										method="post" id="submitForm"><?= csrf_field() ?>
 										<p class="text-danger"><?= lang('Statements.State_0001') ?></p>
@@ -642,7 +643,7 @@ $lastModified = !empty($row['last_updated_on']) ? date('d M Y h:i A', (int) $row
 													<button type="submit" class="btn btn-outline-danger waves-effect btn-sm rounded-pill waves-light"
 														onclick="return confirm('<?php echo lang('Alert.Aler_003') ?>')"><?= lang('Buttons.Delete_Video') ?></button>
 												</form>
-									<?php
+								<?php
 											}
 										}
 									}

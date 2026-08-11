@@ -419,7 +419,8 @@
                                                                 onchange="toggleTrueFalse(this, '<?php echo $optionId; ?>')"
                                                                 data-question-id="<?php echo $questionId; ?>"
                                                                 data-type="<?php echo $type; ?>"
-                                                                data-current="<?php echo $truefalse; ?>">
+                                                                data-current="<?php echo $truefalse; ?>"
+                                                                data-option-id="<?php echo $optionId; ?>">
                                                             <span class="cyu-toggle-slider"></span>
                                                         </label>
                                                     <?php } else { ?>
@@ -576,20 +577,61 @@
 
         if (type === '5' && newStatus === '1') {
             const checkboxes = document.querySelectorAll(`input[data-question-id="${questionId}"]`);
-            const alreadyCorrect = Array.from(checkboxes).some(cb =>
+            const currentCorrectCb = Array.from(checkboxes).find(cb =>
                 cb.getAttribute('data-current') === '1'
             );
 
-            if (alreadyCorrect) {
-                alert("<?php echo lang('UI_Text.CB_Only_One_Correct_Answer'); ?>");
-                // The checkbox already flipped itself before this handler ran - put it back
-                // since the change is being rejected.
-                checkbox.checked = false;
+            if (currentCorrectCb) {
+                const oldOptionId = currentCorrectCb.getAttribute('data-option-id');
+                switchCorrectAnswer(oldOptionId, optionId);
                 return;
             }
         }
 
         updateDate(newStatus, 'truefalse', optionId);
+    }
+
+    // Single-choice questions must keep exactly one correct option: flip the previously
+    // correct option to wrong before marking the newly chosen one correct, then reload once.
+    function switchCorrectAnswer(oldOptionId, newOptionId) {
+        let scourse_id = '<?php echo $scourse_id ?>';
+        let question_id = '<?php echo isset($qrow['q_id']) ? $qrow['q_id'] : '' ?>';
+        let url = '<?php echo base_url('Assessment/trainings/updatedateformat') ?>';
+
+        // Mark the new option correct FIRST. The backend refuses to unmark a "wrong" option
+        // if it would leave zero correct options, so flipping the old one first (while it's
+        // still the only correct one) gets silently rejected - do it in this order instead.
+        fetch(url, {
+                method: 'POST',
+                body: new URLSearchParams({
+                    value: '1',
+                    column: 'truefalse',
+                    id: newOptionId,
+                    scourse_id: scourse_id,
+                    question_id: question_id
+                }),
+                credentials: 'same-origin'
+            })
+            .then(function() {
+                return fetch(url, {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        value: '2',
+                        column: 'truefalse',
+                        id: oldOptionId,
+                        scourse_id: scourse_id,
+                        question_id: question_id
+                    }),
+                    credentials: 'same-origin'
+                });
+            })
+            .then(function() {
+                location.reload();
+            })
+            .catch(function() {
+                console.log('request failed');
+                location.reload();
+            });
     }
 
     function updateDate(element, column, id) {

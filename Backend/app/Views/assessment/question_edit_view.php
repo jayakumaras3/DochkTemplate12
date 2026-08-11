@@ -447,6 +447,7 @@ $array  = array_map('intval', str_split($userlevel)); ?>
                                                 data-question-id="<?php echo $questionId; ?>"
                                                 data-type="<?php echo $type; ?>"
                                                 data-current="<?php echo $truefalse; ?>"
+                                                data-option-id="<?php echo $optionId; ?>"
                                                 onclick="toggleTrueFalse(this, '<?php echo $optionId; ?>')">
                                                 <?php echo $btnText; ?>
                                             </button>
@@ -695,18 +696,56 @@ $array  = array_map('intval', str_split($userlevel)); ?>
 
         if (type === '5' && newStatus === '1') {
             const buttons = document.querySelectorAll(`button[data-question-id="${questionId}"]`);
-            const alreadyCorrect = Array.from(buttons).some(btn =>
+            const currentCorrectBtn = Array.from(buttons).find(btn =>
                 btn.getAttribute('data-current') === '1'
             );
 
-            if (alreadyCorrect) {
-                alert("Only one correct answer is allowed for this single-choice question. Please unselect the current answer before selecting a new one.");
+            if (currentCorrectBtn) {
+                const oldOptionId = currentCorrectBtn.getAttribute('data-option-id');
+                switchCorrectAnswer(oldOptionId, optionId);
                 return;
             }
         }
 
         // Proceed with AJAX update
         updateDate(newStatus, 'truefalse', optionId);
+    }
+
+    // Mark the new option correct FIRST. The backend refuses to unmark a "wrong" option if it
+    // would leave zero correct options, so flipping the old one first (while it's still the
+    // only correct one) gets silently rejected - do it in this order instead.
+    function switchCorrectAnswer(oldOptionId, newOptionId) {
+        let scourse_id = '<?php echo $row['scourse_id'] ?>';
+        let question_id = '<?php echo $row['q_id'] ?>';
+        let url = '<?php echo base_url('Assessment/trainings/updatedateformat') ?>';
+
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                value: '1',
+                column: 'truefalse',
+                id: newOptionId,
+                scourse_id: scourse_id,
+                question_id: question_id
+            }
+        }).done(function() {
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    value: '2',
+                    column: 'truefalse',
+                    id: oldOptionId,
+                    scourse_id: scourse_id,
+                    question_id: question_id
+                }
+            }).always(function() {
+                location.reload(true);
+            });
+        }).fail(function() {
+            location.reload(true);
+        });
     }
 </script>
 

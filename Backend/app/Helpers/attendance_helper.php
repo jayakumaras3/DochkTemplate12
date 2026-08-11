@@ -96,7 +96,10 @@ function attendance_summary($start_dt, $end_dt, $today, array $holidays, array $
         if (!$isWeekend && !$isHoliday) {
             $totalWorkingDays++;
 
-            if ($thisdate <= $today) {
+            // Today is excluded here (both from the elapsed-days baseline and from the
+            // office/WFH/leave totals that get subtracted from it) so a missing check-in on
+            // a day that isn't over yet never counts as an absence.
+            if ($thisdate < $today) {
                 $workingDaysElapsed++;
 
                 $wfh = $wfhByDate[$thisdate] ?? 0;
