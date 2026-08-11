@@ -62,6 +62,11 @@ if (isset($coursedetails)) {
 } else {
     $theme = 'Default';
 }
+/* ModernTheme now ships as a full exported SCORM package with its assets one level deeper,
+   under export_themes/ModernTheme/theme/... - see the fuller note beside the identical
+   $themePath line in header.php. ModernTheme-only: the other 8 theme folders still use the
+   old flat layout. Computed here as well because each view resolves $theme independently. */
+$themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
 ?>
 <?php if (!empty($getAssessmentSettings)) {
     foreach ($getAssessmentSettings as $value) {
@@ -228,10 +233,19 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                  in footer.php only ever check panel.style.display === 'block', so starting
                  from "none" instead of unset does not change first-click open behaviour. */ ?>
         <div id="Tmenu" class="sideBar" style="display:none">
-            <img class="logo" src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/logo.svg'); ?>" alt="logo">
+            <img class="logo" src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $themePath . '/images/logo.svg'); ?>" alt="logo">
+            <?php /* Tab markup matches the theme's own content.html:5-31 - the label is a
+                     <span role="button" tabindex="0"> inside the #toc_id / #trans_id tab div,
+                     not a bare span. Two things depend on it: the theme's
+                     `#Tmenu.sideBar #sideBarHeader > #toc_id > span:focus-visible` rule
+                     (Color.css:2425-2426) can only match a focusable span, and without
+                     tabindex the tabs were not keyboard-reachable at all. aria-current="page"
+                     is likewise part of the theme's contract for the selected tab.
+                     The click handler in footer.php binds to the #toc_id/#trans_id divs, so
+                     clicks on the span still bubble to it unchanged. */ ?>
             <div id="sideBarHeader" role="tablist" aria-label="Sidebar tabs">
-                <div id="toc_id" class="tocclickedclscss" role="tab" aria-selected="true"><span><?php echo $MenuName ?></span></div>
-                <div id="trans_id" role="tab" aria-selected="false"><span><?php echo $TranscriptName ?></span></div>
+                <div id="toc_id" class="tocclickedclscss" role="tab" aria-selected="true" aria-current="page"><span role="button" tabindex="0" aria-label="<?php echo esc($MenuName); ?>"><?php echo $MenuName ?></span></div>
+                <div id="trans_id" role="tab" aria-selected="false"><span role="button" tabindex="0" aria-label="<?php echo esc($TranscriptName); ?>"><?php echo $TranscriptName ?></span></div>
             </div>
             <?php /* Inline style copied verbatim from the theme's own content.html:
                      <div class="tocData" ng-bind-html="sb.sideBarData"
@@ -297,9 +311,24 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                                                 <input type="hidden" name="course_id" value="<?php echo $page['fk_course_id']; ?>" />
                                                 <input type="hidden" name="page_number" value="<?php echo $page['page_number']; ?>" />
                                                 <input type="hidden" name="typeOfLaunch" value="<?php echo $typeOfLaunch ?>" />
-                                                <?php /* gap:6px mirrors .toc-row-item's own gap in Color.css, since the
-                                                         icon and text are flex items of this button. */ ?>
-                                                <button type="submit" style="all:unset; display:flex; align-items:center; gap:6px; width:100%; cursor:pointer; color:inherit; font:inherit;">
+                                                <?php /* display:contents, so the icon and title become DIRECT flex children of
+                                                         span.toc-row-item and the theme's own row rule governs their spacing and
+                                                         alignment verbatim - gap: 12px, align-items: center,
+                                                         padding: 9px 40px 9px 18px, font-size: 14px, font-weight: 600
+                                                         (Color.css:2503-2523). This replaced an inline
+                                                         `display:flex; gap:6px; align-items:center; width:100%`, which put the icon
+                                                         and text one level too deep: the theme's 12px gap then applied between
+                                                         .toc-row-item's single child instead of between the icon and the text, and
+                                                         the hardcoded 6px won regardless because an inline style outranks any
+                                                         stylesheet rule. No spacing value is declared here now.
+                                                         font/color:inherit are kept deliberately: display:contents removes the box
+                                                         but NOT inheritance, so without them the spans would inherit the <button>
+                                                         UA font (~13.3px Arial, weight 400) instead of the row's 14px/600 - and
+                                                         .menu-title's own `font-weight: inherit` (Color.css:2530) would resolve to
+                                                         400. Clicks are handled by the delegated row listener in header.php (the
+                                                         theme sets pointer-events:none inside the row); keyboard is unaffected -
+                                                         a display:contents button is still focusable and submits on Enter/Space. */ ?>
+                                                <button type="submit" style="display:contents; font:inherit; color:inherit;">
                                                     <span class="toc-item-icon" aria-hidden="true"><?php
                                                         $tocIconKey = $resolveTocIcon($page['page_name'], isset($page['type']) ? $page['type'] : 0);
                                                         echo isset($tocIconSvg[$tocIconKey]) ? $tocIconSvg[$tocIconKey] : $tocIconSvg['lesson'];
@@ -343,7 +372,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
         </div>
         <div class="contentArea">
             <div id="clickableDiv" class="headingArea1">
-                <img id="TmenuIcon" src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/footer-menu/Menuopen.svg'); ?>"
+                <img id="TmenuIcon" src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $themePath . '/images/footer-menu/Menuopen.svg'); ?>"
                     alt="<?php echo $Menutitle ?>" role="button" tabindex="0" style="cursor:pointer;" onclick="toggleModernSidebar()">
             </div>
             <?php /* FSize19 is part of the theme's own header markup (content.html:68 -
@@ -364,7 +393,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                          submitPostRequest() opened - no SCORM call is introduced. */ ?>
                 <button id="exitCourseBtn" type="button" onclick="window.close();" aria-label="Exit Course" title="Exit Course">
                     <img id="ImagExitCourse"
-                        src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/footer-menu/' . rawurlencode('Exit button_02.png')); ?>"
+                        src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $themePath . '/images/footer-menu/' . rawurlencode('Exit button_02.png')); ?>"
                         alt="" style="height: 20px; vertical-align: middle;">
                 </button>
             </div>
@@ -404,7 +433,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
             <?php } else {
             } ?>
             <?php if ($coursedetails[0]['theme'] == '3' || $coursedetails[0]['theme'] == '6' || $coursedetails[0]['theme'] == '5') { ?>
-                <img src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/logo.png'); ?>"
+                <img src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $themePath . '/images/logo.png'); ?>"
                     alt="logo" height="120px">
             <?php } ?>
             <!-- Tabs for Menu and Transcript (Horizontal Layout) -->
@@ -610,7 +639,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                                     <td style="<?php echo $isModernThemeQ ? 'display:none;' : 'width: 10%;  vertical-align: top;  height: 70vh;'; ?>">
                                         <div class="question_bg_question">
                                             <img style="width: 80px;"
-                                                src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/Bulb.svg'); ?>">
+                                                src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $themePath . '/images/Bulb.svg'); ?>">
                                         </div>
                                     </td>
                                     <td style="<?php echo $isModernThemeQ ? 'vertical-align: top;' : 'width: 80%; vertical-align: top;  height: 70vh;'; ?>">
@@ -775,7 +804,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                                     <td style="<?php echo $isModernThemeQ ? 'display:none;' : 'width: 10%; vertical-align: top; height: 70vh;'; ?>">
                                         <div class="question_bg_question">
                                             <img style="width: 80px;"
-                                                src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/Bulb.svg'); ?>">
+                                                src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $themePath . '/images/Bulb.svg'); ?>">
                                         </div>
                                     </td>
 
@@ -950,7 +979,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                             method="POST"><?= csrf_field() ?>
                             <button style="all: unset; cursor: pointer;">
                                 <img style="height:20px"
-                                    src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/footer-menu/next.svg'); ?> "
+                                    src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $themePath . '/images/footer-menu/next.svg'); ?> "
                                     title="<?php echo $NextTitle; ?>">
                             </button>
                         </form>
@@ -965,7 +994,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                             method="POST"><?= csrf_field() ?>
                             <button style="all: unset; cursor: pointer;">
                                 <img style="height:20px"
-                                    src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $theme . '/images/footer-menu/previous.svg'); ?>"
+                                    src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $themePath . '/images/footer-menu/previous.svg'); ?>"
                                     title="<?php echo $Prevtitle; ?>">
                             </button>
                         </form>

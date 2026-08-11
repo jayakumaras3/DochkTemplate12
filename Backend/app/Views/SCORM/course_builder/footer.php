@@ -148,9 +148,32 @@ $mtShowResources = $isModernTheme && !empty($getAllFileOwner) && $mtResourceCrea
             transTab.setAttribute('aria-selected', showTranscript ? 'true' : 'false');
             tocTab.classList.toggle('tocclickedclscss', !showTranscript);
             transTab.classList.toggle('tocclickedclscss', showTranscript);
+            /* Keep aria-current on the selected tab, matching the theme's own markup
+               (content.html:8 puts aria-current="page" on the selected tab). */
+            if (showTranscript) {
+                transTab.setAttribute('aria-current', 'page');
+                tocTab.removeAttribute('aria-current');
+            } else {
+                tocTab.setAttribute('aria-current', 'page');
+                transTab.removeAttribute('aria-current');
+            }
         }
         tocTab.addEventListener('click', function () { selectTab(false); });
         transTab.addEventListener('click', function () { selectTab(true); });
+        /* The tab labels are now focusable spans (matching the theme, which wires
+           onkeydown="keyHandler(...)" there). That theme global needs Angular, which Preview
+           never bootstraps, so activate on Enter/Space here instead - same selectTab() the
+           click path already uses, so no behaviour is duplicated. */
+        function tabKeydown(showTranscript) {
+            return function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    selectTab(showTranscript);
+                }
+            };
+        }
+        tocTab.addEventListener('keydown', tabKeydown(false));
+        transTab.addEventListener('keydown', tabKeydown(true));
     });
 </script>
 <?php endif; ?>

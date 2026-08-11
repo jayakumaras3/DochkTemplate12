@@ -24,6 +24,18 @@ if (isset($coursedetails)) {
 } else {
     $theme = 'Default';
 }
+/* ModernTheme has been re-published as a complete exported SCORM package: its assets moved
+   from export_themes/ModernTheme/{css,scripts,lib,images,Json}/ down one level into
+   export_themes/ModernTheme/theme/..., alongside a new index.html + imsmanifest.xml + .xsd
+   schemas at the package root. The old flat paths no longer exist, so every theme URL built
+   below was 404ing until this extra segment was added.
+   Verified before gating: the other 8 folders in export_themes/ still use the old flat
+   layout (css/ and content.html at their root), so the segment MUST be ModernTheme-only --
+   applying it globally would 404 every other theme. Resolved once here rather than inline at
+   each URL, so there is a single place to update if another theme is re-published this way.
+   Everything inside theme/ kept its original names (css/, scripts/, lib/, images/, Json/,
+   and all 14 CSS filenames), so only this prefix changed. */
+$themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
 ?>
 <!DOCTYPE html>
 <html lang="en" data-layout="horizontal" data-topbar-color="light">
@@ -51,50 +63,50 @@ if (isset($coursedetails)) {
                  (that also removes the 404 it was producing)
              Color-FIXED.css is deliberately absent: the export does not load it, Color.css
              is the live override layer and must stay last. */ ?>
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/bootstrap.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/sideBar.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/content.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/footer.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/custom.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/mobile.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/toc.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/Color.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/sideBar.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/content.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/footer.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/custom.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/mobile.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/toc.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/Color.css" rel="stylesheet">
     <?php else: ?>
     <?php /* Every other theme keeps the original order and set, unchanged. */ ?>
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/bootstrap.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/custom.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/Color.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/content.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/footer.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/mobile.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/toc.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/certification.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/custom.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/Color.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/content.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/footer.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/mobile.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/toc.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/certification.css" rel="stylesheet">
     <?php endif; ?>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/angular-1.5.8/angular.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/angular-1.5.8/angular-route.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/angular-1.5.8/angular-sanitize.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/radialIndicator.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/angular.radialIndicator.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/jquery-3.1.1.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/bootstrap.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/preloadjs/assets/src/common/Proxy.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/preloadjs/assets/src/common/Extend.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/preloadjs/assets/src/common/EventDispatcher.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/preloadjs/assets/src/SoundInstance.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/preloadjs/assets/src/Preloadjs.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/preloadjs/assets/src/Soundjs.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/lib/createjs-2015.11.26.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/service/globalSettingService.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/service/globalVariableService.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/controller/sideBarController.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/controller/footerBarController.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/controller/contentController.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/controller/certificateController.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/controller/mainBarController.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/controller/loginController.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/app.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/main.js"></script>
-    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/scripts/jMain.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/angular-1.5.8/angular.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/angular-1.5.8/angular-route.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/angular-1.5.8/angular-sanitize.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/radialIndicator.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/angular.radialIndicator.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/jquery-3.1.1.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/bootstrap.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/preloadjs/assets/src/common/Proxy.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/preloadjs/assets/src/common/Extend.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/preloadjs/assets/src/common/EventDispatcher.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/preloadjs/assets/src/SoundInstance.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/preloadjs/assets/src/Preloadjs.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/preloadjs/assets/src/Soundjs.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/lib/createjs-2015.11.26.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/service/globalSettingService.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/service/globalVariableService.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/controller/sideBarController.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/controller/footerBarController.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/controller/contentController.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/controller/certificateController.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/controller/mainBarController.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/controller/loginController.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/app.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/main.js"></script>
+    <script src="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/scripts/jMain.js"></script>
     <script type='text/javascript' src="<?php echo base_url(); ?>/public/assets/ckeditor/ckeditor.js"></script>
 
     <style>
@@ -919,9 +931,9 @@ if (isset($coursedetails)) {
              SCQ|MCQ_style -> Color -> QuestionOptions. Color.css must follow the question
              stylesheet so .Correct_CR / .Incorrect_CR win over its plain .correct /
              .incorrect, which is what gives the theme's feedback bars their colours. */ ?>
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/<?php echo ($row['type'] == 5) ? 'SCQ_style.css' : 'MCQ_style.css'; ?>" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/Color.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/QuestionOptions.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/<?php echo ($row['type'] == 5) ? 'SCQ_style.css' : 'MCQ_style.css'; ?>" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/Color.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/QuestionOptions.css" rel="stylesheet">
     <style>
         /* Structure only. The inline question markup lives inside the course page's
            .pageContent, so give the theme's question card room and drop the legacy
@@ -998,9 +1010,9 @@ if (isset($coursedetails)) {
              they must also come after this file's legacy inline <style> block above, which styles
              the old .options/.quiz_* classes and would otherwise win on equal specificity.
              Gated on $isQuizPage so quiz rules never bleed into ordinary course pages. */ ?>
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/Quiz_style.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/Color.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $theme ?>/css/QuestionOptions.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/Quiz_style.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/Color.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/<?php echo $themePath ?>/css/QuestionOptions.css" rel="stylesheet">
     <style>
         /* The legacy faded/disabled state was styled as `.submit-quiz-btn.faded`; the
            ModernTheme markup drops that class (it carried the old red background), so
@@ -1046,26 +1058,14 @@ if (isset($coursedetails)) {
         }
     </style>
     <?php endif; ?>
-    <?php if ($theme === 'ModernTheme'): ?>
-    <?php /* MUST be the last stylesheet in <head>. Color.css sizes the sidebar responsively
-             (--player-sidebar-width: 20vw, min 240px / max 380px) and redefines that variable
-             inside several @media blocks, so on a wide window it clamps to 380px while the
-             reference export - viewed in a ~1525px window - renders 305px. Pinned to 305px so
-             Preview matches the export at any window size.
-             Placed here rather than with the other ModernTheme rules because the inline-question
-             and quiz blocks above re-link Color.css; sitting before them, this pin was being
-             reset back to 20vw on SCQ/MCQ and quiz pages, giving those pages a different
-             sidebar width from the normal course pages.
-             Set on :root so Color.css's own .sideBar rule consumes it and every dependent
-             value (tab widths, row widths, active bar, insets) rescales automatically - no
-             individual dimension is hardcoded. Desktop only: below 1025px Color.css switches
-             to its own drawer widths, which are left untouched. Export is unaffected. */ ?>
-    <style>
-        @media (min-width: 1025px) {
-            :root { --player-sidebar-width: 305px; }
-        }
-    </style>
-    <?php endif; ?>
+    <?php /* No --player-sidebar-width override here by design. Preview must be a clone of the
+             theme, so the sidebar is left entirely to the theme's own responsive rule
+             (Color.css: width: var(--player-sidebar-width) = 20vw, min-width 240px,
+             max-width 380px, plus its own per-breakpoint drawer widths below 1025px). An
+             earlier fixed 305px pin lived here; it was removed because a hardcoded width can
+             only ever match the export at one specific window width and diverges at every
+             other, whereas consuming the theme's variable rescales the tabs, rows, active bar
+             and insets exactly as the export does at any size. */ ?>
     <?php if ($theme === 'ModernTheme' && ($isInlineQuestionPage || !empty($isQuizPage))): ?>
     <?php /* Full-row option selection. In the export, the theme's own quiz.js puts an inline
              onclick on the row div itself (`<div class="answer" onclick="selectOption('answerN')">`
@@ -1110,6 +1110,65 @@ if (isset($coursedetails)) {
                 input.checked = !input.checked;
             }
             input.dispatchEvent(new Event('change', { bubbles: true }));
+        }, false);
+    </script>
+    <?php endif; ?>
+    <?php if ($theme === 'ModernTheme'): ?>
+    <?php /* Sidebar menu row clicks. The updated ModernTheme added a "Full-row hit area" rule
+             (Color.css:2564-2570):
+                 #Tmenu.sideBar #tocData > span > li > span.toc-row-item > * { pointer-events: none }
+             In the theme that is safe and deliberate: span.toc-row-item ITSELF carries the
+             controller's inline onclick, and its children really are decorative, so disabling
+             hit-testing on them makes every click resolve to the handler element.
+
+             Preview's row is built the other way round - span.toc-row-item contains a
+             <form> whose <button type="submit"> is the actual handler. pointer-events is an
+             INHERITED property, so `none` on that form propagates to the button and to
+             everything inside it (display:contents on the form does not change inheritance).
+             The whole row interior therefore stopped being hittable, and the click resolved to
+             span.toc-row-item, which in Preview has no handler at all - the reported
+             "menu items do not respond".
+
+             Fixed the same way the theme solves it for its own rows (theme/scripts/
+             menuRowClick.js: delegate from document, then re-invoke the row's EXISTING
+             handler) rather than by fighting the theme's CSS with a higher-specificity
+             pointer-events override. Here that means submitting the row's own untouched form:
+             same action URL, same hidden inputs, same CSRF token, so navigation is identical
+             to a direct button press and no navigation logic is duplicated.
+
+             Keyboard was never affected and is left alone: pointer-events does not block
+             focus, so the real submit button is still reachable by Tab and activates on
+             Enter/Space natively. The button/anchor guard below means that if the theme's CSS
+             ever stops disabling hit-testing, the native submit takes over and this never
+             double-fires. */ ?>
+    <script>
+        document.addEventListener('click', function (event) {
+            if (!event.target || !event.target.closest) { return; }
+
+            /* If the click reached a real control, let it handle itself. */
+            if (event.target.closest('button, a, input, select, textarea')) { return; }
+
+            /* Resolve to the ROW WRAPPER (#tocData > span), not just .toc-row-item, which is
+               what menuRowClick.js's own rowWrapperFrom() does. The completion tick is a
+               sibling grid cell outside .toc-row-item and is itself pointer-events:none
+               (Color.css:2699), so a click on the tick - or on the wrapper's own padding -
+               resolves to the wrapper. Matching there makes the whole row live, exactly as
+               the theme intends. */
+            var wrapper = event.target.closest('#tocData > span');
+            if (!wrapper) { return; }
+
+            /* Locked rows: mirror the theme, which leaves .disabledClass rows inert. */
+            var listItem = wrapper.querySelector('li');
+            if (listItem && listItem.classList.contains('disabledClass')) { return; }
+
+            var form = wrapper.querySelector('form');
+            if (!form) { return; }
+
+            if (typeof form.requestSubmit === 'function') {
+                form.requestSubmit();
+            } else {
+                form.submit();
+            }
         }, false);
     </script>
     <?php endif; ?>
