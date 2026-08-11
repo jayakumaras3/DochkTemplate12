@@ -1034,22 +1034,28 @@ class Trainings extends BaseController
         $getQuestiondatax = $this->assessment_training_model->getQuestionDetails_byQID($data['pagerow']['page_id'], $data['scourse_id']);
         // print_r($getQuestiondatax);
         // exit();
-        if (!empty($getQuestiondatax)) {
-            $data['question_id'] = $getQuestiondatax[0]['q_id'];
-
-            $getQuestiondata = $this->assessment_training_model->geteditquestiondetails($data['question_id']);
-            $data['row'] = $getQuestiondata[0];
-            $data['question_attachment_image'] = $this->assessment_training_model->check_image_file_exists($data['question_id'], 1);
-            $data['question_attachment_video'] = $this->assessment_training_model->check_image_file_exists($data['question_id'], 3);
-            $data['AssessmentQuestionType'] = $this->dropdown_model->getCountrylist(21);
-            $data['allcategories'] = $this->scorm_course_model->getAllMetadata(12);
-            $data['getoptiondata'] = $this->assessment_training_model->getoptiondaata($data['question_id']);
-            $data['CategoryData'] = $this->dropdown_model->getCountrylist(20);
-
-            $data['page_content'] = $this->scorm_page_model->getpagecontent($data['page_number'], $data['scourse_id']);
-
-            $data['page_id'] = $getQuestiondata[0]['page_id'];
+        if (empty($getQuestiondatax)) {
+            // This view assumes a question already exists for the page (it fills $data['row']
+            // from one, unguarded, throughout question_edit_view.php) - a page that was only
+            // just retyped to SCQ/MCQ (rather than created as one) has no question row yet, so
+            // send the user to the course builder instead, which renders this same page safely
+            // via cyu.php's blank "add your first question" form.
+            return redirect()->to(base_url('SCORM/course_builder/Editor'));
         }
+        $data['question_id'] = $getQuestiondatax[0]['q_id'];
+
+        $getQuestiondata = $this->assessment_training_model->geteditquestiondetails($data['question_id']);
+        $data['row'] = $getQuestiondata[0];
+        $data['question_attachment_image'] = $this->assessment_training_model->check_image_file_exists($data['question_id'], 1);
+        $data['question_attachment_video'] = $this->assessment_training_model->check_image_file_exists($data['question_id'], 3);
+        $data['AssessmentQuestionType'] = $this->dropdown_model->getCountrylist(21);
+        $data['allcategories'] = $this->scorm_course_model->getAllMetadata(12);
+        $data['getoptiondata'] = $this->assessment_training_model->getoptiondaata($data['question_id']);
+        $data['CategoryData'] = $this->dropdown_model->getCountrylist(20);
+
+        $data['page_content'] = $this->scorm_page_model->getpagecontent($data['page_number'], $data['scourse_id']);
+
+        $data['page_id'] = $getQuestiondata[0]['page_id'];
         $currentpagenum = $data['pagerow']['page_number'];
         $fk_course_id = $data['pagerow']['fk_course_id'];
         $data['scourse_id'] = $fk_course_id;

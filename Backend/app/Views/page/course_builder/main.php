@@ -110,18 +110,38 @@ $userlevel = session('userlevel');
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold"><?php echo lang('UI_Text.CB_Page_Type'); ?></label>
+                                <?php
+                                // Only offer swapping within a type's own "family" - types outside it don't
+                                // share the underlying data (e.g. an Articulate page has no assessment_questions
+                                // row), so switching to one leaves the page unable to render. Types with no
+                                // listed family (Video, Video Sub Page, Audio Version, Quiz) aren't known to be
+                                // safely interchangeable with anything, so they're locked to themselves.
+                                $typeLabels = [
+                                    1 => 'UI_Text.CB_Type_Articulate',
+                                    9 => 'UI_Text.CB_Type_Audio_Version',
+                                    2 => 'UI_Text.CB_Type_Video',
+                                    8 => 'UI_Text.CB_Type_Video_Sub_Page',
+                                    5 => 'UI_Text.CB_Type_SCQ_Full',
+                                    6 => 'UI_Text.CB_Type_MCQ_Full',
+                                    4 => 'UI_Text.CB_Type_Quiz',
+                                    3 => 'UI_Text.CB_Type_Html',
+                                    10 => 'UI_Text.CB_Type_Text_Only',
+                                    11 => 'UI_Text.CB_Type_Image_Text',
+                                    12 => 'UI_Text.CB_Type_Text_Image',
+                                ];
+                                $typeSwapFamilies = [
+                                    1 => [1, 3], 3 => [1, 3],
+                                    5 => [5, 6], 6 => [5, 6],
+                                    10 => [10, 11, 12], 11 => [10, 11, 12], 12 => [10, 11, 12],
+                                ];
+                                $allowedPageTypes = $typeSwapFamilies[$row['type']] ?? [(int) $row['type']];
+                                ?>
                                 <select name="type" class="form-control">
-                                    <option value="1" <?php echo ($row['type'] == 1) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_Articulate'); ?></option>
-                                    <option value="9" <?php echo ($row['type'] == 9) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_Audio_Version'); ?></option>
-                                    <option value="2" <?php echo ($row['type'] == 2) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_Video'); ?></option>
-                                    <option value="8" <?php echo ($row['type'] == 8) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_Video_Sub_Page'); ?></option>
-                                    <option value="5" <?php echo ($row['type'] == 5) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_SCQ_Full'); ?></option>
-                                    <option value="6" <?php echo ($row['type'] == 6) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_MCQ_Full'); ?></option>
-                                    <option value="4" <?php echo ($row['type'] == 4) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_Quiz'); ?></option>
-                                    <option value="3" <?php echo ($row['type'] == 3) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_Html'); ?></option>
-                                    <option value="10" <?php echo ($row['type'] == 10) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_Text_Only'); ?></option>
-                                    <option value="11" <?php echo ($row['type'] == 11) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_Image_Text'); ?></option>
-                                    <option value="12" <?php echo ($row['type'] == 12) ? 'selected' : ''; ?>><?php echo lang('UI_Text.CB_Type_Text_Image'); ?></option>
+                                    <?php foreach ($typeLabels as $typeValue => $typeLangKey): ?>
+                                        <?php if (in_array($typeValue, $allowedPageTypes, true)): ?>
+                                            <option value="<?php echo $typeValue; ?>" <?php echo ($row['type'] == $typeValue) ? 'selected' : ''; ?>><?php echo lang($typeLangKey); ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="mb-1">

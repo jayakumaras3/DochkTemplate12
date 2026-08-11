@@ -303,11 +303,15 @@ class Scorm_course_pages extends BaseController
                 $page_number = $this->request->getVar('page_number');
                 $page_name = $this->request->getVar('page_name');
 
-                // Make room for the new page: any existing page (and its own sub-pages) at or
-                // past this slot shifts up by one, so inserting "in between" existing pages -
-                // or reusing a number that's already taken - can't leave two pages sharing a
-                // page_number (which otherwise made left-menu navigation land on the wrong one).
-                $this->scorm_page_model->shiftPageNumbersFrom($data['scourse_id'], $page_number, 1);
+                // Make room for the new page only if its number is actually taken: any existing
+                // page (and its own sub-pages) at or past this slot shifts up by one, so
+                // inserting "in between" existing pages - or reusing a number that's already
+                // taken - can't leave two pages sharing a page_number (which otherwise made
+                // left-menu navigation land on the wrong one). If the slot is free (e.g. pages
+                // were created out of order, leaving a gap), nothing needs to move.
+                if (!empty($this->scorm_page_model->getpagedata_number($page_number, $data['scourse_id']))) {
+                    $this->scorm_page_model->shiftPageNumbersFrom($data['scourse_id'], $page_number, 1);
+                }
 
                 $newdata = [
                     'fk_course_id' => $data['scourse_id'],
@@ -572,7 +576,22 @@ class Scorm_course_pages extends BaseController
                 $newStatus = $this->request->getVar('status');
 
                 $existingPage = $this->scorm_page_model->getpagedata($data['page_id']);
+                // Mirrors the type dropdown's own filtering (main.php's editPageModal) - only
+                // types that share the same underlying data are offered there, but this is the
+                // authoritative check in case that gets bypassed (e.g. a direct POST).
+                $typeSwapFamilies = [
+                    1 => [1, 3], 3 => [1, 3],
+                    5 => [5, 6], 6 => [5, 6],
+                    10 => [10, 11, 12], 11 => [10, 11, 12], 12 => [10, 11, 12],
+                ];
+                $requestedType = $this->request->getVar('type');
                 if (!empty($existingPage)) {
+                    $oldType = (int) $existingPage[0]['type'];
+                    $allowedPageTypes = $typeSwapFamilies[$oldType] ?? [$oldType];
+                    if (!in_array((int) $requestedType, $allowedPageTypes, true)) {
+                        $requestedType = $oldType;
+                    }
+
                     $courseId = $existingPage[0]['fk_course_id'];
                     $oldPageNumber = $existingPage[0]['page_number'];
                     $oldStatus = $existingPage[0]['status'];
@@ -602,7 +621,7 @@ class Scorm_course_pages extends BaseController
                 $newdata = [
                     'page_name' => $this->request->getVar('page_name'),
                     'sub_page_main' => $this->request->getVar('sub_page_main'),
-                    'type' => $this->request->getVar('type'),
+                    'type' => $requestedType,
                     'status' => $this->request->getVar('status'),
                     'page_number' => $newPageNumber,
                     'last_update_by' => session()->get('id_user'),
@@ -1360,13 +1379,9 @@ class Scorm_course_pages extends BaseController
         }
 
         $imageTag = '';
-        if (!empty($eachpage['page_image'])) {
-            $sourceImage = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $scourse_id . '/' . $timestamp . '/assets/page_images/' . $eachpage['page_image'];
-            if (file_exists($sourceImage)) {
-                copy($sourceImage, $htmlFolder . '/' . $eachpage['page_image']);
-                $alt = htmlspecialchars($eachpage['image_alt'] ?? '', ENT_QUOTES);
-                $imageTag = '<img src="' . $eachpage['page_image'] . '" alt="' . $alt . '" style="max-width:100%;height:auto;">';
-            }
+        if (!empty($eachpage['page_image']) && file_exists($htmlFolder . '/' . $eachpage['page_image'])) {
+            $alt = htmlspecialchars($eachpage['image_alt'] ?? '', ENT_QUOTES);
+            $imageTag = '<img src="' . $eachpage['page_image'] . '" alt="' . $alt . '" style="max-width:100%;height:auto;">';
         }
 
         $content = $eachpage['content'] ?? '';
@@ -1403,7 +1418,7 @@ class Scorm_course_pages extends BaseController
             $layoutType = 'text-only';
         }
 
-        $hasImage = !empty($eachpage['page_image']);
+        $hasImage = !empty($eachpage['page_image']) && file_exists($htmlFolder . '/' . $eachpage['page_image']);
 
         $pagejson = [
             "meta" => [
@@ -2204,7 +2219,7 @@ class Scorm_course_pages extends BaseController
                 $extension = $file->getExtension();
                 // Unique per upload (not just per page) so replacing an image never collides with a cached copy of the old one.
                 $filename = 'page_' . $data['page_id'] . '_' . time() . '.' . $extension;
-                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/page_images/';
+                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['course_id'] . '/' . $timestamp . '/assets/html/' . $data['page_id'] . '/';
 
                 if (!is_dir($imageFolderPath)) {
                     mkdir($imageFolderPath, 0777, true);
@@ -2242,7 +2257,7 @@ class Scorm_course_pages extends BaseController
         if ($page_id) {
             $pagejsonfile = $this->scorm_page_model->getpagedata($page_id);
             if (!empty($pagejsonfile) && !empty($pagejsonfile[0]['page_image'])) {
-                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $pagejsonfile[0]['fk_course_id'] . '/' . $pagejsonfile[0]['createdon'] . '/assets/page_images/';
+                $imageFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $pagejsonfile[0]['fk_course_id'] . '/' . $pagejsonfile[0]['createdon'] . '/assets/html/' . $page_id . '/';
                 $filePath = $imageFolderPath . $pagejsonfile[0]['page_image'];
                 if (file_exists($filePath)) {
                     unlink($filePath);
