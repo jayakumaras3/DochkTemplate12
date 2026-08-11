@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name='viewport' content='width=device-width, initial-scale=1, viewport-fit=cover'/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script>
+    /* iPad Safari can report pointer:fine / hover:hover (e.g. with a
+       trackpad/Magic Keyboard attached, or in its default "desktop site"
+       mode), so CSS alone can't reliably tell an iPad from a laptop with
+       a mouse - and several iPad landscape widths (1024-1366px CSS
+       points) overlap common laptop resolutions, so width/orientation
+       media queries alone can't either. navigator.maxTouchPoints is the
+       standard capability check (unaffected by input peripherals or UA
+       spoofing) used to flag real touch hardware; the width check keeps
+       large touch-screen desktops out. One-time class toggle, no
+       listeners, no polling - Color.css does the responsive work from
+       here via plain CSS media queries scoped to html.is-touch-device.
+       Same pattern already used in MCQ.html / SCQ.html / Quiz.html. */
+    (function () {
+        var isTouch = (navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+        if (isTouch && window.innerWidth <= 1366) {
+            document.documentElement.classList.add('is-touch-device');
+        }
+    })();
+    </script>
+    <link href="theme/css/bootstrap.css" rel="stylesheet">
+    <link href="theme/css/sideBar.css" rel="stylesheet">
+    <link href="theme/css/content.css" rel="stylesheet">
+    <link href="theme/css/footer.css" rel="stylesheet">
+    <link href="theme/css/custom.css" rel="stylesheet">
+	 <link href="theme/css/mobile.css" rel="stylesheet">
+	 <link href="theme/css/toc.css" rel="stylesheet">
+	 <link href="theme/css/Color.css" rel="stylesheet">
+    <script src="theme/lib/angular-1.5.8/angular.min.js"></script>
+    <script src="theme/lib/angular-1.5.8/angular-route.min.js"></script>
+    <script src="theme/lib/angular-1.5.8/angular-sanitize.min.js"></script>
+    <script src="theme/lib/radialIndicator.min.js"></script>
+    <script src="theme/lib/angular.radialIndicator.js"></script>
+    <script src="theme/lib/jquery-3.1.1.min.js"></script>
+    <script src="theme/lib/bootstrap.min.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/common/Proxy.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/common/Extend.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/common/EventDispatcher.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/SoundInstance.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/Preloadjs.js"></script>
+    <script src="theme/lib/preloadjs/assets/src/Soundjs.js"></script>
+    <script src="theme/lib/createjs-2015.11.26.min.js"></script>
+    <script type="text/javascript" src="theme/scripts/loader.js"></script>
+    <script src="theme/scripts/service/globalSettingService.js"></script>
+    <script src="theme/scripts/service/globalVariableService.js"></script>
+    <script src="theme/scripts/controller/sideBarController.js"></script>
+    <script src="theme/scripts/controller/footerBarController.js"></script>
+    <script src="theme/scripts/controller/contentController.js"></script>
+    <script src="theme/scripts/controller/certificateController.js"></script>
+    <script src="theme/scripts/controller/mainBarController.js"></script>
+    <script src="theme/scripts/controller/loginController.js"></script>
+    <script src="theme/scripts/app.js"></script>
+    <script src="theme/scripts/main.js"></script>
+	<script src="theme/scripts/jMain.js"></script>
+	<!-- Full-row menu hit area (routes to the existing tocDataClick handler) -->
+	<script src="theme/scripts/menuRowClick.js"></script>
+	<!-- VIDEO CAPTION INITIALIZATION - Handles caption loading on first page load -->
+	<script src="theme/scripts/videoTrackInitializer.js"></script>
+	<!-- VIDEO CAPTION DEBUGGER - Optional: Comment out in production -->
+	<script type="text/javascript" src="theme/scripts/SCORM_API_wrapper.js"></script>
+   <script type="text/javascript" src="theme/scripts/scormtrack.js"></script>
+   <script type="text/javascript" src="theme/scripts/scormFunctions.js"></script>
+  
+</head>
+ <style>
+        /* ── Overlay ── */
+        #courseLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+        }
+        /* ── Fade-out ── */
+        .loader-hide {
+            opacity: 0;
+            transition: opacity .5s ease;
+            pointer-events: none;
+        }
+        /* ── Vertical stack: logo + card ── */
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /* ── Logo ── */
+        .loader-logo {
+            width: 300px;
+            height: auto;
+            margin-bottom: 0;
+        }
+        /* ── Card ── */
+        .loader-card {
+            width: 380px;
+            min-height: 300px;
+            border: 4px solid #ACD2DF;
+            border-radius: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            background: #ffffff;
+        }
+        /* ── SVG Spinner ── */
+        .touchstone-spinner {
+            width: 65px;
+            height: 72px;
+            animation: touchstoneSpin 1.2s linear infinite;
+            flex-shrink: 0;
+        }
+        .touchstone-spinner .track { stroke: #83B4C5; }
+        .touchstone-spinner .arc   {
+            stroke: #0088BB;
+            stroke-dasharray: 94 32;
+            stroke-linecap: round;
+        }
+        @keyframes touchstoneSpin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        /* ── Loading text ── */
+        .loader-text {
+            font-size: 17px;
+            color: #0088BB;
+            font-weight: 400;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        /* ── Tablet ── */
+        @media (max-width: 900px) {
+            .loader-logo  { width: 240px; }
+            .loader-card  { width: 320px; min-height: 240px; gap: 22px; }
+            .touchstone-spinner { width: 58px; height: 58px; }
+            .loader-text  { font-size: 15px; }
+        }
+        /* ── Mobile ── */
+        @media (max-width: 520px) {
+            .loader-logo  { width: 180px; }
+            .loader-card  { width: 82vw; min-height: 200px; border-radius: 18px; gap: 18px; }
+            .touchstone-spinner { width: 48px; height: 48px; }
+            .loader-text  { font-size: 14px; }
+        }
+    </style>
+<script>
+
+</script>
+<body ng-app="aristoFramework">
+<div id="courseLoader">
+    <div class="loader-container">
+        <svg class="touchstone-spinner" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+            <circle class="track" cx="25" cy="25" r="20" fill="none" stroke-width="5"/>
+            <circle class="arc"   cx="25" cy="25" r="20" fill="none" stroke-width="5"
+                    transform="rotate(-90 25 25)"/>
+        </svg>
+    </div>
+</div>
+<div id="mainPage" ng-view="">
+
+</div>
+<script src="theme/scripts/resize.js"></script>
+	<div id="resumemainContainer" class="resume_container" role="dialog" aria-modal="true" aria-labelledby="Resumeheading" aria-describedby="resume_id" tabindex="0">
+  <div class="preloaderDisplayresume" aria-hidden="true"></div>
+
+  <div id="resumeArea" class="resume_content_container">
+    <div  tabindex="0" id="Resumeheading" class="resume_content_header ColorSet_CR FSize18">
+      Resume
+    </div>
+
+    <div  tabindex="0" id="resume_id" class="resume_content_text FSize17">
+      Are you sure you want to continue where you left?
+    </div>
+
+    <div class="row h-100" role="group" aria-label="Resume confirmation buttons">
+      <div class="col-xs-6 text-center">
+        <button  tabindex="0"
+          id="resumeyes"
+          onclick="yesBtnClick()"
+          class="btn btn-large btn-default text-center yes-btn ColorSet_CR"
+          aria-label="Yes"
+        >
+          Yes
+        </button>
+      </div>
+      <div class="col-xs-6 text-center">
+        <button  tabindex="0"
+          id="resumeno"
+          onclick="noBtnClick()"
+          class="btn btn-large btn-default text-center no-btn ColorSet_CR"
+          aria-label="No"
+        >
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>

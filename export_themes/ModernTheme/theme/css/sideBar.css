@@ -1,0 +1,272 @@
+/* @font-face {
+    font-family: '';
+    src: url('../fonts/MYRIADPRO-REGULAR.OTF') format('truetype');
+}*/
+@font-face {
+    font-family: 'tahoma';
+    src: url('../fonts/MYRIADPRO-REGULAR.OTF') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*25-04-2022
+*/
+#toc_id
+{
+	width: 49%;
+	padding-left: 0 !important;
+}
+#trans_id
+{
+	/*display:none;*/
+	padding-left: 0 !important;
+	width: 50%;
+}
+
+.transcriptDownL {
+	display:none;
+  padding-left: 18%;
+  margin-top: 10px;
+}
+
+
+/*endEnd*/
+.sideBar > .tocData {
+    position: relative;
+    float: none;
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    background-color: white;
+    font-size: inherit;
+    padding-right: 0;
+}
+
+.sideBar #sideBarHeader {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.line {
+	height: 1px;
+    position: relative;
+    background-color: #dedede;
+    /* top: 572px; */
+    top: 561px;
+    width: 85%;
+    left: 15px;
+	display:none;
+}
+
+.copyright {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 7px 14px;
+    font-size: 10px;
+    color: #9CA3AF;
+    text-align: center;
+    background: #ffffff;
+    border-top: 1px solid #E5E7EB;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 10;
+}
+
+#sideBarHeader div {
+    position: relative;
+    float: none;
+    padding-left: 0;
+    text-align: center;
+    font-size: inherit;
+    height: auto;
+    border-bottom-color: transparent;
+}
+.tocclickedclscss
+{
+    background-color: inherit;
+    border: inherit;
+    border-bottom-color: inherit;
+    font-weight: bold;
+}
+
+.transcriptClass {
+    padding: 5% 5% 60px 5%;
+}
+ .sideBarHeader1 {
+  /*  padding: 8px;*/
+    font-size: 20px;
+    font-weight: bold;
+}
+.sideBarHeader {
+    padding: 8px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.sideBartopicHeader {
+    padding: 4px;
+    font-size: 16px;
+    font-weight: bold;
+}
+#tocData li
+{
+    list-style: none;
+    right: auto;
+    align-content: center;
+    width: 100%;
+    font-weight: 600;
+    position: relative;
+    font-size: 11px;
+    padding-left: 0;
+    margin-bottom: 2px;
+}
+.sideBar li span {
+    max-width: none;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+.sideBar li span:hover {
+    color: #5097ab;
+}
+
+.sideBar {
+	top: 1px;
+	left: 2px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+    position: absolute;
+    width: 266px;
+    height: 763px;
+    background-color: white;
+    float: left;
+    border-radius: 5px;
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+	z-index: 1002;
+}
+
+/*
+.logo {
+	position: relative;
+    width: 83%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    margin-left: 17%;
+}*/
+.logo {
+    position: relative;
+    width: auto;
+    border-radius: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+}
+
+
+
+
+body {
+    position: relative;
+    left: auto;
+    font-family: 'tahoma';
+    top: auto;
+    width: 100%;
+    height: 100%;
+    background-color: #e6e6e6;
+    display: none;
+    overflow: hidden;
+    -ms-overflow-style: none;
+}
+
+.wholeContainer {
+    display:none;
+    position: relative;
+    background-color: #dedede;
+    width: 100%;
+    height: 100%;
+
+}
+.visitedTOC
+{
+    color:#707070;
+}
+.tickSymbol::before{
+	
+    content: '\2713'; /* Unicode for the tick symbol */
+     /*margin-left: 10px; Optional: add some spacing between the tick and existing content */
+}
+
+.tickSymbol1::before{
+	visibility :visible;
+    content: '\2713'; /* Unicode for the tick symbol */
+     /*margin-left: 10px; Optional: add some spacing between the tick and existing content */
+}
+.toggle-box {
+    display: none;
+}
+
+.toggle-box + label {
+    cursor: pointer;
+    display: block;
+    width:100% !important;
+    font-weight: bold;
+    line-height: 21px;
+    margin-top: 0px;    
+    margin-left:0px;
+}
+
+.toggle-box + label + ul {
+    display: none;
+    margin-bottom: 10px;
+    margin-left:0px;
+}
+
+.toggle-box:checked + label + ul {
+    display: block;
+}
+
+.toggle-box + label:before {
+    background-color: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #333;
+    content: "+";
+    display: block;
+    float: left;
+    font-weight: bold;
+    height: 20px;
+    line-height: 20px;
+    margin-right: 5px;
+    text-align: center;
+    width: 20px;    font-size: 12px;
+}
+
+.toggle-box:checked + label:before {
+    content: "\2212";
+}
+
+.glossary_Index
+{ 
+	float:left;
+	width:20px;
+	height:20px;
+	margin-left:2px;
+	line-height:20px;
+	text-align:center;
+	border-radius:4px;
+}
+
+#indexlist a.link.active { font-weight:bold;text-decoration:none; }
+#glossaryindex .glossary_Index a.active { font-weight:bold}
+
+#glossary td
+{
+	    padding: 7px;
+}

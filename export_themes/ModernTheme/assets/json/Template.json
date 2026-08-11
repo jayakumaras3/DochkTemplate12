@@ -1,0 +1,35 @@
+{
+  "master": true,
+  "lmsStatus": "Passed/Failed",
+  "QuizAttempt": "2",
+  "AudioVersionEnable": true,
+  "CertificateEnabled": false,
+  "PageLevelCourseComplete": false,
+  "LearningAidsTitle": "LearningAids",
+  "Menutitle": "Menu",
+  "ExitCourseTitle": "Exit Course",
+  "NextTitle": " Next",
+  "Prevtitle": "Prev",
+  "MenuName": "Menu",
+  "TranscriptName": "Transcript",
+  "ResumeTitle": "Resume",
+  "ResumeHeader": "Are you sure you want to continue where you left?",
+  "ResumeYES": "Yes",
+  "ResumeNO": "No",
+  "VttLanguage": "en",
+  "CourseName": "Neurodiversity",
+  "VttLabel": "English",
+  "spanCliContinue": "Select <b>Next</b> to continue.",
+  "Resource": true,
+  "ResourceArea": {
+    "LearningAids": {
+      "Title": "Troubleshooting",
+      "Resources": [
+        {
+          "Title": "Click to view transcript",
+          "URL": "assets/PDF/Neurodiversity_Transcript.pdf"
+        }
+      ]
+    }
+  }
+}
