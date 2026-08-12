@@ -1,4 +1,4 @@
-<?php $isModernTheme = isset($coursedetails) && isset($coursedetails[0]['theme']) && $coursedetails[0]['theme'] == '8'; ?>
+<?php $isModernTheme = isset($coursedetails) && isset($coursedetails[0]['theme']) && in_array((string) $coursedetails[0]['theme'], ['8', '9'], true); ?>
 </div>
 </div>
 <?php

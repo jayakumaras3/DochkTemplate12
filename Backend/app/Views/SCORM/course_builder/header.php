@@ -18,6 +18,8 @@ if (isset($coursedetails)) {
         $theme = 'Vertical_ContentforU';
     } elseif ($coursedetails[0]['theme'] == '8') {
         $theme = 'ModernTheme';
+    } elseif ($coursedetails[0]['theme'] == '9') {
+        $theme = 'ZydusTheme';
     } else {
         $theme = 'Default';
     }
@@ -36,6 +38,23 @@ if (isset($coursedetails)) {
    Everything inside theme/ kept its original names (css/, scripts/, lib/, images/, Json/,
    and all 14 CSS filenames), so only this prefix changed. */
 $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
+/* ZydusTheme is a colour-fork of the updated ModernTheme, not a separate design system.
+   Verified by hashing every file in both packages: of ZydusTheme's 136 files only 16 differ
+   from their ModernTheme counterpart, and every one of those differs solely in brand colour
+   (content.html, main.js, footerBarController.js, 8 stylesheets, 3 SVGs) or line endings
+   (menuRowClick.js, CRLF vs LF, byte-identical otherwise). The DOM contract Preview targets
+   is present in ZydusTheme/css/Color.css at identical occurrence counts: #Tmenu.sideBar 102,
+   .toc-row-item 38, #sideBarHeader 44, .headingArea 31, .pageHeaderText 8, tickSymbol 20,
+   aria-selected 15. The two selector sets are identical apart from Zydus adding :root/a/a:focus.
+   So the whole Preview integration below is theme-family behaviour, not ModernTheme branding,
+   and gating it on ModernTheme alone left ZydusTheme rendering the legacy Preview UI.
+   Colour still comes from the theme's own stylesheets - every override below either reuses a
+   theme token (var(--menu-brand), which Zydus defines as var(--zydus-primary)) or sets a
+   non-colour property, so widening this gate carries no ModernTheme colour into Zydus.
+   $themePath deliberately stays ModernTheme-only: ModernTheme is the one folder re-published
+   with a nested theme/ directory; ZydusTheme still uses the flat layout Export's copyFolder()
+   expects. */
+$isModernFamily = ($theme === 'ModernTheme' || $theme === 'ZydusTheme');
 ?>
 <!DOCTYPE html>
 <html lang="en" data-layout="horizontal" data-topbar-color="light">
@@ -52,7 +71,7 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
 
-    <?php if ($theme === 'ModernTheme'): ?>
+    <?php if ($isModernFamily): ?>
     <?php /* Exact stylesheet set and order of the exported ModernTheme player, taken from a
              real exported package's entry point (course-packages/DocheckPre/index.html):
                  bootstrap -> sideBar -> content -> footer -> custom -> mobile -> toc -> Color
@@ -857,7 +876,7 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
             }
         }
     </script>
-    <?php if ($theme === 'ModernTheme'): ?>
+    <?php if ($isModernFamily): ?>
     <style>
         /* Footer Prev/Next/Learning-Aids keyboard focus. The controls were already
            Tab-reachable and Enter/Space-activatable (they are real <button type="submit">
@@ -868,15 +887,29 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
            restored from CSS without !important; the inline declaration was therefore
            narrowed (in page_video_view.php) to only the resets actually needed
            (background/border/padding/margin), leaving `outline` alone. No !important needed.
-           Values below are the theme's own focus treatment, copied from its #TmenuIcon rule
-           (Color.css:136-140) so the footer matches the header's existing convention rather
-           than introducing a new one. Note .footer > div applies
+           Values below are the theme's own focus treatment, taken from its #TmenuIcon rule so
+           the footer matches the header's existing convention rather than introducing a new
+           one. The colour is a theme token rather than a literal: that #TmenuIcon rule is
+           per-theme (ModernTheme Color.css:136-140 declares #2456d6, ZydusTheme Color.css:
+           173-177 declares #00A0A5), so the copied literal that used to sit here would have
+           painted ModernTheme's blue ring onto the teal Zydus player.
+           --brand, NOT --menu-brand: both themes define --menu-brand inside the
+           `#Tmenu.sideBar { ... }` rule (ModernTheme Color.css:2241, ZydusTheme :2278), so it
+           only inherits to sidebar descendants. .footer and #resource1 sit outside #Tmenu, so
+           var(--menu-brand) there would be invalid at computed-value time and `outline` would
+           fall back to its unset value - i.e. NO ring at all, a worse WCAG 2.4.7 failure than
+           a wrong colour. --brand is declared at :root by both (ModernTheme Color.css:10
+           #005E80, ZydusTheme :31 var(--zydus-primary) #006366) so it resolves document-wide.
+           The literal fallback keeps a ring visible if a future theme drops the token.
+           Known deliberate delta: ModernTheme's ring goes #2456d6 -> #005E80, which is that
+           theme's own --brand/--menu-brand value, so it is more on-brand, not less.
+           Note .footer > div applies
            filter: contrast(1.15) brightness(0.62), which darkens the ring slightly - it is
            inherited by descendants and cannot be escaped without moving the indicator off
            the control, so it is accepted rather than fought. */
         .footer > div > form > button:focus-visible,
         #resource1:focus-visible {
-            outline: 2px solid #2456d6;
+            outline: 2px solid var(--brand, #2456d6);
             outline-offset: 3px;
             border-radius: 4px;
         }
@@ -947,7 +980,7 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
        stylesheets. Gated on the page type so these rules never touch other page types. */
     $isInlineQuestionPage = isset($row['type']) && ($row['type'] == 5 || $row['type'] == 6);
     ?>
-    <?php if ($theme === 'ModernTheme' && $isInlineQuestionPage): ?>
+    <?php if ($isModernFamily && $isInlineQuestionPage): ?>
     <?php /* Exactly the order the theme's own SCQ.html / MCQ.html use:
              SCQ|MCQ_style -> Color -> QuestionOptions. Color.css must follow the question
              stylesheet so .Correct_CR / .Incorrect_CR win over its plain .correct /
@@ -966,12 +999,18 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
         .pageContent .question_bg > table > tbody,
         .pageContent .question_bg > table > tbody > tr,
         .pageContent .question_bg > table > tbody > tr > td { display: block; width: auto; height: auto; }
-        /* QuestionOptions.css marks the selected option via [aria-checked], which only the
-           theme's JS sets; map it onto the native :checked state (no JS change). */
-        .pageContent .answer:has(input:checked) {
-            background: #EAF4FF;
-            box-shadow: inset 0 0 0 1px #2A78C8;
-        }
+        /* Selected-option appearance is NOT declared here on purpose. QuestionOptions.css
+           marks it via [aria-checked="true"], which only the theme's own JS sets, and this
+           block used to substitute a hardcoded `background:#EAF4FF; box-shadow:...#2A78C8`.
+           Those are ModernTheme's blue accents, so once ZydusTheme (a colour-fork whose own
+           accent is teal #00A0A5 / rgba(0,160,165,.06)) started using this block it would
+           have been painted with the wrong brand. The colour now comes from the theme's own
+           stylesheet instead: QuestionOptions.css:91-97 lists `.highlight` in the very same
+           rule as `.answer[aria-checked="true"]`, with identical declarations, and that class
+           is dormant - it appears in exactly one CSS rule and is set by no theme script
+           (nextClassHighlight / navCircleHighlight / exitHighlight are unrelated names). So
+           the delegated script below toggles `.highlight` on the row and each theme supplies
+           its own selected colour with zero duplication here. */
         /* The theme's own SCQ.html / MCQ.html never load Bootstrap, so its
            `label { font-weight: bold }` reset does not exist there. Preview does load
            Bootstrap, which was overriding QuestionOptions.css's option text. */
@@ -1026,7 +1065,7 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
         .pageContent .option_container > .feedback { margin-left: 0; padding-left: 16px; }
     </style>
     <?php endif; ?>
-    <?php if ($theme === 'ModernTheme' && !empty($isQuizPage)): ?>
+    <?php if ($isModernFamily && !empty($isQuizPage)): ?>
     <?php /* The theme's own Quiz.html loads these two last (Quiz_style -> Color -> QuestionOptions);
              they must also come after this file's legacy inline <style> block above, which styles
              the old .options/.quiz_* classes and would otherwise win on equal specificity.
@@ -1070,13 +1109,11 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
         /* The theme's Quiz question layout has no bulb icon (see quiz.js). */
         .mtQuizArea .Quiz_question_img { display: none; }
 
-        /* QuestionOptions.css styles the selected option via [aria-checked="true"],
-           which only the theme's own JS sets. Map the same rule onto the native
-           :checked state so selection is visible without touching any JavaScript. */
-        .mtQuizArea .answer:has(input:checked) {
-            background: #EAF4FF;
-            box-shadow: inset 0 0 0 1px #2A78C8;
-        }
+        /* Selected-option appearance is deliberately not declared here - see the matching
+           note in the inline-question block above. It used to hardcode ModernTheme's blue
+           (#EAF4FF / #2A78C8), which would be the wrong brand for ZydusTheme's teal. The
+           delegated script below toggles the theme's own dormant `.highlight` class instead,
+           so the colour comes from each theme's QuestionOptions.css:91-97. */
     </style>
     <?php endif; ?>
     <?php /* No --player-sidebar-width override here by design. Preview must be a clone of the
@@ -1087,7 +1124,7 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
              only ever match the export at one specific window width and diverges at every
              other, whereas consuming the theme's variable rescales the tabs, rows, active bar
              and insets exactly as the export does at any size. */ ?>
-    <?php if ($theme === 'ModernTheme' && ($isInlineQuestionPage || !empty($isQuizPage))): ?>
+    <?php if ($isModernFamily && ($isInlineQuestionPage || !empty($isQuizPage))): ?>
     <?php /* Full-row option selection. In the export, the theme's own quiz.js puts an inline
              onclick on the row div itself (`<div class="answer" onclick="selectOption('answerN')">`
              - SCQ/quiz.js:42-45, MCQ/quiz.js, Quiz/quiz.js:345/354), which is what makes the whole
@@ -1132,9 +1169,55 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
             }
             input.dispatchEvent(new Event('change', { bubbles: true }));
         }, false);
+
+        /* Selected-option appearance. The theme's own quiz.js keeps a `.answer` row in sync
+           with its input by setting aria-checked on the row; Preview cannot reuse that path,
+           because the theme also puts role="radio"/role="checkbox" + tabindex="0" on the row
+           and tabindex="-1" on the input (SCQ/quiz.js:43,49 - MCQ/quiz.js:42-53), making the
+           row the widget. Preview instead keeps real native inputs with <label for>, which is
+           why the comment above refuses to add role/tabindex to the row: it already has
+           correct keyboard and screen-reader behaviour and a second tab stop would regress it.
+           Setting aria-checked on a role-less <div> would also be invalid ARIA.
+
+           So this syncs the theme's `.highlight` class instead - the class QuestionOptions.css
+           lists alongside .answer[aria-checked="true"] with the same declarations. Purely a
+           styling hook: no role, no tabindex, no ARIA state, nothing announced, and the
+           accessible checked state still comes from the native input alone.
+
+           One delegated 'change' listener covers every selection path, because a native input
+           click, a <label for> click and the row click above all end in a `change` event. All
+           rows are re-synced on each change so a radio group's previous selection clears. */
+        (function () {
+            function syncSelectedRows() {
+                var rows = document.querySelectorAll('.answer');
+                for (var i = 0; i < rows.length; i++) {
+                    var input = rows[i].querySelector('input[type="radio"], input[type="checkbox"]');
+                    if (!input) { continue; }
+                    if (input.checked) {
+                        rows[i].classList.add('highlight');
+                    } else {
+                        rows[i].classList.remove('highlight');
+                    }
+                }
+            }
+
+            document.addEventListener('change', function (event) {
+                if (!event.target || !event.target.closest) { return; }
+                if (!event.target.closest('.answer')) { return; }
+                syncSelectedRows();
+            }, false);
+
+            /* Initial state, so an option already checked on render (resume/bookmark, or a
+               reloaded page) shows as selected before the learner touches anything. */
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', syncSelectedRows, false);
+            } else {
+                syncSelectedRows();
+            }
+        }());
     </script>
     <?php endif; ?>
-    <?php if ($theme === 'ModernTheme'): ?>
+    <?php if ($isModernFamily): ?>
     <?php /* Sidebar menu row clicks. The updated ModernTheme added a "Full-row hit area" rule
              (Color.css:2564-2570):
                  #Tmenu.sideBar #tocData > span > li > span.toc-row-item > * { pointer-events: none }
@@ -1227,7 +1310,7 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
 </head>
 
 <body>
-    <?php if ($theme === 'ModernTheme'): ?>
+    <?php if ($isModernFamily): ?>
     <?php /* Color.css's .wholeContainer is itself the full-viewport flex column; nesting it
              inside .container-fluid.full-view (max-width/position:absolute) would fight it. */ ?>
     <div class="wholeContainer">

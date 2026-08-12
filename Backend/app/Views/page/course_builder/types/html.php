@@ -218,23 +218,10 @@
                                                     event.preventDefault();
                                                     if (button && button.disabled) return;
 
-<<<<<<< Updated upstream
                                                     if (typeof FormData === 'undefined' || typeof XMLHttpRequest === 'undefined') {
                                                         alert(formDataError);
                                                         return;
                                                     }
-=======
-                    function resetUploadButton() {
-                        var button = document.getElementById('uploadButton');
-                        if (button) {
-                            button.disabled = false;
-                            button.innerHTML = '<?php echo lang('UI_Text.CB_Upload_HTML_Zip_Package'); ?>';
-                        }
-                    }
-
-                    $('#uploadhtmlfile').on('submit', function(event) {
-                        event.preventDefault();
->>>>>>> Stashed changes
 
                                                     setPending(true);
                                                     var uploadSucceeded = false;
@@ -247,7 +234,6 @@
                                                         alert(message || genericError);
                                                     }
 
-<<<<<<< Updated upstream
                                                     try {
                                                         xhr = new XMLHttpRequest();
                                                         xhr.open('POST', form.action, true);
@@ -266,58 +252,6 @@
                                                         progressBar.textContent = percentComplete + '%';
                                                         progressBar.setAttribute('aria-valuenow', String(percentComplete));
                                                     });
-=======
-                            $.ajax({
-                                url: '<?php echo base_url('SCORM/course_builder/Scorm_course_pages/uploadHTML') ?>',
-                                type: "POST",
-                                data: dataString,
-                                processData: false,
-                                contentType: false,
-                                beforeSend: function() {
-                                    $(".progress").show();
-                                },
-                                success: function(data) {
-                                    var obj;
-                                    try {
-                                        obj = JSON.parse(data);
-                                    } catch (e) {
-                                        console.error('HTML upload: non-JSON response', data);
-                                        resetUploadButton();
-                                        alert('<?php echo lang('Messages.Error_0025'); ?>');
-                                        return;
-                                    }
-
-                                    if (obj.status === 'OK') {
-                                        $('#loading_spinner').hide();
-                                        alert('<?php echo lang('Messages.Success_0055'); ?>');
-                                        location.reload();
-                                    } else {
-                                        console.error('HTML upload failed', obj);
-                                        resetUploadButton();
-                                        alert('<?php echo lang('Messages.Error_0025'); ?>' + (obj.message ? ('\n\n' + obj.message) : ''));
-                                    }
-                                },
-                                error: function(xhr, textStatus, errorThrown) {
-                                    console.error('HTML upload: request failed', xhr.status, xhr.responseText);
-                                    resetUploadButton();
-                                    alert('<?php echo lang('Messages.Error_0025'); ?>' + ' (HTTP ' + xhr.status + ')');
-                                },
-                                complete: function() {
-                                    $(".progress").hide();
-                                },
-                                xhr: function() {
-                                    var xhr = new window.XMLHttpRequest();
-                                    xhr.upload.addEventListener("progress", function(evt) {
-                                        if (evt.lengthComputable) {
-                                            var percentComplete = (evt.loaded / evt.total) * 100;
-                                            $(".progress-bar").width(percentComplete + '%');
-                                            $(".progress-bar").html(percentComplete.toFixed(2) + '%');
-                                        }
-                                    }, false);
-                                    return xhr;
-                                }
-                            });
->>>>>>> Stashed changes
 
                                                     xhr.addEventListener('load', function() {
                                                         var response = null;

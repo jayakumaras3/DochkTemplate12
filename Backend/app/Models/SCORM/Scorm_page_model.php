@@ -64,11 +64,13 @@ class Scorm_page_model extends Model
     }
     public function addpagedetails($newdata)
     {
-        $db = \Config\Database::connect();
         $builder = $this->db->table('page');
-        $builder->insert($newdata);
-        $data['page_id'] = $db->insertID();
-        if (isset($data['page_id'])) {
+        if (!$builder->insert($newdata)) {
+            return false;
+        }
+
+        $data['page_id'] = $this->db->insertID();
+        if (!empty($data['page_id'])) {
             $builder = $this->db->table('scorm_courses as sc');
             $builder->select('sc.*');
             $builder->where('sc.scourse_id', $newdata['fk_course_id']);
@@ -95,7 +97,7 @@ class Scorm_page_model extends Model
                 if (isset($postdata)) {
                     $builder = $this->db->table('assessment_questions');
                     $builder->insert($postdata);
-                    $data['question_id'] = $db->insertID();
+                    $data['question_id'] = $this->db->insertID();
 
                     // Every SCQ/MCQ question needs at least one option, and at least one
                     // correct option, to be answerable - seed one with placeholder text marked
@@ -148,6 +150,8 @@ class Scorm_page_model extends Model
             }
             return $data;
         }
+
+        return false;
     }
     function getCoursedata($course_id)
     {
@@ -160,14 +164,13 @@ class Scorm_page_model extends Model
     }
     function editpagedetails($newdata, $page_id)
     {
-        $db = \Config\Database::connect();
         $builder = $this->db->table('page as p');
         $builder->where('p.page_id', $page_id);
-        $builder->update($newdata);
-        $data['page_id'] = $db->insertID();
-        if (isset($data['page_id'])) {
-            return $data;
+        if ($builder->update($newdata)) {
+            return ['page_id' => $page_id];
         }
+
+        return false;
     }
     function edituploadpagedetails($newdata, $page_id)
     {
@@ -330,8 +333,119 @@ class Scorm_page_model extends Model
         $builder->where('p.fk_course_id', $fk_course_id);
         $builder->where('p.sub_page_main', $page_id);
         $builder->where('p.status !=', 0);
+        $builder->orderBy('p.page_number');
         $data = $builder->get()->getResultArray();
         return $data;
+    }
+
+    function getNextSubpageNumber($parentPageNumber, $courseId)
+    {
+        $builder = $this->db->table('page');
+        $builder->selectMax('page_number', 'last_page_number');
+        $builder->where('fk_course_id', $courseId);
+        $builder->where('sub_page_main', $parentPageNumber);
+        $builder->where('status !=', 0);
+        $row = $builder->get()->getRowArray();
+
+        $lastPageNumber = $row['last_page_number'] ?? null;
+        $nextPageNumber = $lastPageNumber === null
+            ? (float) $parentPageNumber + 0.01
+            : (float) $lastPageNumber + 0.01;
+        $nextPageNumber = round($nextPageNumber, 2);
+
+        // page_number has two decimal places, so a parent can hold suffixes .01 through .99.
+        if ($nextPageNumber >= ((float) $parentPageNumber + 1)) {
+            return null;
+        }
+
+        return number_format($nextPageNumber, 2, '.', '');
+    }
+
+    /**
+     * Serializes page-number mutations for a course. Call only inside a transaction.
+     */
+    public function lockCourseForNumbering($courseId)
+    {
+        $table = $this->db->escapeIdentifiers($this->db->prefixTable('scorm_courses'));
+        $sql = 'SELECT scourse_id FROM ' . $table . ' WHERE scourse_id = ?';
+        if (in_array($this->db->getPlatform(), ['MySQLi', 'Postgre'], true)) {
+            $sql .= ' FOR UPDATE';
+        }
+
+        $query = $this->db->query($sql, [$courseId]);
+        return $query !== false && $query->getRowArray() !== null;
+    }
+
+    private function hasDuplicateMainPageNumbers($courseId)
+    {
+        return $this->db->table('page')
+            ->select('page_number')
+            ->where('fk_course_id', $courseId)
+            ->groupStart()
+            ->where('sub_page_main', 0)
+            ->orWhere('sub_page_main', null)
+            ->groupEnd()
+            ->where('status !=', 0)
+            ->groupBy('page_number')
+            ->having('COUNT(*) > 1', null, false)
+            ->limit(1)
+            ->get()
+            ->getRowArray() !== null;
+    }
+
+    /**
+     * Creates a child using the persisted parent and the next available decimal suffix.
+     */
+    public function addSubpage($parentPageId, $courseId, array $newdata)
+    {
+        $this->db->transStart();
+
+        if (!$this->lockCourseForNumbering($courseId)) {
+            $this->db->transRollback();
+            return false;
+        }
+        if ($this->hasDuplicateMainPageNumbers($courseId)) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $parentPage = $this->db->table('page')
+            ->select('page_id, fk_course_id, page_number, sub_page_main, status')
+            ->where('page_id', $parentPageId)
+            ->get()
+            ->getRowArray();
+
+        if (empty($parentPage)
+            || (string) $parentPage['fk_course_id'] !== (string) $courseId
+            || (int) $parentPage['status'] === 0
+            || (float) $parentPage['sub_page_main'] !== 0.0) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $pageNumber = $this->getNextSubpageNumber($parentPage['page_number'], $courseId);
+        if ($pageNumber === null) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $newdata['fk_course_id'] = $courseId;
+        $newdata['sub_page_main'] = $parentPage['page_number'];
+        $newdata['page_number'] = $pageNumber;
+        $result = $this->addpagedetails($newdata);
+
+        if (!$result) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $committed = $this->db->transComplete();
+        if (!$committed || !$this->db->transStatus()) {
+            return false;
+        }
+
+        $result['page_number'] = $pageNumber;
+        return $result;
     }
 
     function get_full_sb($course_id)
@@ -394,7 +508,10 @@ class Scorm_page_model extends Model
         $builder->select('p.page_number as pre_page, p.page_name as page_name,p.fk_course_id');
         $builder->where('p.page_number', $page_num);
         $builder->where('p.fk_course_id', $fk_course_id);
+        $builder->groupStart();
         $builder->where('p.sub_page_main', 0);
+        $builder->orWhere('p.sub_page_main', null);
+        $builder->groupEnd();
         $builder->where('p.status !=', 0);
         $data = $builder->get()->getResultArray();
         // echo $this->db->getLastQuery();
@@ -409,37 +526,165 @@ class Scorm_page_model extends Model
         $builder->select('p.page_id as page_id, p.page_name as page_name, p.page_number as page_number,p.fk_course_id');
         $builder->where('p.page_number', $page_num);
         $builder->where('p.fk_course_id', $fk_course_id);
+        $builder->groupStart();
         $builder->where('p.sub_page_main', 0);
+        $builder->orWhere('p.sub_page_main', null);
+        $builder->groupEnd();
         $builder->where('p.status !=', 0);
         $data = $builder->get()->getResultArray();
         // echo $this->db->getLastQuery();
         // exit();
         return $data;
     }
-    function updatePagenumber($position)
+    function updatePagenumber($courseId, $position)
     {
-        $i = 2;
-        foreach ($position as $k => $page_id) {
-            $builder = $this->db->table('page as p');
-            $builder->set('p.page_number', $i);
-            $builder->where('p.page_id', $page_id);
-            $builder->update();
-            $i++;
+        if (!is_array($position) || empty($position) || filter_var($courseId, FILTER_VALIDATE_INT) === false) {
+            return false;
         }
+
+        $pageIds = [];
+        foreach ($position as $pageId) {
+            $validatedPageId = filter_var($pageId, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+            if ($validatedPageId === false || in_array($validatedPageId, $pageIds, true)) {
+                return false;
+            }
+            $pageIds[] = $validatedPageId;
+        }
+
+        $this->db->transStart();
+        if (!$this->lockCourseForNumbering($courseId)) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $mainPages = $this->db->table('page')
+            ->select('page_id, page_number')
+            ->where('fk_course_id', $courseId)
+            ->groupStart()
+            ->where('sub_page_main', 0)
+            ->orWhere('sub_page_main', null)
+            ->groupEnd()
+            ->where('status !=', 0)
+            ->orderBy('page_number')
+            ->orderBy('page_id')
+            ->get()
+            ->getResultArray();
+        $existingIds = array_map('intval', array_column($mainPages, 'page_id'));
+
+        $submittedSet = $pageIds;
+        $existingSet = $existingIds;
+        sort($submittedSet);
+        sort($existingSet);
+        if ($submittedSet !== $existingSet) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $slotNumbers = array_map(
+            static fn ($page) => number_format((float) $page['page_number'], 2, '.', ''),
+            $mainPages
+        );
+        if (count(array_unique($slotNumbers)) !== count($slotNumbers)) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $pagesById = [];
+        $childrenByParent = [];
+        foreach ($mainPages as $page) {
+            $pageId = (int) $page['page_id'];
+            $pagesById[$pageId] = $page;
+            $childrenByParent[$pageId] = [];
+        }
+
+        $children = $this->db->table('page')
+            ->select('page_id, sub_page_main')
+            ->where('fk_course_id', $courseId)
+            ->where('sub_page_main !=', 0)
+            ->where('status !=', 0)
+            ->get()
+            ->getResultArray();
+        $parentIdsByNumber = [];
+        foreach ($mainPages as $page) {
+            $parentIdsByNumber[number_format((float) $page['page_number'], 2, '.', '')] = (int) $page['page_id'];
+        }
+        foreach ($children as $child) {
+            $parentKey = number_format((float) $child['sub_page_main'], 2, '.', '');
+            if (isset($parentIdsByNumber[$parentKey])) {
+                $childrenByParent[$parentIdsByNumber[$parentKey]][] = (int) $child['page_id'];
+            }
+        }
+
+        $result = true;
+        foreach ($pageIds as $index => $pageId) {
+            $oldNumber = (float) $pagesById[$pageId]['page_number'];
+            $newNumber = (float) $slotNumbers[$index];
+            $result = $this->db->table('page')
+                ->where('page_id', $pageId)
+                ->where('fk_course_id', $courseId)
+                ->groupStart()
+                ->where('sub_page_main', 0)
+                ->orWhere('sub_page_main', null)
+                ->groupEnd()
+                ->where('status !=', 0)
+                ->update(['page_number' => $newNumber]) && $result;
+
+            if (!empty($childrenByParent[$pageId])) {
+                $delta = $newNumber - $oldNumber;
+                $childBuilder = $this->db->table('page');
+                $childBuilder->whereIn('page_id', $childrenByParent[$pageId]);
+                $childBuilder->set('page_number', 'page_number + (' . (float) $delta . ')', false);
+                $childBuilder->set('sub_page_main', $newNumber);
+                $result = $childBuilder->update() && $result;
+            }
+        }
+
+        if (!$result) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        return $this->db->transComplete() && $this->db->transStatus();
     }
 
-    // Makes room for a page being inserted/moved to $fromNumber: every other page in the
-    // course whose page_number is already at or past that slot moves up by $increment, in a
-    // single atomic UPDATE (the WHERE clause is evaluated once against the pre-update values,
-    // so shifting can't cause pages to collide with each other mid-update). A sub-page's
-    // number is its parent's number plus a small fraction (e.g. 2.10 under page 2), so it
-    // naturally shifts together with its parent whenever both are >= $fromNumber - no separate
-    // handling needed for the common "insert a new page" case. $excludePageIds lets a caller
-    // (e.g. editing a page's own number) keep specific pages out of the shift.
+    // Shifts top-level page slots and carries each affected page's children with it. Children
+    // are selected by sub_page_main, not by their decimal page_number, so they never count as
+    // independent slots in the main-page sequence.
     function shiftPageNumbersFrom($course_id, $fromNumber, $increment = 1, $excludePageIds = [])
     {
+        $this->db->transStart();
+
+        if (!$this->lockCourseForNumbering($course_id)) {
+            $this->db->transRollback();
+            return false;
+        }
+        if ($this->hasDuplicateMainPageNumbers($course_id)) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $lastMainPage = $this->db->table('page')
+            ->selectMax('page_number', 'last_page_number')
+            ->where('fk_course_id', $course_id)
+            ->groupStart()
+            ->where('sub_page_main', 0)
+            ->orWhere('sub_page_main', null)
+            ->groupEnd()
+            ->where('status !=', 0)
+            ->get()
+            ->getRowArray();
+        $lastPageNumber = (float) ($lastMainPage['last_page_number'] ?? 0);
+        if ((float) $fromNumber < 1 || (float) $fromNumber > $lastPageNumber + 1) {
+            $this->db->transRollback();
+            return false;
+        }
+
         $builder = $this->db->table('page');
         $builder->where('fk_course_id', $course_id);
+        $builder->groupStart();
+        $builder->where('sub_page_main', 0);
+        $builder->orWhere('sub_page_main', null);
+        $builder->groupEnd();
         $builder->where('page_number >=', $fromNumber);
         $builder->where('status !=', 0);
         if (!empty($excludePageIds)) {
@@ -448,9 +693,6 @@ class Scorm_page_model extends Model
         $builder->set('page_number', 'page_number + (' . (float) $increment . ')', false);
         $result = $builder->update();
 
-        // A sub-page points at its parent via sub_page_main = parent's page_number (not the
-        // parent's page_id, per this schema) - so any parent that just shifted needs its
-        // children's sub_page_main shifted the same amount, or they'd silently detach from it.
         $subBuilder = $this->db->table('page');
         $subBuilder->where('fk_course_id', $course_id);
         $subBuilder->where('sub_page_main >=', $fromNumber);
@@ -459,10 +701,12 @@ class Scorm_page_model extends Model
         if (!empty($excludePageIds)) {
             $subBuilder->whereNotIn('page_id', $excludePageIds);
         }
+        $subBuilder->set('page_number', 'page_number + (' . (float) $increment . ')', false);
         $subBuilder->set('sub_page_main', 'sub_page_main + (' . (float) $increment . ')', false);
-        $subBuilder->update();
+        $subResult = $subBuilder->update();
 
-        return $result;
+        $committed = $this->db->transComplete();
+        return $result && $subResult && $committed && $this->db->transStatus();
     }
 
     // Handles moving an EXISTING page to a new number (editpage()'s "page number changed"
@@ -496,9 +740,54 @@ class Scorm_page_model extends Model
             $increment = -1;
         }
 
+        $this->db->transStart();
+
+        if (!$this->lockCourseForNumbering($course_id)) {
+            $this->db->transRollback();
+            return false;
+        }
+        if ($this->hasDuplicateMainPageNumbers($course_id)) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $lastMainPage = $this->db->table('page')
+            ->selectMax('page_number', 'last_page_number')
+            ->where('fk_course_id', $course_id)
+            ->groupStart()
+            ->where('sub_page_main', 0)
+            ->orWhere('sub_page_main', null)
+            ->groupEnd()
+            ->where('status !=', 0)
+            ->get()
+            ->getRowArray();
+        $lastPageNumber = (float) ($lastMainPage['last_page_number'] ?? 0);
+        if ((float) $newNumber < 1 || (float) $newNumber > $lastPageNumber) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        // Capture the moving parent's children before displaced parents can acquire the old
+        // parent number. Updating these rows later by id prevents accidental re-parenting.
+        $movingSubpageIds = [];
+        if (!empty($excludePageIds)) {
+            $movingSubpages = $this->db->table('page')
+                ->select('page_id')
+                ->where('fk_course_id', $course_id)
+                ->where('sub_page_main', $oldNumber)
+                ->where('status !=', 0)
+                ->get()
+                ->getResultArray();
+            $movingSubpageIds = array_column($movingSubpages, 'page_id');
+        }
+
         $builder = $this->db->table('page');
         $builder->where('fk_course_id', $course_id);
         $builder->where('status !=', 0);
+        $builder->groupStart();
+        $builder->where('sub_page_main', 0);
+        $builder->orWhere('sub_page_main', null);
+        $builder->groupEnd();
         $builder->where('page_number ' . $lowOperator, $rangeLow);
         $builder->where('page_number ' . $highOperator, $rangeHigh);
         if (!empty($excludePageIds)) {
@@ -507,8 +796,6 @@ class Scorm_page_model extends Model
         $builder->set('page_number', 'page_number + (' . (float) $increment . ')', false);
         $result = $builder->update();
 
-        // Same reasoning as shiftPageNumbersFrom(): a page that shifts within this range needs
-        // its own children's sub_page_main (which stores the parent's page_number) shifted too.
         $subBuilder = $this->db->table('page');
         $subBuilder->where('fk_course_id', $course_id);
         $subBuilder->where('status !=', 0);
@@ -518,29 +805,229 @@ class Scorm_page_model extends Model
         if (!empty($excludePageIds)) {
             $subBuilder->whereNotIn('page_id', $excludePageIds);
         }
+        if (!empty($movingSubpageIds)) {
+            $subBuilder->whereNotIn('page_id', $movingSubpageIds);
+        }
+        $subBuilder->set('page_number', 'page_number + (' . (float) $increment . ')', false);
         $subBuilder->set('sub_page_main', 'sub_page_main + (' . (float) $increment . ')', false);
-        $subBuilder->update();
+        $subResult = $subBuilder->update();
 
-        return $result;
+        $movingPageResult = true;
+        if (!empty($excludePageIds)) {
+            $movingPageBuilder = $this->db->table('page');
+            $movingPageBuilder->where('fk_course_id', $course_id);
+            $movingPageBuilder->groupStart();
+            $movingPageBuilder->where('sub_page_main', 0);
+            $movingPageBuilder->orWhere('sub_page_main', null);
+            $movingPageBuilder->groupEnd();
+            $movingPageBuilder->whereIn('page_id', $excludePageIds);
+            $movingPageBuilder->set('page_number', (float) $newNumber);
+            $movingPageResult = $movingPageBuilder->update();
+        }
+
+        $movingSubpageResult = true;
+        if (!empty($movingSubpageIds)) {
+            $delta = (float) $newNumber - (float) $oldNumber;
+            $movingSubpageBuilder = $this->db->table('page');
+            $movingSubpageBuilder->whereIn('page_id', $movingSubpageIds);
+            $movingSubpageBuilder->set('page_number', 'page_number + (' . $delta . ')', false);
+            $movingSubpageBuilder->set('sub_page_main', (float) $newNumber);
+            $movingSubpageResult = $movingSubpageBuilder->update();
+        }
+
+        $committed = $this->db->transComplete();
+        return $result
+            && $subResult
+            && $movingPageResult
+            && $movingSubpageResult
+            && $committed
+            && $this->db->transStatus();
     }
 
-    // When a specific page's own number is edited (not the bulk "make room" shift above), its
-    // existing sub-pages need to be repointed at the new number and moved by the same delta -
-    // shiftPageNumbersFrom() alone won't do this since the parent isn't moving by a uniform
-    // "everything past this point" amount, it's jumping straight to $newParentNumber.
-    function relinkSubpages($course_id, $oldParentNumber, $newParentNumber)
+    function softDeletePageHierarchy($pageId, $updatedBy, $updatedOn)
     {
-        if ((float) $oldParentNumber === (float) $newParentNumber) {
-            return true;
+        $course = $this->db->table('page')
+            ->select('fk_course_id')
+            ->where('page_id', $pageId)
+            ->get()
+            ->getRowArray();
+
+        if (empty($course)) {
+            return false;
         }
-        $delta = $newParentNumber - $oldParentNumber;
-        $builder = $this->db->table('page');
-        $builder->where('fk_course_id', $course_id);
-        $builder->where('sub_page_main', $oldParentNumber);
-        $builder->where('status !=', 0);
-        $builder->set('sub_page_main', $newParentNumber);
-        $builder->set('page_number', 'page_number + (' . (float) $delta . ')', false);
-        return $builder->update();
+
+        $this->db->transStart();
+        if (!$this->lockCourseForNumbering($course['fk_course_id'])) {
+            $this->db->transRollback();
+            return false;
+        }
+        $page = $this->db->table('page')
+            ->select('page_id, fk_course_id, page_number, sub_page_main, status')
+            ->where('page_id', $pageId)
+            ->where('fk_course_id', $course['fk_course_id'])
+            ->get()
+            ->getRowArray();
+
+        if (empty($page)) {
+            $this->db->transRollback();
+            return false;
+        }
+        if ((int) $page['status'] === 0) {
+            return $this->db->transComplete() && $this->db->transStatus();
+        }
+        if ((float) $page['sub_page_main'] === 0.0
+            && $this->hasDuplicateMainPageNumbers($course['fk_course_id'])) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $result = $this->softDeletePageHierarchyLocked($page, $updatedBy, $updatedOn);
+        if (!$result) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        return $this->db->transComplete() && $this->db->transStatus();
+    }
+
+    /**
+     * Applies an Editor page update without accepting hierarchy fields from the request.
+     */
+    public function updatePageHierarchy($pageId, array $changes, $updatedBy, $updatedOn)
+    {
+        $course = $this->db->table('page')
+            ->select('fk_course_id')
+            ->where('page_id', $pageId)
+            ->get()
+            ->getRowArray();
+
+        if (empty($course)) {
+            return false;
+        }
+
+        $this->db->transStart();
+        if (!$this->lockCourseForNumbering($course['fk_course_id'])) {
+            $this->db->transRollback();
+            return false;
+        }
+        $page = $this->db->table('page')
+            ->select('page_id, fk_course_id, page_name, type, page_number, sub_page_main, status')
+            ->where('page_id', $pageId)
+            ->where('fk_course_id', $course['fk_course_id'])
+            ->get()
+            ->getRowArray();
+
+        if (empty($page)) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        $newStatus = array_key_exists('status', $changes)
+            && $changes['status'] !== null
+            && $changes['status'] !== ''
+            ? (int) $changes['status']
+            : (int) $page['status'];
+        if ((int) $page['status'] === 0) {
+            if ($newStatus === 0) {
+                return $this->db->transComplete() && $this->db->transStatus();
+            }
+
+            $this->db->transRollback();
+            return false;
+        }
+
+        $isSubpage = (float) $page['sub_page_main'] !== 0.0;
+        $hasPageNumberChange = array_key_exists('page_number', $changes)
+            && (!is_numeric($changes['page_number'])
+                || (float) $changes['page_number'] !== (float) $page['page_number']);
+        if (!$isSubpage
+            && ($newStatus === 0 || $hasPageNumberChange)
+            && $this->hasDuplicateMainPageNumbers($course['fk_course_id'])) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        if ((int) $page['status'] !== 0 && $newStatus === 0) {
+            $result = $this->softDeletePageHierarchyLocked($page, $updatedBy, $updatedOn);
+        } else {
+            $newPageNumber = $page['page_number'];
+            if (!$isSubpage && array_key_exists('page_number', $changes)) {
+                $requestedNumber = filter_var($changes['page_number'], FILTER_VALIDATE_FLOAT);
+                if ($requestedNumber === false
+                    || $requestedNumber < 1
+                    || floor((float) $requestedNumber) !== (float) $requestedNumber) {
+                    $this->db->transRollback();
+                    return false;
+                }
+
+                $newPageNumber = (int) $requestedNumber;
+                if ((float) $page['page_number'] !== (float) $newPageNumber
+                    && !$this->movePageNumberRange(
+                        $page['fk_course_id'],
+                        $page['page_number'],
+                        $newPageNumber,
+                        [$page['page_id']]
+                    )) {
+                    $this->db->transRollback();
+                    return false;
+                }
+            }
+
+            $newdata = [
+                'page_name' => $changes['page_name'] ?? $page['page_name'],
+                'type' => $changes['type'] ?? $page['type'],
+                'status' => $newStatus,
+                'page_number' => $newPageNumber,
+                'sub_page_main' => $page['sub_page_main'],
+                'last_update_by' => $updatedBy,
+                'last_update_on' => $updatedOn,
+            ];
+            $result = (bool) $this->editpagedetails($newdata, $pageId);
+        }
+
+        if (!$result) {
+            $this->db->transRollback();
+            return false;
+        }
+
+        return $this->db->transComplete() && $this->db->transStatus();
+    }
+
+    private function softDeletePageHierarchyLocked(array $page, $updatedBy, $updatedOn)
+    {
+        $result = true;
+
+        if ((float) $page['sub_page_main'] === 0.0) {
+            // A deleted parent cannot leave active children behind or attach them to the page
+            // that moves into its former slot.
+            $childrenDeleted = $this->db->table('page')
+                ->where('fk_course_id', $page['fk_course_id'])
+                ->where('sub_page_main', $page['page_number'])
+                ->where('status !=', 0)
+                ->update([
+                    'status' => 0,
+                    'last_update_by' => $updatedBy,
+                    'last_update_on' => $updatedOn,
+                ]);
+            $result = $childrenDeleted && $result;
+
+            // Start at the next main slot. The deleted parent and its children must not shift.
+            $result = $this->shiftPageNumbersFrom(
+                $page['fk_course_id'],
+                (float) $page['page_number'] + 1,
+                -1
+            ) && $result;
+        }
+
+        $pageDeleted = $this->db->table('page')
+            ->where('page_id', $page['page_id'])
+            ->update([
+                'status' => 0,
+                'last_update_by' => $updatedBy,
+                'last_update_on' => $updatedOn,
+            ]);
+
+        return $pageDeleted && $result;
     }
     function addtrancript($newdata)
     {
@@ -985,6 +1472,13 @@ class Scorm_page_model extends Model
         // print_r($sheetData[0][0]);
         // exit();
         if (trim($sheetData[0][0]) == 'Page Name') {
+            $this->db->transStart();
+            if (!$this->lockCourseForNumbering($scourse_id)
+                || $this->hasDuplicateMainPageNumbers($scourse_id)) {
+                $this->db->transRollback();
+                return ['error' => 'The course page numbering must be repaired before importing pages.'];
+            }
+
             $j = 0;
             foreach ($sheetData as $Row) {
                 // print_r($scourse_id.'-'.$page_id);
@@ -1038,30 +1532,47 @@ class Scorm_page_model extends Model
                             // $type = '112';
                         }
                     }
-                    $builder = $this->db->table('page as p');
-                    $builder->select('p.page_number');
-                    $builder->where('fk_course_id', $scourse_id);
-                    $builder->where('status !=', 0);
-                    $builder->orderBy('page_id', 'DESC'); // Get the last inserted page number
-                    $data = $builder->get()->getResultArray();
-                    if (!empty($data)) {
-                        $page_number = $data['0']['page_number'];
+                    $isMainPage = $Main_sub_page_number === ''
+                        || (float) $Main_sub_page_number === 0.0;
+                    if ($isMainPage) {
+                        $validatedPageNumber = filter_var($Main_page_number, FILTER_VALIDATE_FLOAT);
+                        if ($validatedPageNumber === false
+                            || $validatedPageNumber < 1
+                            || floor((float) $validatedPageNumber) !== (float) $validatedPageNumber
+                            || !$this->shiftPageNumbersFrom($scourse_id, $validatedPageNumber, 1)) {
+                            $this->db->transRollback();
+                            return ['error' => 'Row ' . $j . ': invalid main page number. No records were imported.'];
+                        }
+                        $newPageNumber = (int) $validatedPageNumber;
+                        $parentPageNumber = 0;
                     } else {
-                        $page_number = '';
-                    }
-                    $lastPage = $page_number;
-                    $lastPage = $this->getLatestPageNumber($scourse_id);
-                    // print_r($lastPage);
-                    // exit();
-                    if ($Main_sub_page_number == '' || $Main_sub_page_number == '0' || $Main_sub_page_number == NULL) {
-                        $newPageNumber = $Main_page_number;
-                    } else {
-                        $newPageNumber = ($lastPage) ? number_format($lastPage + 0.01, 2) : $Main_page_number;
+                        $parentPages = $this->db->table('page')
+                            ->select('page_number')
+                            ->where('fk_course_id', $scourse_id)
+                            ->where('page_number', $Main_sub_page_number)
+                            ->groupStart()
+                            ->where('sub_page_main', 0)
+                            ->orWhere('sub_page_main', null)
+                            ->groupEnd()
+                            ->where('status !=', 0)
+                            ->get()
+                            ->getResultArray();
+                        if (count($parentPages) !== 1) {
+                            $this->db->transRollback();
+                            return ['error' => 'Row ' . $j . ': sub page parent was not found. No records were imported.'];
+                        }
+
+                        $parentPageNumber = $parentPages[0]['page_number'];
+                        $newPageNumber = $this->getNextSubpageNumber($parentPageNumber, $scourse_id);
+                        if ($newPageNumber === null) {
+                            $this->db->transRollback();
+                            return ['error' => 'Row ' . $j . ': the parent already has 99 sub pages. No records were imported.'];
+                        }
                     }
                     $insertpagedata = [
                         'fk_course_id' => $scourse_id,
                         'page_name' => $page_name,
-                        'sub_page_main' => isset($Main_sub_page_number) ? $Main_sub_page_number : 0,
+                        'sub_page_main' => $parentPageNumber,
                         'page_number' => $newPageNumber,
                         'type' => $type,
                         'status' => '1',
@@ -1072,22 +1583,21 @@ class Scorm_page_model extends Model
                     ];
                     // print_r($insertquestiondata);
                     // exit();
-                    $db = \Config\Database::connect();
                     $builder = $this->db->table('page');
-                    $builder->insert($insertpagedata);
-                    $insert_id = $db->insertID();
-                    if (isset($insert_id)) {
-                        $q_id = $insert_id;
+                    if (!$builder->insert($insertpagedata)) {
+                        $this->db->transRollback();
+                        return ['error' => 'Row ' . $j . ': the page could not be imported. No records were imported.'];
                     }
                 } else {
-                    $insertrecordCount = $j - 1;
-                    $data['error'] = "Row " . $j . " : don't have properly value, further row excution has been stopped <br/>
-                    only" . $insertrecordCount . " : Record imported successfully";
-                    return $data;
+                    $this->db->transRollback();
+                    return ['error' => 'Row ' . $j . ': required values are missing. No records were imported.'];
                 }
             }
-            $data['success'] = 'Record imported successfully';
-            return $data;
+            if (!$this->db->transComplete() || !$this->db->transStatus()) {
+                return ['error' => 'The import could not be completed. No records were imported.'];
+            }
+
+            return ['success' => 'Record imported successfully'];
         } else {
             $data['error'] = 'Data not found!, Your trying to import wrong Excelsheet';
             return $data;

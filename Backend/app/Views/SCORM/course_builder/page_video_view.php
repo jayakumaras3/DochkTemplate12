@@ -3,9 +3,12 @@
    to be gated before it is emitted. It nudges .form-check-input down 10px and forces
    .form-check to align-items:flex-start, both of which override the theme's
    .answer { align-items:center } and knock the radio/checkbox out of line with the tick
-   and the option text. Skipped for ModernTheme knowledge-check pages only. */
+   and the option text. Skipped for ModernTheme-family knowledge-check pages only - theme 8
+   (ModernTheme) and theme 9 (ZydusTheme), Zydus being a colour-fork of the same package that
+   carries the identical .answer / .tickSymbol / #quizContainer contract and therefore needs the
+   same legacy <style> suppressed. See the fuller note beside $isModernFamily in header.php. */
 $isModernThemeQ = isset($coursedetails) && isset($coursedetails[0]['theme'])
-    && $coursedetails[0]['theme'] == '8'
+    && in_array((string) $coursedetails[0]['theme'], ['8', '9'], true)
     && isset($row['type']) && in_array((int) $row['type'], [5, 6], true);
 ?>
 <?php if (!$isModernThemeQ): ?>
@@ -56,6 +59,8 @@ if (isset($coursedetails)) {
         $theme = 'Vertical_ContentforU';
     } elseif ($coursedetails[0]['theme'] == '8') {
         $theme = 'ModernTheme';
+    } elseif ($coursedetails[0]['theme'] == '9') {
+        $theme = 'ZydusTheme';
     } else {
         $theme = 'Default';
     }
@@ -67,6 +72,10 @@ if (isset($coursedetails)) {
    $themePath line in header.php. ModernTheme-only: the other 8 theme folders still use the
    old flat layout. Computed here as well because each view resolves $theme independently. */
 $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
+/* ZydusTheme is a colour-fork of the updated ModernTheme and shares its whole DOM contract,
+   so every structural gate below covers both. $themePath stays ModernTheme-only because only
+   ModernTheme was re-published with a nested theme/ directory. Full evidence in header.php. */
+$isModernFamily = ($theme === 'ModernTheme' || $theme === 'ZydusTheme');
 ?>
 <?php if (!empty($getAssessmentSettings)) {
     foreach ($getAssessmentSettings as $value) {
@@ -167,7 +176,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
 ?>
 <?php /* ModernTheme's layout root is .wholeContainer (opened in header.php); .only_course
          constrains width to 74vw/1280px, which would clip it. */ ?>
-<?php if ($theme !== 'ModernTheme'): ?>
+<?php if (!$isModernFamily): ?>
 <div class="col-sm-12 only_course" id="target">
 <?php endif; ?>
     <?php //} else { 
@@ -218,7 +227,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
     $prev_page_number = $currentpage - 1;
     $next_page_number = $currentpage + 1;
     ?>
-    <?php if ($theme === 'ModernTheme'): ?>
+    <?php if ($isModernFamily): ?>
         <?php /* Structure below mirrors ModernTheme's own content.html contract, which
                  Color.css targets with strict child selectors:
                  #Tmenu.sideBar > (img.logo, #sideBarHeader > #toc_id|#trans_id, .tocData, .copyright)
@@ -533,7 +542,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
             </div>
         </div>
     <?php endif; ?>
-        <?php if ($theme === 'ModernTheme'): ?>
+        <?php if ($isModernFamily): ?>
         <div class="pageContent">
         <?php endif; ?>
         <?php
@@ -969,7 +978,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                             <?php } ?>
                         </div>
                     <?php } ?>
-    <?php if ($theme === 'ModernTheme'): ?>
+    <?php if ($isModernFamily): ?>
     <?php /* closes .pageContent then .contentArea; Color.css expects .footer to be a direct
              child of .wholeContainer, with each control a direct <div> child of .footer. */ ?>
     </div>

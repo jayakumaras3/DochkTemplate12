@@ -1,0 +1,227 @@
+<script language=JavaScript>var message="Function Disabled!";function clickIE4(){if (event.button==2){alert(message);return false;}}function clickNS4(e){if (document.layers||document.getElementById&&!document.all){if (e.which==2||e.which==3){alert(message);return false;}}}if (document.layers){document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS4;}else if (document.all&&!document.getElementById){document.onmousedown=clickIE4;}document.oncontextmenu=new Function("alert(message);return false") </script>
+<div ng-controller="mainController as mc" class="wholeContainer">
+    <div id="Tmenu" ng-controller="sideBar as sb" class="sideBar" ng-show="sb.showSideBar" style="display:none">
+		<img src="theme/images/logo.svg" class="logo" alt="Logo" role="img">
+        <div id="sideBarHeader" role="tablist" aria-label="Sidebar tabs">
+		<!-- <hr> -->
+            <!-- Menu Button -->
+<div class="tocclickedclscss" id="toc_id" role="tab" aria-selected="true" aria-current="page">
+  <span
+    role="button"
+    tabindex="0"
+    aria-label="Start"
+    ng-click="sb.tocClick('toc')"
+    onkeydown="keyHandler(event, 'toc')"
+  >
+    Start
+  </span>
+</div>
+
+<!-- Transcript Button -->
+<div id="trans_id" role="tab" aria-selected="false">
+  <span
+    role="button"
+    tabindex="0"
+    aria-label="Transcript"
+    ng-click="sb.tocClick('transcript')"
+    onkeydown="keyHandler(event, 'transcript')"
+  >
+    Transcript
+  </span>
+</div>
+            <!--div id="glossary_id" ><span role="button"  ng-click="sb.tocClick('glossary')">Glossary</span></div-->
+        </div>
+        <div class="tocData" ng-bind-html="sb.sideBarData" style="line-height:1.5;overflow-y:auto !important;"></div>
+        <div class="copyright">&copy; 2026 Touchstone</div>
+        <div class="line"><hr></div>
+    </div>
+        <img
+            id="sideBarCloseBtn"
+            src="theme/images/footer-menu/MenuClose_icon.svg"
+            alt="Close Menu"
+            title="Close Menu"
+            role="button"
+            tabindex="0"
+            onclick="menuClose()"
+            onkeydown="if(event.key==='Enter'||event.key===' ')menuClose()"
+            style="cursor:pointer;display:none;position:fixed;">
+        <div class="contentArea" ng-controller="contentController as cc" ng-class="cc.fullScreen == true ? 'fullContentArea' : ''">
+	
+		<div
+  id="clickableDiv"
+  class="headingArea1"
+  ng-controller="sideBar as sb"
+  >
+            <img
+  title="Menu"
+  id="TmenuIcon"
+  ng-click="sb.tocClick('toggleMenu')"
+  ng-keydown="sb.handleKeydown($event, 'toggleMenu')"
+  src="theme/images/footer-menu/Menuopen.svg"
+  alt="Menu"
+  role="button"
+  tabindex="0"
+  aria-haspopup="true"
+  aria-expanded="{{sb.menuOpen ? 'true' : 'false'}}"
+  style="cursor: pointer;">
+		 <img title="Menu"  style="display:none;" id="TmenuIcon1" ng-click="sb.tocClick('toggleMenu')"  alt="image"></div> 
+        <div class="headingArea FSize19" ng-show="cc.showHeader">
+        <span class="pageHeaderText" tabindex="0" role="text" ng-attr-title="{{cc.header}}" ng-attr-aria-label="{{cc.header}}">{{cc.header}}</span>
+        <div  tabindex="0" id="pagenoHeader"></div>
+        <button id="exitCourseBtn" onclick="end()" aria-label="Exit Course" title="Exit Course">
+  <img id="ImagExitCourse" src="theme/images/footer-menu/Exit%20button_02.png" alt="" style="height: 20px; vertical-align: middle;">
+</button>
+        <button id="certificateid" onclick="showCertificate()" aria-label="View Certificate">
+  <img  id="Imagcertificateid" src="theme/images/footer-menu/Certificate.svg" alt="" style="height: 32px; vertical-align: middle;">
+</button>
+
+</div>
+        <div class="line2"></div>
+        <div class="pageContent" ng-class="cc.fullScreen == true ? 'fullContentArea' : ''">
+            <div ng-include="cc.pageContent" onload="cc.finishLoading()" ng-if="cc.pageContentType == 'flash'"
+                 style="width:100%;height:100%" id="flashArea"></div>
+			 <div ng-include="cc.pageContent" ng-if="cc.pageContentType == 'html'" style="width:100%;height:100%" id="htmlArea"></div>
+			<video ng-src="{{cc.pageContent}}" 
+       ng-if="cc.pageContentType == 'video'" 
+       style="width:100%;height:100%" 
+       id="vidArea" 
+       preload="metadata"
+       onended="onendofvideo()" 
+       controls 
+       onvolumechange="volumechange_fun()" 
+       onpause="onPauseVid()" 
+       controlsList="nodownload" 
+       disablePictureInPicture 
+       onchange="videochange"
+       crossorigin="anonymous">
+    <!-- Caption tracks will be dynamically created by LanguageTrackChange() in loader.js -->
+</video>
+            <iframe id="captivateFrame" style="" ng-if="cc.pageContentType == 'captivate'"
+                    ng-src="{{cc.pageContent}}" onload="captivateIframeComplete()"></iframe>
+					<!--div id="audscript" style="width:100%;height: 70px;background: rgba(0,0,0,0);bottom:0px;position:absolute;font-size: 20px;/* text-align: center; */padding: 17px;"></div-->
+        </div>
+		
+    </div>
+    <div ng-controller="footerBar as fb" class="footer" ng-show="fb.showFooter">
+ <!-- <img src="theme/images/logo.svg" class="footer-logo" alt="Logo" role="img">-->
+<div
+    ng-repeat="btn in fb.navigationBtn"
+    id="{{btn.id}}"
+    ng-click="fb.navigationBtnClick(btn)"
+    ng-class="(btn.display == 'yes') ? btn.class : btn.class + ' hideContent'"
+    role="button"
+    tabindex="0"
+    aria-label="{{btn.tooltip || btn.name}}"
+    title="{{btn.tooltip}}"
+>
+    {{btn.name}}
+</div>
+
+    <!-- Navigation Circles -->
+    <div
+        ng-repeat="circle in fb.navCircle"
+        class="navCircle"
+        ng-click="fb.navBtnClick($index)"
+        role="button"
+        tabindex="0"
+        aria-label="Navigation Circle {{$index + 1}}"
+        title="Navigation Circle {{$index + 1}}"
+    ></div>
+
+    <!-- Progress Bar (for screen readers) -->
+    <div
+        id="ProgressBar"
+        title="Progress Bar"
+        aria-label="Progress Bar"
+        role="progressbar"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="{{indicatorValue}}"
+        data-radial-indicator="indicatorOption"
+        data-radial-indicator-model="indicatorValue"
+        style="margin-top:10px"
+    ></div>
+
+    <div class="FSize20" id="clickNextId">
+        <span tabindex="0" id="spanCliContinue">Click here to continue</span>
+    </div>
+
+    </div>
+
+</div>
+
+<div id="preloader">
+    <div class="preloaderDisplay"></div>
+    <div id="preloaderText"><img src="theme/images/preload.gif">
+        <div id="preloaderCount" class="preloaderDisplay FSize24"></div>
+    </div>
+</div>
+<div id="resourceArea">
+    <div class="preloaderDisplay"></div>
+    <div id="resourceContent">
+	 <div class="Navigation_cls_main" onclick="backToMainPage()" >
+                <img  role="button">
+            </div>
+        <div class="leftResourceArea FSize16">
+            <p class="headerResource FSize22_im" style="color:#006366;">Learning Aids</p>
+<h4><b></b></h4>
+<ul style="list-style-type:'- '">
+  <li ><a style=""target="_blank" href=""></a></li>
+</ul>
+
+            
+        </div>
+    </div>
+</div>
+<div id="resourceArea1">
+    <div class="preloaderDisplay"></div>
+    <div id="resourceContent1">
+      <div class="Navigation_cls" onclick="backToMainPage1()" >
+                <img role="button">
+            </div>
+            <img src="">
+        </div>
+       <div class="rightResourceContent1" >
+	   
+	     
+		
+    </div>
+	
+	
+</div>
+<div id="exitContainer" style="position: absolute;width: 100%;height:100%;display:none">
+    <div class="preloaderDisplay"></div>
+    <div id="exitArea" style="background-image: url('theme/images/Closepopup.jpg');    border-radius: 5px;
+         width: 316px;
+         height: 167px;
+         z-index: 10003;
+         position: absolute;left:0;right:0;top:0;bottom:0;margin:auto;padding: 3%;">
+
+        <div id="heading" style="    position: absolute;    left: 0px;    top: 4px;    color: #fff;    font-weight: bold;    font-size: 18px;    text-align: center;    width: 100%;">Exit</div>
+        <h3 style="font-weight:bold;text-align: center;     margin-top: 9px; font-size:21px;  ">Are you sure you want to <br>exit the eLearning?</h3>
+        <div style="width: 50%;text-align: center;position: absolute;left: 0px;right: 0px;margin: auto;">
+            <!-- <button class="btn btn-large btn-default text-center" onclick="exitCloseYes()" style="background-color: #444444;color:white;    border: none;">Yes</button> -->
+            <button class="btn btn-large btn-default text-center" onclick="exitCloseYesWBT()" style="background-color: #006366;color:white;    border: none;">Yes</button>
+            <button class="btn  btn-large  btn-default text-center" onclick="exitCloseNo()" style="background-color: #006366;color:white;margin-left: 10%;    border: none;">No </button>
+        </div>
+    </div>
+</div>
+<div id="searchContainer" style="position: absolute;width: 100%;height:100%;display:none">
+    <div class="preloaderDisplay"></div>
+    <div id="searchArea">
+        <div id="heading" style=" ">Search</div>
+        <div style="width: 100%;text-align: center;position: absolute;left: 0px;right: 0px;margin: auto;">
+			<input type="text" id="searchtext" style="width: 178px;height:30px;border: none;text-align: center;"></input>
+			<button class="btn  btn-large  btn-default text-center" onclick="searchbtnclick()" style="background-color: #006366;color:white;margin-left: 10%;    border: none;">Search </button>
+        </div>
+	<div id="searchcountresult" style="width:87%;position: absolute;top: 77px;left: 20px;"></div>
+	<div id="searchresult" style="width:87%;position: absolute;top: 110px;left: 20px;color:#006366;"></div>
+    </div>
+</div>
+
+<div id="exitwithoutlogContainer" style="position: absolute;width: 100%;height:100%;display:none">
+    <div class="preloaderDisplay"></div>
+    
+</div>
+
+

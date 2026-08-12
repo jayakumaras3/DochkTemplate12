@@ -375,16 +375,19 @@ $lastModified = !empty($row['last_updated_on']) ? date('d M Y h:i A', (int) $row
 									</div>
 									<div class="col-lg-4 mb-3">
 										<label class="form-label"><?= lang('UI_Text.Course Theme') ?></label>
+
 										<select name="theme" class="form-select">
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 1</option>
-											<option value="1" <?php echo ($row['theme'] == 1) ? 'selected' : ''; ?>>Touchstone 2</option>
-											<option value="3" <?php echo ($row['theme'] == 3) ? 'selected' : ''; ?>>Touchstone 3</option>
-											<option value="4" <?php echo ($row['theme'] == 4) ? 'selected' : ''; ?>>Touchstone 4</option>
-											<option value="5" <?php echo ($row['theme'] == 5) ? 'selected' : ''; ?>>Touchstone 5</option>
-											<option value="6" <?php echo ($row['theme'] == 6) ? 'selected' : ''; ?>>Touchstone 6</option>
-											<option value="7" <?php echo ($row['theme'] == 7) ? 'selected' : ''; ?>>Touchstone 7</option>
-											<option value="2" <?php echo ($row['theme'] == 2) ? 'selected' : ''; ?>>Touchstone 8</option>
-											
+											<option value="1" <?php echo ($row['theme'] == 1) ? 'selected' : ''; ?>>Default</option>
+											<option value="2" <?php echo ($row['theme'] == 2) ? 'selected' : ''; ?>>ContentforU</option>
+											<option value="3" <?php echo ($row['theme'] == 3) ? 'selected' : ''; ?>>Wabtec</option>
+											<option value="4" <?php echo ($row['theme'] == 4) ? 'selected' : ''; ?>>Knowledge Works</option>
+											<option value="5" <?php echo ($row['theme'] == 5) ? 'selected' : ''; ?>>Wabtec Arabic</option>
+											<option value="6" <?php echo ($row['theme'] == 6) ? 'selected' : ''; ?>>Wabtec Theme</option>
+											<option value="7" <?php echo ($row['theme'] == 7) ? 'selected' : ''; ?>>Vertical ContentforU</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Modern Theme</option>
+											<option value="9" <?php echo ($row['theme'] == 9) ? 'selected' : ''; ?>>Zydus Theme</option>
+
+
 										</select>
 									</div>
 									<div class="col-lg-4 mb-3">
@@ -402,7 +405,29 @@ $lastModified = !empty($row['last_updated_on']) ? date('d M Y h:i A', (int) $row
 									<div class="col-12">
 										<span class="badge bg-danger">* <?= lang('UI_Text.Only_Touchstone') ?></span>
 									</div>
-								<?php } else { ?>
+								<?php }elseif($client == 86) { ?>
+									<div class="col-lg-4 mb-3">
+										<label class="form-label"><?= lang('UI_Text.Course Theme') ?></label>
+										<select name="theme" class="form-select">
+											<option value="1" <?php echo ($row['theme'] == 1) ? 'selected' : ''; ?>>Touchstone 1</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 2</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 3</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 4</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 5</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 6</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 7</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 8</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 9</option>
+											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 10</option>
+											<option value="9" <?php echo ($row['theme'] == 9) ? 'selected' : ''; ?>>Zydus Theme</option>
+										</select>
+									</div>
+									<?php
+									echo '<input type="hidden" name="theme" value="1">';
+									echo '<input type="hidden" name="demo" value="0">';
+									echo '<input type="hidden" name="type" value="' . $row['type'] . '">';
+									?>
+								} else { ?>
 									<div class="col-lg-4 mb-3">
 										<label class="form-label"><?= lang('UI_Text.Course Theme') ?></label>
 										<select name="theme" class="form-select">

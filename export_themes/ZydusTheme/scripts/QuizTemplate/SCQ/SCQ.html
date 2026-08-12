@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <script>
+    /* iPad Safari can report pointer:fine / hover:hover (e.g. with a
+       trackpad/Magic Keyboard attached, or in its default "desktop site"
+       mode), so CSS alone can't reliably tell an iPad from a laptop with a
+       mouse. navigator.maxTouchPoints is the standard capability check
+       (unaffected by input peripherals or UA spoofing) used to flag real
+       touch hardware; the width check keeps large touch-screen desktops
+       out. This is a one-time class toggle -- no listeners, no polling --
+       SCQ_style.css does the actual responsive work from here via plain
+       CSS media queries. */
+    (function () {
+        var isTouch = (navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+        if (isTouch && window.innerWidth <= 1366) {
+            document.documentElement.classList.add('is-touch-device');
+        }
+
+        /* This page runs inside the SCORM player's own iframe chrome
+           (header bar with Question X/Y + Exit/Certificate, footer bar with
+           prev/next). Depending on the host, that chain can position this
+           iframe so the chrome overlaps its top/bottom edge and clips
+           content this page renders there -- the actual cause of the
+           Submit button becoming unreachable on short desktop windows
+           (e.g. 1366x768) with many options. Same measurement approach
+           already proven on the Quiz.html/Mixed-Quiz template: walk the
+           same-origin frameElement chain accumulating this viewport's
+           offset until the window owning .headingArea/.footer is found,
+           and derive the real intrusion from that. 0 when the layout
+           already clears the chrome (standalone launches), so this is a
+           no-op there; SCQ_style.css's fallbacks cover any cross-origin or
+           structural mismatch. */
+        function updateOuterHeaderClearance() {
+            try {
+                var offsetTop = 0;
+                var w = window;
+                var overlap = null;
+                for (var depth = 0; depth < 4; depth++) {
+                    var fe = w.frameElement;
+                    if (!fe) break;
+                    offsetTop += fe.getBoundingClientRect().top;
+                    w = w.parent;
+                    var header = w.document.querySelector('.headingArea');
+                    if (header) {
+                        overlap = header.getBoundingClientRect().bottom - offsetTop;
+                        break;
+                    }
+                }
+                if (overlap !== null) {
+                    overlap = Math.max(0, Math.min(150, overlap));
+                    document.documentElement.style.setProperty('--outer-header-overlap', overlap.toFixed(1) + 'px');
+                }
+            } catch (e) {
+                /* Cross-origin or structural mismatch: CSS fallbacks cover this. */
+            }
+        }
+        updateOuterHeaderClearance();
+        window.addEventListener('resize', updateOuterHeaderClearance);
+        window.addEventListener('load', updateOuterHeaderClearance);
+
+        function updateOuterFooterClearance() {
+            try {
+                var offsetTop = 0;
+                var w = window;
+                var overlap = null;
+                var ourHeight = window.innerHeight;
+                for (var depth = 0; depth < 4; depth++) {
+                    var fe = w.frameElement;
+                    if (!fe) break;
+                    offsetTop += fe.getBoundingClientRect().top;
+                    w = w.parent;
+                    var footer = w.document.querySelector('.footer');
+                    if (footer) {
+                        var footerRect = footer.getBoundingClientRect();
+                        if (footerRect.height > 0) {
+                            overlap = (offsetTop + ourHeight) - footerRect.top;
+                        }
+                        break;
+                    }
+                }
+                if (overlap !== null) {
+                    overlap = Math.max(0, Math.min(150, overlap));
+                    document.documentElement.style.setProperty('--outer-footer-overlap', overlap.toFixed(1) + 'px');
+                }
+            } catch (e) {
+                /* Cross-origin or structural mismatch: CSS fallback (0px) covers this. */
+            }
+        }
+        updateOuterFooterClearance();
+        window.addEventListener('resize', updateOuterFooterClearance);
+        window.addEventListener('load', updateOuterFooterClearance);
+    })();
+    </script>
+    <link rel="stylesheet" href="../../../css/SCQ_style.css">
+    <link rel="stylesheet" href="../../../css/Color.css">
+    <link rel="stylesheet" href="../../../css/QuestionOptions.css">
+	
+</head>
+<body>
+<div id="parentquizContainer">	</div>									  
+    <div id="quizContainer"></div>
+    <script src="quiz.js"></script>
+</body>
+</html>

@@ -125,11 +125,11 @@ $client = session()->get('client');
                     <!-- LEFT: Course name -->
                     <h4><?php echo $courseDetails[0]['course_name']; ?></h4>
                     <?php
-                    if ($pagesDetails) {
-                        $arrayleng = count($pagesDetails) - 1;
-                        $nxt_page = $pagesDetails[$arrayleng]['page_number'] + 1;
-                    } else {
-                        $nxt_page = 1;
+                    $nxt_page = 1;
+                    foreach ($pagesDetails as $pageDetails) {
+                        if ((float) $pageDetails['sub_page_main'] === 0.0) {
+                            $nxt_page = max($nxt_page, (int) $pageDetails['page_number'] + 1);
+                        }
                     }
 
                     ?>
@@ -268,7 +268,7 @@ $client = session()->get('client');
                                         </div>
                                         <div class="mb-1">
                                             <label class="form-label fw-semibold"><?php echo lang('UI_Text.CB_Page_Number'); ?> <span class="text-danger">*</span></label>
-                                            <input type="number" min="1" class="form-control" name="page_number" placeholder="<?php echo lang('UI_Text.CB_Page_Number'); ?>" oninput="validateCreatePageNumber(this)" value="<?php echo $nxt_page; ?>" required />
+                                            <input type="number" min="1" step="1" class="form-control" name="page_number" placeholder="<?php echo lang('UI_Text.CB_Page_Number'); ?>" oninput="validateCreatePageNumber(this)" value="<?php echo $nxt_page; ?>" required />
                                             <span id="createPageNumberError" style="color: red;"></span>
                                         </div>
                                         <input type="hidden" name="scourse_id" value="<?php echo $scourse_id ?>">

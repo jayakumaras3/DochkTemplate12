@@ -1,0 +1,54 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="104px" height="104px" viewBox="0 0 104 104">
+<defs>
+<g id="Layer0_0_MEMBER_0_MEMBER_0_FILL">
+<path fill="#006366" stroke="none" d="
+M 1577.35 312
+Q 1534.65 312 1504.45 342.15 1474.3 372.35 1474.3 415.05 1474.3 457.75 1504.45 487.9 1534.65 518.1 1577.35 518.1 1620.05 518.1 1650.2 487.9 1680.4 457.75 1680.4 415.05 1680.4 372.35 1650.2 342.15 1620.05 312 1577.35 312 Z"/>
+</g>
+
+<path id="Layer0_0_MEMBER_1_MEMBER_0_MEMBER_0_MEMBER_0_1_STROKES" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+M 76.25 25.35
+L 71.95 29.55
+M 51.95 15.8
+L 51.95 22.05
+M 32 29.65
+L 27.85 25.3
+M 32.1 69.45
+L 27.8 73.65
+M 76.15 73.75
+L 72 69.4
+M 23.8 49.5
+L 17.85 49.4
+M 86.2 49.5
+L 80.25 49.4"/>
+
+<path id="Layer0_0_MEMBER_1_MEMBER_0_MEMBER_1_MEMBER_0_1_STROKES" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+M 40.65 32.25
+Q 35.3 36.2 33.3 42.5 30.95 50.35 34.8 57.55 37.55 62.6 42.25 65.3
+L 42.25 71.15 61.85 71.15 61.85 65.5
+Q 62.95 64.9 63.95 64.15 69.2 60.35 70.95 53.95 73.35 46.15 69.65 38.95 65.85 31.75 58 29.3 55.1 28.45 52.25 28.45 47.65 28.45 43.75 30.35 42.1 31.15 40.65 32.25 Z
+M 46.25 35.5
+Q 45.2044921875 36.0365234375 44.25 36.8 40.55 39.5 39.15 43.85 38.61328125 45.6783203125 38.55 47.45
+M 38.7 49.75
+Q 38.7220703125 49.9505859375 38.75 50.15
+M 43.25 79.15
+L 45.1 79.15 58.6 79.15 60.45 79.15
+M 45.1 79.15
+L 45.1 86.7 58.6 86.7 58.6 79.15
+M 42.55 74.9
+L 61.1 74.9"/>
+</defs>
+
+<g transform="matrix( 0.50457763671875, 0, 0, 0.5045623779296875, -743.9,-157.4) ">
+<use xlink:href="#Layer0_0_MEMBER_0_MEMBER_0_FILL"/>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,-0.05) ">
+<use xlink:href="#Layer0_0_MEMBER_1_MEMBER_0_MEMBER_0_MEMBER_0_1_STROKES"/>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,-0.05) ">
+<use xlink:href="#Layer0_0_MEMBER_1_MEMBER_0_MEMBER_1_MEMBER_0_1_STROKES"/>
+</g>
+</svg>

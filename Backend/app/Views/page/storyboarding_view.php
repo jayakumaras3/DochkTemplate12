@@ -217,7 +217,7 @@
                         </div>
                         <div class="collapse" id="<?php echo $collapseId; ?>" data-bs-parent="#storyboardAccordion">
                             <div class="sb-page-content">
-                                
+
                                 <div class="sb-col-audio">
                                     <div class="sb-col-label"><i class="mdi mdi-microphone-outline"></i> Audio Text/Transcript</div>
                                     <div class="sb-col-text"><?php echo $content['audio']; ?></div>

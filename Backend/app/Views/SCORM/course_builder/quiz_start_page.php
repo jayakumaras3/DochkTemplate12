@@ -58,7 +58,7 @@ if ($getAssessmentSettings) {
     $minutesdescrip = (isset($minutesdescrip) &&  $minutesdescrip != '') ? $minutesdescrip : $assessment_sets['71'];
 }
 $quiz_question_path = base_url() . "SCORM/Course_builder/Review_course/quizQuestions/" . $course_id . "/" . $page_id . "/0";
-$isModernTheme = isset($coursedetails) && isset($coursedetails[0]['theme']) && $coursedetails[0]['theme'] == '8';
+$isModernTheme = isset($coursedetails) && isset($coursedetails[0]['theme']) && in_array((string) $coursedetails[0]['theme'], ['8', '9'], true);
 ?>
 <?php if ($isModernTheme): ?>
     <?php /* Mirrors the start-page markup ModernTheme's own scripts/QuizTemplate/Quiz/quiz.js

@@ -177,8 +177,8 @@
 						</div>
 						<div class="form-group col-md-2 mb-2">
 							<label>Page Number</label>
-							<input type="number" class="form-control col-md-12" name="page_number" placeholder="Page Number"
-								value="<?php echo $pagerow['page_number'] ?>" />
+							<input type="number" min="1" step="1" class="form-control col-md-12" name="page_number" placeholder="Page Number"
+								value="<?php echo (int) $pagerow['page_number'] ?>" />
 						</div>
 						<div class="form-group col-md-2 mb-2">
 							<label>Status</label>

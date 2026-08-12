@@ -294,6 +294,7 @@ class Scorm_course_pages extends BaseController
         if ($this->request->getPost()) {
             $rules = [
                 'page_name' => 'required',
+                'page_number' => 'required|integer|greater_than_equal_to[1]',
             ];
 
             if (!$this->validate($rules)) {
@@ -303,16 +304,25 @@ class Scorm_course_pages extends BaseController
                 $page_number = $this->request->getVar('page_number');
                 $page_name = $this->request->getVar('page_name');
 
-                // Make room for the new page only if its number is actually taken: any existing
-                // page (and its own sub-pages) at or past this slot shifts up by one, so
-                // inserting "in between" existing pages - or reusing a number that's already
-                // taken - can't leave two pages sharing a page_number (which otherwise made
-                // left-menu navigation land on the wrong one). If the slot is free (e.g. pages
-                // were created out of order, leaving a gap), nothing needs to move.
-                if (!empty($this->scorm_page_model->getpagedata_number($page_number, $data['scourse_id']))) {
-                    $this->scorm_page_model->shiftPageNumbersFrom($data['scourse_id'], $page_number, 1);
-                }
+                $database = \Config\Database::connect();
 
+                $database->transStart();
+
+
+
+                // Only main pages consume numbered slots. The model carries children with any
+
+                // parent page that shifts to make room for this insertion.
+
+                $numberingUpdated = $this->scorm_page_model->shiftPageNumbersFrom(
+
+                    $data['scourse_id'],
+
+                    $page_number,
+
+                    1
+
+                );
                 $newdata = [
                     'fk_course_id' => $data['scourse_id'],
                     'page_name' => $this->request->getVar('page_name'),
@@ -325,9 +335,26 @@ class Scorm_course_pages extends BaseController
                     'last_update_by' => session()->get('id_user'),
                     'last_update_on' => time()
                 ];
-                $result = $this->scorm_page_model->addpagedetails($newdata);
-                // print_r($result);
-                // exit();
+                $result = $numberingUpdated
+
+                    ? $this->scorm_page_model->addpagedetails($newdata)
+
+                    : false;
+
+                if (!$result) {
+
+                    $database->transRollback();
+
+                    $result = false;
+                } else {
+
+                    $committed = $database->transComplete();
+
+                    if (!$committed || !$database->transStatus()) {
+
+                        $result = false;
+                    }
+                }
 
                 if ($result) {
                     // print_r($result);
@@ -422,17 +449,11 @@ class Scorm_course_pages extends BaseController
         } else {
             return redirect()->to(base_url() . '/SCORM/course_builder/Editor');
         }
-        $page_number = $this->request->getVar('page_number');
-        $current_sub_pages = count($this->scorm_page_model->getSubpagecontent($page_number, $data['scourse_id']));
-        $newsubpage_id = $page_number + ($current_sub_pages + 1) / 100;
+
 
         if ($this->request->getPost()) {
             $newdata = [
-                'fk_course_id' => $data['scourse_id'],
                 'page_name' => $this->request->getVar('page_name'),
-                'sub_page_main' => $this->request->getVar('page_number'),
-                'type' => $this->request->getVar('type'),
-                'page_number' => $newsubpage_id,
                 'type' => $this->request->getVar('type'),
                 'status' => '1',
                 'createdby' => session()->get('id_user'),
@@ -440,18 +461,46 @@ class Scorm_course_pages extends BaseController
                 'last_update_by' => session()->get('id_user'),
                 'last_update_on' => time()
             ];
-            $result = $this->scorm_page_model->addpagedetails($newdata);
+            $result = $this->scorm_page_model->addSubpage(
 
+                $data['page_id'],
+
+                $data['scourse_id'],
+
+                $newdata
+
+            );
 
             if ($result) {
                 $_SESSION['scourse_id'] = $data['scourse_id'];
                 $_SESSION['page_id'] = $result['page_id'];
+                $_SESSION['page_number'] = $result['page_number'];
                 session()->setFlashdata('success', lang('Messages.Success_0011'));
-                return redirect()->to(base_url('SCORM/course_builder/scorm_course_pages/page_edit_view'));
+                if ($this->request->isAJAX()) {
+
+                    return $this->response->setJSON([
+
+                        'success' => true,
+
+                        'page_id' => $result['page_id'],
+
+                    ]);
+                }
+
+                return redirect()->to(base_url('SCORM/course_builder/Editor'));
             } else {
                 session()->setFlashdata('error', lang('Messages.Error_0001'));
                 session()->setFlashdata('alert-class', 'alert-danger');
-                return redirect()->to(base_url('SCORM/course_builder/Scorm_course_pages/storyboarding'));
+                if ($this->request->isAJAX()) {
+
+                    return $this->response
+
+                        ->setStatusCode(422)
+
+                        ->setJSON(['success' => false]);
+                }
+
+                return redirect()->to(base_url('SCORM/course_builder/Editor'));
             }
         }
 
@@ -465,16 +514,18 @@ class Scorm_course_pages extends BaseController
             return $response;
         }
         $data = [];
+
         helper(['form']);
 
         if (isset($_POST['crid'])) {
             $data['crid'] = $_POST['crid'];
+            $data['course_id'] = $data['crid'];
             $_SESSION['crid'] = $data['crid'];
             $_SESSION['scourse_id'] = $data['crid'];
         } elseif (isset($_SESSION['crid'])) {
             $data['course_id'] = $_SESSION['crid'];
         } elseif (isset($_SESSION['scourse_id'])) {
-            $data['scourse_id'] = $_SESSION['scourse_id'];
+            $data['course_id'] = $_SESSION['scourse_id'];
         } else {
             return redirect()->to(base_url() . '/SCORM/course_builder/Editor');
         }
@@ -515,6 +566,17 @@ class Scorm_course_pages extends BaseController
         // exit();
         if (!empty($pagedata)) {
             $data['row'] = $pagedata[0];
+            $data['page_id'] = $data['row']['page_id'];
+
+            $data['page_number'] = $data['row']['page_number'];
+
+            $data['page_name'] = $data['row']['page_name'];
+
+            $_SESSION['page_id'] = $data['page_id'];
+
+            $_SESSION['page_number'] = $data['page_number'];
+
+            $_SESSION['page_name'] = $data['page_name'];
         } else {
             return redirect()->to(base_url() . '/SCORM/course_builder/Editor');
         }
@@ -522,7 +584,7 @@ class Scorm_course_pages extends BaseController
 
         $data['sub_page_content'] = $this->scorm_page_model->getSubpagecontent($data['page_number'], $data['course_id']);
 
-        $data['page_id'] = $data['row']['page_id'];
+
 
         $currentpagenum = $data['row']['page_number'];
         $fk_course_id = $data['row']['fk_course_id'];
@@ -564,6 +626,7 @@ class Scorm_course_pages extends BaseController
         $user = session()->get('username');
 
         if ($this->request->getPost()) {
+            $result = false;
             //print_r("sss");
             $rules = [
                 'page_name' => 'required',
@@ -572,69 +635,53 @@ class Scorm_course_pages extends BaseController
             if (!$this->validate($rules)) {
                 $data['coursevalidation'] = $this->validator;
             } else {
-                $newPageNumber = $this->request->getVar('page_number');
-                $newStatus = $this->request->getVar('status');
+                $result = $this->scorm_page_model->updatePageHierarchy(
 
-                $existingPage = $this->scorm_page_model->getpagedata($data['page_id']);
-                // Mirrors the type dropdown's own filtering (main.php's editPageModal) - only
-                // types that share the same underlying data are offered there, but this is the
-                // authoritative check in case that gets bypassed (e.g. a direct POST).
-                $typeSwapFamilies = [
-                    1 => [1, 3], 3 => [1, 3],
-                    5 => [5, 6], 6 => [5, 6],
-                    10 => [10, 11, 12], 11 => [10, 11, 12], 12 => [10, 11, 12],
-                ];
-                $requestedType = $this->request->getVar('type');
-                if (!empty($existingPage)) {
-                    $oldType = (int) $existingPage[0]['type'];
-                    $allowedPageTypes = $typeSwapFamilies[$oldType] ?? [$oldType];
-                    if (!in_array((int) $requestedType, $allowedPageTypes, true)) {
-                        $requestedType = $oldType;
-                    }
+                    $data['page_id'],
 
-                    $courseId = $existingPage[0]['fk_course_id'];
-                    $oldPageNumber = $existingPage[0]['page_number'];
-                    $oldStatus = $existingPage[0]['status'];
+                    [
 
-                    // If the page number actually changed, shift only the pages the move
-                    // actually passes over (between the old and new slot) and carry this
-                    // page's own sub-pages along with it - otherwise editing a number to match
-                    // (or pass) another page would leave two pages sharing a number (breaking
-                    // left-menu navigation) or strand this page's sub-pages under its old,
-                    // now-reassigned number. movePageNumberRange() (not
-                    // shiftPageNumbersFrom(), which is for insert/delete where the page count
-                    // itself changes) keeps pages outside that range untouched.
-                    if ($newPageNumber !== null && $newPageNumber !== '' && (float) $oldPageNumber !== (float) $newPageNumber) {
-                        $this->scorm_page_model->movePageNumberRange($courseId, $oldPageNumber, $newPageNumber, [$data['page_id']]);
-                        $this->scorm_page_model->relinkSubpages($courseId, $oldPageNumber, $newPageNumber);
-                    }
+                        'page_name' => $this->request->getVar('page_name'),
 
-                    // If this edit is deleting the page (status -> 0 via the Status field),
-                    // close the gap it leaves behind: every later page shifts down by one so
-                    // numbering stays contiguous, mirroring the shift the other direction when
-                    // inserting/moving a page above.
-                    if ((int) $oldStatus !== 0 && (int) $newStatus === 0) {
-                        $this->scorm_page_model->shiftPageNumbersFrom($courseId, $oldPageNumber, -1, [$data['page_id']]);
-                    }
-                }
+                        'type' => $this->request->getVar('type'),
 
-                $newdata = [
-                    'page_name' => $this->request->getVar('page_name'),
-                    'sub_page_main' => $this->request->getVar('sub_page_main'),
-                    'type' => $requestedType,
-                    'status' => $this->request->getVar('status'),
-                    'page_number' => $newPageNumber,
-                    'last_update_by' => session()->get('id_user'),
-                    'last_update_on' => time(),
+                        'status' => $this->request->getVar('status'),
 
-                ];
-                $result = $this->scorm_page_model->editpagedetails($newdata, $data['page_id']);
+                        'page_number' => $this->request->getVar('page_number'),
+
+                    ],
+
+                    session()->get('id_user'),
+
+                    time()
+
+                );
+
                 if ($result) {
+
+                    if ((int) $this->request->getVar('status') !== 0) {
+
+                        $updatedPage = $this->scorm_page_model->getpagedata($data['page_id']);
+
+                        if (!empty($updatedPage)) {
+
+                            $_SESSION['page_number'] = $updatedPage[0]['page_number'];
+                        }
+                    }
+
                     session()->setFlashdata('success', lang('Messages.Success_0008'));
                 } else {
                     session()->setFlashdata('error', lang('Messages.Error_0001'));
                     session()->setFlashdata('alert-class', 'alert-danger');
                 }
+            }
+            if ($this->request->isAJAX()) {
+
+                return $this->response
+
+                    ->setStatusCode($result ? 200 : 422)
+
+                    ->setJSON(['success' => (bool) $result]);
             }
         }
         return redirect()->to(base_url('SCORM/course_builder/scorm_course_pages/page_edit_view'));
@@ -692,32 +739,68 @@ class Scorm_course_pages extends BaseController
         } else {
             return redirect()->to(base_url() . 'SCORM/course_builder/Scorm_course_pages/storyboarding');
         }
-        if ($data['type'] == 4 || $data['type'] == 5 || $data['type'] == 6) {
-            $coursedata = $this->scorm_page_model->getCoursedata($data['scourse_id']);
-            $dir = FCPATH . 'assets/assets/uploads/SCORM_course_document/' . $data['scourse_id'] . '/' . $coursedata[0]['createdon'] . '/shared/assets/content/english/pages/' . $data['page_id'];
-            $this->emptyDir($dir);
-            rmdir($dir);
-        }
 
         $newStatus = $this->request->getVar('status');
+        $result = false;
 
-        // If this is deleting the page (status -> 0), close the gap it leaves behind: every
-        // later page shifts down by one so numbering stays contiguous - same as editpage().
+        $existingPage = [];
+
+        // If this is deleting a main page (status -> 0), close the gap it leaves behind: every
+        // later page shifts down by one so numbering stays contiguous - same as editpage(). A
+        // sub-page's number (e.g. 1.02) is only ever compared against its own siblings (see
+        // getSubpagecontent()'s exact-match on sub_page_main) - shiftPageNumbersFrom()'s
+        // ">= fromNumber" is unbounded, so applying it to a sub-page's fractional number would
+        // also catch every later *main* page (2, 3, 4... are all >= 1.02) and drag them down too.
         if ((int) $newStatus === 0) {
             $existingPage = $this->scorm_page_model->getpagedata($data['page_id']);
+            // $isSubpage = !empty($existingPage) && (float) ($existingPage[0]['sub_page_main'] ?? 0) !== 0.0;
             if (!empty($existingPage) && (int) $existingPage[0]['status'] !== 0) {
-                $this->scorm_page_model->shiftPageNumbersFrom($existingPage[0]['fk_course_id'], $existingPage[0]['page_number'], -1, [$data['page_id']]);
+                $result = $this->scorm_page_model->softDeletePageHierarchy(
+
+                    $data['page_id'],
+
+                    session()->get('id_user'),
+
+                    time()
+
+                );
+                // $this->scorm_page_model->shiftPageNumbersFrom($existingPage[0]['fk_course_id'], $existingPage[0]['page_number'], -1, [$data['page_id']]);
             }
         }
 
-        $newdata = [
-            'status' => $newStatus,
-            'last_update_by' => session()->get('id_user'),
-            'last_update_on' => time(),
 
-        ];
-        $result = $this->scorm_page_model->editpagedetails($newdata, $data['page_id']);
         if ($result) {
+            $persistedPage = $existingPage[0];
+
+            if (in_array((int) $persistedPage['type'], [4, 5, 6], true)) {
+
+                $coursedata = $this->scorm_page_model->getCoursedata($persistedPage['fk_course_id']);
+
+                if (!empty($coursedata)) {
+
+                    $dir = FCPATH
+
+                        . 'assets/assets/uploads/SCORM_course_document/'
+
+                        . $persistedPage['fk_course_id'] . '/'
+
+                        . $coursedata[0]['createdon']
+
+                        . '/shared/assets/content/english/pages/'
+
+                        . $persistedPage['page_id'];
+
+                    if (is_dir($dir)) {
+
+                        $this->emptyDir($dir);
+
+                        if (!rmdir($dir)) {
+
+                            log_message('error', 'Unable to remove deleted page asset directory: ' . $dir);
+                        }
+                    }
+                }
+            }
             session()->setFlashdata('success', lang('Messages.Success_0005'));
         } else {
             session()->setFlashdata('error', lang('Messages.Error_0001'));
@@ -1930,11 +2013,19 @@ class Scorm_course_pages extends BaseController
         if ($response =  $this->requireRole(['5', '44', '67', '46'])) {
             return $response;
         }
-        $position = $_POST['position'];
-        $pagenumberresult = $this->scorm_page_model->updatePagenumber($position);
-        if ($pagenumberresult) {
-            return json_encode(['success' => true]);
-        }
+        $position = $this->request->getPost('position');
+
+        $courseId = $this->request->getPost('scourse_id');
+
+        $pagenumberresult = $this->scorm_page_model->updatePagenumber($courseId, $position);
+
+
+
+        return $this->response
+
+            ->setStatusCode($pagenumberresult ? 200 : 422)
+
+            ->setJSON(['success' => $pagenumberresult]);
     }
     function uploadZipfile()
     {
@@ -2339,9 +2430,11 @@ class Scorm_course_pages extends BaseController
             }
 
             $normalizedEntry = str_replace('\\', '/', $entry);
-            if (str_starts_with($normalizedEntry, '/')
+            if (
+                str_starts_with($normalizedEntry, '/')
                 || preg_match('/^[A-Za-z]:\//', $normalizedEntry)
-                || preg_match('~(^|/)\.\.(/|$)~', $normalizedEntry)) {
+                || preg_match('~(^|/)\.\.(/|$)~', $normalizedEntry)
+            ) {
                 $zip->close();
                 $zipIsOpen = false;
                 return $this->response->setJSON(['status' => 'ERROR', 'message' => 'The ZIP package contains an unsafe file path.']);
@@ -2457,7 +2550,7 @@ class Scorm_course_pages extends BaseController
                     if (!$restoreBackup($backupDirectory, $targetDirectory)) {
                         throw new \RuntimeException(
                             'Unable to install the new HTML package or restore the existing package. '
-                            . 'The backup remains at ' . $backupDirectory
+                                . 'The backup remains at ' . $backupDirectory
                         );
                     }
                     $backupDirectory = null;
@@ -2967,6 +3060,12 @@ class Scorm_course_pages extends BaseController
             } elseif ($theme == 8) {
                 $themesourceFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/ModernTheme';
                 $indexsourceFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/scorm_libraries/Modern_index_files';
+            } elseif ($theme == 8) {
+                $themesourceFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/ModernTheme';
+                $indexsourceFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/scorm_libraries/Modern_index_files';
+            } elseif ($theme == 9) {
+                $themesourceFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/ZydusTheme';
+                $indexsourceFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/scorm_libraries/Zydus_index_files';
             } else {
                 $themesourceFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/Default';
                 $indexsourceFolderPath = FCPATH . 'assets/assets/uploads/SCORM_course_document/scorm_libraries/index_files';
@@ -3150,14 +3249,18 @@ class Scorm_course_pages extends BaseController
             $data['course_id'] = $_POST['course_id'];
             $data['page_id'] = $_POST['page_id'];
             $data['status'] = $_POST['status'];
+            $result = $this->scorm_page_model->updatePageHierarchy(
 
-            $newdata = [
-                'status' => $data['status'],
-                'last_update_by' => session()->get('id_user'),
-                'last_update_on' => time(),
-            ];
+                $data['page_id'],
 
-            $result = $this->scorm_page_model->editpagedetails($newdata, $data['page_id']);
+                ['status' => $data['status']],
+
+                session()->get('id_user'),
+
+                time()
+
+            );
+
             if ($result) {
                 session()->setFlashdata('success', lang('Messages.Success_0008'));
             } else {

@@ -31,7 +31,7 @@
     $kyusubmit = (isset($kyusubmit) && $kyusubmit != '') ? $kyusubmit : $assessment_scqmcq_sets['61'];
     $kyupleaseselectanswer = (isset($kyupleaseselectanswer) && $kyupleaseselectanswer != '') ? $kyupleaseselectanswer : $assessment_scqmcq_sets['68'];
 
-$userlevel = session('userlevel');
+    $userlevel = session('userlevel');
     $arrayuserlevel = array_map('intval', explode(',', $userlevel));
     ?>
 
@@ -41,43 +41,43 @@ $userlevel = session('userlevel');
                 <div class="row justify-content-between align-items-center">
                     <div class="col-sm-7 d-flex align-items-center">
                         <h4><?php echo abs($row['page_number']); ?> : <?php echo $page_name; ?> (<?php
-                            $type = $row['type'];
-                            switch ($type) {
-                                case 1:
-                                    echo lang('UI_Text.CB_Type_Articulate');
-                                    break;
-                                case 2:
-                                    echo lang('UI_Text.CB_Type_Video');
-                                    break;
-                                case 8:
-                                    echo lang('UI_Text.CB_Type_Video_Sub_Page');
-                                    break;
-                                case 3:
-                                    echo lang('UI_Text.CB_Type_Html');
-                                    break;
-                                case 4:
-                                    echo lang('UI_Text.CB_Type_Quiz');
-                                    break;
-                                case 5:
-                                    echo lang('UI_Text.CB_Type_SCQ');
-                                    break;
-                                case 6:
-                                    echo lang('UI_Text.CB_Type_MCQ');
-                                    break;
-                                case 9:
-                                    echo lang('UI_Text.CB_Type_Audio_Version');
-                                    break;
-                                case 10:
-                                    echo lang('UI_Text.CB_Type_Text_Only');
-                                    break;
-                                case 11:
-                                    echo lang('UI_Text.CB_Type_Image_Text');
-                                    break;
-                                case 12:
-                                    echo lang('UI_Text.CB_Type_Text_Image');
-                                    break;
-                            }
-                            ?>)</h4>
+                                                                                                    $type = $row['type'];
+                                                                                                    switch ($type) {
+                                                                                                        case 1:
+                                                                                                            echo lang('UI_Text.CB_Type_Articulate');
+                                                                                                            break;
+                                                                                                        case 2:
+                                                                                                            echo lang('UI_Text.CB_Type_Video');
+                                                                                                            break;
+                                                                                                        case 8:
+                                                                                                            echo lang('UI_Text.CB_Type_Video_Sub_Page');
+                                                                                                            break;
+                                                                                                        case 3:
+                                                                                                            echo lang('UI_Text.CB_Type_Html');
+                                                                                                            break;
+                                                                                                        case 4:
+                                                                                                            echo lang('UI_Text.CB_Type_Quiz');
+                                                                                                            break;
+                                                                                                        case 5:
+                                                                                                            echo lang('UI_Text.CB_Type_SCQ');
+                                                                                                            break;
+                                                                                                        case 6:
+                                                                                                            echo lang('UI_Text.CB_Type_MCQ');
+                                                                                                            break;
+                                                                                                        case 9:
+                                                                                                            echo lang('UI_Text.CB_Type_Audio_Version');
+                                                                                                            break;
+                                                                                                        case 10:
+                                                                                                            echo lang('UI_Text.CB_Type_Text_Only');
+                                                                                                            break;
+                                                                                                        case 11:
+                                                                                                            echo lang('UI_Text.CB_Type_Image_Text');
+                                                                                                            break;
+                                                                                                        case 12:
+                                                                                                            echo lang('UI_Text.CB_Type_Text_Image');
+                                                                                                            break;
+                                                                                                    }
+                                                                                                    ?>)</h4>
                     </div>
 
                     <div class="col-auto d-flex align-items-center">
@@ -130,9 +130,13 @@ $userlevel = session('userlevel');
                                     12 => 'UI_Text.CB_Type_Text_Image',
                                 ];
                                 $typeSwapFamilies = [
-                                    1 => [1, 3], 3 => [1, 3],
-                                    5 => [5, 6], 6 => [5, 6],
-                                    10 => [10, 11, 12], 11 => [10, 11, 12], 12 => [10, 11, 12],
+                                    1 => [1, 3],
+                                    3 => [1, 3],
+                                    5 => [5, 6],
+                                    6 => [5, 6],
+                                    10 => [10, 11, 12],
+                                    11 => [10, 11, 12],
+                                    12 => [10, 11, 12],
                                 ];
                                 $allowedPageTypes = $typeSwapFamilies[$row['type']] ?? [(int) $row['type']];
                                 ?>
@@ -146,14 +150,25 @@ $userlevel = session('userlevel');
                             </div>
                             <div class="mb-1">
                                 <label class="form-label fw-semibold"><?php echo lang('UI_Text.CB_Page_Number'); ?> <span class="text-danger">*</span></label>
-                                <input type="number" step="0.1" min="1" class="form-control" name="page_number" placeholder="<?php echo lang('UI_Text.CB_Page_Number'); ?>" value="<?php echo $row['page_number']; ?>" required />
+                                <?php if ((float) $row['sub_page_main'] === 0.0) { ?>
+
+                                    <input type="number" step="1" min="1" class="form-control" name="page_number" placeholder="<?php echo lang('UI_Text.CB_Page_Number'); ?>" value="<?php echo (int) $row['page_number']; ?>" required />
+
+                                <?php } else { ?>
+
+                                    <input type="text" class="form-control" value="<?php echo $row['page_number']; ?>" readonly />
+
+                                    <input type="hidden" name="page_number" value="<?php echo $row['page_number']; ?>" />
+
+                                <?php } ?>
                             </div>
                             <div class="mb-1">
                                 <label class="form-label fw-semibold"><?php echo lang('UI_Text.Status'); ?></label>
                                 <select name="status" class="form-control">
                                     <?php // "Active" keeps whatever non-deleted status this page already has (e.g. the
                                     // Dev Completed/QA Approved workflow states used elsewhere - see types/video.php) -
-                                    // it's not reset to a single fixed value. Choosing "Deleted" always submits 0. ?>
+                                    // it's not reset to a single fixed value. Choosing "Deleted" always submits 0. 
+                                    ?>
                                     <option value="<?php echo $row['status'] != 0 ? $row['status'] : 1; ?>" <?php echo ($row['status'] != 0) ? 'selected' : ''; ?>><?php echo lang('UI_Text.Active'); ?></option>
                                     <option value="0" <?php echo ($row['status'] == 0) ? 'selected' : ''; ?>><?php echo lang('UI_Text.Deleted'); ?></option>
                                 </select>
@@ -254,7 +269,13 @@ $userlevel = session('userlevel');
                     fetch(form.action, {
                             method: 'POST',
                             body: new FormData(form),
-                            credentials: 'same-origin'
+                            credentials: 'same-origin',
+
+                            headers: {
+
+                                'X-Requested-With': 'XMLHttpRequest'
+
+                            }
                         })
                         .then(function(response) {
                             var overlay = document.getElementById('loading-screen');
@@ -269,6 +290,9 @@ $userlevel = session('userlevel');
                             window.location.href = '<?php echo base_url('SCORM/course_builder/Editor'); ?>';
                         })
                         .catch(function(err) {
+                            form.dataset.submitting = '0';
+
+                            if (submitButton) submitButton.disabled = false;
                             var overlay = document.getElementById('loading-screen');
                             if (overlay) overlay.style.display = 'none';
                             var message = 'Unable to update the page. Please try again.';
@@ -311,6 +335,13 @@ $userlevel = session('userlevel');
                     addSubPageFormEl.addEventListener('submit', function(e) {
                         e.preventDefault();
                         var form = e.target;
+                        if (form.dataset.submitting === '1') return;
+
+                        form.dataset.submitting = '1';
+
+                        var submitButton = e.submitter || document.querySelector('[form="addSubPageForm"][type="submit"]');
+
+                        if (submitButton) submitButton.disabled = true;
                         var errorBox = document.getElementById('addSubPageModalError');
                         if (errorBox) errorBox.style.display = 'none';
                         // fetch(), not jQuery.ajax() - see the equivalent comment on
@@ -318,7 +349,13 @@ $userlevel = session('userlevel');
                         fetch(form.action, {
                                 method: 'POST',
                                 body: new FormData(form),
-                                credentials: 'same-origin'
+                                credentials: 'same-origin',
+
+                                headers: {
+
+                                    'X-Requested-With': 'XMLHttpRequest'
+
+                                }
                             })
                             .then(function(response) {
                                 var overlay = document.getElementById('loading-screen');
@@ -327,6 +364,9 @@ $userlevel = session('userlevel');
                                 window.location.href = '<?php echo base_url('SCORM/course_builder/Editor'); ?>';
                             })
                             .catch(function(err) {
+                                form.dataset.submitting = '0';
+
+                                if (submitButton) submitButton.disabled = false;
                                 var overlay = document.getElementById('loading-screen');
                                 if (overlay) overlay.style.display = 'none';
                                 var message = 'Unable to add the sub page. Please try again.';
@@ -345,7 +385,7 @@ $userlevel = session('userlevel');
         <style>
             .card-body td:nth-child(2) {
                 max-width: 200px;
-                
+
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -376,7 +416,7 @@ $userlevel = session('userlevel');
         }
         ?>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="theme-settings-offcanvas" aria-modal="true" role="dialog">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="theme-settings-offcanvas" aria-modal="true" role="dialog">
             <div class="offcanvas-body p-3 h-100" data-simplebar="init">
                 <div class="simplebar-wrapper" style="margin: -24px;">
                     <div class="simplebar-height-auto-observer-wrapper">
@@ -488,9 +528,17 @@ $userlevel = session('userlevel');
                         <div class="col-12 col-md-12 col-lg-12 mg-t-10">
                             <?php
                             $typePartials = [
-                                1 => 'articulate', 2 => 'video', 3 => 'html', 4 => 'quiz',
-                                5 => 'cyu', 6 => 'cyu', 8 => 'video', 9 => 'video',
-                                10 => 'text', 11 => 'text', 12 => 'text',
+                                1 => 'articulate',
+                                2 => 'video',
+                                3 => 'html',
+                                4 => 'quiz',
+                                5 => 'cyu',
+                                6 => 'cyu',
+                                8 => 'video',
+                                9 => 'video',
+                                10 => 'text',
+                                11 => 'text',
+                                12 => 'text',
                             ];
                             $typePartialName = $typePartials[$row['type']] ?? null;
 
@@ -506,23 +554,23 @@ $userlevel = session('userlevel');
             </div>
         </div>
 
-<?php } else { ?>
-                    <div class="col-lg-12 col-xl-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <ul class="nav nav-pills nav-fill navtab-bg">
-                                    <li class="nav-item">
-                                        <a href="#content" data-bs-toggle="tab" aria-expanded="true"
-                                            class="nav-link active">
-                                            <?php echo lang('UI_Text.CB_Content'); ?>
-                                        </a>
-                                    </li>
-                                    
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+    <?php } else { ?>
+        <div class="col-lg-12 col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-pills nav-fill navtab-bg">
+                        <li class="nav-item">
+                            <a href="#content" data-bs-toggle="tab" aria-expanded="true"
+                                class="nav-link active">
+                                <?php echo lang('UI_Text.CB_Content'); ?>
+                            </a>
+                        </li>
 
-                <?php } ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    <?php } ?>
 </div>
 </div>

@@ -93,7 +93,14 @@
 				<ol class="breadcrumb m-0">
 					<li class="breadcrumb-item"><a href="<?php echo base_url($courses_link); ?>"><?= esc($courses_link_label) ?></a></li>
 					<?php if ($show_course_details_link) { ?>
-						<li class="breadcrumb-item"><a href="<?php echo base_url('my_training/read_more'); ?>"><?= lang('UI_Text.Course_Details') ?></a></li>
+						<li class="breadcrumb-item">
+							<form action="<?php echo base_url('my_training/read_more'); ?>" method="POST" class="d-inline"><?= csrf_field() ?>
+								<input type="hidden" name="crid" value="<?php echo esc($scourse_id); ?>">
+								<input type="hidden" name="detail_type" value="2">
+								<input type="hidden" name="tab" value="1">
+								<button type="submit" class="btn btn-link p-0 border-0 align-baseline"><?= lang('UI_Text.Course_Details') ?></button>
+							</form>
+						</li>
 					<?php } ?>
 				</ol>
 			</div>

@@ -1100,21 +1100,41 @@ class Trainings extends BaseController
                 'page_name' => 'required',
             ];
 
+
             if (!$this->validate($rules)) {
                 $data['coursevalidation'] = $this->validator;
             } else {
-                $newdata = [
-                    'page_name' => $this->request->getVar('page_name'),
-                    'sub_page_main' => $this->request->getVar('sub_page_main'),
-                    'type' => $this->request->getVar('type'),
-                    'status' => $this->request->getVar('status'),
-                    'page_number' => $this->request->getVar('page_number'),
-                    'last_update_by' => session()->get('id_user'),
-                    'last_update_on' => time(),
+                $result = $this->scorm_page_model->updatePageHierarchy(
 
-                ];
-                $result = $this->scorm_page_model->editpagedetails($newdata, $data['page_id']);
+                    $data['page_id'],
+
+                    [
+
+                        'page_name' => $this->request->getVar('page_name'),
+
+                        'type' => $this->request->getVar('type'),
+
+                        'status' => $this->request->getVar('status'),
+
+                        'page_number' => $this->request->getVar('page_number'),
+
+                    ],
+
+                    session()->get('id_user'),
+
+                    time()
+
+                );
                 if ($result) {
+                    if ((int) $this->request->getVar('status') !== 0) {
+
+                        $updatedPage = $this->scorm_page_model->getpagedata($data['page_id']);
+
+                        if (!empty($updatedPage)) {
+
+                            $_SESSION['page_number'] = $updatedPage[0]['page_number'];
+                        }
+                    }
                     session()->setFlashdata('success', lang('Messages.Success_0008'));
                 } else {
                     session()->setFlashdata('error', lang('Messages.Error_0001'));
@@ -1188,18 +1208,37 @@ class Trainings extends BaseController
             if (!$this->validate($rules)) {
                 $data['coursevalidation'] = $this->validator;
             } else {
-                $newdata = [
-                    'page_name' => $this->request->getVar('page_name'),
-                    'type' => $this->request->getVar('type'),
-                    'status' => $this->request->getVar('status'),
-                    'page_number' => $this->request->getVar('page_number'),
-                    'last_update_by' => session()->get('id_user'),
-                    'last_update_on' => time(),
+                $result = $this->scorm_page_model->updatePageHierarchy(
 
-                ];
-                $result = $this->scorm_page_model->editpagedetails($newdata, $data['page_id']);
+                    $data['page_id'],
 
+                    [
+
+                        'page_name' => $this->request->getVar('page_name'),
+
+                        'type' => $this->request->getVar('type'),
+
+                        'status' => $this->request->getVar('status'),
+
+                        'page_number' => $this->request->getVar('page_number'),
+
+                    ],
+
+                    session()->get('id_user'),
+
+                    time()
+
+                );
                 if ($result) {
+                    if ((int) $this->request->getVar('status') !== 0) {
+
+                        $updatedPage = $this->scorm_page_model->getpagedata($data['page_id']);
+
+                        if (!empty($updatedPage)) {
+
+                            $_SESSION['page_number'] = $updatedPage[0]['page_number'];
+                        }
+                    }
 
                     // print_r($_SESSION);
                     // exit();
@@ -2999,8 +3038,9 @@ class Trainings extends BaseController
         $data['groupedData'] = $groupedData;
         $maxOptions = 0;
         foreach ($groupedData as $q_id => $options) {
-            $data['maxOptions'] = max($maxOptions, count($options));
+            $maxOptions = max($maxOptions, count($options));
         }
+        $data['maxOptions'] = $maxOptions;
         echo view('templates/header_view', $data);
         echo view('assessment/review_quiz_view', $data);
         echo view('templates/footer_view');

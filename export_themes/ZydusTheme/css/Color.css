@@ -1,0 +1,2992 @@
+/* ============================================================
+   Zydus Life brand palette — single source of truth.
+   Theme-only: these replace the previous theme's colour values.
+   No layout, sizing, spacing or behaviour is defined here.
+   ============================================================ */
+:root {
+    --zydus-primary: #006366;
+    --zydus-primary-hover: #005356;
+    --zydus-accent: #00A0A5;
+    --zydus-light: #B8ECEA;
+    /* Subtle Zydus hover surface (spec section 17). */
+    --zydus-tint: #F5FAFA;
+    --zydus-white: #FFFFFF;
+    --zydus-text: #1E1E1E;
+    --zydus-grey: #666666;
+    --zydus-border: #D9D9D9;
+    --zydus-line-soft: #E5E5E5;
+}
+
+/* Existing theme variables repointed at the Zydus palette rather than
+   duplicated, so every rule already consuming them updates in place. */
+:root {
+    --app-bg: var(--zydus-white);
+    --surface: var(--zydus-white);
+    --surface-soft: var(--zydus-white);
+    --text: var(--zydus-text);
+    --text-soft: #444444;
+    --muted: var(--zydus-grey);
+    --line: var(--zydus-border);
+    --line-soft: var(--zydus-line-soft);
+    --brand: var(--zydus-primary);
+    --brand-hover: var(--zydus-primary-hover);
+    --accent: var(--zydus-accent);
+    --shadow-soft: 0 18px 50px rgba(17, 24, 39, 0.08);
+}
+
+/* Links (spec 11 / 25). bootstrap.css - loaded before this file - sets
+   `a { color: #337ab7 }` and `a:hover, a:focus { color: #23527c }`, and
+   nothing in the theme overrode it, so links in the transcript and
+   Learning Aids panels still rendered in Bootstrap blue. Colour only:
+   text-decoration, size and behaviour are left to Bootstrap. Components
+   that set their own link colour with !important (.resource-modal-item)
+   are unaffected. */
+a {
+    color: var(--zydus-primary);
+}
+
+a:hover,
+a:focus {
+    color: var(--zydus-primary-hover);
+}
+
+html,
+body,
+.wholeContainer {
+    display: block !important;
+    visibility: visible !important;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+#mainPage {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+}
+
+body {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0;
+    overflow: hidden;
+    transform: none !important;
+    -webkit-transform: none !important;
+    background: var(--app-bg);
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+.wholeContainer {
+    position: relative;
+    display: flex !important;
+    flex-direction: column;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+    background: var(--surface);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.contentArea,
+.contentArea.fullContentArea {
+    position: relative;
+    left: auto !important;
+    float: none;
+    display: flex !important;
+    flex: 1 1 0;
+    flex-direction: column;
+    width: 100% !important;
+    height: 0 !important;
+    min-height: 0;
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+    background: var(--surface-soft);
+    box-shadow: none;
+}
+
+.headingArea1 {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1006;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 60px;
+    margin: 0 !important;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+/* When menu is open, push hamburger button behind the sidebar panel */
+.wholeContainer.menu-open .headingArea1 {
+    z-index: 1003 !important;
+}
+
+.headingArea1::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 18px;
+    width: 1px;
+    height: 18px;
+    background: var(--line);
+}
+
+#TmenuIcon {
+    width: 22px !important;
+    height: 22px !important;
+    margin: 0 !important;
+    cursor: pointer;
+    object-fit: contain;
+    opacity: 1;
+    filter: contrast(1.05) brightness(0.55);
+}
+
+#TmenuIcon:hover {
+    filter: contrast(1.1) brightness(0.4);
+}
+
+#TmenuIcon[aria-disabled="true"] {
+    opacity: 0.32 !important;
+    filter: grayscale(100%) brightness(1.2) !important;
+    cursor: default !important;
+    pointer-events: none !important;
+}
+
+#TmenuIcon:focus-visible {
+    outline: 2px solid #00A0A5;
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+#TmenuIcon1 {
+    display: none !important;
+}
+
+.headingArea {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    flex: 0 0 60px;
+    width: 100%;
+    min-width: 0;
+    min-height: 60px;
+    height: 60px;
+    margin: 0;
+    padding: 0 32px 0 84px;
+    color: var(--text);
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.moduleBreadcrumb {
+    color: var(--text-soft);
+    font-weight: 500;
+}
+
+.breadcrumbDivider {
+    color: #666666;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.pageHeaderText {
+    color: #000000;
+    font-weight: 700;
+}
+
+#pagenoHeader {
+    margin-left: auto;
+    /* Same colour as the header title (.pageHeaderText above). Was
+       var(--muted) (#637083). Colour only - size stays 13px. */
+    color: #000000;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+#certificateid,
+#exitCourseBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin-left: 8px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    cursor: pointer;
+}
+
+/* pagenumberEna_DIsable() (jMain.js) sets #pagenoHeader's inline
+   display to "none" on pages that don't show a page count (e.g. the
+   Welcome/start page). A hidden flex item doesn't consume any layout
+   space, so its margin-left:auto no longer pushes anything - fall
+   back to giving the exit button its own auto margin only in that
+   case, so normal pages (where #pagenoHeader does the pushing) don't
+   end up with two auto-margins and a gap between "x/8" and the icon. */
+#pagenoHeader[style*="none"] ~ #exitCourseBtn {
+    margin-left: auto;
+}
+
+#exitCourseBtn:hover {
+    background: #F5FAFA;
+}
+
+#Imagcertificateid,
+#ImagExitCourse {
+    width: 15px;
+    height: 15px !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.line2 {
+    display: none !important;
+}
+
+.pageContent,
+.pageContent.fullContentArea {
+    position: relative;
+    float: none;
+    flex: 1 1 0;          /* 0 base so it grows to fill exactly remaining height */
+    width: 100% !important;
+    height: 0 !important;
+    min-height: 0;
+    min-width: 0;
+    margin: 0;
+    padding: 0 !important;
+    overflow: hidden;
+    background: var(--surface-soft);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Iframes/video/canvas: fill parent via absolute so % height is guaranteed */
+#htmlArea,
+#flashArea,
+#captivateFrame,
+#vidArea {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+    border: 0;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+video,
+canvas {
+    border: 0;
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+#vidArea {
+    object-fit: contain;
+    background: #000;
+}
+
+video::cue {
+    font-size: 22px;
+    line-height: 1.8;
+    padding: 10px;
+}
+
+.footer {
+    position: relative;
+    left: auto;
+    top: auto;
+    z-index: 1000;
+    display: flex !important;
+    flex: 0 0 70px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+    width: 100% !important;
+    min-height: 70px;
+    height: 70px;
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0 46px 0 32px;
+    overflow: hidden;
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.footerCopyright {
+    margin-right: auto !important;
+    color: #1E1E1E;
+    font-size: clamp(13px, 1.05vw, 18px);
+    font-weight: 400;
+    white-space: nowrap;
+    background: transparent !important;
+    border: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    transform: none !important;
+}
+
+.footer > div {
+    position: relative;
+    float: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    min-width: 25px;
+    min-height: 25px;
+    margin: 0 !important;
+    padding: 0;
+    background-color: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    filter: contrast(1.15) brightness(0.62);
+    transition: background-color 0.18s ease, opacity 0.18s ease, transform 0.18s ease;
+}
+
+.footer > div:not(.footerCopyright):hover {
+    background-color: #F5FAFA;
+    filter: contrast(1.2) brightness(0.5);
+    transform: none;
+}
+
+#resource1 {
+    order: 10;
+}
+
+#prev {
+    order: 20;
+}
+
+#next {
+    order: 30;
+}
+
+#prev::before {
+    content: "";
+    position: absolute;
+    left: -14px;
+    top: 6px;
+    width: 1px;
+    height: 30px;
+    background: var(--line);
+}
+
+.resourceClass {
+    width: 36px !important;
+    height: 36px !important;
+    background-size: 20px 22px;
+}
+
+.prevClass,
+.nextClass {
+    width: 42px !important;
+    height: 42px !important;
+    background-size: 24px 24px;
+}
+
+.nextClassHighlight {
+    background-image: url("../images/footer-menu/NextHighlightAnim.svg");
+}
+
+.resourceHighlight {
+    background-image: url("../images/footer-menu/resource.svg") !important;
+}
+
+.exitClass,
+.exitClass1,
+.muteClass,
+.unmuteClass,
+.playClass,
+.pauseClass,
+.replayClass,
+.ccClass,
+.searchClass,
+.pageClass {
+    display: none !important;
+}
+
+.disabledClass {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.disabledClass span:hover {
+    color: #8f8f8f !important;
+}
+
+.navCircle {
+    width: 10px;
+    height: 10px;
+    margin-left: 0 !important;
+    border: 1px solid #9aa4b4;
+    border-radius: 50%;
+    background: transparent;
+}
+
+.navCircleHighlight {
+    background-color: var(--brand);
+    border-color: var(--brand) !important;
+}
+
+.sideBar {
+    position: absolute !important;
+    top: 72px !important;
+    left: 0 !important;
+    z-index: 1005 !important;
+    display: none;
+    width: 300px !important;
+    height: calc(100% - 72px) !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #FFFFFF !important;
+    border: none !important;
+    border-right: 1px solid #D9D9D9 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.headingcloser {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 1004 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    background: rgba(15, 23, 42, 0.14) !important;
+    cursor: pointer;
+}
+
+.headingcloser #TmenuIcon {
+    display: none !important;
+}
+
+.logo {
+    display: block;
+    width: auto;
+    max-width: 180px;
+    margin: 7px auto 13px !important;
+    padding: 0 !important;
+}
+
+.sideBarHeader1 {
+    display: none;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.sideBar #sideBarHeader {
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    width: 100% !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    flex: 0 0 32px;
+    padding: 0 !important;
+    background: #006366 !important;
+}
+
+#toc_id,
+#trans_id {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 50% !important;
+    min-width: 0 !important;
+    height: 32px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #FFFFFF !important;
+    background: #006366 !important;
+    border: none !important;
+   /* border-bottom: 2px solid transparent !important; */
+    border-radius: 0 !important;
+    box-sizing: border-box;
+    font-size: 14px !important;
+    line-height: 30px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    cursor: pointer;
+    float: none !important;
+    text-align: center !important;
+    transition: background-color 0.15s ease;
+}
+
+#trans_id {
+    border-left: 6px solid #ffffff !important;
+}
+
+/* High-specificity override beats any #sideBarHeader div rule in mobile.css */
+.sideBar #sideBarHeader > #toc_id,
+.sideBar #sideBarHeader > #trans_id {
+    height: 32px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 30px !important;
+    color: #FFFFFF !important;
+    background: #006366 !important;
+    border: none !important;
+    /*border-bottom: 2px solid transparent !important;  */
+    border-radius: 0 !important;
+    box-sizing: border-box;
+    padding: 0 !important;
+    float: none !important;
+    text-align: center !important;
+    width: 50% !important;
+}
+
+/* Re-apply separator — must come after the combined rule above (same specificity, last wins) */
+.sideBar #sideBarHeader > #trans_id {
+    border-left: 6px solid #ffffff !important;
+}
+
+#toc_id > span,
+#trans_id > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    font-size: inherit;
+    line-height: 24px;
+}
+
+#toc_id:hover,
+#trans_id:hover {
+    color: #FFFFFF !important;
+    background: #006366 !important;
+}
+
+.tocclickedclscss {
+    color: #FFFFFF !important;
+    background: #00A0A5 !important;
+    border-color: transparent !important;
+    font-weight: 700 !important;
+    box-shadow: none !important;
+    border-bottom: 2px solid rgba(255,255,255,0.7) !important;
+    box-sizing: border-box;
+}
+
+.tocclickedclscss:hover {
+    color: #FFFFFF !important;
+    background: #006366 !important;
+    border-color: transparent !important;
+}
+
+/* Explicit active-state style for Menu/Transcript tabs (same theme colors, clearer affordance) */
+.sideBar #sideBarHeader > #toc_id,
+.sideBar #sideBarHeader > #trans_id {
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.sideBar #sideBarHeader > #toc_id[aria-selected="true"],
+.sideBar #sideBarHeader > #trans_id[aria-selected="true"] {
+    background: #00A0A5 !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+   /* border-bottom: 2px solid rgba(255,255,255,0.7) !important;*/
+    opacity: 1;
+}
+
+.sideBar #sideBarHeader > #toc_id[aria-selected="false"],
+.sideBar #sideBarHeader > #trans_id[aria-selected="false"] {
+    background: #006366 !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+   /* border-bottom: 2px solid transparent !important; */
+    opacity: 0.88;
+}
+
+.sideBar > .tocData {
+    position: relative;
+    float: none;
+    width: 100%;
+    height: calc(100% - 120px);
+    margin-top: 6px;
+    padding: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    background: transparent;
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+#tocData li {
+    position: relative;
+    right: auto;
+    width: 100%;
+    margin: 0 0 2px;
+    padding: 0;
+    color: #666666;
+    border-radius: 0;
+    list-style: none;
+    font-size: 11px;
+    line-height: 1.3;
+    font-weight: 600;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+#tocData li:hover {
+    color: var(--brand);
+    background: #F5FAFA;
+}
+
+.sideBar li span {
+    display: inline-block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.visitedTOC {
+    color: #707070;
+}
+
+#tocData .tickSymbol::before,
+#tocData .tickSymbol1::before {
+    content: "";
+    display: block;
+    width: 8px;
+    height: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath d='M1 4.3L3.6 7L9 1' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+}
+
+#tocData .tickSymbol1::before {
+    visibility: visible;
+}
+
+.copyright {
+    position: static;
+    left: auto;
+    bottom: auto;
+    width: 100%;
+    height: auto;
+    color: var(--muted);
+    text-align: center;
+    font-size: 13px;
+}
+
+#clickNextId {
+    position: relative;
+    z-index: 1;
+    right: auto;
+    bottom: auto;
+    top: auto;
+    color: var(--surface);
+    text-align: right;
+    margin: 0 0 0 10px !important;
+    min-width: auto !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    filter: none !important;
+    background: transparent !important;
+}
+
+.footer > #clickNextId {
+    display: none;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    z-index: 1;
+    order: 5;
+    margin: 0 10px 0 0 !important;
+    max-width: min(42vw, 320px);
+    flex: 0 1 auto;
+}
+
+.footer > #clickNextId:hover {
+    background: transparent !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+.footer > #clickNextId > #spanCliContinue {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#spanCliContinue {
+    display: inline-block;
+    padding: 10px 16px;
+    color: var(--surface);
+    background:#006366;
+    border-radius: 999px;
+    box-shadow: 0 12px 30px rgba(17, 24, 39, 0.18);
+    font-size: 14px;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.preloaderDisplay {
+    position: absolute;
+    z-index: 10001;
+    width: 100%;
+    height: 100%;
+    opacity: 0.65;
+    background-color: rgba(255, 255, 255, 0.72);
+}
+
+#preloader {
+    position: absolute;
+    left: 0 !important;
+    top: 0;
+    z-index: 10000;
+    display: none;
+    width: 100% !important;
+    height: 100%;
+}
+
+#preloaderText {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;
+    z-index: 10002;
+}
+
+#preloaderText > img {
+    position: static;
+}
+
+#resourceArea1,
+#exitContainer,
+#searchContainer,
+#exitwithoutlogContainer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.32);
+}
+
+#resourceArea {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: rgba(7, 20, 42, 0.55);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 10001;
+}
+
+#resourceContent1,
+#searchArea,
+#exitArea {
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+}
+
+/* Resource modal card — centered, fixed-size card */
+#resourceContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    width: 480px;
+    max-width: 88%;
+    max-height: 78%;
+    height: auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(7, 20, 42, 0.28);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    z-index: 10002;
+    margin: 0;
+    animation: resourceModalIn 0.22s cubic-bezier(0.34, 1.26, 0.64, 1);
+}
+
+@keyframes resourceModalIn {
+    from { opacity: 0; transform: translate(-50%, -48%) scale(0.93); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.resource-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #E5E5E5;
+    flex-shrink: 0;
+}
+
+.resource-modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1E1E1E;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.resource-modal-icon-brand { color: #006366; }
+
+.resource-modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #f3f4f6;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, transform 0.15s;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+    color: #1E1E1E;
+}
+
+.resource-modal-close:hover {
+    background: #E5E5E5;
+    transform: scale(1.1);
+}
+
+.resource-modal-body {
+    padding: 16px 24px 24px;
+    overflow-y: auto;
+}
+
+.resource-modal-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 16px;
+    border: 1.5px solid #E5E5E5;
+    border-radius: 10px;
+    text-decoration: none !important;
+    color: #1E1E1E !important;
+    margin-bottom: 10px;
+    transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.resource-modal-item:last-child { margin-bottom: 0; }
+
+.resource-modal-item:hover {
+    border-color: #006366;
+    box-shadow: 0 3px 14px rgba(0, 99, 102, 0.12);
+    background: #F5FAFA;
+    color: #1E1E1E !important;
+    text-decoration: none !important;
+}
+
+.resource-item-icon-wrap {
+    width: 40px;
+    height: 40px;
+    background: #B8ECEA;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #006366;
+}
+
+.resource-item-label { flex: 1; line-height: 1.35; }
+
+.resource-item-arrow {
+    color: #006366;
+    flex-shrink: 0;
+    opacity: 0.65;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+.resource-modal-item:hover .resource-item-arrow {
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+#resourceContent1 {
+    position: absolute;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+}
+
+#searchArea {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 147px;
+    z-index: 10003;
+    width: 316px;
+    height: 167px;
+    margin: auto;
+    padding: 3%;
+}
+
+#searchtext {
+    width: 178px;
+    height: 34px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    text-align: center;
+}
+
+#searchArea button,
+#exitArea button {
+    color: var(--surface);
+    background: var(--brand);
+    border: 0;
+    border-radius: 8px;
+}
+
+.Navigation_cls,
+.Navigation_cls_main {
+    cursor: pointer;
+}
+
+#resultsHeading {
+    color: var(--text);
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.ColorSet_CR {
+    background-color:#006366;
+}
+
+.instext {
+    color: var(--brand);
+}
+
+.Incorrect_CR {
+    background-color: #c23d5d;
+}
+
+.Correct_CR {
+    background-color: #0c7d42;
+}
+
+.incorrect,
+.correct {
+    color: var(--surface);
+}
+
+.parentquestion_CR {
+    background-color: #006366;
+}
+
+.FSize20 { font-size: 20px; }
+.FSize19 { font-size: 19px; }
+.FSize21 { font-size: 21px; }
+.FSize24 { font-size: 24px; }
+.FSize22 { font-size: 22px; }
+.FSize14 { font-size: 14px; }
+.FSize18 { font-size: 18px; }
+.FSize16 { font-size: 16px; }
+.FSize17 { font-size: 17px; }
+.FSize3_RM { font-size: 3rem; }
+.FSize38 { font-size: 38px; }
+
+.leftResourceArea p {
+    color: var(--text);
+    font-size: 14px;
+}
+
+@media (max-width: 900px) {
+    body {
+        overflow: auto;
+    }
+
+    .wholeContainer {
+        width: 100%;
+        height: auto;
+        min-height: 100%;
+        margin: 0;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+
+    .footer {
+        padding: 0 20px;
+        gap: 12px;
+    }
+
+    .footerCopyright {
+        font-size: 12px;
+    }
+
+    .sideBar {
+        top: 64px !important;
+        left: 16px !important;
+        width: calc(100% - 32px) !important;
+        height: calc(100% - 148px) !important;
+    }
+
+    .headingArea {
+        padding: 0 16px 0 72px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* ---- Small mobile: ≤ 600px --------------------------------- */
+@media (max-width: 600px) {
+    .wholeContainer {
+        width: 100% !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+    }
+
+    .headingArea {
+        min-height: 50px !important;
+        height: auto !important;
+        padding: 8px 12px 8px 60px !important;
+        font-size: 12px !important;
+        gap: 6px !important;
+    }
+
+    .headingArea1 {
+        width: 52px !important;
+        height: 50px !important;
+    }
+
+    .pageContent,
+    .pageContent.fullContentArea {
+        padding: 16px 14px !important;
+    }
+
+    .footer {
+        flex: 0 0 54px !important;
+        min-height: 54px !important;
+        height: 54px !important;
+        padding: 0 14px 0 14px !important;
+        gap: 10px !important;
+    }
+
+    .footerCopyright {
+        font-size: 11px !important;
+    }
+
+    .sideBar {
+        top: 54px !important;
+        left: 10px !important;
+        width: calc(100% - 20px) !important;
+        height: calc(100% - 130px) !important;
+        padding: 16px 14px !important;
+    }
+}
+
+/* ============================================================
+   Player Layout Stabilization Layer (SCORM-safe)
+   ============================================================ */
+:root {
+    --player-sidebar-width: 20vw;
+    --player-header-height: clamp(52px, 4.8vh, 60px);
+    --player-footer-height: clamp(54px, 5.3vh, 70px);
+    --player-main-pad-x: clamp(10px, 1.5vw, 24px);
+    --player-main-pad-y: clamp(10px, 1.2vh, 16px);
+    --player-content-radius: 0px;
+}
+
+html,
+body,
+#mainPage,
+.wholeContainer {
+    width: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh;
+    max-width: 100vw;
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden !important;
+}
+
+html,
+body {
+    overflow-y: hidden !important;
+    scrollbar-gutter: auto !important;
+    padding-right: 0 !important;
+}
+
+body.menu-open-body,
+html.menu-open-body {
+    overflow: hidden !important;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.wholeContainer {
+    position: relative;
+    overflow: hidden;
+    min-height: 100dvh;
+}
+
+.wholeContainer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 15, 30, 0);
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1003;
+}
+
+.wholeContainer.menu-open::after {
+    background: rgba(8, 15, 30, 0.28);
+}
+
+#menuClickOverlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    background: rgba(8, 15, 30, 0.2);
+    z-index: 1004;
+    display: none;
+}
+
+.contentArea,
+.contentArea.fullContentArea {
+    min-height: 0;
+    overflow: hidden !important;
+}
+
+.headingArea {
+    flex: 0 0 var(--player-header-height);
+    min-height: var(--player-header-height);
+    height: var(--player-header-height);
+    padding: 0 clamp(16px, 2.2vw, 28px) 0 clamp(62px, 5.4vw, 82px);
+    z-index: 1002;
+}
+
+.headingArea1 {
+    width: clamp(52px, 4.6vw, 72px);
+    height: var(--player-header-height);
+    z-index: 1006;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+#TmenuIcon {
+    width: clamp(19px, 1.6vw, 24px) !important;
+    height: clamp(19px, 1.6vw, 24px) !important;
+    padding: 6px;
+   /* border-radius: 999px;*/
+    transition: all 0.3s ease;
+}
+
+#TmenuIcon:hover {
+    background: #F5FAFA;
+}
+
+.headingcloser {
+    z-index: 1004 !important;
+    background: transparent !important;
+    width: clamp(52px, 4.6vw, 72px) !important;
+    height: var(--player-header-height) !important;
+    inset: auto !important;
+    left: 0 !important;
+    top: 0 !important;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.sideBar {
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: var(--player-sidebar-width) !important;
+    min-width: 240px;
+    max-width: 380px;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    min-height: 0 !important;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 !important;
+    padding: 10px 14px 10px !important;
+    margin: 0 !important;
+    transform: none !important;
+    transform-origin: left top;
+    transition: all 0.3s ease;
+    z-index: 1005 !important;
+    will-change: transform, opacity;
+    overflow: hidden;
+}
+
+.sideBar > .tocData {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0 4px 48px 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+   /* scrollbar-width: thin;*/
+}
+
+.sideBar .logo,
+.sideBar #sideBarHeader,
+.sideBar .line,
+.sideBar .copyright {
+    flex: 0 0 auto;
+}
+
+.sideBar .copyright {
+    margin-top: auto;
+}
+
+.sideBar > .tocData::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sideBar > .tocData::-webkit-scrollbar-thumb {
+    background: #D9D9D9;
+    border-radius: 999px;
+}
+
+.sideBar > .tocData::-webkit-scrollbar-track {
+    background: transparent;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#sideBarHeader {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.96);
+    padding-top: 4px;
+}
+
+#tocData li {
+    margin-bottom: 6px;
+    padding: 10px 10px;
+    font-size: 16px;
+    line-height: 22px;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.footer {
+    position: relative;
+    flex: 0 0 var(--player-footer-height);
+    min-height: var(--player-footer-height);
+    height: var(--player-footer-height);
+    padding: 0 clamp(14px, 2.2vw, 34px);
+    z-index: 1001;
+}
+
+.footerCopyright {
+    font-size: clamp(11px, 0.95vw, 14px);
+}
+
+.footer > div {
+    transition: all 0.3s ease;
+}
+
+.pageContent,
+.pageContent.fullContentArea {
+    padding: var(--player-main-pad-y) var(--player-main-pad-x);
+    overflow: hidden;
+}
+
+#flashArea,
+#htmlArea,
+#vidArea,
+#captivateFrame {
+    border: 1px solid var(--line-soft);
+    border-radius: var(--player-content-radius);
+    background: #ffffff;
+}
+
+/* High-density desktop */
+@media (min-width: 1920px) {
+    :root {
+        --player-sidebar-width: 20vw;
+        --player-main-pad-x: 26px;
+    }
+
+    .headingArea {
+        font-size: 16px;
+    }
+}
+
+/* Standard desktop */
+@media (max-width: 1440px) {
+    :root {
+        --player-sidebar-width: 20vw;
+    }
+}
+
+/* Laptop */
+@media (max-width: 1280px) {
+    :root {
+        --player-sidebar-width: 20vw;
+        --player-main-pad-x: 14px;
+    }
+
+    .headingArea {
+        padding-left: 64px;
+    }
+}
+
+/* Tablet landscape */
+@media (max-width: 1024px) {
+    :root {
+        --player-footer-height: 58px;
+        --player-sidebar-width: 25vw;
+    }
+
+    .wholeContainer.menu-open::after {
+        background: rgba(8, 15, 30, 0.36);
+    }
+
+    .sideBar {
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        width: var(--player-sidebar-width) !important;
+        min-width: 300px;
+        max-width: 380px;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .headingArea {
+        padding-right: 14px;
+    }
+
+    #pagenoHeader {
+        font-size: 12px;
+    }
+}
+
+/* Tablet portrait / mobile large */
+@media (max-width: 768px) {
+    :root {
+        --player-header-height: 52px;
+        --player-footer-height: 54px;
+        --player-main-pad-x: 10px;
+        --player-main-pad-y: 8px;
+        --player-sidebar-width: 25vw;
+    }
+
+    .headingArea {
+        gap: 8px;
+        padding-left: 56px;
+    }
+
+    .moduleBreadcrumb,
+    .breadcrumbDivider {
+        display: none;
+    }
+
+    .footer {
+        gap: 8px;
+    }
+
+    .footerCopyright {
+        max-width: 44vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .sideBar {
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        width: var(--player-sidebar-width) !important;
+        min-width: 270px;
+        max-width: 380px;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        margin: 0 !important;
+        padding: 14px 12px 10px !important;
+    }
+
+    .sideBar > .tocData {
+        height: auto;
+    }
+
+    #tocData li {
+        font-size: 16px;
+        line-height: 22px;
+    }
+
+    #clickNextId {
+        margin-left: 8px !important;
+    }
+
+    .footer > #clickNextId {
+        margin-right: 8px !important;
+        max-width: min(40vw, 220px);
+    }
+}
+
+/* Final layout guard: prevent residual right-side strip in quiz screens */
+#mainPage,
+.wholeContainer,
+.contentArea,
+.contentArea.fullContentArea,
+.pageContent,
+.pageContent.fullContentArea {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    right: 0 !important;
+}
+
+html,
+body,
+#mainPage,
+.wholeContainer {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 100vw !important;
+    margin-right: 0 !important;
+    overflow-x: hidden !important;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    :root {
+        --player-header-height: 50px;
+        --player-footer-height: 52px;
+        --player-sidebar-width: 85vw;
+    }
+
+    .headingArea {
+        font-size: 12px;
+        padding-left: 52px;
+    }
+
+    #certificateid,
+    #exitCourseBtn {
+        width: 30px;
+        height: 30px;
+        margin-left: 4px;
+    }
+
+    #pagenoHeader[style*="none"] ~ #exitCourseBtn {
+        margin-left: auto;
+    }
+
+    .footer {
+        padding: 0 10px;
+    }
+
+    .prevClass,
+    .nextClass,
+    .resourceClass {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .footerCopyright {
+        font-size: 10px !important;
+        max-width: 38vw;
+    }
+
+    #spanCliContinue {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .sideBar {
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        width: var(--player-sidebar-width) !important;
+        min-width: 0;
+        max-width: none;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        margin: 0 !important;
+        padding: 12px 10px 10px !important;
+    }
+
+    #tocData li {
+        font-size: 16px;
+        line-height: 22px;
+    }
+}
+
+/* Hard lock menu trigger alignment across all open/close states */
+#clickableDiv.headingArea1,
+#clickableDiv.headingcloser {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: clamp(52px, 4.6vw, 72px) !important;
+    height: var(--player-header-height) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+#clickableDiv.headingcloser #TmenuIcon,
+#clickableDiv.headingArea1 #TmenuIcon {
+    display: block !important;
+    margin: 0 !important;
+    transform: none !important;
+    width: 37px !important;
+    height: 37px !important;
+   /*padding: 2px !important;*/
+    object-fit: contain !important;
+    opacity: 1 !important;
+    filter: none !important;
+}
+
+#clickableDiv:focus,
+#clickableDiv:focus-visible {
+    outline: none !important;
+}
+
+/* Reference-style topic list layout */
+
+#tocData {
+    margin: 0 !important;
+    padding: 10px 0 0 0 !important;
+}
+
+#tocData > span {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 12px;
+    align-items: center;
+    column-gap: 4px;
+    width: 100%;
+    margin: 1px 0;
+    padding: 0 8px 0 0;
+    box-sizing: border-box;
+}
+
+#tocData > span > li {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    background: transparent !important;
+}
+
+#tocData > span > li > span.toc-row-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    min-height: 42px;
+    padding: 6px 0 6px 8px;
+    color: #666666;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: left;
+    transition: background 0.15s ease;
+    box-sizing: border-box;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    position: relative;
+}
+
+/* Disable legacy pseudo-element */
+#tocData > span > li > span.toc-row-item::before {
+    display: none !important;
+}
+
+/* Icon container: no align-self override - it inherits align-items:
+   center from .toc-row-item so it centers against the full text
+   block (1-3 lines), not just the first line. */
+.toc-item-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9CA3AF;
+    opacity: 1;
+}
+
+.toc-item-icon svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    flex-shrink: 0;
+}
+
+/* Text label wrapper: stays a plain flex item so it gets a definite
+   width from the flex layout. The line-clamp box lives on .menu-title
+   below - applying -webkit-line-clamp directly to a `flex: 1` item is
+   unreliable in Chromium/WebKit because the -webkit-box width
+   resolution fights the flexbox algorithm, so the clamp silently
+   never engages. Deliberately no overflow:hidden here: a second clip
+   stacked on top of .menu-title's own clip shaved a sub-pixel off the
+   box and broke the browser-generated ellipsis on the third line. */
+.toc-item-text {
+    flex: 1;
+    min-width: 0;
+    display: block;
+}
+
+/* #tocData-prefixed for specificity: the legacy `.sideBar li span`
+   rule (sideBar.css) matches this element too (it's a span nested in
+   li within .sideBar) and, at equal load order, its higher selector
+   specificity was silently winning over a bare `.menu-title` - forcing
+   word-break back to "normal" and overriding hover color - which
+   skewed where the line-clamp truncated and broke the ellipsis. */
+#tocData .menu-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    font-size: 14px;
+    line-height: 1.3;
+    text-align: left;
+    word-break: break-word;
+    color: inherit;
+}
+
+/* Engines without native line-clamp support (no JS involved): hard-cap
+   at 3 lines with a plain clip. No fabricated "..." - an honest cut
+   beats fake dots, and this path is effectively unreachable in any
+   current evergreen browser. */
+@supports not (-webkit-line-clamp: 3) {
+    #tocData .menu-title {
+        max-height: 3.9em;
+        overflow: hidden;
+    }
+}
+
+#tocData > span > li > span.toc-row-item:hover {
+    background: #F5FAFA;
+    color: #006366;
+}
+
+#tocData > span > li > span.toc-row-item:hover .toc-item-icon {
+    opacity: 1;
+}
+
+#tocData > span > li > span.toc-row-item:focus {
+    outline: none;
+}
+
+#tocData > span > li > span.toc-row-item:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #00A0A5;
+}
+
+#tocData > span > li > span.toc-row-item.selectedToc {
+    background: #B8ECEA;
+    color: #006366;
+    font-weight: 700;
+    border-radius: 0;
+    padding-left: 5px;
+    position: relative;
+}
+
+#tocData > span > li > span.toc-row-item.selectedToc::after {
+  
+    position: absolute;
+    left: auto;
+    right: 24px;
+    top: 50%;
+    width: 48px;
+    height: 2px;
+    background: #B8ECEA;
+    transform: translateY(-50%);
+}
+
+#tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
+    color: #006366;
+    opacity: 1;
+}
+
+#tocData > span > li > span.toc-row-item.visitedTOC {
+    color: #666666;
+}
+
+#tocData > span > li > span.toc-row-item.visitedTOC .toc-item-icon {
+    opacity: 0.65;
+}
+
+#tocData > span > li > span.toc-row-item.selectedToc .toc-item-text,
+#tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
+    color: inherit;
+}
+
+.toc-list-row {
+    display: flex;
+    align-items: flex-start;
+}
+
+.toc-list-item {
+    list-style: none;
+}
+
+.sideBar.collapsed #tocData > span {
+    grid-template-columns: 1fr;
+}
+
+.sideBar.collapsed #tocData > span > li > span.toc-row-item {
+    justify-content: center;
+    gap: 0;
+}
+
+.sideBar.collapsed .toc-item-text {
+    display: none;
+}
+
+#tocData > span > p.tickSymbol,
+#tocData > span > p.tickSymbol1 {
+    margin: 0;
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-size: 8px;
+    font-weight: 700;
+    line-height: 1;
+    vertical-align: middle;
+    background: #006366;
+    border-radius: 50%;
+    align-self: center;
+}
+
+.sideBar .copyright {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    margin: 0 !important;
+    padding: 7px 14px !important;
+    font-size: 10px !important;
+    color: #9CA3AF !important;
+    text-align: center;
+    background: #ffffff !important;
+    border-top: 1px solid #E5E5E5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+    #tocData > span {
+        grid-template-columns: minmax(0, 1fr) 16px;
+        column-gap: 6px;
+        padding: 0 12px 0 0;
+    }
+
+    #tocData > span > li > span.toc-row-item {
+        min-height: 40px;
+        padding: 8px 14px;
+        gap: 10px;
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+    .toc-item-icon,
+    .toc-item-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    #tocData > span > p.tickSymbol,
+    #tocData > span > p.tickSymbol1 {
+        margin: 0 !important;
+        width: 14px;
+        height: 14px;
+        min-width: 14px;
+        max-width: 14px;
+        min-height: 14px;
+        max-height: 14px;
+        font-size: 8px;
+        line-height: 1;
+        flex: 0 0 14px;
+        justify-self: end;
+        align-self: center;
+        transform: none;
+    }
+}
+
+/* Mobile-only alignment and overflow guards for player chrome/content */
+@media (max-width: 1024px) {
+    .headingArea,
+    .headingArea1,
+    .pageHeaderText,
+    #pagenoHeader {
+        display: flex;
+        align-items: center;
+    }
+
+    .headingArea {
+        min-width: 0;
+    }
+
+    .headingArea1::after {
+        top: 50%;
+        height: clamp(16px, calc(100% - 22px), 28px);
+        transform: translateY(-50%);
+    }
+
+    .pageHeaderText {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 1.2;
+    }
+
+    #pagenoHeader {
+        margin-left: auto;
+        padding-left: 10px;
+        white-space: nowrap;
+        line-height: 1;
+    }
+
+    .footer {
+        align-items: center;
+        justify-content: flex-end;
+        gap: clamp(6px, 2.2vw, 12px);
+    }
+
+    .footer > div,
+    #resource1,
+    #prev,
+    #next {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    #prev::before {
+        left: -8px;
+        top: 50%;
+        height: 60%;
+        min-height: 20px;
+        transform: translateY(-50%);
+    }
+
+    .pageContent,
+    .pageContent.fullContentArea {
+        overflow-x: hidden !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .headingArea {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 8px;
+    }
+
+    #resource1 {
+        margin-right: 2px !important;
+    }
+
+    #prev::before {
+        left: -6px;
+    }
+
+    .footer {
+        padding-left: clamp(8px, 3vw, 14px) !important;
+        padding-right: clamp(8px, 3vw, 14px) !important;
+    }
+}
+
+/* Header title responsive typography (tablet/mobile only) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .headingArea {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .headingArea1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .headingArea1::after {
+        height: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .pageHeaderText {
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    #pagenoHeader {
+        flex: 0 0 auto;
+        margin-left: 10px;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 767px) {
+    .headingArea {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .headingArea1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .headingArea1::after {
+        height: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .pageHeaderText {
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    #pagenoHeader {
+        flex: 0 0 auto;
+        margin-left: 10px;
+        white-space: nowrap;
+    }
+}
+
+/* Mobile/tablet title truncation guard: keep page number visible and TOC rows single-line */
+@media (max-width: 991px) {
+    .headingArea {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .pageHeaderText {
+        display: block;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding-right: 8px;
+    }
+
+    #pagenoHeader {
+        flex: 0 0 auto;
+        flex-shrink: 0;
+        margin-left: auto;
+        white-space: nowrap;
+    }
+
+    #certificateid,
+    #exitCourseBtn {
+        flex: 0 0 auto;
+    }
+
+    /*#tocData > span > li > span.toc-row-item {
+        min-height: 42px;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .toc-item-text {
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: normal;
+        overflow-wrap: normal;
+    }*/
+
+    /* Fallback for legacy TOC markup before toc-item-text enhancement is applied
+    #tocData li > span[role="button"] {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    } */
+}
+
+/* iPad/tablet header title alignment */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .headingArea {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start !important;
+        padding-left: 63px !important;
+        padding-right: 16px !important;
+        text-align: left;
+    }
+
+    .headingArea .pageHeaderText {
+        position: static;
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex: 0 1 auto;
+        height: 100%;
+        width: auto;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+        line-height: 1;
+        transform: translateY(3px);
+    }
+
+    .headingArea #pagenoHeader {
+        margin-left: auto;
+    }
+}
+
+/* iPhone/iPad drawer scroll containment: only sidebar content scrolls when menu is open */
+@media (max-width: 1024px) {
+    html.menu-open-body,
+    body.menu-open-body {
+        overflow: hidden !important;
+        overscroll-behavior: none;
+    }
+
+    .wholeContainer.menu-open .contentArea,
+    .wholeContainer.menu-open .pageContent,
+    .wholeContainer.menu-open .pageContent.fullContentArea {
+        overflow: hidden !important;
+    }
+
+    .sideBar {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        overflow: hidden !important;
+    }
+
+    /* Angular sets an inline style="display: block" on .sideBar when the
+       drawer opens (see the identical [style*="display: block"] hack in
+       mobile.css's <=768px block). That inline style beats sideBar.css's
+       unscoped, non-!important `display: flex`, so between 769px and this
+       1024px breakpoint the sidebar was silently rendering as a plain
+       block box. Flex properties on children (.tocData's flex/min-height
+       below) have no effect without an actual flex *container*, so
+       .tocData just grew to fit all of its content and the overflow:
+       hidden above clipped whatever didn't fit, with nothing left inside
+       .tocData to scroll. Forcing flex only while shown -- never when
+       style="display: none" -- leaves the closed/hidden state untouched. */
+    .sideBar[style*="display: block"],
+    .wholeContainer.menu-open .sideBar {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .sideBar .logo,
+    .sideBar #sideBarHeader,
+    .sideBar .line,
+    .sideBar .copyright {
+        flex: 0 0 auto;
+    }
+
+    .sideBar > .tocData {
+        flex: 1 1 auto;
+        min-height: 0;
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
+    }
+}
+
+/* iPad Landscape: modern iPad landscape CSS widths (iPad mini/10.2"/Air/
+   Pro) run ~1024-1366px, wider than the max-width:1024px block above, so
+   the Menu/Transcript panel (.tocData, shared by both tabs) fell through
+   to the plain Laptop/base sidebar rules with no scroll containment,
+   leaving long content inaccessible below the fold. 1366px alone is also
+   a very common laptop resolution, so this is gated behind
+   html.is-touch-device (set in index.html via navigator.maxTouchPoints,
+   same pattern as MCQ.html/SCQ.html/Quiz.html) rather than width/
+   orientation alone, so desktop/laptop layouts are never touched. */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+    html.is-touch-device .sideBar {
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        min-height: 0 !important;
+        overflow: hidden;
+    }
+
+    /* Same inline-style problem as the <=1024px block above: Angular's
+       inline style="display: block" on .sideBar beats a plain (non-
+       !important) `display: flex`, so this flex column never actually
+       formed in landscape either -- .tocData's flex/min-height rule below
+       had no flex container to attach to. Forcing flex only while shown
+       keeps the closed/hidden state untouched. */
+    html.is-touch-device .sideBar[style*="display: block"],
+    html.is-touch-device .wholeContainer.menu-open .sideBar {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    html.is-touch-device .sideBar .logo,
+    html.is-touch-device .sideBar #sideBarHeader,
+    html.is-touch-device .sideBar .line,
+    html.is-touch-device .sideBar .copyright {
+        flex: 0 0 auto;
+    }
+
+    html.is-touch-device .sideBar > .tocData {
+        flex: 1 1 auto;
+        min-height: 0;
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
+    }
+
+    html.is-touch-device.menu-open-body,
+    html.is-touch-device body.menu-open-body {
+        overflow: hidden !important;
+        overscroll-behavior: none;
+    }
+}
+
+/* ============================================================
+   MENU (sidebar) UI REFRESH — PRESENTATION LAYER ONLY
+   ------------------------------------------------------------
+   Everything below is scoped to `#Tmenu.sideBar`, the course
+   menu panel in theme/content.html, so no other component,
+   template or course is affected. It restyles only what the
+   existing controllers already render:
+
+     .logo                         Touchstone logo (asset untouched)
+     #sideBarHeader > #toc_id      Menu tab      \  state driven by the
+     #sideBarHeader > #trans_id    Transcript tab / existing aria-selected
+     #tocData > span > li          menu rows
+       > span.toc-row-item         row body (+ .selectedToc / .visitedTOC)
+     #tocData > span > p.tickSymbol completion tick (inline visibility)
+     .copyright                    menu footer
+
+   No selector adds/removes state; active, completed, visited and
+   locked states all continue to come from the application.
+   ============================================================ */
+
+#Tmenu.sideBar {
+    /* Zydus palette. --menu-tab-idle stays a neutral surface (spec 10:
+       "Inactive: preserve existing neutral colour"); the idle tab's TEXT
+       is what carries the brand. */
+    --menu-brand: var(--zydus-primary);
+    --menu-brand-dark: var(--zydus-primary-hover);
+    --menu-tab-idle: #F1F5F9;
+    --menu-tab-idle-line: var(--zydus-border);
+    --menu-active-bg: var(--zydus-light);
+    --menu-row-text: var(--zydus-grey);
+    --menu-icon: #8F8F8F;
+    --menu-line: var(--zydus-line-soft);
+
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+    background: #FFFFFF !important;
+    border: 0 !important;
+    border-right: 1px solid #E5E5E5 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+/* The controller opens the drawer with an inline style="display: block",
+   which beats a plain `display: flex` - the panel then stops being a
+   flex container and the list can't size itself against the header and
+   footer, so nothing scrolls. Same guard the <=1024px block already
+   uses, applied at every width. Only while the panel is actually shown:
+   the closed state (inline display:none / ng-hide) is left alone. */
+#Tmenu.sideBar[style*="display: block"]:not(.ng-hide),
+.wholeContainer.menu-open #Tmenu.sideBar:not(.ng-hide) {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Desktop: keep the existing left panel (width/behaviour unchanged),
+   just give the larger reference rows a little more room to breathe. */
+@media (min-width: 1025px) {
+    #Tmenu.sideBar {
+        min-width: 288px;
+    }
+}
+
+/* ---- 1. Logo -------------------------------------------------- */
+
+/* DO NOT SHRINK. The logo is not a compaction target - height savings
+   belong to the tab/progress/row rules below. max-width matches the
+   pre-existing `.logo` rule (180px) so the mark keeps its original
+   size and aspect ratio; only `width: auto` + `max-width` are used so
+   the SVG is never distorted or cropped. */
+#Tmenu.sideBar .logo {
+    display: block !important;
+    flex: 0 0 auto;
+    width: auto !important;
+    height: auto;
+    max-width: 178px !important;
+    margin: 12px auto 10px !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* ---- 2. Menu / Transcript tabs -------------------------------- */
+
+/* Tab wrapper - now the last block before the list, so its bottom
+   padding is the only gap between the tabs and the first menu row.
+   padding-top stays 0: the gap above the tabs is the logo's own
+   margin-bottom, which is deliberately left alone. Horizontal inset
+   matches the menu rows' padding-left (18px) so the tabs and the row
+   icons share one left edge. */
+#Tmenu.sideBar #sideBarHeader {
+    position: static !important;
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: space-between !important;
+    flex: 0 0 auto !important;
+    gap: 10px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 18px 12px !important;
+    background: #FFFFFF !important;
+    border: 0 !important;
+    line-height: 1 !important;
+}
+
+#Tmenu.sideBar #sideBarHeader > #toc_id,
+#Tmenu.sideBar #sideBarHeader > #trans_id {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    float: none !important;
+    flex: 1 1 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    /* min-height is kept in lockstep with height: a larger min-height
+       wins over height, so leaving the old 44px floor here would have
+       silently cancelled this out. */
+    height: 37px !important;
+    min-height: 37px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: var(--menu-brand) !important;
+    background: var(--menu-tab-idle) !important;
+    border: 1px solid var(--menu-tab-idle-line) !important;
+    border-radius: 7px !important;
+    box-shadow: none !important;
+    box-sizing: border-box;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+    text-align: center !important;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+/* The <span> is what carries ng-click - it has to fill the pill, or the
+   top/bottom of each tab is a dead zone. `align-self: stretch` beats the
+   parent's `align-items: center` without touching the handler. Padding
+   lives here (not on the tab) so it is part of the clickable area. */
+#Tmenu.sideBar #sideBarHeader > #toc_id > span,
+#Tmenu.sideBar #sideBarHeader > #trans_id > span {
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    padding: 0 10px;
+    box-sizing: border-box;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+/* Hover (spec 10: "Hover: #006366", text #FFFFFF). Colour only - the
+   box, size and transition are untouched. */
+#Tmenu.sideBar #sideBarHeader > #toc_id:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id:hover {
+    background: var(--zydus-primary) !important;
+    border-color: var(--zydus-primary) !important;
+    color: #FFFFFF !important;
+}
+
+/* Active tab — driven by the aria-selected the controller already sets.
+   Spec 10: "Active: #00A0A5", text #FFFFFF. Uses the accent directly
+   rather than --menu-brand, because --menu-brand (#006366) is also the
+   active-ROW / icon / tick colour required by spec 8 and 26. */
+#Tmenu.sideBar #sideBarHeader > #toc_id[aria-selected="true"],
+#Tmenu.sideBar #sideBarHeader > #trans_id[aria-selected="true"],
+#Tmenu.sideBar #sideBarHeader > #toc_id.tocclickedclscss,
+#Tmenu.sideBar #sideBarHeader > #trans_id.tocclickedclscss {
+    color: #FFFFFF !important;
+    background: var(--zydus-accent) !important;
+    border-color: var(--zydus-accent) !important;
+    font-weight: 700 !important;
+    opacity: 1;
+}
+
+#Tmenu.sideBar #sideBarHeader > #toc_id[aria-selected="true"]:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id[aria-selected="true"]:hover,
+#Tmenu.sideBar #sideBarHeader > #toc_id.tocclickedclscss:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id.tocclickedclscss:hover {
+    background: var(--zydus-primary) !important;
+    border-color: var(--zydus-primary) !important;
+    color: #FFFFFF !important;
+}
+
+/* Idle tab — explicit so it beats the legacy aria-selected="false" rule. */
+#Tmenu.sideBar #sideBarHeader > #toc_id[aria-selected="false"],
+#Tmenu.sideBar #sideBarHeader > #trans_id[aria-selected="false"] {
+    color: var(--menu-brand) !important;
+    background: var(--menu-tab-idle) !important;
+    border-color: var(--menu-tab-idle-line) !important;
+    font-weight: 600 !important;
+    opacity: 1;
+}
+
+/* Declared after the idle rule above so it isn't cancelled by it. */
+#Tmenu.sideBar #sideBarHeader > #toc_id[aria-selected="false"]:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id[aria-selected="false"]:hover {
+    background: var(--zydus-primary) !important;
+    border-color: var(--zydus-primary) !important;
+    color: #FFFFFF !important;
+}
+
+#Tmenu.sideBar #sideBarHeader > #toc_id > span:focus-visible,
+#Tmenu.sideBar #sideBarHeader > #trans_id > span:focus-visible {
+    outline: 2px solid var(--zydus-accent);
+    outline-offset: 3px;
+    border-radius: 8px;
+}
+
+/* ---- 3. (Course progress readout removed - not required) -------- */
+
+/* ---- 4. Menu list --------------------------------------------- */
+
+#Tmenu.sideBar > .tocData {
+    position: relative;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent;
+    border-top: 1px solid var(--menu-line);
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    font-size: 15px !important;
+}
+
+#Tmenu.sideBar #tocData {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none;
+}
+
+/* Row wrapper: a plain block (not the old 2-column grid) so the row
+   background spans the full width and the completion tick can sit on
+   top of it, exactly as in the reference. */
+#Tmenu.sideBar #tocData > span {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-sizing: border-box;
+}
+
+/* The divider lives on the <li>, not on the wrapper: the audio-version
+   entry is rendered as <li style="display:none"> inside its wrapper, so
+   a border on the wrapper would leave a stray line where a hidden row
+   is. `display` is deliberately left un-!important here for the same
+   reason - the inline display:none must keep winning. */
+#Tmenu.sideBar #tocData > span > li {
+    display: block;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0;
+    border-bottom: 1px solid var(--menu-line);
+    list-style: none !important;
+    font-size: inherit !important;
+}
+
+#Tmenu.sideBar #tocData > span:last-child > li {
+    border-bottom: 0;
+}
+
+#Tmenu.sideBar #tocData > span > li:hover {
+    background: transparent;
+    color: inherit;
+}
+
+/* min-height, not height: a single-line row's own content is only
+   max(icon 24px, text 18.75px) + 18px padding = 42px, so this floor is
+   what sets single-line rows to 52px, and wrapped titles grow past it on
+   their own (2 lines ~56px, 3 lines ~74px) instead of being clipped. The
+   icon therefore contributes no height at all below 52px. */
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 52px;
+    padding: 9px 40px 9px 18px;
+    color: var(--menu-row-text);
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    /* Original pre-redesign menu typography, recovered verbatim from the
+       legacy `#tocData > span > li > span.toc-row-item` rule still present
+       above in this file (14px / 600 / 1.3). Not re-styled. */
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: left;
+    box-sizing: border-box;
+    transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* Original values, recovered from the legacy `#tocData .menu-title` rule
+   above in this file (14px / 1.3). */
+#Tmenu.sideBar #tocData .menu-title {
+    font-size: 14px;
+    line-height: 1.3;
+    font-weight: inherit;
+}
+
+/* Fallback for rows the icon pass hasn't decorated yet (or items whose
+   JSON opts out of masterIcon): same box, just without the icon slot,
+   so the list never renders half-styled. */
+#Tmenu.sideBar #tocData > span > li > span[role="button"]:not(.toc-row-item) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 52px;
+    padding: 9px 40px 9px 18px;
+    color: var(--menu-row-text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+#Tmenu.sideBar #tocData > span > li > span[role="button"]:not(.toc-row-item).selectedToc {
+    color: var(--menu-brand);
+    background: var(--menu-active-bg);
+    font-weight: 700;
+    box-shadow: inset 4px 0 0 0 var(--menu-brand);
+}
+
+/* Full-row hit area.
+   `span.toc-row-item` is the element the controller puts onclick/onkeydown
+   on, and it already spans the whole row. Its children are purely
+   decorative, so they are taken out of hit-testing: every click then
+   resolves to the handler element itself rather than to a child, and
+   `event.target` is always the row. Nothing here adds or moves a handler.
+   The icon is already aria-hidden and the label text carries no role, so
+   screen readers and the tab order are unaffected. */
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item > *,
+#Tmenu.sideBar .toc-item-icon,
+#Tmenu.sideBar .toc-item-icon svg,
+#Tmenu.sideBar .toc-item-text,
+#Tmenu.sideBar #tocData .menu-title {
+    pointer-events: none;
+}
+
+#Tmenu.sideBar #tocData > span,
+#Tmenu.sideBar #tocData > span > li,
+#Tmenu.sideBar #tocData > span > li > span[role="button"] {
+    cursor: pointer;
+}
+
+/* Locked rows keep the existing non-interactive cursor. */
+#Tmenu.sideBar #tocData > span > li.disabledClass,
+#Tmenu.sideBar #tocData > span > li.disabledClass > span[role="button"] {
+    cursor: default;
+}
+
+/* ---- 5. Icons -------------------------------------------------- */
+
+#Tmenu.sideBar .toc-item-icon {
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    color: var(--menu-icon);
+    opacity: 1;
+    transition: color 0.18s ease;
+}
+
+#Tmenu.sideBar .toc-item-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ---- 6. Hover / focus ------------------------------------------ */
+
+/* Spec 9: menu hover uses #005356 on the interactive element, over a
+   subtle Zydus tint. Dimensions, spacing and text size untouched. */
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item:hover {
+    background: var(--zydus-tint);
+    color: var(--zydus-primary-hover);
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item:hover .toc-item-icon {
+    color: var(--zydus-primary-hover);
+}
+
+/* Locked rows keep the existing .disabledClass treatment and must not
+   read as interactive on hover. Click handling is untouched. */
+#Tmenu.sideBar #tocData > span > li.disabledClass > span.toc-row-item:hover {
+    background: transparent;
+    color: var(--menu-row-text);
+}
+
+#Tmenu.sideBar #tocData > span > li.disabledClass > span.toc-row-item:hover .toc-item-icon {
+    color: var(--menu-icon);
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item:focus {
+    outline: none;
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item:focus-visible {
+    outline: 2px solid var(--zydus-accent);
+    outline-offset: -3px;
+    box-shadow: none;
+}
+
+/* ---- 7. Visited / active row (state comes from the controller) -- */
+
+/* Declared before .selectedToc: updateTOCColor()'s Resume_Bool pass can
+   leave both classes on the current row, and the active treatment has
+   to win in that case. */
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.visitedTOC {
+    color: var(--zydus-grey);
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.visitedTOC .toc-item-icon {
+    color: var(--menu-icon);
+    opacity: 1;
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.selectedToc {
+    padding-left: 18px;
+    color: var(--menu-brand);
+    background: var(--menu-active-bg);
+    font-weight: 700;
+    border-radius: 0;
+    box-shadow: inset 4px 0 0 0 var(--menu-brand);
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.selectedToc:hover {
+    background: var(--menu-active-bg);
+    color: var(--menu-brand);
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.selectedToc::after {
+    content: none !important;
+    display: none !important;
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
+    color: var(--menu-brand);
+}
+
+/* ---- 8. Completion tick ---------------------------------------- */
+
+/* Positioned over the row instead of in its own grid column so the
+   active row's tint runs the full width behind it. Visibility is still
+   the inline style pageSormTrack() sets - never touched here. */
+#Tmenu.sideBar #tocData > span > p.tickSymbol,
+#Tmenu.sideBar #tocData > span > p.tickSymbol1 {
+    position: absolute !important;
+    right: 12px !important;
+    top: 50% !important;
+    left: auto !important;
+    transform: translateY(-50%) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: none !important;
+    width: 20px !important;
+    min-width: 20px !important;
+    max-width: 20px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #FFFFFF !important;
+    background: var(--menu-brand) !important;
+    border-radius: 50% !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#Tmenu.sideBar #tocData > span > p.tickSymbol::before,
+#Tmenu.sideBar #tocData > span > p.tickSymbol1::before {
+    width: 11px;
+    height: 11px;
+}
+
+/* ---- 9. Footer -------------------------------------------------- */
+
+/* A real flex row at the end of the column rather than an absolutely
+   positioned overlay: the list above it then gets exactly the remaining
+   height (no reserved padding-bottom to guess at) and the footer still
+   sits on the bottom edge. */
+#Tmenu.sideBar .copyright {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    flex: 0 0 auto;
+    width: 100%;
+    margin: 0 !important;
+    padding: 6px 14px !important;
+    color: #9CA3AF !important;
+    background: #FFFFFF !important;
+    border-top: 1px solid #E5E5E5 !important;
+    text-align: center;
+    font-size: 12px !important;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#Tmenu.sideBar .line {
+    display: none !important;
+}
+
+/* ---- 10. Scrollbar --------------------------------------------- */
+
+#Tmenu.sideBar > .tocData::-webkit-scrollbar {
+    width: 8px;
+}
+
+#Tmenu.sideBar > .tocData::-webkit-scrollbar-thumb {
+    background: var(--zydus-border);
+    border-radius: 999px;
+}
+
+#Tmenu.sideBar > .tocData::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ---- 11. Transcript panel (unchanged behaviour, matched spacing) -- */
+
+#Tmenu.sideBar .transcriptClass {
+    padding: 18px 20px 24px !important;
+    color: var(--zydus-text);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ---- 12. Tablet / mobile: centered rounded card ----------------- */
+/* Same drawer breakpoint the player already uses (<=1024px), so the
+   open/close behaviour, overlay and scroll-lock are untouched - only
+   the panel's box changes from a full-bleed drawer to the reference
+   card, with spacing from the viewport edges. */
+
+@media (max-width: 1024px) {
+    #Tmenu.sideBar {
+        position: fixed !important;
+        top: 14px !important;
+        bottom: 14px !important;
+        left: 14px !important;
+        right: 14px !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: 420px !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: calc(100dvh - 28px) !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        background: #FFFFFF !important;
+        border: 1px solid #E5E5E5 !important;
+        border-radius: 18px !important;
+        box-shadow: 0 18px 50px rgba(7, 20, 42, 0.18) !important;
+        overflow: hidden !important;
+        z-index: 1005 !important;
+    }
+
+    /* Logo restored - not a compaction target (see base rule). */
+    #Tmenu.sideBar .logo {
+        max-width: 160px !important;
+        margin: 14px auto 12px !important;
+    }
+
+    #Tmenu.sideBar #sideBarHeader {
+        padding: 0 20px 14px !important;
+    }
+
+    #Tmenu.sideBar #sideBarHeader > #toc_id,
+    #Tmenu.sideBar #sideBarHeader > #trans_id {
+        height: 46px !important;
+        min-height: 46px !important;
+        border-radius: 11px !important;
+        font-size: 16px !important;
+    }
+
+    /* Rows stay at 54px on touch so the hit target clears 44px even
+       though the header above is tighter than desktop. */
+    /* 16px / 1.4 is the original touch-breakpoint menu typography,
+       recovered from the legacy `@media (max-width: 768px)` block above. */
+    #Tmenu.sideBar #tocData > span > li > span.toc-row-item {
+        min-height: 54px;
+        padding: 10px 44px 10px 20px;
+        gap: 14px;
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+    #Tmenu.sideBar #tocData .menu-title {
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+    #Tmenu.sideBar .toc-item-icon,
+    #Tmenu.sideBar .toc-item-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    #Tmenu.sideBar .toc-item-icon {
+        flex: 0 0 24px;
+        min-width: 24px;
+    }
+
+    #Tmenu.sideBar #tocData > span > p.tickSymbol,
+    #Tmenu.sideBar #tocData > span > p.tickSymbol1 {
+        right: 14px !important;
+        width: 22px !important;
+        min-width: 22px !important;
+        max-width: 22px !important;
+        height: 22px !important;
+        min-height: 22px !important;
+        max-height: 22px !important;
+    }
+
+    #Tmenu.sideBar #tocData > span > p.tickSymbol::before,
+    #Tmenu.sideBar #tocData > span > p.tickSymbol1::before {
+        width: 12px;
+        height: 12px;
+    }
+
+    #Tmenu.sideBar .copyright {
+        padding: 7px 14px !important;
+        font-size: 12px !important;
+        border-bottom-left-radius: 18px;
+        border-bottom-right-radius: 18px;
+    }
+}
+
+/* Short/landscape phones: tighten the card so the list keeps room. */
+@media (max-width: 1024px) and (max-height: 480px) {
+    #Tmenu.sideBar {
+        top: 8px !important;
+        bottom: 8px !important;
+        max-height: calc(100dvh - 16px) !important;
+    }
+
+    /* Logo restored - not a compaction target (see base rule). */
+    #Tmenu.sideBar .logo {
+        max-width: 112px !important;
+        margin: 8px auto 6px !important;
+    }
+
+    #Tmenu.sideBar #sideBarHeader {
+        padding: 0 16px 10px !important;
+        gap: 8px !important;
+    }
+
+    #Tmenu.sideBar #sideBarHeader > #toc_id,
+    #Tmenu.sideBar #sideBarHeader > #trans_id {
+        height: 38px !important;
+        min-height: 38px !important;
+        border-radius: 9px !important;
+        font-size: 14px !important;
+    }
+
+    #Tmenu.sideBar #tocData > span > li > span.toc-row-item {
+        min-height: 44px;
+        padding: 7px 38px 7px 16px;
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    #Tmenu.sideBar #tocData .menu-title {
+        font-size: 14px;
+    }
+
+    #Tmenu.sideBar .toc-item-icon,
+    #Tmenu.sideBar .toc-item-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    #Tmenu.sideBar .toc-item-icon {
+        flex: 0 0 20px;
+        min-width: 20px;
+    }
+
+    #Tmenu.sideBar #tocData > span > p.tickSymbol,
+    #Tmenu.sideBar #tocData > span > p.tickSymbol1 {
+        right: 12px !important;
+        width: 18px !important;
+        min-width: 18px !important;
+        max-width: 18px !important;
+        height: 18px !important;
+        min-height: 18px !important;
+        max-height: 18px !important;
+    }
+
+    #Tmenu.sideBar #tocData > span > p.tickSymbol::before,
+    #Tmenu.sideBar #tocData > span > p.tickSymbol1::before {
+        width: 10px;
+        height: 10px;
+    }
+
+    #Tmenu.sideBar .copyright {
+        padding: 5px 14px !important;
+        font-size: 11px !important;
+    }
+}
+
+/* Very narrow phones: keep the card edge spacing but drop the width cap. */
+@media (max-width: 420px) {
+    #Tmenu.sideBar {
+        top: 12px !important;
+        bottom: 12px !important;
+        left: 12px !important;
+        right: 12px !important;
+        max-width: none !important;
+        max-height: calc(100dvh - 24px) !important;
+    }
+}

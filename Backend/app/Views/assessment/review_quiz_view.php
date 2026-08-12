@@ -102,7 +102,7 @@
                                 <th>Question</th>
                                 <th>Type</th>
                                 <?php if (isset($maxOptions)) {
-                                    $maxOptions_count = 4;
+                                    $maxOptions_count = $maxOptions;
                                 ?>
                                     <?php for ($i = 1; $i <= $maxOptions_count; $i++) { ?>
                                         <th>Option <?php echo $i ?></th>
@@ -112,7 +112,7 @@
                         </thead>
                         <tbody>
                             <?php if (isset($groupedData)) {
-                                $maxOptions_count = 4;
+                                $maxOptions_count = $maxOptions ?? 4;
                             ?>
                                 <?php foreach ($groupedData as $q_id => $options) {
                                     $question = $options[array_key_first($options)][0]['question'];

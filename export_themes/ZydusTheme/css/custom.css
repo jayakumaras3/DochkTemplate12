@@ -1,0 +1,120 @@
+﻿.resume_container {
+    position: absolute;
+    width:100%; 
+    height:100%;
+}
+
+.preloaderDisplayresume {
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5f5;
+    position: absolute;
+    opacity: 1;
+    z-index: 10001;
+ 
+}
+
+.resume_content_container{
+    background-color:#fff; 
+    border-radius: 5px;   
+    width: 480px;
+    max-width: 95vw;
+    min-width: 280px;
+    height: auto;  
+    border-radius: 10px;  
+    z-index: 10003;    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.resume_content_header{
+    position: static;    
+    width: 100%;
+    min-height: 44px;
+    border-radius: 0; 
+    padding: 10px 16px;
+    color: #fff;    
+    font-weight: bold;    
+   /* font-size: 18px;   */ 
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+.resume_content_text{
+    font-weight:bold;
+    text-align: center; 
+    margin-top: 16px; 
+   /* font-size:17px; */
+    margin-bottom: 14px;
+    padding: 0 16px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.yes-btn{
+    color:white; 
+    border: none;
+}
+
+.no-btn{
+    color:white; 
+    border: none;
+}
+
+/* neutralise Bootstrap h-100 inside the modal so it doesn't stretch */
+#resumeArea > .h-100 {
+    height: auto !important;
+}
+
+/* keep resume buttons fully inside the popup on all screens */
+#resumeArea > .row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+    margin: 6px 0 0;
+    padding: 0 16px 24px;
+}
+
+#resumeArea > .row > .col-xs-6 {
+    float: none;
+    /* flex: 0 0 auto (not just width:auto) is required: without an
+       explicit flex-shrink:0, these columns default to flex-shrink:1 and
+       the flex algorithm was measured (via getBoundingClientRect in a live
+       test) collapsing each column to ~6px -- far narrower than the button
+       inside it -- so the button overflowed its own column asymmetrically
+       instead of the pair being centered as intended. */
+    flex: 0 0 auto;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#resumeArea .yes-btn,
+#resumeArea .no-btn {
+    min-width: 54px;
+    padding: 7px 16px;
+    line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+    .resume_content_container {
+        width: 70vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .resume_content_container {
+        width: 90vw;
+    }
+}

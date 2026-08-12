@@ -18,6 +18,10 @@ if (isset($coursedetails)) {
         $theme = 'WabtecTheme';
     } elseif ($coursedetails[0]['theme'] == '7') {
         $theme = 'Vertical_ContentforU';
+    } elseif ($coursedetails[0]['theme'] == '8') {
+        $theme = 'ModernTheme';
+    } elseif ($coursedetails[0]['theme'] == '9') {
+        $theme = 'ZydusTheme';
     } else {
         $theme = 'Default';
     }

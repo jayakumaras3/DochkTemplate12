@@ -237,7 +237,7 @@
                         </div>
                         <div class="form-group col-md-2 mb-2">
                             <label>Page Number</label>
-                            <input type="number" class="form-control col-md-12" name="page_number" placeholder="Page Number" value="<?php echo $pagerow['page_number'] ?>" />
+                            <input type="number" min="1" step="1" class="form-control col-md-12" name="page_number" placeholder="Page Number" value="<?php echo (int) $pagerow['page_number'] ?>" />
                         </div>
                         <div class="form-group col-md-2 mb-2">
                             <label>Status</label>
@@ -298,12 +298,12 @@
 
                             <div class="form-group col-md-2 mb-2">
                                 <label>Page Number</label>
-                                <input type="text" step="0.1" class="form-control col-md-12" name="page_number" placeholder="Page Number" value="<?php echo $pagerow['page_number'] ?>" />
+                                <input type="text" class="form-control col-md-12" name="page_number" placeholder="Page Number" value="<?php echo $pagerow['page_number'] ?>" readonly />
                             </div>
                             <?php if ($sub_page_main != 0) { ?>
                                 <div class="form-group col-md-2 mb-2">
                                     <label>Return Page</label>
-                                    <input type="text" step="0.1" class="form-control col-md-12" name="sub_page_main" placeholder="Return Page" value="<?php echo $pagerow['sub_page_main'] ?>" />
+                                    <input type="text" class="form-control col-md-12" name="sub_page_main" placeholder="Return Page" value="<?php echo $pagerow['sub_page_main'] ?>" readonly />
                                 </div>
                             <?php } else {
                                 echo '<input type="hidden" name="sub_page_main" value="0" />';

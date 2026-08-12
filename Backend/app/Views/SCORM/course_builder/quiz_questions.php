@@ -5,7 +5,7 @@
    theme's .answer { align-items:center } (QuestionOptions.css) and knock the radio/checkbox
    out of line with the label text -- the exact conflict already found and gated the same
    way in page_video_view.php for SCQ/MCQ, just never mirrored into this file. */
-$isModernTheme = isset($coursedetails) && isset($coursedetails[0]['theme']) && $coursedetails[0]['theme'] == '8';
+$isModernTheme = isset($coursedetails) && isset($coursedetails[0]['theme']) && in_array((string) $coursedetails[0]['theme'], ['8', '9'], true);
 ?>
 <?php if (!$isModernTheme): ?>
 <style>

@@ -73,7 +73,10 @@
                                 }
                             } ?>
 
-                            <tr id="<?php echo $eachpagesDetails['page_id'] ?>">
+                            <tr
+                                id="<?php echo $eachpagesDetails['page_id'] ?>"
+                                data-page-id="<?php echo $eachpagesDetails['page_id'] ?>"
+                                data-main-page="<?php echo (float) $eachpagesDetails['sub_page_main'] === 0.0 ? '1' : '0'; ?>">
                                 <td>
                                     <?php echo $eachpagesDetails['page_number']; ?>
                                 </td>
@@ -222,11 +225,14 @@
                         <?php }
                         $j++;
 
-                        if ($pagesDetails) {
-                            $nxt_page = $eachpagesDetails['page_number'] + 1;
-                        } else {
-                            $nxt_page = 1;
-                        }
+                        $mainPageNumbers = array_map(
+                            static fn ($page) => (float) $page['page_number'],
+                            array_filter(
+                                $pagesDetails,
+                                static fn ($page) => (float) $page['sub_page_main'] === 0.0
+                            )
+                        );
+                        $nxt_page = empty($mainPageNumbers) ? 1 : ((int) max($mainPageNumbers) + 1);
 
                         ?>
                     </tbody>
@@ -250,57 +256,57 @@
 
 
 <script type="text/javascript">
-    var sortingAllowed = false; // Flag to track if sorting is allowed
+    var sortingAllowed = false;
 
-    // Function to handle the mousedown event
     function handleDragStart(event) {
-        if (!sortingAllowed) {
-            // Show the confirmation dialog
-            confirm("Do you want to drag?").then(function(response) {
-                if (!response) {
-                    event.preventDefault(); // Prevent the default dragging behavior if the user clicks "No"
-                } else {
-                    enableSorting(); // If the user clicks "Yes" or if sorting is already allowed, enable sorting
-                }
-            });
-        } else {
-            enableSorting(); // If sorting is already allowed, enable sorting
-        }
-    }
+        if (sortingAllowed) return;
 
-    // Function to enable sorting
-    function enableSorting() {
-        $(".row_position").sortable({
-            delay: 150,
-            stop: function(event, ui) {
-                var selectedData = [];
-                $('.row_position>tr').each(function() {
-                    selectedData.push($(this).attr("id"));
-                });
-                console.log(selectedData);
-                updateOrder(selectedData);
+        event.preventDefault();
+        confirm("Do you want to drag?").then(function(response) {
+            if (response) {
+                sortingAllowed = true;
+                $(".row_position").sortable("enable");
             }
         });
-        sortingAllowed = true; // Update flag to indicate sorting is allowed
     }
 
-    // Bind the custom event handler to the mousedown event on draggable elements
-    $(".row_position").on("dragstart", "tr", handleDragStart);
+    $(".row_position").sortable({
+        disabled: true,
+        delay: 150,
+        items: "> tr[data-main-page='1']",
+        cancel: "tr[data-main-page='0'], a, button, input, select, textarea, form, label",
+        stop: function() {
+            var selectedData = [];
+            $(".row_position > tr[data-main-page='1']").each(function() {
+                selectedData.push($(this).attr("data-page-id"));
+            });
+            updateOrder(selectedData);
+        }
+    });
+
+    $(".row_position").on("mousedown", "tr[data-main-page='1']", function(event) {
+        if ($(event.target).closest("a, button, input, select, textarea, form, label").length) {
+            return;
+        }
+
+        handleDragStart(event);
+    });
 
     function updateOrder(data) {
         $.ajax({
             url: "<?php echo base_url('SCORM/course_builder/Scorm_course_pages/update_pagenumber'); ?>",
             type: 'post',
             data: {
-                position: data
+                position: data,
+                scourse_id: <?php echo json_encode($scourse_id); ?>
             },
             success: function() {
                 // alert('Page number change successfully saved');
                 location.reload();
             },
             error: function() {
-                // Handle error
                 console.error('Error found');
+                location.reload();
             }
         });
     }
