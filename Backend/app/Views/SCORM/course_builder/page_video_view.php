@@ -234,18 +234,27 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                  from "none" instead of unset does not change first-click open behaviour. */ ?>
         <div id="Tmenu" class="sideBar" style="display:none">
             <img class="logo" src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $themePath . '/images/logo.svg'); ?>" alt="logo">
-            <?php /* Tab markup matches the theme's own content.html:5-31 - the label is a
-                     <span role="button" tabindex="0"> inside the #toc_id / #trans_id tab div,
-                     not a bare span. Two things depend on it: the theme's
-                     `#Tmenu.sideBar #sideBarHeader > #toc_id > span:focus-visible` rule
-                     (Color.css:2425-2426) can only match a focusable span, and without
-                     tabindex the tabs were not keyboard-reachable at all. aria-current="page"
-                     is likewise part of the theme's contract for the selected tab.
-                     The click handler in footer.php binds to the #toc_id/#trans_id divs, so
-                     clicks on the span still bubble to it unchanged. */ ?>
+            <?php /* Tab semantics. The theme nests a <span role="button" tabindex="0"> inside each
+                     role="tab" div (content.html:5-31). That is invalid ARIA and is why the tabs
+                     did not work for assistive tech: the focusable element was a BUTTON, so it
+                     announced as "button" and lost every tab semantic (selected state, position in
+                     set), while the role="tab" div itself was never focusable - which the ARIA Tabs
+                     pattern requires it to be.
+                     Corrected by making the div the tab AND the focusable control, with the span
+                     demoted to plain text (the div takes its accessible name from that text).
+                     The div - not the span - has to be the tab because the theme's own styling
+                     keys off aria-selected THERE: Color.css:2387-2390 (active) and 2408-2409
+                     (inactive), and the inactive rule has no class fallback, so moving
+                     aria-selected onto the span would break the unselected tab's appearance.
+                     aria-controls now links each tab to its panel, and #menu / #transcript below
+                     carry role="tabpanel" + aria-labelledby back to the tab.
+                     Existing click and Enter/Space handlers in footer.php are bound to these same
+                     divs, so they now receive events directly instead of by bubbling - no handler
+                     change was needed. A focus ring for the div is added in header.php, reusing
+                     the theme's own tab focus values. */ ?>
             <div id="sideBarHeader" role="tablist" aria-label="Sidebar tabs">
-                <div id="toc_id" class="tocclickedclscss" role="tab" aria-selected="true" aria-current="page"><span role="button" tabindex="0" aria-label="<?php echo esc($MenuName); ?>"><?php echo $MenuName ?></span></div>
-                <div id="trans_id" role="tab" aria-selected="false"><span role="button" tabindex="0" aria-label="<?php echo esc($TranscriptName); ?>"><?php echo $TranscriptName ?></span></div>
+                <div id="toc_id" class="tocclickedclscss" role="tab" tabindex="0" aria-selected="true" aria-controls="menu" aria-current="page"><span><?php echo $MenuName ?></span></div>
+                <div id="trans_id" role="tab" tabindex="0" aria-selected="false" aria-controls="transcript"><span><?php echo $TranscriptName ?></span></div>
             </div>
             <?php /* Inline style copied verbatim from the theme's own content.html:
                      <div class="tocData" ng-bind-html="sb.sideBarData"
@@ -294,7 +303,10 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                     return 'book-open';
                 };
                 ?>
-                <div id="menu" style="display:block;">
+                <?php /* role="tabpanel" + aria-labelledby completes the tablist relationship that
+                         #toc_id's aria-controls now points at. Purely semantic - no theme CSS
+                         targets either attribute, so appearance is unchanged. */ ?>
+                <div id="menu" style="display:block;" role="tabpanel" aria-labelledby="toc_id">
                     <ol id="tocData">
                         <?php foreach ($pagedetails as $page) {
                             if ($page['sub_page_main'] == 0) {
@@ -304,39 +316,61 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                         ?>
                                 <span>
                                     <li>
-                                        <span class="<?php echo $rowClass; ?>">
-                                            <form
-                                                action="<?php echo base_url('SCORM/Course_builder/review_course/launcher/1/' . $page['page_number']); ?>"
-                                                method="POST" style="display:contents;"><?= csrf_field() ?>
-                                                <input type="hidden" name="course_id" value="<?php echo $page['fk_course_id']; ?>" />
-                                                <input type="hidden" name="page_number" value="<?php echo $page['page_number']; ?>" />
-                                                <input type="hidden" name="typeOfLaunch" value="<?php echo $typeOfLaunch ?>" />
-                                                <?php /* display:contents, so the icon and title become DIRECT flex children of
-                                                         span.toc-row-item and the theme's own row rule governs their spacing and
-                                                         alignment verbatim - gap: 12px, align-items: center,
-                                                         padding: 9px 40px 9px 18px, font-size: 14px, font-weight: 600
-                                                         (Color.css:2503-2523). This replaced an inline
-                                                         `display:flex; gap:6px; align-items:center; width:100%`, which put the icon
-                                                         and text one level too deep: the theme's 12px gap then applied between
-                                                         .toc-row-item's single child instead of between the icon and the text, and
-                                                         the hardcoded 6px won regardless because an inline style outranks any
-                                                         stylesheet rule. No spacing value is declared here now.
-                                                         font/color:inherit are kept deliberately: display:contents removes the box
-                                                         but NOT inheritance, so without them the spans would inherit the <button>
-                                                         UA font (~13.3px Arial, weight 400) instead of the row's 14px/600 - and
-                                                         .menu-title's own `font-weight: inherit` (Color.css:2530) would resolve to
-                                                         400. Clicks are handled by the delegated row listener in header.php (the
-                                                         theme sets pointer-events:none inside the row); keyboard is unaffected -
-                                                         a display:contents button is still focusable and submits on Enter/Space. */ ?>
-                                                <button type="submit" style="display:contents; font:inherit; color:inherit;">
-                                                    <span class="toc-item-icon" aria-hidden="true"><?php
-                                                        $tocIconKey = $resolveTocIcon($page['page_name'], isset($page['type']) ? $page['type'] : 0);
-                                                        echo isset($tocIconSvg[$tocIconKey]) ? $tocIconSvg[$tocIconKey] : $tocIconSvg['lesson'];
-                                                    ?></span>
-                                                    <span class="toc-item-text"><span class="menu-title"><?php echo $page['page_name']; ?></span></span>
-                                                </button>
-                                            </form>
+                                        <?php /* aria-current="page" on the active row. NOTE: this EXCEEDS the theme -
+                                                 sideBarController.js sets aria-current only on the Menu/Transcript tabs
+                                                 (lines 445-456), never on the selected row, which it marks with the
+                                                 .selectedToc class alone. That leaves the current page conveyed purely
+                                                 by colour, so a screen-reader user cannot tell which row they are on.
+                                                 Added because this task lists "Active menu item" and "screen-reader
+                                                 semantics" as requirements. It is inert visually - no CSS anywhere in
+                                                 the theme or Preview targets [aria-current] on a row - so it changes
+                                                 announcement only, never appearance. Flagged rather than silent. */ ?>
+                                        <?php /* Row structure now matches the theme's own exactly: the interactive element
+                                                 IS span.toc-row-item, carrying role="button" tabindex="0" aria-label, with the
+                                                 icon and title as its DIRECT children
+                                                 (sideBarController.js:192-193 + :748 adds the .toc-row-item class to that same
+                                                 span; its own lookup at :698 is `#tocData li > span[role="button"]`).
+
+                                                 Why this replaced the previous <button style="display:contents"> wrapper:
+                                                 display:contents generates NO layout box, and an element is focusable only if
+                                                 it is "being rendered" i.e. has a layout box (CSS Display 3 also specifies
+                                                 display:contents on a form control behaves as display:none). So that button
+                                                 was silently dropped from the tab order - mouse still worked, because the
+                                                 delegated handler in header.php submits the form directly, but Tab and
+                                                 Enter/Space reached nothing at all.
+
+                                                 Making the row itself the control fixes the tab order AND keeps the spacing
+                                                 fix from the previous round, because the icon/title remain direct flex
+                                                 children of .toc-row-item, so the theme's own gap:12px, align-items:center,
+                                                 padding:9px 40px 9px 18px and 14px/600 typography still govern
+                                                 (Color.css:2503-2523) with nothing declared here.
+
+                                                 Three further things now come from the theme for free rather than from
+                                                 Preview overrides: its `.toc-row-item:focus-visible` ring
+                                                 (Color.css:2627-2631), its `span[role="button"] { cursor: pointer }`
+                                                 (Color.css:2574), and its pointer-events:none on the row's children
+                                                 (Color.css:2564) which is *designed* for exactly this shape - clicks resolve
+                                                 to the handler element, which is now genuinely the handler.
+
+                                                 The <form> is retained purely as the navigation vehicle and moved to a
+                                                 display:none sibling: same action, hidden inputs and CSRF token, submitted by
+                                                 the existing delegated handler. Hidden inputs in a display:none form still
+                                                 serialize, and it is no longer inside the visual row so it cannot affect
+                                                 layout or add a tab stop. */ ?>
+                                        <span class="<?php echo $rowClass; ?>" role="button" tabindex="0" aria-label="<?php echo esc($page['page_name']); ?>"<?php echo $isCurrentPage ? ' aria-current="page"' : ''; ?>>
+                                            <span class="toc-item-icon" aria-hidden="true"><?php
+                                                $tocIconKey = $resolveTocIcon($page['page_name'], isset($page['type']) ? $page['type'] : 0);
+                                                echo isset($tocIconSvg[$tocIconKey]) ? $tocIconSvg[$tocIconKey] : $tocIconSvg['lesson'];
+                                            ?></span>
+                                            <span class="toc-item-text"><span class="menu-title"><?php echo $page['page_name']; ?></span></span>
                                         </span>
+                                        <form
+                                            action="<?php echo base_url('SCORM/Course_builder/review_course/launcher/1/' . $page['page_number']); ?>"
+                                            method="POST" style="display:none;"><?= csrf_field() ?>
+                                            <input type="hidden" name="course_id" value="<?php echo $page['fk_course_id']; ?>" />
+                                            <input type="hidden" name="page_number" value="<?php echo $page['page_number']; ?>" />
+                                            <input type="hidden" name="typeOfLaunch" value="<?php echo $typeOfLaunch ?>" />
+                                        </form>
                                     </li>
                                     <?php /* Completion indicator. Color.css makes #tocData > span a
                                              two-column grid (1fr + 12px) whose second cell is this
@@ -355,7 +389,7 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                         } ?>
                     </ol>
                 </div>
-                <div id="transcript" style="display:none;">
+                <div id="transcript" style="display:none;" role="tabpanel" aria-labelledby="trans_id">
                     <p><?php if (isset($transcript)) {
                             foreach ($transcript as $script) { ?>
                     <div class="transcript-item" style="font-size:12px;">
@@ -372,8 +406,18 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
         </div>
         <div class="contentArea">
             <div id="clickableDiv" class="headingArea1">
+                <?php /* Matches the theme's own menu-icon contract (content.html:55-66), which
+                         carries title, role=button, tabindex=0, aria-haspopup and a DYNAMIC
+                         aria-expanded, plus ng-keydown alongside ng-click.
+                         The keyboard part is the important one: this is an <img role="button">,
+                         which is NOT a natively activatable control, so an onclick alone fires
+                         on mouse only - Tab focused the icon (tabindex=0, and Color.css:136 even
+                         draws its focus ring) but Enter/Space did nothing. Keyboard activation
+                         and the aria-expanded sync are wired in footer.php next to
+                         toggleModernSidebar(), so the open/close state lives in one place. */ ?>
                 <img id="TmenuIcon" src="<?php echo base_url('assets/assets/uploads/SCORM_course_document/scorm_libraries/export_themes/' . $themePath . '/images/footer-menu/Menuopen.svg'); ?>"
-                    alt="<?php echo $Menutitle ?>" role="button" tabindex="0" style="cursor:pointer;" onclick="toggleModernSidebar()">
+                    alt="<?php echo $Menutitle ?>" title="<?php echo esc($Menutitle); ?>" role="button" tabindex="0"
+                    aria-haspopup="true" aria-expanded="false" style="cursor:pointer;" onclick="toggleModernSidebar()">
             </div>
             <?php /* FSize19 is part of the theme's own header markup (content.html:68 -
                      `<div class="headingArea FSize19">`) and is the ONLY thing that sets the
@@ -384,7 +428,12 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                      rendered 14px against the export's 19px. The <=1024px / <=600px media queries
                      already set .headingArea font-size themselves, so only desktop was affected. */ ?>
             <div class="headingArea FSize19">
-                <span class="pageHeaderText"><?php echo $row['page_name']; ?></span>
+                <?php /* tabindex/role/title/aria-label copied from the theme's own header span
+                         (content.html:69), which Preview was emitting bare. role="text" keeps
+                         screen readers announcing the page name as a single label, and tabindex
+                         makes it reachable so the title can be read on its own - both are the
+                         theme's choices, not additions. */ ?>
+                <span class="pageHeaderText" tabindex="0" role="text" title="<?php echo esc($row['page_name']); ?>" aria-label="<?php echo esc($row['page_name']); ?>"><?php echo $row['page_name']; ?></span>
                 <div id="pagenoHeader"><?php echo $currentpage; ?> / <?php echo $totalPage; ?></div>
                 <?php /* Exit/power control, same ids, asset and markup as the theme's own
                          content.html header (#exitCourseBtn > #ImagExitCourse), so Color.css

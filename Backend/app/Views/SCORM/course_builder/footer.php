@@ -128,7 +128,33 @@ $mtShowResources = $isModernTheme && !empty($getAllFileOwner) && $mtResourceCrea
         if (v) {
             (panel && panel.style.display === 'block') ? v.pause() : v.play();
         }
+
+        /* Keep aria-expanded truthful, which the theme does via
+           aria-expanded="{{sb.menuOpen ? 'true' : 'false'}}" (content.html:65). Read back from
+           the panel rather than from a local flag so it stays correct no matter which of the two
+           paths above actually flipped it. */
+        var menuIcon = document.getElementById('TmenuIcon');
+        if (menuIcon) {
+            menuIcon.setAttribute('aria-expanded', (panel && panel.style.display === 'block') ? 'true' : 'false');
+        }
     }
+
+    /* Keyboard activation for the menu icon. It is an <img role="button">, not a natively
+       activatable control, so its onclick fires on mouse only - the theme pairs its ng-click
+       with ng-keydown for exactly this reason (content.html:58-59). Enter and Space are the
+       two keys the button role is required to support. */
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') { return; }
+        var icon = e.target && e.target.id === 'TmenuIcon' ? e.target : null;
+        if (!icon) { return; }
+        /* Same guard the theme's own keyboard handler applies before acting
+           (sideBarController.js:424-426): when the menu is disabled, Color.css:129-133 sets
+           pointer-events:none on the icon, and keyboard must respect that too rather than
+           opening a menu the mouse cannot. */
+        if (window.getComputedStyle(icon).pointerEvents === 'none') { return; }
+        e.preventDefault(); /* stop Space from scrolling the page */
+        toggleModernSidebar();
+    }, false);
 
     /* Color.css requires #toc_id/#trans_id to be direct children of #sideBarHeader, which
        Bootstrap's nav-tabs markup (ul > li > a) cannot satisfy, so the tab switch is wired

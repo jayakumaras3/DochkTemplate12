@@ -881,6 +881,27 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
             border-radius: 4px;
         }
 
+        /* Menu / Transcript tab focus ring. The theme puts its ring on the inner span
+           (`#toc_id > span:focus-visible`, Color.css:2425-2430) because that span is what it
+           makes focusable. Preview makes the role="tab" DIV the focusable control instead -
+           required, because the theme's own active/inactive tab styling keys off aria-selected
+           on that div (Color.css:2387-2390 / 2408-2409) - so the ring has to move with focus.
+           Declarations are copied verbatim from that theme rule, variable included; nothing is
+           invented, and the theme's span rule simply never matches now. */
+        #Tmenu.sideBar #sideBarHeader > #toc_id:focus-visible,
+        #Tmenu.sideBar #sideBarHeader > #trans_id:focus-visible {
+            outline: 2px solid var(--menu-brand);
+            outline-offset: 3px;
+            border-radius: 8px;
+        }
+
+        /* No menu-row focus rule here by design. span.toc-row-item now carries
+           role="button" tabindex="0" itself (matching the theme), so the theme's OWN
+           `.toc-row-item:focus-visible` ring (Color.css:2627-2631) matches natively. An
+           earlier `:has(:focus-visible)` workaround lived here to draw that ring on the row
+           while the focusable element was a boxless display:contents <button> inside it; both
+           the workaround and that button are gone. */
+
         /* Color.css sizes .pageContent as a flex child (height:0; flex:1), but the
            content blocks below were written for the legacy fixed-header shell and
            hardcode 86vh/70vh. Neutralise those inside .pageContent only. */
@@ -1161,6 +1182,11 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
             var listItem = wrapper.querySelector('li');
             if (listItem && listItem.classList.contains('disabledClass')) { return; }
 
+            submitMenuRow(wrapper);
+        }, false);
+
+        /* Shared by the mouse and keyboard paths so the navigation call exists once. */
+        function submitMenuRow(wrapper) {
             var form = wrapper.querySelector('form');
             if (!form) { return; }
 
@@ -1169,6 +1195,32 @@ $themePath = ($theme === 'ModernTheme') ? $theme . '/theme' : $theme;
             } else {
                 form.submit();
             }
+        }
+
+        /* Keyboard activation for menu rows. span.toc-row-item is a span with role="button"
+           (the theme's own shape), and a role does NOT confer native key handling - only real
+           <button>/<a> elements activate on Enter/Space - which is why the theme pairs its
+           onclick with onkeydown="tocKeyHandler(event, this)" on that same span. Enter and
+           Space are the two keys the button role must support.
+           Cannot double-fire: a span with role=button emits no synthetic click on key press,
+           so the click listener above is not triggered by this, and the row is no longer
+           inside the form so Enter cannot implicitly submit either. */
+        document.addEventListener('keydown', function (event) {
+            if (event.key !== 'Enter' && event.key !== ' ') { return; }
+            if (!event.target || !event.target.closest) { return; }
+
+            var row = event.target.closest('#tocData > span > li > span.toc-row-item');
+            if (!row) { return; }
+
+            var listItem = row.closest('li');
+            if (listItem && listItem.classList.contains('disabledClass')) { return; }
+            if (row.getAttribute('aria-disabled') === 'true') { return; }
+
+            var wrapper = row.closest('#tocData > span');
+            if (!wrapper) { return; }
+
+            event.preventDefault(); /* stop Space scrolling the sidebar */
+            submitMenuRow(wrapper);
         }, false);
     </script>
     <?php endif; ?>
