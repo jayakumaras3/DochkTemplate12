@@ -273,11 +273,17 @@ body {
     position: static;
 }
 
+/* No border/shadow: this is the outer wrapper, and on desktop it is
+   `flex: 0 0 auto` (below), so it hugs .questionContainer instead of
+   filling the page. Its bottom border therefore landed 16px under the
+   question card as a stray full-width rule, with the shadow smudging
+   below it. .questionContainer keeps its own border - this frame was
+   redundant with it. Matches Quiz_style.css, which already does this. */
 #quizContainer {
     background: #ffffff;
-    border: 1px solid #E5E5E5;
+    border: none;
     border-radius: 0;
-    box-shadow: 0 8px 22px rgba(41, 28, 28, 0.05);
+    box-shadow: none;
     box-sizing: border-box;
     margin-left: 0;
     margin-right: 0;
@@ -303,10 +309,15 @@ body {
     line-height: 1.45;
 }
 
+/* The white question card - this is the element that draws the visible
+   rectangle. Its border and shadow follow the radius automatically. No
+   overflow:hidden needed: the 20px padding keeps every child clear of
+   the corners, and clipping here would break the desktop scroll rule
+   (.questionContainer is the scroll container via overflow-y: auto). */
 .questionContainer {
     background: #ffffff;
     border: 1px solid #E5E5E5;
-    border-radius: 0;
+    border-radius: 7px !important;
     box-shadow: 0 10px 24px rgba(41, 28, 28, 0.04);
     padding: 20px;
 }
@@ -350,7 +361,9 @@ body {
 .correct,
 .incorrect {
     width: 100%;
-    border-radius: 0;
+    /* Feedback banner ("That's Incorrect. Please try again.") - matches the
+       7px action-button radius set in QuestionOptions.css. */
+    border-radius: 7px !important;
     border: 1px solid transparent;
     box-shadow: none;
     padding: 11px 16px;
@@ -560,12 +573,13 @@ html:not(.is-touch-device) body {
        percentage max-height on .questionContainer against it was measured
        (via computed-style + offsetHeight in a live test) to compute as
        "none", letting .questionContainer grow to its natural content size
-       instead of being clipped. 38px is #quizContainer's own vertical
-       padding (20px top + 16px bottom) + border (1px + 1px); update this
-       if that padding/border ever changes. */
+       instead of being clipped. 36px is #quizContainer's own vertical
+       padding (20px top + 16px bottom); its 1px+1px border was removed
+       along with the stray separator, so this dropped from 38px. Update
+       it if that padding/border ever changes. */
     html:not(.is-touch-device) .questionContainer {
-        max-height: calc(100vh - 38px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
-        max-height: calc(100dvh - 38px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
+        max-height: calc(100vh - 36px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
+        max-height: calc(100dvh - 36px - var(--outer-header-overlap, 0px) - var(--outer-footer-overlap, 0px));
         overflow-y: auto;
         overflow-x: hidden;
         scrollbar-width: thin;
@@ -583,3 +597,16 @@ html:not(.is-touch-device) body {
 }
 
 
+
+/* ---------------------------------------------------------------
+   Empty page area must be white.
+   This template links Color.css AFTER this file, and Color.css's
+   `body { background: var(--app-bg) }` (#f3f4f6) therefore beat the
+   `body { background-color: #ffffff }` declared above at equal
+   specificity, painting the unused space below the question card
+   grey. `html body` (0,0,2) outranks `body` (0,0,1) so it wins
+   regardless of load order. Background only - no layout, no logic.
+   --------------------------------------------------------------- */
+html body {
+    background: #ffffff;
+}
