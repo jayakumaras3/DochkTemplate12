@@ -1,12 +1,10 @@
 {
   "0": [
     {
-      "name": "4926",
-      "title": "Welcome",
-      "header": "Welcome",
-      "transcript": " ",
-      "masterIcon": true,
-      "icon": "brain",
+      "name": "8397",
+      "title": "Introduction ",
+      "header": "Introduction ",
+      "transcript": "<p>Every conversation you have as a Zydus sales professional carries the weight of a 74-year legacy.&nbsp;&nbsp;</p>\r\n\r\n<p>Zydus was built by&nbsp;Mr. Ramanbhai B. Patel,&nbsp;a first-generation entrepreneur with a simple conviction: that healthcare should reach the people who need it most. That conviction has grown into a global healthcare business spanning formulations, biologics,&nbsp;vaccines&nbsp;and wellness products, which reach patients across continents.&nbsp;</p>\r\n\r\n<p>You are now part of that story. But a&nbsp;legacy&nbsp;this size is only as strong as the person standing in front of a doctor,&nbsp;pharmacist&nbsp;or hospital administrator today. When you walk into a clinic or a chemist&rsquo;s counter, you are not simply selling a product. You&nbsp;represent&nbsp;a brand, a set of&nbsp;values&nbsp;and a promise made to patients you will never meet.&nbsp;</p>\r\n\r\n<p>This course will introduce you to the fundamentals of that role. You will learn how to carry yourself as a representative of the&nbsp;organisation, how to build genuine engagement with healthcare customers, how to talk about product value in a way that is clear and credible and how to maintain the professional standards that protect both you and the&nbsp;organisation&nbsp;you represent.&nbsp;</p>\r\n\r\n<p>By the end of this course, you should be able to:&nbsp;</p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>Describe the standards of conduct expected when&nbsp;representing&nbsp;the&nbsp;organisation&nbsp;in front of healthcare customers&nbsp;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>Apply techniques for engaging healthcare customers professionally and building credible relationships&nbsp;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>Communicate product value clearly and compliantly during customer interactions</p>\r\n\t</li>\r\n</ul>\r\n",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -16,7 +14,7 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/html/4926/Screen_01.html",
+            "src": "assets/html/8397/Screen_01.html",
             "id": "Screen_01.html"
           },
           {
@@ -27,19 +25,17 @@
         "content": [
           {
             "type": "captivate",
-            "path": "assets/html/4926/Screen_01.html",
+            "path": "assets/html/8397/Screen_01.html",
             "functionName": "captivate"
           }
         ]
       }
     },
     {
-      "name": "4957",
-      "title": "Audio Version",
-      "header": "Audio Version",
+      "name": "8398",
+      "title": "Describing the Expected Standards of Conduct ",
+      "header": "Describing the Expected Standards of Conduct ",
       "transcript": " ",
-      "masterIcon": true,
-      "icon": "video",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -49,139 +45,7 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/video/en_2.mp4",
-            "id": "en_2.mp4"
-          },
-          {
-            "src": "theme/scripts/Screen_01.js",
-            "id": "Screen_01"
-          }
-        ],
-        "content": [
-          {
-            "type": "video",
-            "path": "assets/video/en_2.mp4",
-            "onendnextscrn": "false"
-          }
-        ]
-      }
-    },
-    {
-      "name": "4959",
-      "title": "Introduction",
-      "header": "Introduction",
-  	  "transcript": "<p>Neurodiversity describes the idea that people experience and interact with the world around them in different ways, there is no one &ldquo;right&rdquo; way of thinking, learning, and behaving, and these differences are not to be viewed as deficits.</p>\r\n\r\n<p>It is important for all of us to foster an environment that is conducive to neurodiversity. We need to recognize and emphasize each and every person&rsquo;s individual strengths and talents and provide support for their differences and requirements.</p>\r\n\r\n<p>People with neurological differences are not broken or incomplete versions of normal people. We are all born different and raised differently, hence all of us are to some extent, differently abled. Neurodiversity is a normal and natural variation in the human genome. The distinctiveness of neurodiverse people isn&rsquo;t something that necessarily needs to be &ldquo;cured&rdquo;. Neurodiverse employees merely need some help and accommodation. They may bring new perspectives to an organization&rsquo;s efforts to create or recognize value.</p>\r\n\r\n<p>In this course, you will:</p>\r\n\r\n<ul>\r\n\t<li>Recognize the value that neurodiverse employees add to an organization.</li>\r\n\t<li>You will understand how to educate your employees about neurodiversity and create an inclusive workplace.</li>\r\n\t<li>You will learn to examine strategies for providing equal access to neurodiverse employees.</li>\r\n</ul>\r\n",
-        "masterIcon": true,
-        "icon": "book-open",
-      "settings": {
-        "sidebar": true,
-        "header": true,
-        "footer": true,
-        "fullScreen": false,
-        "pageNumber": "Page 1/11",
-        "module": 0,
-        "preloader": [
-          {
-            "src": "assets/html/customHTML/index.html",
-            "id": "index.html"
-          },
-          {
-            "src": "theme/scripts/Screen_01.js",
-            "id": "Screen_01"
-          }
-        ],
-        "content": [
-          {
-            "type": "captivate",
-            "path": "assets/html/customHTML/index.html",
-            "onendnextscrn": "false"
-          }
-        ]
-      }
-    },
-    {
-      "name": "4997",
-      "title": "Neurodiversity in the Workforce",
-      "header": "Neurodiversity in the Workforce",
-  	  "transcript": "<p>The Neurodiverse population remains a largely untapped pool of talent. Unemployment runs as high as 80%. Even when they are working, highly capable neurodiverse people are often underemployed. Many times, despite having required skill set and solid credentials, they have to settle for menial jobs. These poor numbers are due to the way companies screen and hire their possible candidates.</p>\r\n\r\n<p>Fostering an inclusive workplace begins with making neurodiversity a priority. Employers and recruiters need to revamp their hiring practices so as to not miss out on any of the neurodiverse talent that could help the company flourish. Recruitment of people on the spectrum is only the first step. Employers need to make certain accommodations for a fulfilling work environment for people across the spectrum.</p>\r\n\r\n<p>Encouraging neurodiversity makes organizations inclusive and innovative. Employees who identify on the neurodiverse spectrum bring with them new ways of looking at things. This encourages the entire team to think creatively. Merging unique perspectives and ideas within a team naturally fosters an environment that is innovative and forward-thinking.</p>\r\n",
-        "masterIcon": true,
-        "icon": "video",
-      "settings": {
-        "sidebar": true,
-        "header": true,
-        "footer": true,
-        "fullScreen": false,
-        "pageNumber": "Page 1/11",
-        "module": 0,
-        "preloader": [
-          {
-            "src": "assets/video/en_4.mp4",
-            "id": "en_4.mp4"
-          },
-          {
-            "src": "theme/scripts/Screen_01.js",
-            "id": "Screen_01"
-          }
-        ],
-        "content": [
-          {
-            "type": "video",
-            "path": "assets/video/en_4.mp4",
-            "onendnextscrn": "false"
-          }
-        ]
-      }
-    },
-    {
-      "name": "4998",
-      "title": "Advantages of Neurodiversity at the Workplace",
-      "header": "Advantages of Neurodiversity at the Workplace",
-  	  "transcript": "<p>Managers claim that inclusive practices are already showing benefits in ways far beyond reputational enhancement. These include productivity gains, quality improvement, boost in innovative capabilities, and growth in employee engagement. They have begun thinking more deeply about leveraging the talents of all employees through greater sensitivity to individual needs.</p>\r\n\r\n<p>1.&nbsp;<strong>Better Pattern Recognition</strong><br />\r\nLarge companies, particularly tech companies have realized they already had neurodiverse talent on their staff. Many of these employees contribute their special skills in pattern recognition, memory, or mathematics on teams working to solve highly complex problems. In the fields of machine learning, artificial intelligence, and data science, neurodiverse employees have proven to outperform their neurotypical counterparts.</p>\r\n\r\n<p>2.&nbsp;<strong>Creative Thinking</strong><br />\r\nVariations in their neurological constitution allows neurodivergent employees to think differently or out of the box. They are able to see past the conventional frameworks which could limit the creativity of neurotypical individuals.</p>\r\n\r\n<p>3.&nbsp;<strong>Positive Work Environment/Organization&rsquo;s Reputation</strong><br />\r\nAccording to Training Industry, employers who have opened their doors to a neurodiverse workforce have found that neurodiverse and autistic employees have a retention rate upwards of 90%.<br />\r\n<br />\r\nMoreover, having neurodiverse talent in your workforce improves a company&rsquo;s external as well as internal image. When a brand has a strong purpose consumers are four times more likely to trust the company, and six times more likely to defend the company from criticism.</p>\r\n",
-        "masterIcon": true,
-        "icon": "video",
-      "settings": {
-        "sidebar": true,
-        "header": true,
-        "footer": true,
-        "fullScreen": false,
-        "pageNumber": "Page 1/11",
-        "module": 0,
-        "preloader": [
-          {
-            "src": "assets/video/en_5.mp4",
-            "id": "en_5.mp4"
-          },
-          {
-            "src": "theme/scripts/Screen_01.js",
-            "id": "Screen_01"
-          }
-        ],
-        "content": [
-          {
-            "type": "video",
-            "path": "assets/video/en_5.mp4",
-            "onendnextscrn": "false"
-          }
-        ]
-      }
-    },
-    {
-      "name": "5002",
-      "title": "Knowledge Check 1",
-      "header": "Knowledge Check 1",
-      "transcript": " ",
-      "masterIcon": true,
-      "icon": "clipboard-check",
-      "settings": {
-        "sidebar": true,
-        "header": true,
-        "footer": true,
-        "fullScreen": false,
-        "pageNumber": "Page 1/11",
-        "module": 0,
-        "preloader": [
-          {
-            "src": "assets/Quiz/5002/index.html",
+            "src": "assets/html/8398/Screen_01.html",
             "id": "Screen_01.html"
           },
           {
@@ -192,52 +56,17 @@
         "content": [
           {
             "type": "captivate",
-            "path": "assets/Quiz/5002/index.html",
+            "path": "assets/html/8398/Screen_01.html",
             "functionName": "captivate"
           }
         ]
       }
     },
     {
-      "name": "5004",
-      "title": "Accommodations for Neurodivergent Employees Accommodations for Neurodivergent Employees",
-      "header": "Accommodations for Neurodivergent Employees Accommodations for Neurodivergent Employees",
-  	  "transcript": "<p>Organizations as well as employees can benefit from creating a thoughtfully designed accessible workspace. It opens up a creative sandbox where people are free to think, work and create in a way that works best for them.</p>\r\n\r\n<p>1.&nbsp;<strong>Inclusive Recruiting</strong><br />\r\nFor people on the neurodiversity spectrum, interviews can be a challenge because their communication styles are not similar to those of neurotypical candidates. The robust communication and eye contact the recruiters and employers look for is not the strong suit of candidates on the spectrum. Try to diversify your hiring strategy.<br />\r\n<br />\r\nPsychometric assessments are far more objective as they eliminate human biases in early stages of recruitment. Provide multiple opportunities to candidates so they can demonstrate their ability and competency during the process, regardless of neurodiversity. Formalize a hiring program to help create a talent pipeline of neurodivergent candidates.</p>\r\n\r\n<p>2.&nbsp;<strong>Distraction-free Environment</strong><br />\r\nProvide a distraction-free workspace to employees, for example noise cancelling headphones to reduce sensory overload and spacious drawers and storage cabinets to declutter their desks. Distraction need not necessarily be physical. Mental decluttering is also as important. Provide reference materials, worksheets, and interview questions in advance and have sufficient mental health days in your company calendar. Assistive technologies can help some neurodivergent employees to perform better. Such support can include software and devices like portable and talking word processors, assistive listening systems and visual organizers.</p>\r\n\r\n<p>3.&nbsp;<strong>Architectural Accommodations</strong><br />\r\nYou can create focused areas of work where employees &mdash; neurodiverse or neurotypical can choose to work with low stimuli. Assess the texture of desks, chairs, and any other high-touch surfaces. Spatial disorientation can frustrate people with dyslexia and autism. So, try to create unique spaces with visual landmarks and clear lines of sight that can help everyone map their own location within a space, ultimately saving both time and frustration. Arranging furniture in different ways can also help people feel better equipped at work. The same positioning of the desk might not be comfortable for everyone. So, allow a space where pacing is welcomed.</p>\r\n\r\n<p>4.&nbsp;<strong>Flexibility</strong><br />\r\nConsider giving your employees the option of remote working. Flexible work schedules support your entire workforce and not just neurodivergent employees &mdash; working parents, caregivers and people with disability.</p>\r\n\r\n<p>5.&nbsp;<strong>Empowering Language</strong><br />\r\nNeurodiversity advocates encourage inclusive, non-judgmental language. While many disability advocacy organizations prefer person-first language (&ldquo;a person with autism&rdquo;, &ldquo;a person with Down syndrome&rdquo;), some research has found that the majority of the autistic community prefers identity-first language (&ldquo;an autistic person&rdquo;). Therefore, rather than making assumptions, it is best to ask directly what a person&rsquo;s preferred language is and how they want to be addressed.</p>\r\n\r\n<p>6.&nbsp;<strong>Educate Your Team</strong><br />\r\nCreate a culture where individuals feel comfortable to disclose and talk openly about their neurodiversity. Upskill your workforce by providing &lsquo;Diversity and Inclusion Training days&rsquo; for all so that everyone understands the challenges and the uniqueness of neurodiversity. Focus on fostering an open and trusting relationship with your team. Ask the employees what support they need. Provide employees additional support and guidance, if required, and ensure to make employees aware of the availability of the same. Ensure other team members are aware of the specific needs each individual may require. Moreover, handle performance issues very sensitively.<br />\r\n<br />\r\nIf you feel uncertain about anything, you can begin by asking your employees what they feel is required for them to work efficiently and comfortably. Your employees do not have to reveal their medical history for you to make accommodations at the workplace. You can simply ask them to share which elements of their work experience could be made more inclusive or accessible.</p>\r\n",
-        "masterIcon": true,
-        "icon": "video",
-      "settings": {
-        "sidebar": true,
-        "header": true,
-        "footer": true,
-        "fullScreen": false,
-        "pageNumber": "Page 1/11",
-        "module": 0,
-        "preloader": [
-          {
-            "src": "assets/video/en_7.mp4",
-            "id": "en_7.mp4"
-          },
-          {
-            "src": "theme/scripts/Screen_01.js",
-            "id": "Screen_01"
-          }
-        ],
-        "content": [
-          {
-            "type": "video",
-            "path": "assets/video/en_7.mp4",
-            "onendnextscrn": "false"
-          }
-        ]
-      }
-    },
-    {
-      "name": "5007",
-      "title": "Knowledge Check 2",
-      "header": "Knowledge Check 2",
+      "name": "8402",
+      "title": "CYU – 1 ",
+      "header": "CYU – 1 ",
       "transcript": " ",
-      "masterIcon": true,
-      "icon": "badge-check",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -247,7 +76,7 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/Quiz/5007/index.html",
+            "src": "assets/Quiz/8402/index.html",
             "id": "Screen_01.html"
           },
           {
@@ -258,19 +87,17 @@
         "content": [
           {
             "type": "captivate",
-            "path": "assets/Quiz/5007/index.html",
+            "path": "assets/Quiz/8402/index.html",
             "functionName": "captivate"
           }
         ]
       }
     },
     {
-      "name": "5009",
-      "title": "Summary",
-      "header": "Summary",
-  	  "transcript": "<p>By the end of this course, you have learned:</p>\r\n\r\n<ul>\r\n\t<li>Neurodiversity describes the idea that people experience and interact with the world around them in many different ways, there is no one &ldquo;right&rdquo; way of thinking, learning, and differences should not be viewed as deficits.</li>\r\n\t<li>You learned that the neurodiverse population remains a largely untapped pool of talent and they have the ability to bring in new perspectives. You learned that neurodivergent employees are proven to have better pattern recognition and creative thinking than their neurotypical counterparts. Plus, accommodating neurodivergent candidates can greatly improve a company&rsquo;s image.</li>\r\n\t<li>You learned that people managers must practice inclusive recruiting with, for example, psychometric assessment or performance-based tests, so as not to miss out on neurodivergent talent.</li>\r\n\t<li>You learned that leaders must accommodate neurodivergent employees by creating distraction-free workspaces, providing flexibility, and educating themselves and their teams about the challenges and uniqueness of the people on the spectrum.</li>\r\n</ul>\r\n",
-        "masterIcon": true,
-        "icon": "video",
+      "name": "8403",
+      "title": "Applying Techniques for Engaging Healthcare Customers ",
+      "header": "Applying Techniques for Engaging Healthcare Customers ",
+      "transcript": "<p>Engaging a healthcare customer well means listening more than you speak. Doctors and pharmacists are pressed for time, so the representatives who stand out are the ones who ask thoughtful questions and genuinely register the answers. Sales trainer and author Neil Rackham&rsquo;s research on high-performing sales conversations found that top performers spend more time understanding a customer&rsquo;s specific needs before ever mentioning a product. Building credibility is less about what you say&nbsp;in&nbsp;the first minute, and more about what you notice.&nbsp;</p>\r\n\r\n<p>Let&rsquo;s&nbsp;understand this with a scenario.&nbsp;</p>\r\n\r\n<p>Sarah, a sales professional, is meeting Dr. Coleman for the first time. Instead of opening with her product line, she asks what conditions he sees most often in his practice and what challenges his patients typically&nbsp;face with&nbsp;their current treatment plans. Dr. Coleman mentions that several of his patients struggle to remember complex dosing schedules.&nbsp;</p>\r\n\r\n<p>Sarah makes a note of this. In her next visit, she brings information specifically addressing dosing simplicity, tailored to what he told her.&nbsp;</p>\r\n\r\n<p>Dr. Coleman notices that she remembered, and he begins to see her as someone worth being available for, rather than another rep with a script.&nbsp;</p>\r\n\r\n<p>Sarah succeeded because she treated the conversation as a two-way exchange, not a pitch. Professional engagement with healthcare customers means asking thoughtful questions, listening&nbsp;closely&nbsp;and following up on what you learn. Credibility is built over time by showing that you pay attention.&nbsp;</p>\r\n",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -280,8 +107,70 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/video/en_9.mp4",
-            "id": "en_9.mp4"
+            "src": "assets/html/8403/Screen_01.html",
+            "id": "Screen_01.html"
+          },
+          {
+            "src": "theme/scripts/Screen_01.js",
+            "id": "Screen_01"
+          }
+        ],
+        "content": [
+          {
+            "type": "captivate",
+            "path": "assets/html/8403/Screen_01.html",
+            "functionName": "captivate"
+          }
+        ]
+      }
+    },
+    {
+      "name": "8404",
+      "title": "CYU – 2",
+      "header": "CYU – 2",
+      "transcript": " ",
+      "settings": {
+        "sidebar": true,
+        "header": true,
+        "footer": true,
+        "fullScreen": false,
+        "pageNumber": "Page 1/11",
+        "module": 0,
+        "preloader": [
+          {
+            "src": "assets/Quiz/8404/index.html",
+            "id": "Screen_01.html"
+          },
+          {
+            "src": "theme/scripts/Screen_01.js",
+            "id": "Screen_01"
+          }
+        ],
+        "content": [
+          {
+            "type": "captivate",
+            "path": "assets/Quiz/8404/index.html",
+            "functionName": "captivate"
+          }
+        ]
+      }
+    },
+    {
+      "name": "8406",
+      "title": "Communicating Product Value Clearly and Compliantly During Customer Interactions ",
+      "header": "Communicating Product Value Clearly and Compliantly During Customer Interactions ",
+      "transcript": "<p>Communicating product value is not about listing every feature; it is about connecting a product&rsquo;s benefits to a specific need the healthcare professional has already raised, within the bounds of what can be claimed. Regulatory bodies&nbsp;require&nbsp;&lsquo;fair balance&rsquo; in promotional communication, meaning benefits must always be presented alongside relevant safety information, never in isolation. Getting this right protects the patient, the healthcare professional&rsquo;s&nbsp;trust&nbsp;and the&nbsp;organisation&rsquo;s&nbsp;licence&nbsp;to&nbsp;operate.&nbsp;</p>\r\n\r\n<p>Let&rsquo;s&nbsp;understand this with a scenario.&nbsp;</p>\r\n\r\n<p>Kyle, a sales professional, is presenting a product to Dr. Whitfield. He leads with the dosing convenience, describing it as a solution that &lsquo;works for virtually every patient&rsquo; and moves on to the next product before Dr. Whitfield can ask a follow-up question. He does not mention contraindications or&nbsp;reference&nbsp;the prescribing information.&nbsp;</p>\r\n\r\n<p>Later that week, Tom, another sales professional, presents the same product. He links the dosing convenience directly to a concern Dr. Whitfield raised earlier about patient adherence, then proactively covers the relevant safety information and contraindications, referencing the approved prescribing information rather than paraphrasing from memory.&nbsp;</p>\r\n\r\n<p>Dr. Whitfield tells his staff he is cautious about Kyle&rsquo;s claims going forward, but he trusts Tom&rsquo;s recommendations because Tom presents the full picture, not just the highlights.&nbsp;</p>\r\n\r\n<p>Compliant communication is not a constraint on selling well; it is what makes a sales conversation credible in the first place. Value that is not balanced with&nbsp;accurate&nbsp;safety information is not&nbsp;value&nbsp;at all; it is a liability waiting to surface.&nbsp;</p>\r\n",
+      "settings": {
+        "sidebar": true,
+        "header": true,
+        "footer": true,
+        "fullScreen": false,
+        "pageNumber": "Page 1/11",
+        "module": 0,
+        "preloader": [
+          {
+            "src": "assets/video/Zydus Introduction.mp4",
+            "id": "Zydus Introduction.mp4"
           },
           {
             "src": "theme/scripts/Screen_01.js",
@@ -291,19 +180,79 @@
         "content": [
           {
             "type": "video",
-            "path": "assets/video/en_9.mp4",
+            "path": "assets/video/Zydus Introduction.mp4",
             "onendnextscrn": "false"
           }
         ]
       }
     },
     {
-      "name": "5011",
+      "name": "8408",
+      "title": "CYU – 3",
+      "header": "CYU – 3",
+      "transcript": " ",
+      "settings": {
+        "sidebar": true,
+        "header": true,
+        "footer": true,
+        "fullScreen": false,
+        "pageNumber": "Page 1/11",
+        "module": 0,
+        "preloader": [
+          {
+            "src": "assets/Quiz/8408/index.html",
+            "id": "Screen_01.html"
+          },
+          {
+            "src": "theme/scripts/Screen_01.js",
+            "id": "Screen_01"
+          }
+        ],
+        "content": [
+          {
+            "type": "captivate",
+            "path": "assets/Quiz/8408/index.html",
+            "functionName": "captivate"
+          }
+        ]
+      }
+    },
+    {
+      "name": "8409",
+      "title": "Summary ",
+      "header": "Summary ",
+      "transcript": "<p>Congratulations!&nbsp;&nbsp;</p>\r\n\r\n<p>You have completed the course:&nbsp;Zydus Sales &ndash; Introduction Training&nbsp;</p>\r\n\r\n<p>In this course, you&nbsp;learnt that:&nbsp;</p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>Professional conduct, from punctuality to managing confidential information, builds the credibility that earns you continued access to healthcare customers&nbsp;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>Genuine engagement means listening to a customer&rsquo;s needs before discussing a product and following up on what you learn to build lasting relationships&nbsp;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>Product value is best communicated by linking it to the customer&#39;s specific needs while providing balanced,&nbsp;accurate&nbsp;safety information&nbsp;</p>\r\n\t</li>\r\n</ul>\r\n",
+      "settings": {
+        "sidebar": true,
+        "header": true,
+        "footer": true,
+        "fullScreen": false,
+        "pageNumber": "Page 1/11",
+        "module": 0,
+        "preloader": [
+          {
+            "src": "assets/video/Zydus Introduction.mp4",
+            "id": "Zydus Introduction.mp4"
+          },
+          {
+            "src": "theme/scripts/Screen_01.js",
+            "id": "Screen_01"
+          }
+        ],
+        "content": [
+          {
+            "type": "video",
+            "path": "assets/video/Zydus Introduction.mp4",
+            "onendnextscrn": "false"
+          }
+        ]
+      }
+    },
+    {
+      "name": "8411",
       "title": "Quiz",
       "header": "Quiz",
       "transcript": " ",
-      "masterIcon": true,
-      "icon": "clipboard-list",
       "settings": {
         "sidebar": true,
         "header": true,
@@ -313,7 +262,7 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/Quiz/5011/index.html",
+            "src": "assets/Quiz/8411/index.html",
             "id": "Screen_01.html"
           },
           {
@@ -324,7 +273,7 @@
         "content": [
           {
             "type": "captivate",
-            "path": "assets/Quiz/5011/index.html",
+            "path": "assets/Quiz/8411/index.html",
             "functionName": "captivate"
           }
         ]

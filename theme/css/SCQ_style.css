@@ -606,6 +606,11 @@ html:not(.is-touch-device) body {
    specificity, painting the unused space below the question card
    grey. `html body` (0,0,2) outranks `body` (0,0,1) so it wins
    regardless of load order. Background only - no layout, no logic.
+
+   Deliberately NO page background image here: QuestionPageBG.png is
+   scoped to the Quiz assessment start page only (see the
+   `#quizContainer.quiz-start-view` rule in Quiz_style.css). SCQ
+   question pages must stay plain white.
    --------------------------------------------------------------- */
 html body {
     background: #ffffff;

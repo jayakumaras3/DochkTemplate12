@@ -533,12 +533,38 @@ html body {
     height: 0;
 }
 
+/* Assessment / Quiz front page (the "Assessment / total questions /
+   passing score / attempts / Start" card shown before startQuiz()).
+
+   This is the ONLY page that carries QuestionPageBG.png. `.quiz-start-view`
+   is added by quiz.js's loadQuestions() and removed by startQuiz(), and both
+   start-card branches (PreTest and normal) render #Startpageid inside it, so
+   this one existing selector covers every way the front page appears -- and
+   it stops applying the instant the first question loads. It is deliberately
+   NOT on `body`: body is shared with the question and results views in this
+   same document, which must stay plain white.
+
+   quiz.js also sets parentquizContainer.style.display='none' on this view,
+   so with #quizContainer at flex:1 this fills the whole content area below
+   the player's header. The player's header and footer live in the parent
+   document, outside this iframe, so they cannot be covered. #Startpageid
+   keeps its own opaque #ffffff + border + shadow, so the Assessment card,
+   its text and the Start button are untouched and need no overlay.
+   Background only - no layout, no logic, no SCORM. */
 #quizContainer.quiz-start-view {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 0;
     background: #ffffff;
+    background-image: url("../images/QuestionPageBG.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    /* Deliberately not `fixed`: iOS/iPadOS Safari resolves fixed
+       backgrounds against the layout viewport, which makes them
+       scale/jump while scrolling. `scroll` is stable everywhere. */
+    background-attachment: scroll;
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -863,6 +889,20 @@ html body {
     min-height: calc(100vh - 120px - var(--outer-header-overlap, 0px));
     padding-top: 0;
     padding-bottom: 0;
+    /* Results/summary must stay plain white, and it cannot rely on
+       .quiz-start-view being gone by now: quiz.js adds that class in
+       loadQuestions() (always runs on load) but removes it ONLY in
+       loadQuestion(). On the revisit paths where the quiz is already
+       finished -- attempts exhausted (`curAttempt == QuizAttemptLimit`)
+       or a PreTest already Completed/Attempted -- displayResultsScorm()
+       injects .results straight into #quizContainer without ever calling
+       loadQuestion(), so the element still carries .quiz-start-view.
+       This rule and the start-view rule are both specificity (1,1,0), so
+       this one wins only the properties it declares; without an explicit
+       background reset here, the start page's QuestionPageBG.png survived
+       and painted around the results card. Resetting the background is
+       enough -- no layout property is touched, and no JS change is needed. */
+    background: #ffffff;
 }
 
 @media (max-width: 1366px) {
