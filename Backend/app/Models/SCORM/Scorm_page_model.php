@@ -376,7 +376,7 @@ class Scorm_page_model extends Model
         return $query !== false && $query->getRowArray() !== null;
     }
 
-    private function hasDuplicateMainPageNumbers($courseId)
+    public function hasDuplicateMainPageNumbers($courseId)
     {
         return $this->db->table('page')
             ->select('page_number')

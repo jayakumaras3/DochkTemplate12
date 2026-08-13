@@ -88,6 +88,35 @@ class Assessment_training_model extends Model
         $builder->update($newdata);
         return true;
     }
+    // SCQ (single-choice) questions must have exactly one correct option, but an MCQ
+    // (multi-choice) question converted to SCQ may still have several options marked
+    // correct - normalize to "Option 1" (the first/oldest active option) alone being correct,
+    // matching the SCQ standard, whenever a question's quiz_type is switched to SCQ.
+    public function enforceSingleCorrectOption($question_id)
+    {
+        $options = $this->db->table('assessment_options')
+            ->where('question_id', $question_id)
+            ->where('status !=', 0)
+            ->orderBy('o_id', 'ASC')
+            ->get()->getResultArray();
+
+        if (empty($options)) {
+            return;
+        }
+
+        $firstOptionId = $options[0]['o_id'];
+
+        $this->db->table('assessment_options')
+            ->where('question_id', $question_id)
+            ->where('o_id !=', $firstOptionId)
+            ->set('truefalse', 2)
+            ->update();
+
+        $this->db->table('assessment_options')
+            ->where('o_id', $firstOptionId)
+            ->set('truefalse', 1)
+            ->update();
+    }
     public function addoptiondata($newdata)
     {
         $builder = $this->db->table('assessment_options');

@@ -87,7 +87,7 @@
                                                                         <td><?= date('d-m-Y h:i:s', $Articulate['createdon']) ?></td>
                                                                         <td><?= $Articulate['createdby'] ?></td>
                                                                         <td>
-                                                                            <?php if ((in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel)) && $Articulate['status'] != 8) { ?>
+                                                                            <?php if ((in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel) || in_array('44', $arrayuserlevel)) && $Articulate['status'] != 8) { ?>
                                                                                 <form method="POST"
                                                                                     action="<?= base_url('SCORM/course_builder/Scorm_course_pages/del_folder'); ?>">
                                                                                     <input type="hidden" name="page_id"
@@ -148,7 +148,7 @@
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <table class="table dt-responsive wrap w-100">
+                                                <table class="table dt-responsive wrap w">
                                                     <thead>
                                                         <tr>
                                                             <th>

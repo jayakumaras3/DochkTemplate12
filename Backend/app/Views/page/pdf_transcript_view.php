@@ -8,9 +8,18 @@
         <img src="<?php echo $logo; ?>" alt="Header Image" class="header-img" height="40px" />
     </div>
 
+    <?php $isArabic = ($full_sb[0]['language'] ?? '') === 'Arabic'; ?>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            <?php if ($isArabic) { ?>
+                /* Rendered through mpdf (not Dompdf) for Arabic - 'xbriyaz' is one of mpdf's
+                   bundled Arabic-capable fonts; 'DejaVu Sans' has no Arabic glyphs at all. */
+                font-family: 'xbriyaz', sans-serif;
+                direction: rtl;
+                text-align: right;
+            <?php } else { ?>
+                font-family: 'DejaVu Sans', sans-serif;
+            <?php } ?>
         }
 
         h2 {
@@ -63,7 +72,7 @@
     } elseif ($full_sb[0]['language'] == 'Bahasa') {
         $Audiotrancript = 'Audio Transcript';
     } elseif ($full_sb[0]['language'] == 'Arabic') {
-        $Audiotrancript = 'Audio Transcript';
+        $Audiotrancript = 'النص الصوتي';
     } elseif ($full_sb[0]['language'] == 'German') {
         $Audiotrancript = 'Audio-Transkript';
     } elseif ($full_sb[0]['language'] == 'Italian') {

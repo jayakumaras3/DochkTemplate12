@@ -633,6 +633,7 @@ return [
     'CB_Is_Correct' => 'Is Correct',
     'CB_Actions' => 'Actions',
     'CB_Min_One_Option_Note' => 'A question must have at least one option',
+    'CB_Min_One_Correct_Option_Note' => 'A question must have at least one correct option - mark an option correct before deleting this one',
     'CB_Add_New_Option' => 'Add New Option',
     'CB_Add_Options_Mark_Answer' => 'Add options and mark the correct answer.',
     'CB_Add_Options_Mark_Answers' => 'Add options and mark the correct answer(s).',

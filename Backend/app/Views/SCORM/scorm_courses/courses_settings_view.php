@@ -361,11 +361,11 @@ $lastModified = !empty($row['last_updated_on']) ? date('d M Y h:i A', (int) $row
 						</div>
 					</div>
 
-					<div class="card settings-section mb-3">
-						<div class="card-body">
-							<h5 class="section-title"><i class="mdi mdi-cog-outline"></i> <?= lang('UI_Text.Course_Configuration') ?></h5>
-							<div class="row align-items-end">
-								<?php if ($client == 1) { ?>
+					<?php if ($client == 1) { ?>
+						<div class="card settings-section mb-3">
+							<div class="card-body">
+								<h5 class="section-title"><i class="mdi mdi-cog-outline"></i> <?= lang('UI_Text.Course_Configuration') ?></h5>
+								<div class="row align-items-end">
 									<div class="col-lg-4 mb-3">
 										<label class="form-label"><?= lang('UI_Text.Course Type') ?></label>
 										<select name="type" class="form-select">
@@ -405,45 +405,16 @@ $lastModified = !empty($row['last_updated_on']) ? date('d M Y h:i A', (int) $row
 									<div class="col-12">
 										<span class="badge bg-danger">* <?= lang('UI_Text.Only_Touchstone') ?></span>
 									</div>
-								<?php }elseif($client == 86) { ?>
-									<div class="col-lg-4 mb-3">
-										<label class="form-label"><?= lang('UI_Text.Course Theme') ?></label>
-										<select name="theme" class="form-select">
-											<option value="1" <?php echo ($row['theme'] == 1) ? 'selected' : ''; ?>>Touchstone 1</option>
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 2</option>
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 3</option>
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 4</option>
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 5</option>
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 6</option>
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 7</option>
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 8</option>
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 9</option>
-											<option value="8" <?php echo ($row['theme'] == 8) ? 'selected' : ''; ?>>Touchstone 10</option>
-											<option value="9" <?php echo ($row['theme'] == 9) ? 'selected' : ''; ?>>Zydus Theme</option>
-										</select>
-									</div>
-									<?php
-									echo '<input type="hidden" name="theme" value="1">';
-									echo '<input type="hidden" name="demo" value="0">';
-									echo '<input type="hidden" name="type" value="' . $row['type'] . '">';
-									?>
-								} else { ?>
-									<div class="col-lg-4 mb-3">
-										<label class="form-label"><?= lang('UI_Text.Course Theme') ?></label>
-										<select name="theme" class="form-select">
-											<option value="3" <?php echo ($row['theme'] == 3) ? 'selected' : ''; ?>>Assessment</option>
-											<option value="5" <?php echo ($row['theme'] == 5) ? 'selected' : ''; ?>>Assessment Arabic</option>
-										</select>
-									</div>
-									<?php
-									echo '<input type="hidden" name="theme" value="1">';
-									echo '<input type="hidden" name="demo" value="0">';
-									echo '<input type="hidden" name="type" value="' . $row['type'] . '">';
-									?>
-								<?php } ?>
+								</div>
 							</div>
 						</div>
-					</div>
+					<?php } else { ?>
+						<?php
+						echo '<input type="hidden" name="theme" value="1">';
+						echo '<input type="hidden" name="demo" value="0">';
+						echo '<input type="hidden" name="type" value="' . $row['type'] . '">';
+						?>
+					<?php } ?>
 
 					<div class="card settings-section mb-3">
 						<div class="card-body">

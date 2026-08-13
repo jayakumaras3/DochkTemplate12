@@ -108,7 +108,7 @@ $editorColumn = '<div class="mb-2">'
 
 <div class="row">
     <div class="col-md-6">
-        <table class="table dt-responsive wrap w-100">
+        <table class="table dt-responsive wrap w">
             <thead>
                 <tr>
                     <th>

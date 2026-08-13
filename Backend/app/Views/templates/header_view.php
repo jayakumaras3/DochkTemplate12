@@ -757,14 +757,23 @@ $current_subsubpage = explode('/', uri_string())[2] ?? '';
             // "navigating" again, leaving the overlay stuck spinning forever (only a manual
             // refresh, which does navigate, was clearing it). Forms marked data-ajax="1" are
             // also excluded because their submit handler deliberately stays on this page.
+            // Deliberately NOT capture-phase: a capturing listener on document would run
+            // before the form's own onsubmit="return confirm(...)" (e.g. the delete-course
+            // form), showing the overlay before that handler gets a chance to cancel the
+            // submission. Clicking Cancel there would then leave the overlay stuck forever -
+            // "navigating" never got un-set because no actual navigation followed. Running
+            // in the bubble phase (after the target's own handlers) and checking
+            // defaultPrevented ensures the overlay only shows for submissions that actually
+            // go through.
             document.addEventListener('submit', function(event) {
+                if (event.defaultPrevented) return;
                 if (event.target && event.target.tagName === 'FORM'
                     && event.target.getAttribute('data-download') !== '1'
                     && event.target.getAttribute('data-ajax') !== '1') {
                     navigating = true;
                     showOverlay();
                 }
-            }, true);
+            });
 
             document.addEventListener('click', function(event) {
                 var link = event.target.closest ? event.target.closest('a[href]') : null;

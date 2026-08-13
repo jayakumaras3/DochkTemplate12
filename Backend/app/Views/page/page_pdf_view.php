@@ -208,6 +208,20 @@ function formatSizeExact($bytes)
 		font-weight: 600;
 	}
 
+	/* The theme's global .btn:hover reset (color: #6658dd !important; background-color:
+	   rgba(0,0,0,.075)) has the same specificity as these :hover rules and otherwise wins on
+	   source order, stripping this button's solid background and white text down to a
+	   near-transparent background with purple text - unreadable against the card's own light
+	   background. Bootstrap's own variant buttons (btn-primary, etc.) carry their own hover
+	   colors that already survive this; this custom class needs the same explicitly. */
+	.pdfv-create-btn:hover,
+	.pdfv-create-btn:focus,
+	.pdfv-create-btn:active {
+		background-color: rgb(var(--ct-primary-rgb)) !important;
+		border-color: rgb(var(--ct-primary-rgb)) !important;
+		color: #fff !important;
+	}
+
 	.pdfv-about-box {
 		background-color: rgba(var(--ct-primary-rgb), 0.06);
 		border-radius: 12px;
@@ -339,7 +353,7 @@ function formatSizeExact($bytes)
 														<td><?php echo $exportFile['exported_on']; ?></td>
 														<td>SCORM 1.2</td>
 														<td>
-															<a href="<?php echo $exportFile['download_url']; ?>"
+															<a href="<?php echo $exportFile['download_url']; ?>" data-download="1"
 																class="btn btn-add-page btn-sm rounded-pill waves-effect waves-light"
 																title="Download"><i class="mdi mdi-download"></i></a>
 														</td>

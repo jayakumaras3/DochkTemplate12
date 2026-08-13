@@ -162,7 +162,9 @@ $client = session()->get('client');
                             </button>
                         <?php } ?>
 
-                        <?php if (in_array('67', $arrayuserlevel) || in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel)) { ?>
+                        <?php // Internal-use only (checking feedback data) - not something any client
+                        // other than DOCHEK's own (client_id 1) should see, regardless of role.
+                        if ($client == 1 && (in_array('67', $arrayuserlevel) || in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel) || in_array('44', $arrayuserlevel))) { ?>
                             <form action="<?php echo base_url('SCORM/course_builder/Editor/settings') ?>" method="POST"><?= csrf_field() ?>
                                 <input type="hidden" name="course_name" value="<?php echo $courseDetails[0]['course_name']; ?>">
                                 <input type="hidden" name="scourse_id" value="<?php echo $scourse_id ?>">

@@ -1503,7 +1503,7 @@ if ($subpages_Count > 0) {
 					<?php endif; ?>
 				</div>
 				<div class="tab-pane" id="storyboard">
-					<table class="table dt-responsive wrap w-100">
+					<table class="table dt-responsive wrap w">
 						<thead>
 							<tr>
 								<th>Audio</th>

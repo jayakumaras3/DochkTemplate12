@@ -172,32 +172,57 @@ class Scorm_course_pages extends BaseController
             return redirect()->back()->with('error', 'No storyboard content is available to export.');
         }
 
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isPhpEnabled', true);
-        $options->set('defaultFont', 'Arial');
         // if (!empty($data['userexitInterdata'])) {
         $data['logo'] = $this->imageToBase64(ROOTPATH . 'assets/assets/img/TS_Logo.svg');
 
+        $isArabic = ($data['full_sb'][0]['language'] ?? '') === 'Arabic';
         $html = view('page/pdf_transcript_view', $data);
-        $dompdf = new Dompdf($options);
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        $canvas = $dompdf->getCanvas();
-        $font = $dompdf->getFontMetrics()->getFont('Segoe UI', 'normal');
-        $fontSize = 8;
-        $y = 820;
-        $canvas->page_text(558, $y, "{PAGE_NUM}", $font, $fontSize, [0, 0, 0]);
 
         $filename = preg_replace('/[\\\\\/:*?"<>|]+/', '_', $data['full_sb'][0]['course_name']);
         $filename = ($filename !== '' ? $filename : 'audio-transcript') . '.pdf';
 
+        if ($isArabic) {
+            // Dompdf has no Arabic text shaping (letter-joining) or right-to-left layout
+            // support at all - Arabic would render as disconnected, left-to-right glyphs even
+            // with an Arabic-capable font registered. mpdf (already a project dependency, see
+            // composer.json) handles both natively and ships its own Arabic-capable font
+            // family ('xbriyaz'), so Arabic transcripts are rendered through mpdf instead.
+            $mpdf = new \Mpdf\Mpdf([
+                'format' => 'A4',
+                'default_font' => 'xbriyaz',
+            ]);
+            $mpdf->SetDirectionality('rtl');
+            $mpdf->WriteHTML($html);
+            $mpdf->SetHTMLFooter('<div style="text-align:left; font-size:8pt;">{PAGENO}</div>');
+            $pdfOutput = $mpdf->Output('', \Mpdf\Output\Destination::STRING_RETURN);
+        } else {
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isPhpEnabled', true);
+            // 'Arial' has no Cyrillic/other non-Latin glyphs in Dompdf's bundled fonts, so
+            // non-English transcript text (Russian, etc.) rendered blank/missing - 'DejaVu Sans'
+            // is Dompdf's built-in Unicode-covering font, already used for this same reason by
+            // the other PDF exports in this app (see pdf_exit_clearance_view.php, etc.).
+            $options->set('defaultFont', 'DejaVu Sans');
+
+            $dompdf = new Dompdf($options);
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            $canvas = $dompdf->getCanvas();
+            $font = $dompdf->getFontMetrics()->getFont('Segoe UI', 'normal');
+            $fontSize = 8;
+            $y = 820;
+            $canvas->page_text(558, $y, "{PAGE_NUM}", $font, $fontSize, [0, 0, 0]);
+
+            $pdfOutput = $dompdf->output();
+        }
+
         return $this->response
             ->setHeader('Content-Type', 'application/pdf')
             ->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"')
-            ->setBody($dompdf->output());
+            ->setBody($pdfOutput);
     }
     private function imageToBase64($path)
     {
@@ -305,6 +330,12 @@ class Scorm_course_pages extends BaseController
                 $page_name = $this->request->getVar('page_name');
 
                 $database = \Config\Database::connect();
+
+                if ($this->scorm_page_model->hasDuplicateMainPageNumbers($data['scourse_id'])) {
+                    session()->setFlashdata('error', 'This course\'s page numbering needs to be repaired before a new page can be added. Contact admin.');
+                    session()->setFlashdata('alert-class', 'alert-danger');
+                    return redirect()->to(base_url('SCORM/course_builder/Editor'));
+                }
 
                 $database->transStart();
 

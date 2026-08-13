@@ -1400,6 +1400,12 @@ class Trainings extends BaseController
             $newdata['score'] = $this->request->getVar('score');
         }
         $result = $this->assessment_training_model->updatequestiondetails($newdata, $data['question_id']);
+        // Switching a question's type to SCQ (112) - e.g. from MCQ, which allows several
+        // correct options - must leave it with exactly one correct option per the SCQ
+        // standard, so force it back down to just "Option 1" here.
+        if (isset($newdata['quiz_type']) && (string) $newdata['quiz_type'] === '112') {
+            $this->assessment_training_model->enforceSingleCorrectOption($data['question_id']);
+        }
         if ($result) {
             session()->setFlashdata('success', lang('Messages.Success_0008'));
         } else {
@@ -2991,7 +2997,7 @@ class Trainings extends BaseController
     }
     function review_quiz()
     {
-        if ($response =  $this->requireRole(['46', '67', '5', '44'])) {
+        if ($response =  $this->requireRole(['6', '46', '67', '5', '44'])) {
             return $response;
         }
         helper(['form']);

@@ -253,7 +253,7 @@ $quizType = isset($row['quiz_type']) ? (string) $row['quiz_type'] : '';
 
                     <textarea class="form-control cyu-question-textarea" id="quizQuestionText" name="question" maxlength="500"
                         placeholder="Type your question here&hellip;" required
-                        oninput="document.getElementById('quizQuestionCount').textContent = this.value.length + ' / 500';"
+                        oninput="updateCharCount(this, 500, 'quizQuestionCount')"
                         onblur="quizSaveQuestion(this)"><?php echo isset($row['question']) ? htmlspecialchars($row['question']) : '' ?></textarea>
                     <span class="cyu-saving-indicator" id="quizQuestionSaving" style="display:none;"><i class="mdi mdi-loading mdi-spin"></i> Saving&hellip;</span>
 
@@ -302,6 +302,9 @@ $quizType = isset($row['quiz_type']) ? (string) $row['quiz_type'] : '';
                                     <?php
                                     $j = 0;
                                     $optionCount = !empty($getoptiondata) ? count($getoptiondata) : 0;
+                                    $correctOptionCount = !empty($getoptiondata) ? count(array_filter($getoptiondata, function ($o) {
+                                        return $o['truefalse'] == 1;
+                                    })) : 0;
                                     if (!empty($getoptiondata)) {
                                         foreach ($getoptiondata as $eachoptiondata) {
                                             $j++;
@@ -349,8 +352,21 @@ $quizType = isset($row['quiz_type']) ? (string) $row['quiz_type'] : '';
 
                                                 <td>
                                                     <div class="d-flex justify-content-center gap-1">
+                                                        <?php
+                                                        // Must mirror updateoptioneditableformat()'s server-side rule exactly: it refuses
+                                                        // any delete that would leave zero correct options among what remains, not just
+                                                        // a delete of "the" correct option. If this question currently has zero correct
+                                                        // options at all (e.g. an older question from before a correct option was
+                                                        // guaranteed on creation), deleting ANY option - including a "wrong" one - still
+                                                        // leaves zero correct and gets rejected server-side; disabling only the correct
+                                                        // option's button missed that case, leaving incorrect options' delete buttons
+                                                        // enabled but silently refused on click.
+                                                        $remainingCorrectIfDeleted = $correctOptionCount - ($isCorrect ? 1 : 0);
+                                                        ?>
                                                         <?php if ($optionCount <= 1) { ?>
                                                             <button type="button" class="btn btn-outline-danger waves-effect waves-light rounded-circle cyu-action-btn" title="A question must have at least one option" disabled><i class="mdi mdi-trash-can-outline"></i></button>
+                                                        <?php } elseif ($remainingCorrectIfDeleted <= 0) { ?>
+                                                            <button type="button" class="btn btn-outline-danger waves-effect waves-light rounded-circle cyu-action-btn" title="A question must have at least one correct option - mark an option correct before deleting this one" disabled><i class="mdi mdi-trash-can-outline"></i></button>
                                                         <?php } else { ?>
                                                             <button type="button" class="btn btn-outline-danger waves-effect waves-light rounded-circle cyu-action-btn" title="Delete"
                                                                 onclick="if (confirm('<?php echo lang('Alert.Aler_002') ?>')) updateDate('0','status','<?php echo $eachoptiondata['o_id'] ?>')"><i class="mdi mdi-trash-can-outline"></i></button>
@@ -501,6 +517,27 @@ $quizType = isset($row['quiz_type']) ? (string) $row['quiz_type'] : '';
 </div>
 
 <script>
+    // JS string .length counts UTF-16 code units, not characters - any pasted character
+    // outside the Basic Multilingual Plane (accented/composed letters some word processors
+    // paste as surrogate pairs, some non-English punctuation, emoji, etc.) counts as 2,
+    // inflating this past the server's mb_strlen()-based count (used for the count shown on
+    // page load) and past the intended limit - e.g. showing "507 / 500" for text a person
+    // would count as exactly 500 characters. Array.from() iterates by Unicode code point
+    // instead, matching mb_strlen, and lets the limit actually be enforced by trimming.
+    function updateCharCount(el, limit, counterId) {
+        var chars = Array.from(el.value);
+        if (chars.length > limit) {
+            var pos = el.selectionEnd;
+            el.value = chars.slice(0, limit).join('');
+            if (pos !== null) {
+                var newPos = Math.min(pos, el.value.length);
+                el.setSelectionRange(newPos, newPos);
+            }
+            chars = Array.from(el.value);
+        }
+        document.getElementById(counterId).textContent = chars.length + ' / ' + limit;
+    }
+
     function toggleTrueFalse(checkbox, optionId) {
         const questionId = checkbox.getAttribute('data-question-id');
         const currentStatus = checkbox.getAttribute('data-current');

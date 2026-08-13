@@ -90,7 +90,7 @@
                                                                                 echo '</td><td>';
                                                                                 echo $video['createdby'];
                                                                                 echo '</td><td>'; ?>
-                                                                                <?php if ((in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel)) && $row['status'] != 8) { ?>
+                                                                                <?php if ((in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel) || in_array('44', $arrayuserlevel)) && $row['status'] != 8) { ?>
                                                                                     <form class="form-horizontal"
                                                                                         action="<?php echo base_url('SCORM/course_builder/Scorm_course_pages/del_file'); ?>"
                                                                                         method="POST"><?= csrf_field() ?>
@@ -137,7 +137,7 @@
                                                                                             <option value="3"><?php echo lang('UI_Text.Language_Name_French'); ?></option>
                                                                                         </select>
                                                                                     </div>
-                                                                                    <div class="form-group col-md-6 mb-2">
+                                                                                    <div class="form-group col-md-12 mb-2">
                                                                                         <label class="fw-semibold"><?php echo lang('UI_Text.CB_Video_File'); ?> <span class="text-danger">*</span></label>
                                                                                         <input type="file" name="file" class="form-control" accept=".mp4,.MP4"
                                                                                             required />
@@ -186,7 +186,7 @@
                                                                                 echo '</td><td>';
                                                                                 echo $vtt['createdby'];
                                                                                 echo '</td><td>'; ?>
-                                                                                <?php if ((in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel)) && $row['status'] != 8) { ?>
+                                                                                <?php if ((in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel) || in_array('44', $arrayuserlevel)) && $row['status'] != 8) { ?>
                                                                                     <form class="form-horizontal"
                                                                                         action="<?php echo base_url('SCORM/course_builder/Scorm_course_pages/del_file'); ?>"
                                                                                         method="POST"><?= csrf_field() ?>
@@ -266,7 +266,7 @@
                                                 $button_name_reject = '';
                                                 $status = 0;
                                                 if (isset($row['status'])) {
-                                                    if ($row['status'] == 6 && (in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel))) {
+                                                    if ($row['status'] == 6 && (in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel) || in_array('44', $arrayuserlevel))) {
                                                         $status = 7;
                                                         $button_name = lang('UI_Text.CB_Dev_Completed');
                                                     } elseif ($row['status'] == 7 && (in_array('67', $arrayuserlevel) || in_array('46', $arrayuserlevel))) {
@@ -335,7 +335,7 @@
 
 </div>
                                             <div class="col-12">
-                                                <table class="table dt-responsive wrap w-100">
+                                                <table class="table dt-responsive wrap w">
                                                     <thead>
                                                         <tr>
                                                             <th>

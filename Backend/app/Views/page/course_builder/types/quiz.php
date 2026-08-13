@@ -332,7 +332,7 @@ $quizTypeLabels = [
                                     <p class="text-muted font-13 mb-2"><?php echo lang('UI_Text.CB_Question_Learner_Sub'); ?></p>
                                     <div class="quiz-textarea-wrap">
                                         <textarea class="form-control" id="quizNewQuestionText" name="question" maxlength="1000" placeholder="<?php echo lang('UI_Text.CB_Question_Placeholder'); ?>" required
-                                            oninput="document.getElementById('quizNewQuestionCount').textContent = this.value.length + ' / 1000';"></textarea>
+                                            oninput="updateCharCount(this, 1000, 'quizNewQuestionCount')"></textarea>
                                         <span class="quiz-char-count" id="quizNewQuestionCount">0 / 1000</span>
                                     </div>
                                 </div>
@@ -446,3 +446,25 @@ $quizTypeLabels = [
         </div>
     </div>
 </div>
+
+<script>
+    // JS string .length counts UTF-16 code units, not characters - any pasted character
+    // outside the Basic Multilingual Plane (accented/composed letters some word processors
+    // paste as surrogate pairs, some non-English punctuation, emoji, etc.) counts as 2,
+    // inflating the shown count past the intended limit - e.g. "1007 / 1000" for text a
+    // person would count as exactly 1000 characters. Array.from() iterates by Unicode code
+    // point instead, and lets the limit actually be enforced by trimming.
+    function updateCharCount(el, limit, counterId) {
+        var chars = Array.from(el.value);
+        if (chars.length > limit) {
+            var pos = el.selectionEnd;
+            el.value = chars.slice(0, limit).join('');
+            if (pos !== null) {
+                var newPos = Math.min(pos, el.value.length);
+                el.setSelectionRange(newPos, newPos);
+            }
+            chars = Array.from(el.value);
+        }
+        document.getElementById(counterId).textContent = chars.length + ' / ' + limit;
+    }
+</script>

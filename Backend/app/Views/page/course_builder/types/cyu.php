@@ -1,4 +1,4 @@
-<?php if ((in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel))) { ?>
+<?php if ((in_array('46', $arrayuserlevel) || in_array('5', $arrayuserlevel) || in_array('44', $arrayuserlevel))) { ?>
 
     <style>
         .cyu-icon {
@@ -340,7 +340,7 @@
 
                 <textarea class="form-control cyu-question-textarea" id="cyuQuestionText" name="question" maxlength="500"
                     placeholder="<?php echo lang('UI_Text.CB_Question_Placeholder'); ?>" required
-                    oninput="document.getElementById('cyuQuestionCount').textContent = this.value.length + ' / 500';"
+                    oninput="updateCharCount(this, 500, 'cyuQuestionCount')"
                     onblur="cyuSaveQuestion(this)"><?php echo isset($qrow['question']) ? htmlspecialchars($qrow['question']) : '' ?></textarea>
                 <span class="cyu-saving-indicator" id="cyuQuestionSaving" style="display:none;"><i class="mdi mdi-loading mdi-spin"></i> <?php echo lang('UI_Text.CB_Saving_Ellipsis'); ?></span>
 
@@ -390,6 +390,9 @@
                                 <?php
                                 $j = 0;
                                 $optionCount = !empty($getoptiondata) ? count($getoptiondata) : 0;
+                                $correctOptionCount = !empty($getoptiondata) ? count(array_filter($getoptiondata, function ($o) {
+                                    return $o['truefalse'] == 1;
+                                })) : 0;
                                 if (!empty($getoptiondata)) {
                                     foreach ($getoptiondata as $eachoptiondata) {
                                         $j++;
@@ -436,11 +439,20 @@
 
                                             <td>
                                                 <div class="d-flex justify-content-center gap-1">
+                                                    <?php
+                                                    // Must mirror updateoptioneditableformat()'s server-side rule: it refuses any
+                                                    // delete that would leave zero correct options among what remains - not just a
+                                                    // delete of "the" correct option. Matches the same fix applied to the Quiz
+                                                    // (SCQ/MCQ) option editor in option_add_view.php.
+                                                    $remainingCorrectIfDeleted = $correctOptionCount - ($isCorrect ? 1 : 0);
+                                                    ?>
                                                     <?php if ($optionCount <= 1) { ?>
                                                         <button type="button" class="btn btn-outline-danger waves-effect waves-light rounded-circle cyu-action-btn" title="<?php echo lang('UI_Text.CB_Min_One_Option_Note'); ?>" aria-label="<?php echo lang('UI_Text.CB_Min_One_Option_Note'); ?>" disabled><i class="mdi mdi-trash-can-outline" aria-hidden="true"></i></button>
+                                                    <?php } elseif ($remainingCorrectIfDeleted <= 0) { ?>
+                                                        <button type="button" class="btn btn-outline-danger waves-effect waves-light rounded-circle cyu-action-btn" title="<?php echo lang('UI_Text.CB_Min_One_Correct_Option_Note'); ?>" aria-label="<?php echo lang('UI_Text.CB_Min_One_Correct_Option_Note'); ?>" disabled><i class="mdi mdi-trash-can-outline" aria-hidden="true"></i></button>
                                                     <?php } else { ?>
                                                         <button type="button" class="btn btn-outline-danger waves-effect waves-light rounded-circle cyu-action-btn" title="<?php echo lang('Buttons.Delete'); ?>" aria-label="<?php echo lang('Buttons.Delete'); ?>"
-                                                            onclick="updateDate('0','status','<?php echo $eachoptiondata['o_id'] ?>')"><i class="mdi mdi-trash-can-outline" aria-hidden="true"></i></button>
+                                                            onclick="if (confirm('<?php echo lang('Alert.Aler_002') ?>')) updateDate('0','status','<?php echo $eachoptiondata['o_id'] ?>')"><i class="mdi mdi-trash-can-outline" aria-hidden="true"></i></button>
                                                     <?php } ?>
                                                 </div>
                                             </td>
@@ -568,6 +580,28 @@
 <?php } ?>
 
 <script>
+    // JS string .length counts UTF-16 code units, not characters - any pasted character
+    // outside the Basic Multilingual Plane (accented/composed letters some word processors
+    // paste as surrogate pairs, some non-English punctuation, emoji, etc.) counts as 2,
+    // inflating this past the server's mb_strlen()-based count (used for the count shown on
+    // page load) and past the intended limit - e.g. showing "507 / 500" for text a person
+    // would count as exactly 500 characters. Array.from() iterates by Unicode code point
+    // instead, matching mb_strlen, and lets the limit actually be enforced by trimming.
+    // Matches the same fix applied to the Quiz (SCQ/MCQ) question editor.
+    function updateCharCount(el, limit, counterId) {
+        var chars = Array.from(el.value);
+        if (chars.length > limit) {
+            var pos = el.selectionEnd;
+            el.value = chars.slice(0, limit).join('');
+            if (pos !== null) {
+                var newPos = Math.min(pos, el.value.length);
+                el.setSelectionRange(newPos, newPos);
+            }
+            chars = Array.from(el.value);
+        }
+        document.getElementById(counterId).textContent = chars.length + ' / ' + limit;
+    }
+
     function toggleTrueFalse(checkbox, optionId) {
         const questionId = checkbox.getAttribute('data-question-id');
         const type = checkbox.getAttribute('data-type');

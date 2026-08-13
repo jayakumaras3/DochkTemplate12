@@ -647,7 +647,6 @@ class Scorm_courses extends BaseController
                     'course_name' => $this->request->getVar('course_name'),
                     'description' => $this->request->getVar('description'),
                     'theme' => $this->request->getVar('theme'),
-                    'type' => $this->request->getVar('type'),
                     'demo' => $this->request->getVar('demo'),
                     'objectives' => $this->request->getVar('objectives'),
                     'duration' => $this->request->getVar('duration'),
@@ -657,6 +656,14 @@ class Scorm_courses extends BaseController
                     'last_updated_by' => session()->get('id_user'),
                     'last_updated_on' => time(),
                 ];
+                // Only touch the type column when a real value was submitted - a blank/missing
+                // "type" (e.g. a stale hidden field) would otherwise get written as-is and land
+                // as 0 in this numeric column, silently clobbering whatever type the course was
+                // created with.
+                $type = $this->request->getVar('type');
+                if ($type !== null && $type !== '') {
+                    $newdata['type'] = $type;
+                }
                 $result = $this->scorm_course_model->editcoursedetails($newdata, $scourse_id);
                 $enabled_default = array(3);
                 // print_r($result);
@@ -1101,6 +1108,11 @@ class Scorm_courses extends BaseController
 
             session()->setFlashdata('success', lang('Messages.Success_0054'));
             $_SESSION['scourse_id'] = $result['course_id'];
+            // Course Builder (SCORM\Course_builder\Editor) reads 'crid', not 'scourse_id', to
+            // decide which course is currently open - without updating it here too, jumping
+            // into Course Builder right after duplicating still opened whatever course was
+            // last active there instead of the new copy.
+            $_SESSION['crid'] = $result['course_id'];
             $_SESSION['course_name'] = $newdata['course_name'];
             $_SESSION['tab'] = 1;
             return redirect()->to(base_url() . 'SCORM/scorm_courses/course_settings_view');

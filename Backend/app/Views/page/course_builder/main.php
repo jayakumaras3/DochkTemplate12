@@ -114,8 +114,9 @@
                                 // Only offer swapping within a type's own "family" - types outside it don't
                                 // share the underlying data (e.g. an Articulate page has no assessment_questions
                                 // row), so switching to one leaves the page unable to render. Types with no
-                                // listed family (Video, Video Sub Page, Audio Version, Quiz) aren't known to be
-                                // safely interchangeable with anything, so they're locked to themselves.
+                                // listed family (Video, Video Sub Page, Audio Version, Quiz, Articulate, Html)
+                                // aren't known to be safely interchangeable with anything, so they're locked to
+                                // themselves.
                                 $typeLabels = [
                                     1 => 'UI_Text.CB_Type_Articulate',
                                     9 => 'UI_Text.CB_Type_Audio_Version',
@@ -130,8 +131,6 @@
                                     12 => 'UI_Text.CB_Type_Text_Image',
                                 ];
                                 $typeSwapFamilies = [
-                                    1 => [1, 3],
-                                    3 => [1, 3],
                                     5 => [5, 6],
                                     6 => [5, 6],
                                     10 => [10, 11, 12],
