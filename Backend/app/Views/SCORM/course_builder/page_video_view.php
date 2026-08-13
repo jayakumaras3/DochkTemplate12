@@ -398,17 +398,37 @@ $ResumeNO = (isset($ResumeNO) && $ResumeNO != '') ? $ResumeNO : $assessment_expo
                         } ?>
                     </ol>
                 </div>
-                <div id="transcript" style="display:none;" role="tabpanel" aria-labelledby="trans_id">
-                    <p><?php if (isset($transcript)) {
-                            foreach ($transcript as $script) { ?>
-                    <div class="transcript-item" style="font-size:12px;">
-                        <?php echo $script['audio']; ?>
-                    </div>
-            <?php }
-                        } ?></p>
+                <?php /* .transcriptClass is the theme's OWN transcript-panel class: the export
+                         wraps its transcript in exactly this class (sideBarController.js:867),
+                         and #Tmenu.sideBar .transcriptClass in the theme's Color.css is what
+                         supplies the panel's 18px/20px/24px inset. Preview emitted only
+                         #transcript, which no theme rule matches, so the panel fell back to
+                         .tocData's padding:0 and the transcript started flush against the
+                         Menu/Transcript tab row with no gap above it and no inset beside it.
+                         Reusing the theme class - rather than adding Preview-side CSS - keeps
+                         the spacing owned by the theme, so Preview and Export cannot drift.
+                         Scoped to ModernTheme/ZydusTheme because this whole block sits inside
+                         the $isModernFamily branch; the legacy layout below is untouched.
+
+                         The <p> that used to wrap these rows is gone: <div> is not valid inside
+                         <p>, so the parser closed the <p> at the first row and left an empty one
+                         behind, whose ~16px UA margin stacked on top of the theme's padding. */ ?>
+                <div id="transcript" class="transcriptClass" style="display:none;" role="tabpanel" aria-labelledby="trans_id">
+                    <?php if (isset($transcript)) {
+                        foreach ($transcript as $script) { ?>
+                            <div class="transcript-item" style="font-size:12px;">
+                                <?php echo $script['audio']; ?>
+                            </div>
+                    <?php }
+                    } ?>
                 </div>
             </div>
-            <div class="copyright">&copy; <?php echo date('Y'); ?> Touchstone</div>
+            <?php /* Brand word follows the selected theme's own content.html: ZydusTheme's
+                     reads "&copy; 2026 Zydus", every other theme still reads "Touchstone".
+                     Preview builds this sidebar itself instead of loading the theme's
+                     content.html, so the string has to be resolved here off the same $theme
+                     the rest of this view already uses. Year stays date('Y') as before. */ ?>
+            <div class="copyright">&copy; <?php echo date('Y'); ?> <?php echo ($theme === 'ZydusTheme') ? 'Zydus' : 'Touchstone'; ?></div>
             <?php /* Present in the theme's content.html straight after .copyright; sideBar.css
                      keeps it display:none, but emitted for structural parity. */ ?>
             <div class="line"><hr></div>
