@@ -486,7 +486,7 @@ body {
 /* Color.css forces `body { display: block !important }`; this beats it via
    specificity (html body > body) so the Quiz page's flex column applies. */
 html body {
-    background: #f5f5f5;
+    background: #ffffff;
     color: #2f2524;
     overflow: hidden;
     display: flex !important;
@@ -510,7 +510,7 @@ html body {
 }
 
 #quizContainer {
-    background: #f5f5f5;
+    background: #ffffff;
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -538,7 +538,7 @@ html body {
     justify-content: center;
     align-items: center;
     min-height: 0;
-    background: #f5f5f5;
+    background: #ffffff;
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -594,10 +594,14 @@ html body {
     line-height: 1.45;
 }
 
+/* The white question card - the element that draws the visible
+   rectangle. The shadow follows the radius automatically. No
+   overflow:hidden: clipping here would break the desktop scroll rule
+   (.questionContainer is the scroll container via overflow-y: auto). */
 .questionContainer {
     background: #ffffff;
     border: none;
-    border-radius: 0;
+    border-radius: 7px !important;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     padding: clamp(18px, 2vw, 24px);
     margin-top: 0;
@@ -635,10 +639,11 @@ html body {
     height: 0;
 }
 
+/* Assessment / start card. */
 #Startpageid {
     background: #ffffff;
     border: 1px solid #efe4e0;
-    border-radius: 0;
+    border-radius: 7px !important;
     box-shadow: 0 10px 24px rgba(47, 28, 28, 0.05);
     box-sizing: border-box;
     max-width: 760px;
@@ -776,6 +781,19 @@ html body {
     text-transform: none;
 }
 
+/* Quiz feedback banner. Unlike SCQ_style/MCQ_style this file has no base
+   box rule for .correct/.incorrect (only font-size media queries further
+   down), so the radius is declared here to match the 7px used by the
+   action buttons in QuestionOptions.css. quiz.js toggles these classes on
+   #feedback (see its classList.remove('correct','incorrect')). Radius
+   only - colours keep coming from Color.css's .Correct_CR/.Incorrect_CR. */
+.feedback,
+#feedback,
+.correct,
+.incorrect {
+    border-radius: 7px !important;
+}
+
 /* align-items: stretch (the default, restated for clarity) so .options/
    .options1 receive the row's actual cross-size and their overflow-y:auto
    rule can clip+scroll them within it. flex-start here would let a long
@@ -813,10 +831,11 @@ html body {
     box-sizing: border-box;
 }
 
+/* Quiz result / score card. */
 .results {
     background: #ffffff;
     border: 1px solid #f0e8e5;
-    border-radius: 0;
+    border-radius: 7px !important;
     box-sizing: border-box;
     box-shadow: 0 10px 24px rgba(41, 28, 28, 0.05);
     padding: 26px;
@@ -866,7 +885,9 @@ html body {
     .questionContainer {
         max-width: 100%;
         padding: 16px;
-        border-radius: 0;
+        /* Was 0 - this later duplicate re-squared the card below 900px,
+           overriding the base rule. Kept in sync at 7px. */
+        border-radius: 7px !important;
         max-height: calc(100vh - 120px - var(--outer-header-overlap, 0px));
         max-height: calc(100dvh - 120px - var(--outer-header-overlap, 0px));
     }

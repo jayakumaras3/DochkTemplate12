@@ -209,7 +209,12 @@ input.checkbox:focus-visible {
     min-height: 44px;
     padding: 10px 26px;
     border: none;
-    border-radius: 4px;
+    /* Single source of truth for the action-button radius across SCQ,
+       MCQ and Quiz: this file is linked LAST by all three templates and
+       these four selectors cover every Submit / Start / Retry button, so
+       the base rule alone sets every state (the :hover and .disabled
+       rules below declare no radius of their own). */
+    border-radius: 7px !important;
     background: #006B8F;
     color: #FFFFFF;
     font-family: Tahoma, Verdana, sans-serif;

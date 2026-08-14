@@ -183,7 +183,9 @@ body {
 
 #pagenoHeader {
     margin-left: auto;
-    color: var(--muted);
+    /* Same colour as the header title (.pageHeaderText above). Was
+       var(--muted) (#637083). Colour only - size stays 13px. */
+    color: #000000;
     font-size: 13px;
     font-weight: 700;
 }
@@ -2213,5 +2215,731 @@ body,
     html.is-touch-device body.menu-open-body {
         overflow: hidden !important;
         overscroll-behavior: none;
+    }
+}
+
+/* ============================================================
+   MENU (sidebar) UI REFRESH — PRESENTATION LAYER ONLY
+   ------------------------------------------------------------
+   Everything below is scoped to `#Tmenu.sideBar`, the course
+   menu panel in theme/content.html, so no other component,
+   template or course is affected. It restyles only what the
+   existing controllers already render:
+
+     .logo                         Touchstone logo (asset untouched)
+     #sideBarHeader > #toc_id      Menu tab      \  state driven by the
+     #sideBarHeader > #trans_id    Transcript tab / existing aria-selected
+     #tocData > span > li          menu rows
+       > span.toc-row-item         row body (+ .selectedToc / .visitedTOC)
+     #tocData > span > p.tickSymbol completion tick (inline visibility)
+     .copyright                    menu footer
+
+   No selector adds/removes state; active, completed, visited and
+   locked states all continue to come from the application.
+   ============================================================ */
+
+#Tmenu.sideBar {
+    --menu-brand: #005E80;
+    --menu-brand-dark: #00465F;
+    --menu-tab-idle: #F1F5F9;
+    --menu-tab-idle-line: #DDE4EC;
+    --menu-active-bg: #E3EFF6;
+    --menu-row-text: #55606E;
+    --menu-icon: #94A3B8;
+    --menu-line: #EDF0F4;
+
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+    background: #FFFFFF !important;
+    border: 0 !important;
+    border-right: 1px solid #E5E7EB !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+/* The controller opens the drawer with an inline style="display: block",
+   which beats a plain `display: flex` - the panel then stops being a
+   flex container and the list can't size itself against the header and
+   footer, so nothing scrolls. Same guard the <=1024px block already
+   uses, applied at every width. Only while the panel is actually shown:
+   the closed state (inline display:none / ng-hide) is left alone. */
+#Tmenu.sideBar[style*="display: block"]:not(.ng-hide),
+.wholeContainer.menu-open #Tmenu.sideBar:not(.ng-hide) {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Desktop: keep the existing left panel (width/behaviour unchanged),
+   just give the larger reference rows a little more room to breathe. */
+@media (min-width: 1025px) {
+    #Tmenu.sideBar {
+        min-width: 288px;
+    }
+}
+
+/* ---- 1. Logo -------------------------------------------------- */
+
+/* DO NOT SHRINK. The logo is not a compaction target - height savings
+   belong to the tab/progress/row rules below. max-width matches the
+   pre-existing `.logo` rule (180px) so the mark keeps its original
+   size and aspect ratio; only `width: auto` + `max-width` are used so
+   the SVG is never distorted or cropped. */
+#Tmenu.sideBar .logo {
+    display: block !important;
+    flex: 0 0 auto;
+    width: auto !important;
+    height: auto;
+    max-width: 178px !important;
+    margin: 12px auto 10px !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* ---- 2. Menu / Transcript tabs -------------------------------- */
+
+/* Tab wrapper - now the last block before the list, so its bottom
+   padding is the only gap between the tabs and the first menu row.
+   padding-top stays 0: the gap above the tabs is the logo's own
+   margin-bottom, which is deliberately left alone. Horizontal inset
+   matches the menu rows' padding-left (18px) so the tabs and the row
+   icons share one left edge. */
+#Tmenu.sideBar #sideBarHeader {
+    position: static !important;
+    display: flex !important;
+    align-items: stretch !important;
+    justify-content: space-between !important;
+    flex: 0 0 auto !important;
+    gap: 10px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 18px 12px !important;
+    background: #FFFFFF !important;
+    border: 0 !important;
+    line-height: 1 !important;
+}
+
+#Tmenu.sideBar #sideBarHeader > #toc_id,
+#Tmenu.sideBar #sideBarHeader > #trans_id {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    float: none !important;
+    flex: 1 1 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    /* min-height is kept in lockstep with height: a larger min-height
+       wins over height, so leaving the old 44px floor here would have
+       silently cancelled this out. */
+    height: 37px !important;
+    min-height: 37px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: var(--menu-brand) !important;
+    background: var(--menu-tab-idle) !important;
+    border: 1px solid var(--menu-tab-idle-line) !important;
+    border-radius: 7px !important;
+    box-shadow: none !important;
+    box-sizing: border-box;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+    text-align: center !important;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+/* The <span> is what carries ng-click - it has to fill the pill, or the
+   top/bottom of each tab is a dead zone. `align-self: stretch` beats the
+   parent's `align-items: center` without touching the handler. Padding
+   lives here (not on the tab) so it is part of the clickable area. */
+#Tmenu.sideBar #sideBarHeader > #toc_id > span,
+#Tmenu.sideBar #sideBarHeader > #trans_id > span {
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    padding: 0 10px;
+    box-sizing: border-box;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+#Tmenu.sideBar #sideBarHeader > #toc_id:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id:hover {
+    background: #E3EAF2 !important;
+    border-color: #CBD6E1 !important;
+    color: var(--menu-brand) !important;
+}
+
+/* Active tab — driven by the aria-selected the controller already sets. */
+#Tmenu.sideBar #sideBarHeader > #toc_id[aria-selected="true"],
+#Tmenu.sideBar #sideBarHeader > #trans_id[aria-selected="true"],
+#Tmenu.sideBar #sideBarHeader > #toc_id.tocclickedclscss,
+#Tmenu.sideBar #sideBarHeader > #trans_id.tocclickedclscss {
+    color: #FFFFFF !important;
+    background: var(--menu-brand) !important;
+    border-color: var(--menu-brand) !important;
+    font-weight: 700 !important;
+    opacity: 1;
+}
+
+#Tmenu.sideBar #sideBarHeader > #toc_id[aria-selected="true"]:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id[aria-selected="true"]:hover,
+#Tmenu.sideBar #sideBarHeader > #toc_id.tocclickedclscss:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id.tocclickedclscss:hover {
+    background: var(--menu-brand-dark) !important;
+    border-color: var(--menu-brand-dark) !important;
+    color: #FFFFFF !important;
+}
+
+/* Idle tab — explicit so it beats the legacy aria-selected="false" rule. */
+#Tmenu.sideBar #sideBarHeader > #toc_id[aria-selected="false"],
+#Tmenu.sideBar #sideBarHeader > #trans_id[aria-selected="false"] {
+    color: var(--menu-brand) !important;
+    background: var(--menu-tab-idle) !important;
+    border-color: var(--menu-tab-idle-line) !important;
+    font-weight: 600 !important;
+    opacity: 1;
+}
+
+/* Declared after the idle rule above so it isn't cancelled by it. */
+#Tmenu.sideBar #sideBarHeader > #toc_id[aria-selected="false"]:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id[aria-selected="false"]:hover {
+    background: #E3EAF2 !important;
+    border-color: #CBD6E1 !important;
+    color: var(--menu-brand) !important;
+}
+
+#Tmenu.sideBar #sideBarHeader > #toc_id > span:focus-visible,
+#Tmenu.sideBar #sideBarHeader > #trans_id > span:focus-visible {
+    outline: 2px solid var(--menu-brand);
+    outline-offset: 3px;
+    border-radius: 8px;
+}
+
+/* ---- 3. (Course progress readout removed - not required) -------- */
+
+/* ---- 4. Menu list --------------------------------------------- */
+
+#Tmenu.sideBar > .tocData {
+    position: relative;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent;
+    border-top: 1px solid var(--menu-line);
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    font-size: 15px !important;
+}
+
+#Tmenu.sideBar #tocData {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none;
+}
+
+/* Row wrapper: a plain block (not the old 2-column grid) so the row
+   background spans the full width and the completion tick can sit on
+   top of it, exactly as in the reference. */
+#Tmenu.sideBar #tocData > span {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-sizing: border-box;
+}
+
+/* The divider lives on the <li>, not on the wrapper: the audio-version
+   entry is rendered as <li style="display:none"> inside its wrapper, so
+   a border on the wrapper would leave a stray line where a hidden row
+   is. `display` is deliberately left un-!important here for the same
+   reason - the inline display:none must keep winning. */
+#Tmenu.sideBar #tocData > span > li {
+    display: block;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0;
+    border-bottom: 1px solid var(--menu-line);
+    list-style: none !important;
+    font-size: inherit !important;
+}
+
+#Tmenu.sideBar #tocData > span:last-child > li {
+    border-bottom: 0;
+}
+
+#Tmenu.sideBar #tocData > span > li:hover {
+    background: transparent;
+    color: inherit;
+}
+
+/* min-height, not height: a single-line row's own content is only
+   max(icon 24px, text 18.75px) + 18px padding = 42px, so this floor is
+   what sets single-line rows to 52px, and wrapped titles grow past it on
+   their own (2 lines ~56px, 3 lines ~74px) instead of being clipped. The
+   icon therefore contributes no height at all below 52px. */
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 52px;
+    padding: 9px 40px 9px 18px;
+    color: var(--menu-row-text);
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    /* Original pre-redesign menu typography, recovered verbatim from the
+       legacy `#tocData > span > li > span.toc-row-item` rule still present
+       above in this file (14px / 600 / 1.3). Not re-styled. */
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: left;
+    box-sizing: border-box;
+    transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* Original values, recovered from the legacy `#tocData .menu-title` rule
+   above in this file (14px / 1.3). */
+#Tmenu.sideBar #tocData .menu-title {
+    font-size: 14px;
+    line-height: 1.3;
+    font-weight: inherit;
+}
+
+/* Fallback for rows the icon pass hasn't decorated yet (or items whose
+   JSON opts out of masterIcon): same box, just without the icon slot,
+   so the list never renders half-styled. */
+#Tmenu.sideBar #tocData > span > li > span[role="button"]:not(.toc-row-item) {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 52px;
+    padding: 9px 40px 9px 18px;
+    color: var(--menu-row-text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+#Tmenu.sideBar #tocData > span > li > span[role="button"]:not(.toc-row-item).selectedToc {
+    color: var(--menu-brand);
+    background: var(--menu-active-bg);
+    font-weight: 700;
+    box-shadow: inset 4px 0 0 0 var(--menu-brand);
+}
+
+/* Full-row hit area.
+   `span.toc-row-item` is the element the controller puts onclick/onkeydown
+   on, and it already spans the whole row. Its children are purely
+   decorative, so they are taken out of hit-testing: every click then
+   resolves to the handler element itself rather than to a child, and
+   `event.target` is always the row. Nothing here adds or moves a handler.
+   The icon is already aria-hidden and the label text carries no role, so
+   screen readers and the tab order are unaffected. */
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item > *,
+#Tmenu.sideBar .toc-item-icon,
+#Tmenu.sideBar .toc-item-icon svg,
+#Tmenu.sideBar .toc-item-text,
+#Tmenu.sideBar #tocData .menu-title {
+    pointer-events: none;
+}
+
+#Tmenu.sideBar #tocData > span,
+#Tmenu.sideBar #tocData > span > li,
+#Tmenu.sideBar #tocData > span > li > span[role="button"] {
+    cursor: pointer;
+}
+
+/* Locked rows keep the existing non-interactive cursor. */
+#Tmenu.sideBar #tocData > span > li.disabledClass,
+#Tmenu.sideBar #tocData > span > li.disabledClass > span[role="button"] {
+    cursor: default;
+}
+
+/* ---- 5. Icons -------------------------------------------------- */
+
+#Tmenu.sideBar .toc-item-icon {
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    color: var(--menu-icon);
+    opacity: 1;
+    transition: color 0.18s ease;
+}
+
+#Tmenu.sideBar .toc-item-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ---- 6. Hover / focus ------------------------------------------ */
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item:hover {
+    background: #F2F8FB;
+    color: var(--menu-brand);
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item:hover .toc-item-icon {
+    color: var(--menu-brand);
+}
+
+/* Locked rows keep the existing .disabledClass treatment and must not
+   read as interactive on hover. Click handling is untouched. */
+#Tmenu.sideBar #tocData > span > li.disabledClass > span.toc-row-item:hover {
+    background: transparent;
+    color: var(--menu-row-text);
+}
+
+#Tmenu.sideBar #tocData > span > li.disabledClass > span.toc-row-item:hover .toc-item-icon {
+    color: var(--menu-icon);
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item:focus {
+    outline: none;
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item:focus-visible {
+    outline: 2px solid var(--menu-brand);
+    outline-offset: -3px;
+    box-shadow: none;
+}
+
+/* ---- 7. Visited / active row (state comes from the controller) -- */
+
+/* Declared before .selectedToc: updateTOCColor()'s Resume_Bool pass can
+   leave both classes on the current row, and the active treatment has
+   to win in that case. */
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.visitedTOC {
+    color: #4B5563;
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.visitedTOC .toc-item-icon {
+    color: var(--menu-icon);
+    opacity: 1;
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.selectedToc {
+    padding-left: 18px;
+    color: var(--menu-brand);
+    background: var(--menu-active-bg);
+    font-weight: 700;
+    border-radius: 0;
+    box-shadow: inset 4px 0 0 0 var(--menu-brand);
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.selectedToc:hover {
+    background: var(--menu-active-bg);
+    color: var(--menu-brand);
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.selectedToc::after {
+    content: none !important;
+    display: none !important;
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
+    color: var(--menu-brand);
+}
+
+/* ---- 8. Completion tick ---------------------------------------- */
+
+/* Positioned over the row instead of in its own grid column so the
+   active row's tint runs the full width behind it. Visibility is still
+   the inline style pageSormTrack() sets - never touched here. */
+#Tmenu.sideBar #tocData > span > p.tickSymbol,
+#Tmenu.sideBar #tocData > span > p.tickSymbol1 {
+    position: absolute !important;
+    right: 12px !important;
+    top: 50% !important;
+    left: auto !important;
+    transform: translateY(-50%) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: none !important;
+    width: 20px !important;
+    min-width: 20px !important;
+    max-width: 20px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #FFFFFF !important;
+    background: var(--menu-brand) !important;
+    border-radius: 50% !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#Tmenu.sideBar #tocData > span > p.tickSymbol::before,
+#Tmenu.sideBar #tocData > span > p.tickSymbol1::before {
+    width: 11px;
+    height: 11px;
+}
+
+/* ---- 9. Footer -------------------------------------------------- */
+
+/* A real flex row at the end of the column rather than an absolutely
+   positioned overlay: the list above it then gets exactly the remaining
+   height (no reserved padding-bottom to guess at) and the footer still
+   sits on the bottom edge. */
+#Tmenu.sideBar .copyright {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    flex: 0 0 auto;
+    width: 100%;
+    margin: 0 !important;
+    padding: 6px 14px !important;
+    color: #9CA3AF !important;
+    background: #FFFFFF !important;
+    border-top: 1px solid #E5E7EB !important;
+    text-align: center;
+    font-size: 12px !important;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#Tmenu.sideBar .line {
+    display: none !important;
+}
+
+/* ---- 10. Scrollbar --------------------------------------------- */
+
+#Tmenu.sideBar > .tocData::-webkit-scrollbar {
+    width: 8px;
+}
+
+#Tmenu.sideBar > .tocData::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 999px;
+}
+
+#Tmenu.sideBar > .tocData::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ---- 11. Transcript panel (unchanged behaviour, matched spacing) -- */
+
+#Tmenu.sideBar .transcriptClass {
+    padding: 18px 20px 24px !important;
+    color: #374151;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ---- 12. Tablet / mobile: centered rounded card ----------------- */
+/* Same drawer breakpoint the player already uses (<=1024px), so the
+   open/close behaviour, overlay and scroll-lock are untouched - only
+   the panel's box changes from a full-bleed drawer to the reference
+   card, with spacing from the viewport edges. */
+
+@media (max-width: 1024px) {
+    #Tmenu.sideBar {
+        position: fixed !important;
+        top: 14px !important;
+        bottom: 14px !important;
+        left: 14px !important;
+        right: 14px !important;
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: 420px !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: calc(100dvh - 28px) !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        background: #FFFFFF !important;
+        border: 1px solid #E5E7EB !important;
+        border-radius: 18px !important;
+        box-shadow: 0 18px 50px rgba(7, 20, 42, 0.18) !important;
+        overflow: hidden !important;
+        z-index: 1005 !important;
+    }
+
+    /* Logo restored - not a compaction target (see base rule). */
+    #Tmenu.sideBar .logo {
+        max-width: 160px !important;
+        margin: 14px auto 12px !important;
+    }
+
+    #Tmenu.sideBar #sideBarHeader {
+        padding: 0 20px 14px !important;
+    }
+
+    #Tmenu.sideBar #sideBarHeader > #toc_id,
+    #Tmenu.sideBar #sideBarHeader > #trans_id {
+        height: 46px !important;
+        min-height: 46px !important;
+        border-radius: 11px !important;
+        font-size: 16px !important;
+    }
+
+    /* Rows stay at 54px on touch so the hit target clears 44px even
+       though the header above is tighter than desktop. */
+    /* 16px / 1.4 is the original touch-breakpoint menu typography,
+       recovered from the legacy `@media (max-width: 768px)` block above. */
+    #Tmenu.sideBar #tocData > span > li > span.toc-row-item {
+        min-height: 54px;
+        padding: 10px 44px 10px 20px;
+        gap: 14px;
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+    #Tmenu.sideBar #tocData .menu-title {
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+    #Tmenu.sideBar .toc-item-icon,
+    #Tmenu.sideBar .toc-item-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    #Tmenu.sideBar .toc-item-icon {
+        flex: 0 0 24px;
+        min-width: 24px;
+    }
+
+    #Tmenu.sideBar #tocData > span > p.tickSymbol,
+    #Tmenu.sideBar #tocData > span > p.tickSymbol1 {
+        right: 14px !important;
+        width: 22px !important;
+        min-width: 22px !important;
+        max-width: 22px !important;
+        height: 22px !important;
+        min-height: 22px !important;
+        max-height: 22px !important;
+    }
+
+    #Tmenu.sideBar #tocData > span > p.tickSymbol::before,
+    #Tmenu.sideBar #tocData > span > p.tickSymbol1::before {
+        width: 12px;
+        height: 12px;
+    }
+
+    #Tmenu.sideBar .copyright {
+        padding: 7px 14px !important;
+        font-size: 12px !important;
+        border-bottom-left-radius: 18px;
+        border-bottom-right-radius: 18px;
+    }
+}
+
+/* Short/landscape phones: tighten the card so the list keeps room. */
+@media (max-width: 1024px) and (max-height: 480px) {
+    #Tmenu.sideBar {
+        top: 8px !important;
+        bottom: 8px !important;
+        max-height: calc(100dvh - 16px) !important;
+    }
+
+    /* Logo restored - not a compaction target (see base rule). */
+    #Tmenu.sideBar .logo {
+        max-width: 112px !important;
+        margin: 8px auto 6px !important;
+    }
+
+    #Tmenu.sideBar #sideBarHeader {
+        padding: 0 16px 10px !important;
+        gap: 8px !important;
+    }
+
+    #Tmenu.sideBar #sideBarHeader > #toc_id,
+    #Tmenu.sideBar #sideBarHeader > #trans_id {
+        height: 38px !important;
+        min-height: 38px !important;
+        border-radius: 9px !important;
+        font-size: 14px !important;
+    }
+
+    #Tmenu.sideBar #tocData > span > li > span.toc-row-item {
+        min-height: 44px;
+        padding: 7px 38px 7px 16px;
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    #Tmenu.sideBar #tocData .menu-title {
+        font-size: 14px;
+    }
+
+    #Tmenu.sideBar .toc-item-icon,
+    #Tmenu.sideBar .toc-item-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    #Tmenu.sideBar .toc-item-icon {
+        flex: 0 0 20px;
+        min-width: 20px;
+    }
+
+    #Tmenu.sideBar #tocData > span > p.tickSymbol,
+    #Tmenu.sideBar #tocData > span > p.tickSymbol1 {
+        right: 12px !important;
+        width: 18px !important;
+        min-width: 18px !important;
+        max-width: 18px !important;
+        height: 18px !important;
+        min-height: 18px !important;
+        max-height: 18px !important;
+    }
+
+    #Tmenu.sideBar #tocData > span > p.tickSymbol::before,
+    #Tmenu.sideBar #tocData > span > p.tickSymbol1::before {
+        width: 10px;
+        height: 10px;
+    }
+
+    #Tmenu.sideBar .copyright {
+        padding: 5px 14px !important;
+        font-size: 11px !important;
+    }
+}
+
+/* Very narrow phones: keep the card edge spacing but drop the width cap. */
+@media (max-width: 420px) {
+    #Tmenu.sideBar {
+        top: 12px !important;
+        bottom: 12px !important;
+        left: 12px !important;
+        right: 12px !important;
+        max-width: none !important;
+        max-height: calc(100dvh - 24px) !important;
     }
 }
