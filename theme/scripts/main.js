@@ -592,7 +592,9 @@ function processMasterValue1(data) {
 	
   masterBool = data.master || false;
   AudioVersionEnable = data.AudioVersionEnable || false;
-  QuizAttemptLimit = data.QuizAttempt || null;
+  // `|| null` would swallow a numeric 0 here; 0 is a meaningful value
+  // (unlimited attempts), so only fall back when the key is genuinely absent.
+  QuizAttemptLimit = (data.QuizAttempt === undefined || data.QuizAttempt === null || data.QuizAttempt === "") ? 0 : data.QuizAttempt;
   MenuName = data.MenuName || "";
   TranscriptName = data.TranscriptName || "";
   ResumeHeader = data.ResumeHeader || "";

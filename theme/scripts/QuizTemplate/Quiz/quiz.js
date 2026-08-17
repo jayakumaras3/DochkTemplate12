@@ -23,6 +23,31 @@ document.addEventListener("DOMContentLoaded", function() {
 	var QuestionHead="";
 	var selectedOptions="";
 
+	// Attempt-limit helpers. QuizAttempt comes from questions.json and may be a
+	// string ("0", "3") or a number; 0 means UNLIMITED attempts, any positive
+	// value is the real cap. The canonical implementations live with the
+	// curAttempt/PrecurAttempt/QuizAttemptLimit globals in loader.js
+	// (parent.parent scope) so the player shell and this quiz frame can never
+	// disagree; these are thin pass-throughs in the same style as the other
+	// parent.parent.* calls throughout this file.
+	function isUnlimitedAttempts() {
+		return parent.parent.isUnlimitedQuizAttempts();
+	}
+
+	function attemptLimitReached(currentAttempt) {
+		return parent.parent.isQuizAttemptLimitReached(currentAttempt);
+	}
+
+	// Start page "Total number of attempts: 1/3" line. With unlimited attempts
+	// there is no denominator to show -- printing "1/0" would read as a broken
+	// or already-exhausted quiz -- so the line is omitted entirely.
+	function attemptsLineHtml(currentAttempt) {
+		if (isUnlimitedAttempts()) {
+			return '';
+		}
+		return `<p id="quiz-attempts" tabindex="0">${parent.QuizAttemptte} ${currentAttempt}/${parent.QuizAttempt}</p>`;
+	}
+
 	function ensureMenuCopyrightVisible() {
 		return;
 	}
@@ -120,12 +145,13 @@ document.addEventListener("DOMContentLoaded", function() {
 						parent.parent.PrecurAttempt = Number(parent.parent.getSuspendString("str4"));
 					}
 					
-						if (parent.parent.PrecurAttempt == parent.parent.QuizAttemptLimit) {
+						if (attemptLimitReached(parent.parent.PrecurAttempt)) {
 							attempt = parseInt(parent.parent.PrecurAttempt) || 0;
 						}
 						else{
 							attempt = (parseInt(parent.parent.PrecurAttempt) || 0) + 1;
 						}
+						const attemptsInfoHtml = attemptsLineHtml(attempt);
 						const resultsHtml = `
 						<div id ="Startpageid" class="Startpage FSize20" >
 							<p class="headerAss FSize38" id="startpage-header" tabindex="0">${parent.startpageheader}</p>
@@ -133,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function() {
 								<p id="startpage-description" tabindex="0">${parent.startpagedescrip}</p>
 								<p id="total-questions" tabindex="0">${parent.TotalQuestionste}${parent.totalQuestions}</p>
 								<p id="passing-score" tabindex="0">${parent.passingScorete}${passingScore}</p>
-								<p id="quiz-attempts" tabindex="0">${parent.QuizAttemptte} ${attempt}/${parent.QuizAttempt}</p>
+								${attemptsInfoHtml}
 								<p id="duration" tabindex="0" aria-live="polite">${parent.durationte}${parent.duration1} ${parent.MinutesText}</p>
 								<p id="startpage-description-1" tabindex="0">${parent.startpagedescrip1}</p>
 							</div>
@@ -158,6 +184,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		else{
 			
 		attempt = (parseInt(parent.parent.curAttempt) || 0) + 1;
+		const attemptsInfoHtml = attemptsLineHtml(attempt);
 		//    document.body.style.backgroundImage = "url('images/BG_1.png')";
 		const resultsHtml = `
 		  <div id ="Startpageid" class="Startpage FSize20" >
@@ -166,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				<p id="startpage-description" tabindex="0">${parent.startpagedescrip}</p>
 				<p id="total-questions" tabindex="0">${parent.TotalQuestionste}${parent.totalQuestions}</p>
 				<p id="passing-score" tabindex="0">${parent.passingScorete}${passingScore}</p>
-				<p id="quiz-attempts" tabindex="0">${parent.QuizAttemptte} ${attempt}/${parent.QuizAttempt}</p>
+				${attemptsInfoHtml}
 				<p id="durationte" tabindex="0" aria-live="polite">${parent.durationte}${parent.duration1} ${parent.MinutesText}</p>
 				<p id="startpage-description-1" tabindex="0">${parent.startpagedescrip1}</p>
 			</div>
@@ -1003,7 +1030,7 @@ function SetScoreEachQuestion() {
 						}
 						else{
 							
-							if (parent.parent.curAttempt == parent.parent.QuizAttemptLimit) {
+							if (attemptLimitReached(parent.parent.curAttempt)) {
 								resultsHtml = `
 							<div class="results FSize20" >
 							<p id="resultsHeading" role="text" tabindex="0">${parent.TimeUpte}</p>
@@ -1058,7 +1085,7 @@ function SetScoreEachQuestion() {
 				} else {
 					if(QuizMode =="PreTest")
 					{
-						if (parent.parent.PrecurAttempt == parent.parent.QuizAttemptLimit) {
+						if (attemptLimitReached(parent.parent.PrecurAttempt)) {
 							
 						}
 						else{
@@ -1070,7 +1097,7 @@ function SetScoreEachQuestion() {
 						}
 						parent.parent.setSuspendString("str4",parent.parent.PrecurAttempt);
 						console.log(parent.parent.QuizAttemptLimit);
-						if (parent.parent.PrecurAttempt == parent.parent.QuizAttemptLimit) {
+						if (attemptLimitReached(parent.parent.PrecurAttempt)) {
 						resultsHtml = `
 							<div class="results FSize20">
 								
@@ -1103,7 +1130,7 @@ function SetScoreEachQuestion() {
 								parent.parent.curAttempt++;
 							}
 						}
-						if (parent.parent.curAttempt == parent.parent.QuizAttemptLimit) {
+						if (attemptLimitReached(parent.parent.curAttempt)) {
 						
 							resultsHtml = `
 							<div class="results FSize20">
@@ -1147,7 +1174,7 @@ function SetScoreEachQuestion() {
 			else{
 				parent.parent.setSuspendString("str3", "Attempted");
 			}
-			if (parent.parent.PrecurAttempt == parent.parent.QuizAttemptLimit) {
+			if (attemptLimitReached(parent.parent.PrecurAttempt)) {
 			}
 			else
 			{
@@ -1177,10 +1204,10 @@ function SetScoreEachQuestion() {
 				} else {
 					//  console.log("parent.parent.curAttempt" + parent.parent.curAttempt)
 					//  console.log("parent.parent.QuizAttemptLimit" + parent.parent.QuizAttemptLimit)
-					if (parent.parent.curAttempt == parent.parent.QuizAttemptLimit) {
+					if (attemptLimitReached(parent.parent.curAttempt)) {
 
 						document.getElementById('retryBtn').style.display = 'none';
-					} else if (parent.parent.curAttempt < parent.parent.QuizAttemptLimit) {
+					} else if (!attemptLimitReached(parent.parent.curAttempt)) {
 						//parent.parent.curAttempt++;
 						document.getElementById('retryBtn').addEventListener('click', retryQuiz);
 					}
@@ -1244,7 +1271,7 @@ function SetScoreEachQuestion() {
 				quizContainer.innerHTML = resultsHtml;
 			}
 		}
-		else if (parent.parent.PrecurAttempt == parent.parent.QuizAttemptLimit) {
+		else if (attemptLimitReached(parent.parent.PrecurAttempt)) {
 			
 			const resultsHtml = `
 				<div class="results FSize20">>${parent.Resulttitle}</p>
@@ -1309,7 +1336,7 @@ function SetScoreEachQuestion() {
 			//alert();
 			parent.parent.curAttempt++;
 			parent.parent.QuizpageVistedList();
-			if (parent.parent.PrecurAttempt == parent.parent.QuizAttemptLimit) {
+			if (attemptLimitReached(parent.parent.PrecurAttempt)) {
 					parent.parent.pretestCompleteCHeck="Attempted";
 			}
 		}
@@ -1381,7 +1408,7 @@ function SetScoreEachQuestion() {
 		parent.parent.PrecurAttempt= Number(parent.parent.getSuspendString("str4"));
 		console.log(parent.parent.PrecurAttempt);
 		console.log(parent.parent.QuizAttemptLimit);
-		if (parent.parent.PrecurAttempt == parent.parent.QuizAttemptLimit) {
+		if (attemptLimitReached(parent.parent.PrecurAttempt)) {
 			if(parent.parent.pretestCompleteCHeck=="Completed" || parent.parent.pretestCompleteCHeck=="Attempted")
 			{
 				
@@ -1411,7 +1438,7 @@ function SetScoreEachQuestion() {
 	else
 	{
 
-		if (parent.parent.scoreActive && parent.parent.curAttempt == parent.parent.QuizAttemptLimit) {
+		if (parent.parent.scoreActive && attemptLimitReached(parent.parent.curAttempt)) {
 			setTimeout(() => {
 				//console.log("parent.parent.curAttempt" + parent.parent.curAttempt)
 				// console.log("parent.parent.QuizAttemptLimit" + parent.parent.QuizAttemptLimit)

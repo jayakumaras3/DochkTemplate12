@@ -7,6 +7,31 @@ var PrecurAttempt = 0;
 var QuizAttemptLimit = 0;
 var pretestSuccess = false;
 
+// QuizAttempt (questions.json / Template.json) may arrive as a string ("0", "3")
+// or a number, so every read goes through Number(). A limit of 0 -- or anything
+// that is not a usable positive number (blank, null, NaN) -- means UNLIMITED
+// attempts, NOT "no attempts allowed". Any positive value is the real cap.
+function getQuizAttemptLimit() {
+    var limit = Number(QuizAttemptLimit);
+    return isFinite(limit) && limit > 0 ? limit : 0;
+}
+
+function isUnlimitedQuizAttempts() {
+    return getQuizAttemptLimit() === 0;
+}
+
+// The codebase's original test for "no attempts left" was
+// `curAttempt == QuizAttemptLimit`, which is true on the very first attempt
+// when the limit is 0 ("0" == 0) -- that is exactly why 0 behaved as
+// "locked out" instead of "unlimited". Unlimited now short-circuits to false,
+// and the limited case uses >= so an over-count can never slip past the cap.
+function isQuizAttemptLimitReached(currentAttempt) {
+    if (isUnlimitedQuizAttempts()) {
+        return false;
+    }
+    return (Number(currentAttempt) || 0) >= getQuizAttemptLimit();
+}
+
 function onendofvideo() {
 
 
@@ -499,7 +524,9 @@ function scoreSubmit(result) {
         //alert(PassScorevalue);
 
     } else {
-        if (curAttempt == QuizAttemptLimit) {
+        // Only stamp a terminal "failed" status once the learner has genuinely
+        // run out of attempts. With unlimited attempts that never happens.
+        if (isQuizAttemptLimitReached(curAttempt)) {
             scorm.set("cmi.core.lesson_status", LMSfailed);
             certificateDate = formatDate();
             setSuspendString("str2", certificateDate);
@@ -562,7 +589,9 @@ function scoreSubmit_PostQuiz(result) {
         //alert(PassScorevalue);
 
     } else {
-        if (curAttempt == QuizAttemptLimit) {
+        // Only stamp a terminal "failed" status once the learner has genuinely
+        // run out of attempts. With unlimited attempts that never happens.
+        if (isQuizAttemptLimitReached(curAttempt)) {
             scorm.set("cmi.core.lesson_status", LMSfailed);
             certificateDate = formatDate();
             setSuspendString("str2", certificateDate);
