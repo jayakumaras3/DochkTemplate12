@@ -67,6 +67,39 @@
       }
     },
     {
+      "name": "5011",
+      "title": "PreQuiz",
+      "header": "PreQuiz",
+      "transcript": " ",
+      "masterIcon": true,
+      "icon": "clipboard-list",
+      "settings": {
+        "sidebar": true,
+        "header": true,
+        "footer": true,
+        "fullScreen": false,
+        "pageNumber": "Page 3/11",
+        "module": 0,
+        "preloader": [
+          {
+            "src": "assets/Quiz/5012/index.html",
+            "id": "Screen_01.html"
+          },
+          {
+            "src": "theme/scripts/Screen_01.js",
+            "id": "Screen_01"
+          }
+        ],
+        "content": [
+          {
+            "type": "captivate",
+            "path": "assets/Quiz/5012/index.html",
+            "functionName": "captivate"
+          }
+        ]
+      }
+    },
+    {
       "name": "4959",
       "title": "Introduction",
       "header": "Introduction",

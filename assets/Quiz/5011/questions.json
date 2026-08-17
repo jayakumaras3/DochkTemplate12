@@ -7,7 +7,7 @@
 											  
   "passingScore": "80",
   "AlertText": "Please select an answer.11",							
-  "QuizAttempt": "2",  																	 
+  "QuizAttempt": "0",  																	 
   "iframeSrc": "../../../theme/scripts/QuizTemplate/Quiz/Quiz.html",										  
   "duration": "0",
   "startpagedescrip": "",
@@ -53,7 +53,7 @@
     },{
       "question": "mIdentify the combination that causes the chemical reaction in a diesel powered internal combustion engine.",
       "type": "multiple",
-      "options": "Air and fuel|Air, water, and fuel|`Air, heat, and fuel|Air, fuel, and spark plug,Air and fuel|Air, water, and fuel|`Air, heat, and fuel|Air, fuel, and spark plug",
+      "options": "Air and fuel|Air, water, and fuel|`Air, heat, and fuel|Air, fuel, and spark plug,Air and fuel|Air, water, and fuel|Air, heat, and fuel|Air, fuel, and spark plug",
       "correct": "0|0|1|0|0|0|0|0",
       "images": "../../../../assets/Quiz/5011/assessment_image/img3.jpg",
       "video": null
