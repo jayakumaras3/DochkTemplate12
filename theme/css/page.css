@@ -162,16 +162,24 @@ body {
 .page-title--right  ~ .title-accent-bar { margin-left: auto; }
 
 /* ── Main Content Area ───────────────────────────────────── */
+/* min-height:0 lets this shrink below its content's intrinsic height. A flex
+   item defaults to min-height:auto, which floors it at content size and is
+   the usual reason a descendant image can never be made to fit. */
 #page-main {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
 }
 
 /* ── Layout Container ────────────────────────────────────── */
 .layout-container {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: var(--layout-flex-dir);
   gap: var(--layout-gap);
-  align-items: flex-start;
+  align-items: stretch;
   background: var(--color-bg-card);
   border-radius: var(--radius-lg);
   padding: var(--layout-padding);
@@ -180,16 +188,37 @@ body {
   transition: box-shadow 0.3s ease;
 }
 
-/* ── Media Panel ─────────────────────────────────────────── */
+/* ── Media Panel: FIT-TO-CONTAINER (never crop, never stretch) ─
+   Width comes from --layout-media-ratio (JSON mediaRatio); height comes from
+   the row, since .layout-container is align-items:stretch. The image is then
+   fitted into that box with object-fit:contain and centred, so the whole
+   image is always visible and never distorted.
+
+   min-width/min-height:0 are required on every flex ancestor — the default
+   min-*:auto refuses to shrink below content size.
+   ─────────────────────────────────────────────────────────── */
 .media-panel {
   flex: 0 0 var(--layout-media-ratio);
+  max-width: var(--layout-media-ratio);
   min-width: 0;
+  min-height: 0;
+  display: flex;
 }
 
 .media-figure {
   margin: 0;
   position: relative;
   width: 100%;
+  height: 100%;
+  min-width: 0;
+  /* Responsive floor rather than a fixed pixel height. */
+  min-height: min(320px, 38vh);
+  /* Caps the image to the height actually visible (published by
+     initResponsiveFit) so a long text column cannot drive it off-screen. */
+  max-height: var(--available-h, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow-md);
@@ -198,13 +227,18 @@ body {
 .media-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+  object-position: center center;
   display: block;
   border-radius: var(--media-radius);
-  aspect-ratio: 4/3;
-  transition: transform 0.4s ease;
 }
-.media-figure:hover .media-image { transform: scale(1.02); }
+/* The former :hover scale(1.02) is deliberately gone: inside an
+   overflow:hidden figure it clipped the fitted edges, contradicting
+   "the complete image must always be visible". */
 
 .media-caption {
   font-size: 0.8rem;
@@ -233,12 +267,18 @@ body {
 }
 
 /* ── Content Panel ───────────────────────────────────────── */
+/* grow AND shrink stay enabled: mediaRatio + contentRatio + the gap sum to
+   more than 100%, so this column absorbs the gap by shrinking. That is what
+   keeps the row from overflowing horizontally at any width. */
 .content-panel {
   flex: 1 1 var(--layout-content-ratio);
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 20px;
+  overflow-y: auto;
 }
 
 .content-heading {
@@ -544,10 +584,16 @@ body {
     padding: clamp(20px, 4vw, 32px);
     gap: clamp(24px, 4vw, 32px);
   }
-  .media-panel { flex: 0 0 auto; width: 100%; }
-  .content-panel { flex: 0 0 auto; width: 100%; }
+  .media-panel { flex: 0 0 auto; width: 100%; max-width: 100%; }
+  .content-panel { flex: 0 0 auto; width: 100%; min-height: 0; overflow-y: visible; }
+  /* Stacked: the image no longer shares a row with the text, so it takes its
+     natural height. max-height:none releases the --available-h cap and
+     display:block drops the centring flexbox the row layout needs. */
   .media-figure {
     height: auto;
+    min-height: 0;
+    max-height: none;
+    display: block;
     overflow: visible;
   }
   .media-image {

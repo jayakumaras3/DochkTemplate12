@@ -65,6 +65,7 @@
   --transition:       0.22s cubic-bezier(0.4,0,0.2,1);
   --layout-direction: row;
   --media-basis:      46%;
+  --content-basis:    54%;
   --layout-gap:       52px;
   --card-padding:     52px;
   --page-max-width:   1120px;
@@ -116,9 +117,12 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .title-bar--center { margin: 16px auto 0; }
 .title-bar--right { margin-left: auto; margin-top: 16px; }
 
-#page-main { flex: 1; }
+/* min-height:0 lets #page-main shrink below its content's intrinsic height.
+   Without it a flex item's default min-height:auto floors it at content
+   size, which is what stops any descendant from ever fitting. */
+#page-main { flex: 1 1 auto; min-height: 0; display: flex; }
 
-.layout-card { display: flex; flex-direction: row; gap: var(--layout-gap); align-items: stretch; background: var(--c-surface); border-radius: var(--radius-xl); padding: var(--card-padding); box-shadow: var(--shadow-card); border: 1px solid var(--c-border); overflow: hidden; position: relative; transition: flex-direction 0s; }
+.layout-card { flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; flex-direction: row; gap: var(--layout-gap); align-items: stretch; background: var(--c-surface); border-radius: var(--radius-xl); padding: var(--card-padding); box-shadow: var(--shadow-card); border: 1px solid var(--c-border); overflow: hidden; position: relative; transition: flex-direction 0s; }
 .layout-card::before { content: ''; position: absolute; top: 0; right: 0; width: 320px; height: 320px; background: radial-gradient(circle at top right, rgba(26,86,219,.06), transparent 70%); pointer-events: none; border-radius: var(--radius-xl); }
 
 .layout-card.image-left { flex-direction: row; }
@@ -132,10 +136,61 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .layout-card.top-image .media-panel, .layout-card.bottom-image .media-panel { flex: 0 0 100%; width: 100%; max-width: 100%; }
 .layout-card.top-image .content-panel, .layout-card.bottom-image .content-panel { flex: 1 1 100%; width: 100%; max-width: 100%; }
 
-.media-panel { flex: 0 0 var(--media-basis); min-width: 0; position: relative; max-width: var(--media-basis); }
-.media-figure { margin: 0; width: 100%; height: 100%; min-height: 320px; border-radius: var(--radius-lg); overflow: hidden; position: relative; background: var(--c-primary-lt); }
-.media-img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: var(--radius-lg); transition: transform .5s cubic-bezier(0.4,0,0.2,1); }
-.media-figure:hover .media-img { transform: scale(1.03); }
+/* ------------------------------------------------------------------
+   MEDIA: FIT-TO-CONTAINER (never crop, never stretch)
+   ------------------------------------------------------------------
+   The panel takes its width from --media-basis (JSON mediaRatio) and its
+   HEIGHT from the card, because .layout-card is align-items:stretch and the
+   text column is usually the taller of the two. The image is then fitted
+   into that box with object-fit:contain and centred, so the whole image is
+   always visible and its aspect ratio is never distorted.
+
+   min-width/min-height:0 on the panel and figure are required: a flex item
+   defaults to min-*:auto, which refuses to shrink below the intrinsic size
+   of its content and is the usual reason "the image won't fit".
+
+   max-height caps the figure to the height actually visible in the frame
+   (--available-h, published by initResponsiveFit; 100% if JS is
+   unavailable) so a long text column can never drive the image taller than
+   the screen.
+   ------------------------------------------------------------------ */
+.media-panel { flex: 0 0 var(--media-basis); max-width: var(--media-basis); min-width: 0; min-height: 0; position: relative; display: flex; }
+.media-figure {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  /* Responsive floor, not a fixed 320px: keeps a sensible size on tall
+     screens but is free to shrink on short ones. */
+  min-height: min(320px, 38vh);
+  max-height: var(--available-h, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  /* Transparent, not the placeholder tint: with `contain` the leftover
+     space is now visible, and it should read as the card, not as a band of
+     colour around the artwork. */
+  background: transparent;
+}
+.media-img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  border-radius: var(--radius-lg);
+}
+/* The former :hover scale(1.03) is deliberately gone. Inside an
+   overflow:hidden figure it clipped ~1.5% off each fitted edge, which
+   contradicts "the complete image must always be visible". Restore by
+   re-adding a transform here if the zoom is wanted more than the guarantee. */
 
 .media-placeholder { width: 100%; min-height: 340px; border-radius: var(--radius-lg); background: linear-gradient(135deg, var(--c-primary-lt) 0%, #DBEAFE 50%, #E0F2FE 100%); border: 2px dashed rgba(26,86,219,.25); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--c-primary); }
 .media-placeholder svg { opacity: .45; }
@@ -145,7 +200,12 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .media-video iframe, .media-video video { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 .media-caption { margin-top: 10px; font-size: .78rem; color: var(--c-text-3); text-align: center; font-style: italic; }
 
-.content-panel { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+/* flex-basis comes from JSON contentRatio, but grow AND shrink stay enabled:
+   mediaRatio + contentRatio + the gap sum to more than 100%, so the content
+   column absorbs the gap by shrinking. That is what keeps the row from
+   overflowing horizontally at any width, whatever ratios are configured.
+   min-height:0 lets a long column scroll rather than force the card taller. */
+.content-panel { flex: 1 1 var(--content-basis, 0); min-width: 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 22px; overflow-y: auto; }
 .content-heading { font-family: var(--font-heading); font-size: clamp(1.15rem, 2.4vw, 1.6rem); font-weight: 700; line-height: 1.28; letter-spacing: -.025em; color: var(--c-text); }
 
 .content-body { font-size: clamp(.88rem, 1.4vw, .98rem); color: var(--c-text-2); line-height: 1.78; }
@@ -287,7 +347,12 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
   .layout-card, .layout-card.image-left, .layout-card.image-right, .layout-card.top-image, .layout-card.bottom-image { flex-direction: column !important; padding: clamp(20px, 4vw, 36px); gap: 28px; }
   .layout-card .media-panel, .layout-card .content-panel { flex: 0 0 auto !important; width: 100% !important; max-width: 100% !important; }
   .layout-card.image-right { flex-direction: column !important; }
-  .media-figure { min-height: 0; height: auto; overflow: visible; }
+  /* Stacked layout: the image is no longer sharing a row with the text, so
+     it takes its natural height. max-height:none releases the --available-h
+     cap (which exists to stop a tall text column squeezing a side-by-side
+     image) and display:block drops the centring flexbox the row layout
+     needs — otherwise a height:auto flex child gets stretched here. */
+  .media-figure { min-height: 0; height: auto; max-height: none; display: block; overflow: visible; }
   .media-img {
     width: 100%;
     max-width: 100%;
@@ -296,6 +361,8 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
     object-fit: contain;
     aspect-ratio: auto !important;
   }
+  /* No column to shrink into once stacked; let it size to its content. */
+  .content-panel { min-height: 0; overflow-y: visible; }
 }
 
 @media (max-width: 560px) {
@@ -426,6 +493,51 @@ function applyBackground(bg) {
   }
 }
 
+/* Responsive fit.
+   The fitting itself is pure CSS (object-fit + flex), so it already survives
+   every resize with no JS at all. This adds one thing CSS cannot express:
+   the height actually visible inside this frame, minus the page's own header
+   and footer, published as --available-h and used to cap .media-figure. That
+   stops a long text column from driving the image taller than the screen.
+
+   Measured from window.innerHeight and the header/footer boxes only - never
+   from anything that consumes --available-h - and writes only when the value
+   changed. Without that guard the write would resize .media-figure, which
+   would re-fire the observer, which would write again: a ResizeObserver
+   feedback loop. rAF-coalesced, so a drag-resize costs one measure per
+   frame, not one per event. */
+function initResponsiveFit() {
+  const shell = document.getElementById('page-shell');
+  if (!shell) return;
+  const header = document.getElementById('page-header');
+  const footer = document.getElementById('page-footer');
+
+  let queued = 0;
+  let last = -1;
+
+  function measure() {
+    queued = 0;
+    const hdr = header && !header.hidden ? header.offsetHeight : 0;
+    const ftr = footer && !footer.hidden ? footer.offsetHeight : 0;
+    const avail = Math.max(160, Math.round(window.innerHeight - hdr - ftr));
+    if (avail === last) return;
+    last = avail;
+    document.documentElement.style.setProperty('--available-h', avail + 'px');
+  }
+
+  const schedule = () => { if (!queued) queued = requestAnimationFrame(measure); };
+
+  if (typeof ResizeObserver === 'function') {
+    const ro = new ResizeObserver(schedule);
+    ro.observe(document.documentElement);
+    if (header) ro.observe(header);
+    if (footer) ro.observe(footer);
+  }
+  window.addEventListener('resize', schedule, { passive: true });
+  window.addEventListener('orientationchange', schedule, { passive: true });
+  schedule();
+}
+
 const LAYOUT_TYPES = ['image-left','image-right','top-image','bottom-image','full-content'];
 
 function applyLayout(l = {}) {
@@ -441,6 +553,7 @@ function applyLayout(l = {}) {
   }
 
   root.style.setProperty('--media-basis', l.mediaRatio || '46%');
+  root.style.setProperty('--content-basis', l.contentRatio || '54%');
   root.style.setProperty('--layout-gap', l.gap || '52px');
   root.style.setProperty('--card-padding', l.cardPadding || '52px');
   root.style.setProperty('--page-max-width', l.maxWidth || '1120px');
@@ -624,7 +737,7 @@ window.switchTab = (id, idx) => {
   block.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
 };
 
-window.eLearning = { applyBackground, applyLayout, renderTitle, renderMedia, renderContent, renderNavigation, renderComponent };
+window.eLearning = { applyBackground, applyLayout, initResponsiveFit, renderTitle, renderMedia, renderContent, renderNavigation, renderComponent };
 
 async function loadConfig() {
   // Prefer external JSON so authors can update content/layout without editing HTML.
@@ -654,6 +767,8 @@ async function boot() {
     renderMedia(cfg.media || {});
     renderContent(cfg.content || {});
     renderNavigation(cfg.navigation || {});
+    // After the renders, so header/footer visibility is final before measuring.
+    initResponsiveFit();
     const live = document.getElementById('sr-live');
     if (live) live.textContent = (cfg.header?.title || 'Page') + ' loaded.';
   } catch(err) {

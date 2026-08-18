@@ -89,6 +89,51 @@ function applyBackground(background) {
   }
 }
 
+/* ── 2b. Responsive Fit ──────────────────────────────────────
+   The fitting itself is pure CSS (object-fit + flex) and already survives
+   every resize with no JS. This adds the one thing CSS cannot express: the
+   height actually visible in the frame, minus the page's own header and
+   footer, published as --available-h and used to cap .media-figure so a long
+   text column cannot drive the image taller than the screen.
+
+   Measured only from window.innerHeight and the header/footer boxes - never
+   from anything that consumes --available-h - and written only when the
+   value changed. Without that guard the write would resize .media-figure,
+   re-firing the observer, which would write again: a ResizeObserver feedback
+   loop. rAF-coalesced, so a drag-resize costs one measure per frame.
+   ─────────────────────────────────────────────────────────── */
+function initResponsiveFit() {
+  const wrapper = document.getElementById('page-wrapper');
+  if (!wrapper) return;
+  const header = document.getElementById('page-header');
+  const footer = document.getElementById('page-footer');
+
+  let queued = 0;
+  let last = -1;
+
+  function measure() {
+    queued = 0;
+    const hdr = header && !header.hasAttribute('hidden') ? header.offsetHeight : 0;
+    const ftr = footer && !footer.hasAttribute('hidden') ? footer.offsetHeight : 0;
+    const avail = Math.max(160, Math.round(window.innerHeight - hdr - ftr));
+    if (avail === last) return;
+    last = avail;
+    document.documentElement.style.setProperty('--available-h', avail + 'px');
+  }
+
+  const schedule = () => { if (!queued) queued = requestAnimationFrame(measure); };
+
+  if (typeof ResizeObserver === 'function') {
+    const ro = new ResizeObserver(schedule);
+    ro.observe(document.documentElement);
+    if (header) ro.observe(header);
+    if (footer) ro.observe(footer);
+  }
+  window.addEventListener('resize', schedule, { passive: true });
+  window.addEventListener('orientationchange', schedule, { passive: true });
+  schedule();
+}
+
 /* ── 3. Layout Applier ───────────────────────────────────── */
 function renderLayout(layout = {}) {
   const root = document.documentElement;
@@ -480,6 +525,8 @@ async function initPage() {
     renderMedia(data.media || {});
     renderContent(data.content || {});
     renderNavigation(data.navigation || {});
+    // After the renders, so header/footer visibility is final before measuring.
+    initResponsiveFit();
 
     hideLoader();
     triggerPageComplete();
@@ -506,6 +553,7 @@ if (document.readyState === 'loading') {
 window.eLearning = {
   loadPageData,
   applyBackground,
+  initResponsiveFit,
   renderLayout,
   renderTitle,
   renderMedia,
