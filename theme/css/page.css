@@ -1,12 +1,32 @@
 /* ============================================================
    page.css — Modular eLearning Page Styles
-   All values driven by CSS variables injected from JSON theme
+
+   LOCATION: theme/css/. Its companion renderer is
+   theme/scripts/page.js; the page and its data stay in
+   assets/html/customHTML/ (index.html + page.json).
+   This file contains no relative url() — the only @import is an
+   absolute Google Fonts URL — so its location does not affect any
+   asset resolution.
+
+   THIS FILE OWNS ALL VISUAL STYLING: colours, radii, typography,
+   spacing, borders and shadows.
+
+   page.json carries content, layout and visibility only. It holds no
+   colour or radius values, and page.js neither reads a theme from it
+   nor injects one at runtime. To re-skin the page, edit the :root
+   block below and nothing else.
+
+   The only values page.js still sets at runtime are the --layout-*
+   custom properties, which are genuine layout configuration
+   (direction, ratios, gap, padding, max-width) authored in page.json.
    ============================================================ */
 
 /* ── Google Fonts ────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
 
-/* ── CSS Variable Defaults (overridden by JS from JSON) ─── */
+/* ── Theme tokens — SINGLE SOURCE OF TRUTH ───────────────────
+   Edit these to re-skin. Nothing overrides them at runtime.
+   ─────────────────────────────────────────────────────────── */
 :root {
   --color-primary:        #1A56DB;
   --color-primary-dark:   #1341B0;
@@ -22,13 +42,23 @@
   --radius:               12px;
   --radius-sm:            8px;
   --radius-lg:            16px;
+  /* Radius of the media image itself, kept separate from --radius.
+     page.js used to emit this inline from media.borderRadius in
+     page.json; that value was 0 and is declared here instead. It is
+     load-bearing only below 900px: above that the figure's
+     overflow:hidden clips the image to the figure's own --radius, but
+     the responsive block at the end of this file switches the figure to
+     overflow:visible, at which point the image's own corners show. */
+  --media-radius:         0px;
   --font-body:            'DM Sans', 'Segoe UI', system-ui, sans-serif;
   --font-heading:         'Manrope', 'DM Sans', sans-serif;
   --shadow-sm:            0 1px 3px rgba(0,0,0,0.08);
   --shadow-md:            0 4px 16px rgba(26,86,219,0.10);
   --shadow-lg:            0 8px 32px rgba(26,86,219,0.14);
 
-  /* Layout vars (set by JS) */
+  /* Layout vars — the ONLY properties page.js sets at runtime, from
+     the "layout" block in page.json. Values here are the defaults used
+     when a key is absent. */
   --layout-flex-dir:      row;
   --layout-media-ratio:   45%;
   --layout-content-ratio: 55%;
@@ -70,8 +100,31 @@ body {
 }
 .skip-link:focus { top: 1rem; }
 
+/* ── Page Background Image ───────────────────────────────────
+   Every visual property lives here; page.js supplies ONLY the filename,
+   through the --bg-image custom property. pointer-events:none guarantees the
+   layer never intercepts mouse or touch input, and z-index:0 keeps it behind
+   the content without trapping the loader overlay or the skip link, which
+   both sit far above it.
+   ─────────────────────────────────────────────────────────── */
+#backgroundLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--bg-image, none);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+#backgroundLayer[hidden] { display: none; }
+
 /* ── Page Wrapper ────────────────────────────────────────── */
+/* position:relative only establishes the z-index so the content paints above
+   #backgroundLayer; it changes no geometry. */
 #page-wrapper {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -147,7 +200,7 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: var(--radius);
+  border-radius: var(--media-radius);
   aspect-ratio: 4/3;
   transition: transform 0.4s ease;
 }

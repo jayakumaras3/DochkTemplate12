@@ -10,6 +10,16 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ------------------------------------------------------------------
+   VISUAL THEME — SINGLE SOURCE OF TRUTH
+   ------------------------------------------------------------------
+   Colours and radii live here ONLY. page.json carries content, layout
+   and visibility; it must never carry colour or radius values, and no
+   script injects them at runtime any more.
+
+   To re-skin this page, edit the values below. Nothing else needs to
+   change.
+   ------------------------------------------------------------------ */
 :root {
   --c-primary:        #1A56DB;
   --c-primary-dk:     #1341B0;
@@ -24,11 +34,28 @@
   --c-surface-2:      #F8FAFC;
   --c-border:         #E2E8F0;
   --c-border-focus:   #1A56DB;
+  /* Error text for the boot-failure notice. The correct/incorrect and
+     callout status colours further down stay literal on purpose: they are
+     semantic signalling, not brand colour, and must read as red/green
+     whatever the skin. */
+  --c-danger:         #EF4444;
+
+  /* Corner radii. 0 = the square-cornered look this page ships with.
+     These three were previously forced to 0px at runtime by the
+     "radiusBase"/"radiusLg"/"radiusXl" keys in page.json, which
+     overrode the 14/20/28px defaults that used to sit here. That
+     injection is gone, so the shipped values are declared directly —
+     the rendered result is unchanged.
+       --radius     cards, callouts, stat cards, accordion
+       --radius-lg  media figure/image/placeholder/video, quiz, tabs
+       --radius-xl  the main .layout-card
+     --radius-xs / --radius-sm were never overridden and keep their
+     original values. */
   --radius-xs:        6px;
   --radius-sm:        10px;
-  --radius:           14px;
-  --radius-lg:        20px;
-  --radius-xl:        28px;
+  --radius:           0px;
+  --radius-lg:        0px;
+  --radius-xl:        0px;
   --font-body:        'DM Sans', system-ui, sans-serif;
   --font-heading:     'Manrope', 'DM Sans', sans-serif;
   --shadow-sm:        0 1px 4px rgba(15,23,42,0.06);
@@ -51,7 +78,28 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .skip-link { position: absolute; top: -200%; left: 1rem; z-index: 9999; background: var(--c-primary); color: #fff; padding: .5rem 1.2rem; border-radius: var(--radius-sm); font-weight: 700; font-size: .875rem; text-decoration: none; transition: top .2s; }
 .skip-link:focus { top: 1rem; }
 
-#page-shell { display: flex; flex-direction: column; min-height: 100vh; max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--page-h-pad); }
+/* Page background image.
+   Every visual property lives here; page.js supplies ONLY the filename, via
+   the --bg-image custom property. pointer-events:none keeps it from
+   intercepting any mouse or touch input, and z-index:0 keeps it behind the
+   shell without creating a stacking context that could trap the loader
+   (z-index 999) or the skip link (9999), both of which stay above it. */
+#backgroundLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--bg-image, none);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+#backgroundLayer[hidden] { display: none; }
+
+/* Lifts the content above #backgroundLayer. position:relative only
+   establishes the z-index; it changes no geometry, since #page-shell is
+   already a normal-flow block. */
+#page-shell { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--page-h-pad); }
 
 #page-header { padding: clamp(36px,6vh,64px) 0 clamp(20px,3vh,36px); }
 
@@ -229,6 +277,9 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 
 #page-loading { position: fixed; inset: 0; background: var(--c-bg); display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity .4s ease; }
 #page-loading.out { opacity: 0; pointer-events: none; }
+.boot-error { padding: 40px; text-align: center; color: var(--c-danger); }
+.boot-error code { font-size: .8rem; }
+
 .loader-ring { width: 42px; height: 42px; border: 3px solid var(--c-border); border-top-color: var(--c-primary); border-radius: 50%; animation: spin .75s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -282,6 +333,12 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 </head>
 <body>
 
+<!-- Page background image. Ships hidden and is switched on only when
+     page.json says background.visible is true AND supplies a filename, so a
+     missing or disabled config can never flash an empty layer. Decorative,
+     hence aria-hidden. -->
+<div id="backgroundLayer" aria-hidden="true" hidden></div>
+
 <a href="#page-main" class="skip-link">Skip to main content</a>
 <div id="sr-live" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="page-loading"><div class="loader-ring"></div></div>
@@ -307,42 +364,7 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 </div>
 
 <script id="page-config" type="application/json">
-{
-  "meta": { "pageId": "page_001", "lang": "en" },
-  "theme": {
-    "primary": "#1A56DB", "primaryDark": "#1341B0", "primaryLight": "#EBF2FF",
-    "accent": "#06B6D4", "text": "#0F172A", "text2": "#475569", "text3": "#94A3B8",
-    "bg": "#F1F5F9", "surface": "#FFFFFF", "surface2": "#F8FAFC", "border": "#E2E8F0",
-    "radiusBase": "14px", "radiusLg": "20px", "radiusXl": "28px"
-  },
-  "layout": {
-    "type": "image-left", "mediaRatio": "46%", "gap": "52px", "cardPadding": "52px", "maxWidth": "1120px"
-  },
-  "header": {
-    "visible": true, "eyebrow": "eLearning Module 01", "title": "The Future of Modular eLearning", "align": "left", "accentBar": true
-  },
-  "media": {
-    "visible": true, "type": "image", "src": "assets/hero.jpg",
-    "alt": "Futuristic conference room with blue geometric ceiling lights and a large display",
-    "caption": "", "aspectRatio": "4/3", "borderRadius": "16px"
-  },
-  "content": {
-    "visible": true, "heading": "Dynamic Layouts Driven by Data", "headingTag": "h2",
-    "body": "<p>This page demonstrates a fully modular architecture. Instead of hardcoding HTML templates, the entire structure is dictated by a single JSON configuration. The container automatically adapts to responsive screens.</p>",
-    "components": [{
-      "type": "feature-list",
-      "items": [
-        { "icon": "grid", "title": "Flexibility", "description": "Change layouts instantly using CSS flex-direction without altering HTML structure." },
-        { "icon": "code", "title": "Maintainability", "description": "A single responsive container handles all content variations safely." },
-        { "icon": "chart", "title": "Scalability", "description": "Ready to drop in videos, SCQs, MCQs, and interactive components." }
-      ]
-    }]
-  },
-  "navigation": {
-    "visible": true, "prevLabel": "", "prevHref": "", "nextLabel": "Continue to Next Module",
-    "nextHref": "#", "showProgress": true, "currentPage": 1, "totalPages": 5
-  }
-}
+
 </script>
 
 <script>
@@ -366,10 +388,42 @@ const IC = {
 const esc = s => typeof s === 'string' ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : String(s ?? '');
 const uid = () => Math.random().toString(36).slice(2, 8);
 
-function applyTheme(t = {}) {
-  const r = document.documentElement;
-  const map = { '--c-primary': t.primary, '--c-primary-dk': t.primaryDark, '--c-primary-lt': t.primaryLight, '--c-accent': t.accent, '--c-text': t.text, '--c-text-2': t.text2, '--c-text-3': t.text3, '--c-bg': t.bg, '--c-surface': t.surface, '--c-surface-2': t.surface2, '--c-border': t.border, '--radius': t.radiusBase, '--radius-lg': t.radiusLg, '--radius-xl': t.radiusXl };
-  Object.entries(map).forEach(([k, v]) => { if (v) r.style.setProperty(k, v); });
+/* Colours and radii are owned entirely by the :root block in <style> above.
+   No theme is read from JSON and none is injected here at runtime. */
+
+/* Background image.
+   JSON supplies the FILENAME ONLY - nothing here hardcodes an image name or
+   an on/off state, and no sizing, position, repeat, opacity or layering is
+   emitted; all of that is #backgroundLayer's job in the stylesheet.
+
+   Shown only when visible is exactly true AND a non-empty filename is
+   present, so `{"visible": true}` with no image, a missing `background`
+   block, or an older page.json without one all resolve to "off" instead of
+   loading `url(undefined)`.
+
+   The filename is relative to this document, which is what makes
+   "Background.png" resolve inside assets/html/customHTML/. encodeURI keeps
+   spaces and quotes in a filename from breaking out of the url() token. */
+function applyBackground(bg) {
+  const layer = document.getElementById('backgroundLayer');
+  if (!layer) return;
+
+  const cfg = bg || {};
+  const file = typeof cfg.image === 'string' ? cfg.image.trim() : '';
+  // Accept boolean true and the string "true" - configs in this package are
+  // hand-edited and sometimes quote their values. Everything else, including
+  // the string "false", counts as off, so a typo can never leave it stuck on.
+  const visible = cfg.visible === true ||
+    (typeof cfg.visible === 'string' && cfg.visible.trim().toLowerCase() === 'true');
+  const on = visible && file !== '';
+
+  if (on) {
+    layer.style.setProperty('--bg-image', `url("${encodeURI(file)}")`);
+    layer.hidden = false;
+  } else {
+    layer.style.removeProperty('--bg-image');
+    layer.hidden = true;
+  }
 }
 
 const LAYOUT_TYPES = ['image-left','image-right','top-image','bottom-image','full-content'];
@@ -426,17 +480,21 @@ function renderMedia(m = {}) {
   if (!panel) return;
   if (!m.visible) { panel.hidden = true; return; }
   panel.hidden = false;
-  const radius = m.borderRadius || '16px';
+  // aspectRatio is layout data and stays author-controlled from JSON.
+  // The corner radius is NOT emitted here any more - .media-figure,
+  // .media-placeholder and .media-video already carry
+  // `border-radius: var(--radius-lg)` in the stylesheet, which is now the
+  // only place it is defined.
   const aspect = m.aspectRatio || '4/3';
   if (m.type === 'image') {
     if (!m.src) {
-      panel.innerHTML = `<div class="media-placeholder" style="border-radius:${esc(radius)};aspect-ratio:${esc(aspect)};" role="img" aria-label="Image placeholder"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">${IC.img}</svg><span class="media-placeholder-text">assets/hero.jpg</span></div>`;
+      panel.innerHTML = `<div class="media-placeholder" style="aspect-ratio:${esc(aspect)};" role="img" aria-label="Image placeholder"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">${IC.img}</svg><span class="media-placeholder-text">assets/hero.jpg</span></div>`;
     } else {
-      panel.innerHTML = `<figure class="media-figure" style="border-radius:${esc(radius)};"><img class="media-img" src="${esc(m.src)}" alt="${esc(m.alt||'')}" style="aspect-ratio:${esc(aspect)};" loading="lazy" decoding="async"/>${m.caption ? '<figcaption class="media-caption">'+esc(m.caption)+'</figcaption>' : ''}</figure>`;
+      panel.innerHTML = `<figure class="media-figure"><img class="media-img" src="${esc(m.src)}" alt="${esc(m.alt||'')}" style="aspect-ratio:${esc(aspect)};" loading="lazy" decoding="async"/>${m.caption ? '<figcaption class="media-caption">'+esc(m.caption)+'</figcaption>' : ''}</figure>`;
     }
   } else if (m.type === 'video') {
     const isEmbed = /youtube|vimeo/.test(m.src || '');
-    panel.innerHTML = isEmbed ? `<div class="media-video" style="border-radius:${esc(radius)};"><iframe src="${esc(m.src)}" title="${esc(m.alt||'Video')}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div>` : `<div class="media-video" style="border-radius:${esc(radius)};"><video controls preload="metadata"><source src="${esc(m.src)}" type="video/mp4">Your browser does not support video.</video></div>`;
+    panel.innerHTML = isEmbed ? `<div class="media-video"><iframe src="${esc(m.src)}" title="${esc(m.alt||'Video')}" allow="accelerometer;autoplay;clipboard-write;encrypted-media;picture-in-picture" allowfullscreen></iframe></div>` : `<div class="media-video"><video controls preload="metadata"><source src="${esc(m.src)}" type="video/mp4">Your browser does not support video.</video></div>`;
   }
 }
 
@@ -566,7 +624,7 @@ window.switchTab = (id, idx) => {
   block.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
 };
 
-window.eLearning = { applyTheme, applyLayout, renderTitle, renderMedia, renderContent, renderNavigation, renderComponent };
+window.eLearning = { applyBackground, applyLayout, renderTitle, renderMedia, renderContent, renderNavigation, renderComponent };
 
 async function loadConfig() {
   // Prefer external JSON so authors can update content/layout without editing HTML.
@@ -590,7 +648,7 @@ async function loadConfig() {
 async function boot() {
   try {
     const cfg = await loadConfig();
-    applyTheme(cfg.theme || {});
+    applyBackground(cfg.background);
     applyLayout(cfg.layout || {});
     renderTitle(cfg.header || {});
     renderMedia(cfg.media || {});
@@ -601,7 +659,7 @@ async function boot() {
   } catch(err) {
     console.error('[eLearning] Boot error:', err);
     const main = document.getElementById('page-main');
-    if (main) main.innerHTML = `<div style="padding:40px;text-align:center;color:#EF4444"><strong>JSON Config Error</strong><br><code style="font-size:.8rem">${esc(err.message)}</code></div>`;
+    if (main) main.innerHTML = `<div class="boot-error"><strong>JSON Config Error</strong><br><code>${esc(err.message)}</code></div>`;
   }
   const loader = document.getElementById('page-loading');
   if (loader) { loader.classList.add('out'); setTimeout(() => loader.style.display='none', 450); }

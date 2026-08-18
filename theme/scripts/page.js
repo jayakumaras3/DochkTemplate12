@@ -4,6 +4,20 @@
  * Architecture: Pure Vanilla JS, zero dependencies.
  * Each function is single-responsibility and tree-shakeable.
  * JSON → DOM rendering pipeline.
+ * ------------------------------------------------------------
+ * LOCATION / PATHS
+ * This file lives in theme/scripts/. Its companion stylesheet is
+ * theme/css/page.css; the page it renders and that page's data
+ * stay in assets/html/customHTML/ (index.html + page.json).
+ *
+ * The relative paths below — fetch('page.json'), the image srcs
+ * that come out of page.json, and the background filename — are
+ * DELIBERATELY left document-relative. A relative URL in fetch()
+ * and in markup written into the DOM resolves against the HOST
+ * DOCUMENT, never against the location of this script, so they
+ * still point at assets/html/customHTML/ from here. Do not
+ * "correct" them to ../../assets/html/customHTML/... — that would
+ * break them.
  * ============================================================
  */
 
@@ -32,33 +46,47 @@ async function loadPageData(jsonPath = PAGE_JSON_PATH) {
   return data;
 }
 
-/* ── 2. Theme Applier ────────────────────────────────────── */
-function applyTheme(theme = {}) {
-  const root = document.documentElement;
-  const map = {
-    '--color-primary':        theme.primaryColor,
-    '--color-primary-dark':   theme.primaryColorDark,
-    '--color-primary-light':  theme.primaryColorLight,
-    '--color-accent':         theme.accentColor,
-    '--color-text-primary':   theme.textPrimary,
-    '--color-text-secondary': theme.textSecondary,
-    '--color-text-muted':     theme.textMuted,
-    '--color-bg-page':        theme.bgPage,
-    '--color-bg-card':        theme.bgCard,
-    '--color-bg-card-hover':  theme.bgCardHover,
-    '--color-border':         theme.borderColor,
-    '--radius':               theme.borderRadius,
-    '--radius-sm':            theme.borderRadiusSm,
-    '--radius-lg':            theme.borderRadiusLg,
-    '--font-body':            theme.fontFamily,
-    '--font-heading':         theme.fontFamilyHeading,
-    '--shadow-sm':            theme.shadowSm,
-    '--shadow-md':            theme.shadowMd,
-    '--shadow-lg':            theme.shadowLg,
-  };
-  Object.entries(map).forEach(([prop, val]) => {
-    if (val) root.style.setProperty(prop, val);
-  });
+/* ── 2. Theme ────────────────────────────────────────────────
+   Intentionally absent. Colours, radii, fonts and shadows are owned
+   entirely by the :root block in page.css. This renderer reads no
+   colour from JSON, defines no colour fallback, and emits no inline
+   colour style. To re-skin the page, edit page.css.
+   ─────────────────────────────────────────────────────────── */
+
+/* ── 2a. Background Image Applier ────────────────────────────
+   JSON supplies the FILENAME ONLY. Nothing here hardcodes an image name or
+   an on/off state, and no sizing, position, repeat, opacity or layering is
+   emitted - all of that belongs to #backgroundLayer in page.css.
+
+   Shown only when visible is exactly true AND a non-empty filename is
+   present, so `{"visible": true}` with no image, a missing `background`
+   block, or an older page.json without one all resolve to "off" rather than
+   loading `url(undefined)`.
+
+   The filename resolves relative to the host document, which is what makes
+   "Background.png" load from this folder. encodeURI keeps spaces and quotes
+   in a filename from breaking out of the url() token.
+   ─────────────────────────────────────────────────────────── */
+function applyBackground(background) {
+  const layer = document.getElementById('backgroundLayer');
+  if (!layer) return;
+
+  const cfg = background || {};
+  const file = typeof cfg.image === 'string' ? cfg.image.trim() : '';
+  // Accept boolean true and the string "true" - configs in this package are
+  // hand-edited and sometimes quote their values. Everything else, including
+  // the string "false", counts as off, so a typo can never leave it stuck on.
+  const visible = cfg.visible === true ||
+    (typeof cfg.visible === 'string' && cfg.visible.trim().toLowerCase() === 'true');
+  const enabled = visible && file !== '';
+
+  if (enabled) {
+    layer.style.setProperty('--bg-image', `url("${encodeURI(file)}")`);
+    layer.hidden = false;
+  } else {
+    layer.style.removeProperty('--bg-image');
+    layer.hidden = true;
+  }
 }
 
 /* ── 3. Layout Applier ───────────────────────────────────── */
@@ -76,7 +104,8 @@ function renderLayout(layout = {}) {
   root.style.setProperty('--layout-media-ratio',    layout.mediaRatio    || '45%');
   root.style.setProperty('--layout-content-ratio',  layout.contentRatio  || '55%');
   root.style.setProperty('--layout-gap',            layout.gap           || '48px');
-  root.style.setProperty('--layout-padding',        layout.padding       || '48px');
+  // page.json supplies "cardPadding"; "padding" is kept as a legacy alias.
+  root.style.setProperty('--layout-padding',        layout.cardPadding   || layout.padding || '48px');
   root.style.setProperty('--layout-max-width',      layout.maxWidth      || '1100px');
 }
 
@@ -91,7 +120,8 @@ function renderTitle(header = {}) {
     return;
   }
 
-  const align = header.titleAlignment || 'left';
+  // page.json supplies "align"; "titleAlignment" is kept as a legacy alias.
+  const align = header.align || header.titleAlignment || 'left';
   el.textContent = header.title || '';
   el.className = `page-title page-title--${align} animate-in`;
 
@@ -117,15 +147,18 @@ function renderMedia(media = {}) {
   let html = '';
 
   if (media.type === 'image') {
-    const radius = media.borderRadius || 'var(--radius)';
-    const aspect = media.aspectRatio  || '4/3';
+    // aspectRatio is layout data and stays author-controlled from JSON.
+    // The corner radius is NOT emitted here - .media-figure and
+    // .media-image carry `border-radius: var(--radius)` in page.css,
+    // which is now the only place it is defined.
+    const aspect = media.aspectRatio || '4/3';
     html = `
       <figure class="media-figure animate-in" role="img" aria-label="${escapeHtml(media.alt || '')}">
         <img
           class="media-image"
           src="${escapeHtml(media.src || '')}"
           alt="${escapeHtml(media.alt || '')}"
-          style="border-radius:${radius}; aspect-ratio:${aspect};"
+          style="aspect-ratio:${aspect};"
           loading="lazy"
           decoding="async"
           onerror="this.onerror=null;this.src='assets/placeholder.svg';"
@@ -438,8 +471,8 @@ async function initPage() {
   try {
     const data = await loadPageData();
 
-    // Apply theme & layout first (no reflow later)
-    applyTheme(data.theme || {});
+    // Apply background & layout first (no reflow later). Theme comes from page.css.
+    applyBackground(data.background);
     renderLayout(data.layout || {});
 
     // Render sections
@@ -472,7 +505,7 @@ if (document.readyState === 'loading') {
 /* ── Public API (for future extension / AI orchestration) ── */
 window.eLearning = {
   loadPageData,
-  applyTheme,
+  applyBackground,
   renderLayout,
   renderTitle,
   renderMedia,

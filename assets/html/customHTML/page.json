@@ -4,36 +4,19 @@
     "lang": "en"
   },
 
-  "theme": {
-    "primary":      "#1A56DB",
-    "primaryDark":  "#1341B0",
-    "primaryLight": "#EBF2FF",
-    "accent":       "#06B6D4",
-    "text":         "#0F172A",
-    "text2":        "#475569",
-    "text3":        "#94A3B8",
-    "bg":           "#F1F5F9",
-    "surface":      "#FFFFFF",
-    "surface2":     "#F8FAFC",
-    "border":       "#E2E8F0",
-    "radiusBase":   "0px",
-    "radiusLg":     "0px",
-    "radiusXl":     "0px"
-  },
-
   "layout": {
     "type":         "image-left",
-    "mediaRatio":   "46%",
-    "contentRatio": "54%",
+    "mediaRatio":   "50%",
+    "contentRatio": "50%",
     "gap":          "52px",
     "cardPadding":  "52px",
     "maxWidth":     "1120px"
   },
 
   "header": {
-    "visible":    false,
+    "visible":    true,
     "eyebrow":    "",
-    "title":      "The Future of Modular eLearning",
+    "title":      "The Future of Modular eLearning 1",
     "align":      "left",
     "accentBar":  true
   },
@@ -42,10 +25,9 @@
     "visible":      true,
     "type":         "image",
     "src":          "hero.png",
-    "alt":          "Futuristic conference room with blue geometric ceiling lights and a large display",
+    "alt":          "1 Futuristic conference room with blue geometric ceiling lights and a large display",
     "caption":      "",
-    "aspectRatio":  "4/3",
-    "borderRadius": "0px"
+    "aspectRatio":  "4/3"
   },
 
   "content": {
@@ -60,21 +42,26 @@
           {
             "icon": "grid",
             "title": "Flexibility",
-            "description": "Change layouts instantly (image-left, top-image) using CSS flex-direction without altering HTML structure."
+            "description": "1 Change layouts instantly (image-left, top-image) using CSS flex-direction without altering HTML structure."
           },
           {
             "icon": "code",
             "title": "Maintainability",
-            "description": "A single responsive container handles all content variations safely. Easy for AI to generate."
+            "description": "1 A single responsive container handles all content variations safely. Easy for AI to generate."
           },
           {
             "icon": "chart",
             "title": "Scalability",
-            "description": "Ready to drop in videos, SCQs, MCQs, drag-and-drop interactions, and interactive tab components."
+            "description": "1 Ready to drop in videos, SCQs, MCQs, drag-and-drop interactions, and interactive tab components."
           }
         ]
       }
     ]
+  },
+
+  "background": {
+    "visible": true,
+    "image":   "Background.png"
   },
 
   "navigation": {
