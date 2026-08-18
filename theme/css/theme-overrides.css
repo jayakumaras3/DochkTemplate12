@@ -1,0 +1,577 @@
+/* ==========================================================================
+   theme-overrides.css
+   COMMON THEME LAYER — the final visual colour layer for this template.
+
+   WHAT THIS FILE IS
+   -----------------
+   Every UI theme colour in the template is expressed here, in terms of the
+   generic tokens declared in the first block. To re-brand the course for a
+   different client, edit ONLY the "COMMON THEME VARIABLES" block below.
+   Nothing else in this file, and no other stylesheet, needs to change.
+
+   The token names are deliberately brand-neutral (--theme-primary, not
+   --<client>-green) so the same file ships unchanged to every client.
+
+   WHAT THIS FILE IS NOT
+   ---------------------
+   It is a COLOUR layer only. It declares no geometry: no width, height,
+   margin, padding, position, display, flex, grid, gap, font, line-height,
+   border-radius, transform, transition, animation, z-index or overflow, and
+   it adds no media queries of its own. Layout and responsive behaviour come
+   from the existing stylesheets and are untouched.
+
+   Borders are only ever restyled with the `border-color` longhand (never the
+   `border` shorthand) so border-width and border-style stay as authored.
+
+   LOAD ORDER (must be LAST in every document)
+   -------------------------------------------
+     index.html .................. bootstrap -> sideBar -> content -> footer
+                                   -> custom -> mobile -> toc -> Color
+                                   -> THIS FILE
+     SCQ/MCQ/Quiz.html ........... <type>_style -> Color -> QuestionOptions
+                                   -> THIS FILE
+     assets/Quiz/<id>/index.html . (inline <style> only) -> THIS FILE
+
+   CSS custom properties are resolved at computed-value time, after the
+   cascade has picked the winning declaration. A token redefined here
+   therefore reaches every var() consumer in the earlier stylesheets — even
+   consumers marked !important. That is why most of this file is token
+   re-pointing rather than per-selector overrides, and why almost none of it
+   needs !important.
+
+   Custom properties do NOT cross iframe or window boundaries. The quiz
+   templates run in nested iframes, so this file must be linked in each of
+   those documents separately — see LOAD ORDER above.
+
+   DELIBERATELY NOT THEMED
+   -----------------------
+   - Pass/fail and correct/incorrect signalling. These must stay semantically
+     green/red for every brand:
+       Color.css      .Correct_CR (#0c7d42), .Incorrect_CR (#c23d5d)
+       SCQ/MCQ_style  .correct (#01600C), .incorrect (#870D0D)
+       QuestionOptions.css .tickSymbol::before (green #28A745 tick)
+     Note .incorrect's #870D0D is byte-identical to the old --quiz-accent,
+     so never re-brand these by search-and-replacing the hex.
+   - Logos and artwork: theme/images/logo.svg is the brand mark itself.
+   - Video letterbox mats (#vidArea, .quiz-video-panel .VideoQuestion) —
+     black is correct for video regardless of brand.
+   - Disabled/locked greys, scrim and shadow colours — neutral chrome.
+   - Footer navigation icons: they are PNG/SVG background-image assets, so
+     their colour lives in the asset and CSS cannot reach it. Re-branding
+     those requires new artwork, not a stylesheet change.
+   ========================================================================== */
+
+
+/* =========================================
+   COMMON THEME VARIABLES
+   ---------------------------------------
+   THE ONLY BLOCK YOU EDIT TO RE-BRAND.
+   ========================================= */
+/*
+:root {
+    --theme-primary: #006366;
+    --theme-primary-hover: #005356;
+
+    --theme-secondary: #00A0A5;
+    --theme-secondary-light: #B8ECEA;
+
+    --theme-white: #FFFFFF;
+
+    --theme-text: #1E1E1E;
+    --theme-text-secondary: #666666;
+
+    --theme-border: #D9D9D9;
+
+    --theme-background: #FFFFFF;
+
+  
+    --theme-hover-bg: rgba(0, 99, 102, 0.04);
+    --theme-selected-bg: rgba(0, 160, 165, 0.06);
+}*/
+:root {
+    --theme-primary: #005E80;
+    --theme-primary-hover: #004D6A;
+
+    --theme-secondary: #0088BB;
+    --theme-secondary-light: #ACD2DF;
+
+    --theme-white: #FFFFFF;
+
+    --theme-text: #07142A;
+    --theme-text-secondary: #637083;
+
+    --theme-border: #D9D9D9;
+
+    --theme-background: #FFFFFF;
+
+    /* Derived tints. These are literal rgba() because a colour channel
+       cannot be interpolated out of a hex custom property in CSS that is
+       safe for the older browsers an LMS may host. If you change
+       --theme-primary / --theme-secondary above, update these two to match:
+         --theme-hover-bg    = --theme-primary   at 4% alpha
+         --theme-selected-bg = --theme-secondary at 6% alpha */
+    --theme-hover-bg: rgba(0, 94, 128, 0.04);
+    --theme-selected-bg: rgba(0, 136, 187, 0.06);
+}
+
+/* =========================================
+   EXISTING TOKEN SYSTEMS — RE-POINTED
+   ---------------------------------------
+   The template already ships three custom-property systems. Rather than
+   duplicating their consumers, each token is re-pointed at a --theme-*
+   value. This is what makes one edit above reach the whole template.
+   Custom-property definitions must NEVER carry !important: a plain
+   definition already wins here on source order, and !important would
+   freeze the value against any future per-page override.
+   ========================================= */
+
+/* --- 1. Shell tokens (theme/css/Color.css:2-13) ------------------------- */
+:root {
+    --brand: var(--theme-primary);
+    --brand-hover: var(--theme-primary-hover);
+    --accent: var(--theme-secondary);
+
+    --surface: var(--theme-white);
+    --surface-soft: var(--theme-background);
+    --app-bg: var(--theme-background);
+
+    --text: var(--theme-text);
+    --text-soft: var(--theme-text-secondary);
+    --muted: var(--theme-text-secondary);
+
+    --line: var(--theme-border);
+    --line-soft: var(--theme-border);
+}
+
+/* --- 2. Question-template tokens ---------------------------------------
+   Declared in :root by Quiz_style.css:474, SCQ_style.css:249 and
+   MCQ_style.css:250. SCQ/MCQ still carried #870D0D here from an older
+   red-branded build; all three now resolve to the same theme colour, so the
+   instruction line reads identically across SCQ, MCQ and Quiz.
+   --quiz-surface / --quiz-shadow are left alone: white card + neutral drop
+   shadow, not brand colours. */
+:root {
+    --quiz-accent: var(--theme-primary);
+    --quiz-accent-dark: var(--theme-primary-hover);
+    --quiz-accent-soft: var(--theme-secondary-light);
+    --quiz-accent-border: var(--theme-border);
+
+    /* Quiz_style.css:1223 — image caption, media focus ring, video card. */
+    --media-accent: var(--theme-primary);
+}
+
+/* --- 3. Menu tokens (theme/css/Color.css:2242-2249) ---------------------
+   Must be redefined on #Tmenu.sideBar, not :root: a custom property set on
+   an ancestor element beats an inherited :root value inside that subtree.
+   Re-pointing these four rebrands the ~25 !important declarations in the
+   "MENU (sidebar) UI REFRESH" block without this file using !important.
+
+   --menu-tab-idle, --menu-tab-idle-line, --menu-row-text and --menu-icon
+   are intentionally left at their existing values: they are the neutral
+   inactive-row styling, which stays neutral across brands. */
+#Tmenu.sideBar {
+    --menu-brand: var(--theme-primary);
+    --menu-brand-dark: var(--theme-primary-hover);
+    --menu-active-bg: var(--theme-secondary-light);
+    --menu-line: var(--theme-border);
+}
+
+
+/* =========================================
+   GLOBAL THEME COLORS
+   ========================================= */
+
+/* Links. bootstrap.css:1099/1103 supplies the effective link colour in the
+   shell (#337ab7 / #23527c). Equal specificity, later file, so no
+   !important needed. */
+a {
+    color: var(--theme-primary);
+}
+
+a:hover,
+a:focus {
+    color: var(--theme-primary-hover);
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+/* Title and page counter were deliberately set to #000000 (see the comment
+   at Color.css:186-187) rather than the muted token. That decision is kept:
+   they are only routed through --theme-text so the value is centralized,
+   not turned into a brand colour. */
+.pageHeaderText,
+#pagenoHeader {
+    color: var(--theme-text);
+}
+
+.breadcrumbDivider {
+    color: var(--theme-text-secondary);
+}
+
+/* Exit button hover wash (Color.css:219). */
+#exitCourseBtn:hover {
+    background: var(--theme-hover-bg);
+}
+
+
+/* =========================================
+   MENU (sidebar)
+   ---------------------------------------
+   Only the hard-coded literals inside the live "#Tmenu.sideBar" block are
+   listed here; everything else in that block already flows through the
+   --menu-* tokens re-pointed above.
+
+   Selectors are copied verbatim from Color.css because that block is
+   ID-heavy and !important throughout — a simplified selector would silently
+   lose. !important is repeated ONLY where the original declaration has it.
+
+   The older .sideBar / #tocData rules earlier in Color.css (lines 445-604
+   and 1700-1740) are dead for the shipped menu: the panel is #Tmenu, and
+   the later #Tmenu.sideBar rules outrank them on specificity. They are
+   deliberately not overridden.
+   ========================================= */
+
+#Tmenu.sideBar {
+    background: var(--theme-white) !important;
+    border-right-color: var(--theme-border) !important;
+}
+
+#Tmenu.sideBar #sideBarHeader {
+    background: var(--theme-white) !important;
+}
+
+/* Idle tab hover (Color.css:2379 and :2418). */
+#Tmenu.sideBar #sideBarHeader > #toc_id:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id:hover {
+    background: var(--theme-secondary-light) !important;
+}
+
+#Tmenu.sideBar #sideBarHeader > #toc_id[aria-selected="false"]:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id[aria-selected="false"]:hover {
+    background: var(--theme-secondary-light) !important;
+}
+
+/* Active tab label (Color.css:2391 / :2404). */
+#Tmenu.sideBar #sideBarHeader > #toc_id.tocclickedclscss,
+#Tmenu.sideBar #sideBarHeader > #trans_id.tocclickedclscss {
+    color: var(--theme-white) !important;
+}
+
+#Tmenu.sideBar #sideBarHeader > #toc_id.tocclickedclscss:hover,
+#Tmenu.sideBar #sideBarHeader > #trans_id.tocclickedclscss:hover {
+    color: var(--theme-white) !important;
+}
+
+/* Row hover wash (Color.css:2604). Active row background, active text and
+   active icon all come from --menu-active-bg / --menu-brand already. */
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item:hover {
+    background: var(--theme-hover-bg);
+}
+
+/* Visited row text (Color.css:2639) — neutral, centralized only. */
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item.visitedTOC {
+    color: var(--theme-text-secondary);
+}
+
+/* Completion tick glyph sits on --menu-brand; only the glyph colour is
+   literal (Color.css:2694). */
+#Tmenu.sideBar #tocData > span > p.tickSymbol,
+#Tmenu.sideBar #tocData > span > p.tickSymbol1 {
+    color: var(--theme-white) !important;
+}
+
+/* Menu footer (Color.css:2724-2726). */
+#Tmenu.sideBar .copyright {
+    color: var(--theme-text-secondary) !important;
+    background: var(--theme-white) !important;
+    border-top-color: var(--theme-border) !important;
+}
+
+/* Tablet/mobile drawer card (Color.css:2784-2785). Colour only — the
+   breakpoint, geometry and radius stay in Color.css. */
+@media (max-width: 1024px) {
+    #Tmenu.sideBar {
+        background: var(--theme-white) !important;
+        border-color: var(--theme-border) !important;
+    }
+}
+
+
+/* =========================================
+   TRANSCRIPT
+   ---------------------------------------
+   The Transcript tab shares the tab rules above with the Menu tab, so its
+   active treatment is split out here to carry the accent instead of the
+   primary. Same selector shape and !important as Color.css:2389/2400, so it
+   wins on source order.
+   ========================================= */
+
+#Tmenu.sideBar #sideBarHeader > #trans_id.tocclickedclscss {
+    background: var(--theme-secondary) !important;
+    border-color: var(--theme-secondary) !important;
+    color: var(--theme-white) !important;
+}
+
+#Tmenu.sideBar #sideBarHeader > #trans_id.tocclickedclscss:hover {
+    background: var(--theme-primary) !important;
+    border-color: var(--theme-primary) !important;
+    color: var(--theme-white) !important;
+}
+
+/* Transcript panel body text (Color.css:2758). */
+#Tmenu.sideBar .transcriptClass {
+    color: var(--theme-text);
+}
+
+
+/* =========================================
+   FOOTER
+   ---------------------------------------
+   The footer's prev/next/menu/audio/exit controls are background-image
+   assets and cannot be recoloured from CSS — see the header note.
+   ========================================= */
+
+.footer {
+    background-color: var(--theme-white);
+}
+
+/* footer.css:198-201. border-color longhand only, so the 2px width stays. */
+.navCircleHighlight {
+    background-color: var(--theme-secondary-light);
+    border-color: var(--theme-primary) !important;
+}
+
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+
+/* .ColorSet_CR is the template's shared "brand background" utility. It is
+   applied to the resume dialog header, the resume Yes/No buttons, and the
+   quiz Start/Retry buttons (see quiz.js). Color.css:978. */
+.ColorSet_CR {
+    background-color: var(--theme-primary);
+}
+
+.ColorSet_CR:hover {
+    background-color: var(--theme-primary-hover);
+}
+
+/* Shared action buttons for SCQ, MCQ and Quiz — Submit, Start, Retry.
+   QuestionOptions.css:201-239. background-color longhand (not the
+   `background` shorthand) so nothing else in that rule is disturbed, and
+   the border-radius:7px !important it sets is left strictly alone. */
+.btn,
+#submitBtn,
+.Startpagebtn,
+.retrybtn {
+    background-color: var(--theme-primary);
+    color: var(--theme-white);
+}
+
+.btn:hover,
+#submitBtn:hover,
+.Startpagebtn:hover,
+.retrybtn:hover {
+    background-color: var(--theme-primary-hover);
+    color: var(--theme-white);
+}
+
+/* Resume dialog Yes/No. These carry bootstrap's .btn-default, whose
+   :hover/:focus/:active rules (bootstrap.css:3063-3092, specificity up to
+   0,3,0) outrank .ColorSet_CR (0,1,0) and would flip the buttons to grey on
+   hover, keyboard focus and press. Scoping to #resumeArea clears that
+   without !important. */
+#resumeArea .btn-default:hover,
+#resumeArea .btn-default:focus,
+#resumeArea .btn-default.focus,
+#resumeArea .btn-default:active,
+#resumeArea .btn-default:active:hover,
+#resumeArea .btn-default:active:focus {
+    background-color: var(--theme-primary-hover);
+    border-color: var(--theme-primary-hover);
+    color: var(--theme-white);
+}
+
+
+/* =========================================
+   SCQ / MCQ / QUIZ
+   ---------------------------------------
+   All three templates share one option skin (QuestionOptions.css), so these
+   rules theme SCQ, MCQ and the mixed Quiz at once — including the pages the
+   TOC labels "Knowledge Check", which render through the ordinary SCQ/MCQ
+   templates rather than a component of their own.
+
+   The hover and selected selectors are reproduced VERBATIM from
+   QuestionOptions.css:83-96. The html:not(.is-touch-device) guard and the
+   :not(.no-pointer) qualifier are load-bearing: dropping the touch guard
+   re-introduces WebKit's sticky :hover on iOS, where a tapped option stays
+   highlighted and reads as a pre-selected answer on the next question.
+   ========================================= */
+
+/* Option card ground and border. */
+.answer {
+    background: var(--theme-white);
+    border-color: var(--theme-border);
+}
+
+.answer label {
+    color: var(--theme-text);
+}
+
+/* Hover — kept visually lighter than the selected state below so a hovered
+   row can never be mistaken for the actual selection. */
+html:not(.is-touch-device) .answer:not(.no-pointer):hover {
+    background: var(--theme-hover-bg);
+    border-color: var(--theme-primary);
+}
+
+/* Selected. The inset shadow reads as a 2px border without changing the
+   row height, which is why it is a shadow and not a border here. */
+.answer[aria-checked="true"],
+html:not(.is-touch-device) .answer[aria-checked="true"]:not(.no-pointer):hover,
+.highlight {
+    background: var(--theme-selected-bg);
+    box-shadow: inset 0 0 0 1px var(--theme-secondary);
+}
+
+.answer[aria-checked="true"] label {
+    color: var(--theme-text);
+}
+
+/* Radio: native control, tinted via accent-color. */
+input.radioBut,
+input.checkbox {
+    accent-color: var(--theme-secondary);
+}
+
+/* Checkbox: custom-drawn. background-color and border-color LONGHANDS only —
+   the `background` shorthand would reset background-image and erase the
+   white tick glyph baked into the data: URI at QuestionOptions.css:164,
+   leaving a solid coloured box. The tick itself stays white, so the data
+   URI needs no change. */
+input.checkbox {
+    background-color: var(--theme-white);
+}
+
+input.checkbox:checked {
+    background-color: var(--theme-secondary);
+    border-color: var(--theme-secondary);
+}
+
+
+/* =========================================
+   ASSESSMENT / QUIZ CHROME
+   ---------------------------------------
+   Instruction text (.instext / #inste) and the results heading already
+   resolve through --brand and --quiz-accent, re-pointed above.
+   ========================================= */
+
+/* Assessment / quiz start-page heading (Quiz_style.css:658). */
+.headerAss {
+    color: var(--theme-primary);
+}
+
+
+/* =========================================
+   RESOURCE MODAL
+   ---------------------------------------
+   Color.css:888 and :901 re-declare the item colour with !important at the
+   same specificity as content.css, so these two need !important back. The
+   border, hover border and icon colours below are clean and win on order.
+   ========================================= */
+
+.resource-modal-item {
+    color: var(--theme-text) !important;
+}
+
+.resource-modal-item:hover {
+    color: var(--theme-text) !important;
+    border-color: var(--theme-primary);
+}
+
+.resource-modal-icon-brand,
+.resource-item-icon,
+.resource-item-arrow {
+    color: var(--theme-primary);
+}
+
+/* "Click Next to continue" pill (Color.css:725-729). */
+#spanCliContinue {
+    background: var(--theme-primary);
+    color: var(--theme-white);
+}
+
+
+/* =========================================
+   LOADERS
+   ---------------------------------------
+   The shell's splash lives in an inline <style> in index.html that the
+   parser re-parents into <head> AFTER Color.css. Rather than depend on
+   where this file's <link> lands relative to that block, each rule is
+   anchored to the #courseLoader / #quizInlineLoader id so it wins on
+   specificity regardless of order.
+   ========================================= */
+
+#courseLoader {
+    background: var(--theme-background);
+}
+
+#courseLoader .loader-card {
+    background: var(--theme-background);
+    border-color: var(--theme-secondary-light);
+}
+
+#courseLoader .touchstone-spinner .track {
+    stroke: var(--theme-secondary-light);
+}
+
+#courseLoader .touchstone-spinner .arc {
+    stroke: var(--theme-primary);
+}
+
+#courseLoader .loader-text {
+    color: var(--theme-primary);
+}
+
+/* Per-quiz shell spinner (assets/Quiz/<id>/index.html). */
+#quizInlineLoader {
+    background: var(--theme-background);
+}
+
+#quizInlineLoader .quiz-inline-spinner .track {
+    stroke: var(--theme-secondary-light);
+}
+
+#quizInlineLoader .quiz-inline-spinner .arc {
+    stroke: var(--theme-primary);
+}
+
+
+/* =========================================
+   ACCESSIBILITY / FOCUS
+   ---------------------------------------
+   Focus indicators are re-coloured, never removed. Widths and offsets are
+   left exactly as authored so the ring keeps its measured size.
+   ========================================= */
+
+.answer:focus-visible {
+    outline-color: var(--theme-secondary);
+}
+
+input.radioBut:focus-visible,
+input.checkbox:focus-visible {
+    outline-color: var(--theme-secondary);
+}
+
+#Tmenu.sideBar #tocData > span > li > span.toc-row-item:focus-visible {
+    outline-color: var(--theme-primary);
+}
+
+.quiz-image-panel .ImageQuestion:focus-visible,
+.quiz-image-panel-caption:focus-visible {
+    outline-color: var(--theme-primary);
+}

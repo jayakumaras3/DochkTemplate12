@@ -16,7 +16,7 @@
         "module": 0,
         "preloader": [
           {
-            "src": "assets/html/4926/Screen_01.html",
+            "src": "assets/html/4926/index.html",
             "id": "Screen_01.html"
           },
           {
@@ -27,7 +27,7 @@
         "content": [
           {
             "type": "captivate",
-            "path": "assets/html/4926/Screen_01.html",
+            "path": "assets/html/4926/index.html",
             "functionName": "captivate"
           }
         ]

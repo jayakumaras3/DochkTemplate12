@@ -3,6 +3,6 @@
 <!--This is a version 1.2.2 SCORM 1.2 Sequencer Model-->
 <navigation default="pipwerks">
   <manifest_last_modified>1786427876169</manifest_last_modified>
-  <item id="SCORM12_wrapper_test" organization="pipwerks">failed</item>
+  <item id="SCORM12_wrapper_test" organization="pipwerks">incomplete</item>
 </navigation>
 
