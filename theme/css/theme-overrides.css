@@ -84,7 +84,9 @@
 
     --theme-background: #FFFFFF;
 
-  
+    --theme-header-bg: #FFFFFF;
+    --theme-footer-bg: #FFFFFF;
+
     --theme-hover-bg: rgba(0, 99, 102, 0.04);
     --theme-selected-bg: rgba(0, 160, 165, 0.06);
 }*/
@@ -103,6 +105,12 @@
     --theme-border: #D9D9D9;
 
     --theme-background: #FFFFFF;
+
+    /* Chrome bars. Separate from --theme-background so the top header and
+       the bottom navigation bar can be tinted independently of the page
+       ground (and of each other) without touching anything else. */
+    --theme-header-bg: #FFFFFF;
+    --theme-footer-bg: #FFFFFF;
 
     /* Derived tints. These are literal rgba() because a colour channel
        cannot be interpolated out of a hex custom property in CSS that is
