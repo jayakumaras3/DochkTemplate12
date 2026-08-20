@@ -125,6 +125,10 @@ document.addEventListener("DOMContentLoaded", function() {
 		parent.parent.QuizAttemptLimit = parent.QuizAttempt;
 		QuizMode = parent.QuizMode;
 		PostAttemptType = parent.PostAttemptType;
+		// Shared mechanism (theme/scripts/backgroundLayer.js, loaded in Quiz.html's
+		// <head>) - same function SCQ/MCQ/Custom HTML use. Called once here, not
+		// per-question, since the config never changes across a quiz session.
+		if (typeof applyBackground === 'function') applyBackground(parent.background);
 		quizContainer.classList.add('quiz-start-view');
 		parentquizContainer.style.display = 'none';
 		applyMobileScrollFix();

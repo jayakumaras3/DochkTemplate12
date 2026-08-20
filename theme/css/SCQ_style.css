@@ -280,7 +280,13 @@ body {
    below it. .questionContainer keeps its own border - this frame was
    redundant with it. Matches Quiz_style.css, which already does this. */
 #quizContainer {
-    background: #ffffff;
+    /* Transparent, not white: .questionContainer below already paints its
+       own complete card (background/border/border-radius/box-shadow). This
+       outer box is just a positioning wrapper, so any leftover space
+       inside it (padding, or unfilled flex space above/below the card)
+       shows the shared #backgroundLayer image through instead of a solid
+       colour with no image behind it. */
+    background: transparent;
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -542,13 +548,26 @@ body {
 html:not(.is-touch-device) body {
     padding-top: var(--outer-header-overlap, 0px);
     padding-bottom: var(--outer-footer-overlap, 0px);
-    /* Anchor the flex column to the top so the now content-sized
-       #quizContainer (flex:0 0 auto below) sits directly under the header
-       instead of being vertically centered by the legacy
-       body{justify-content:center}. Inert before this change (flex:1 filled
-       the column, leaving nothing to distribute); mirrors the same
-       top-anchor already proven on the Quiz.html/Mixed template. */
+}
+
+/* Centers the (now content-sized, flex:0 0 auto below) #quizContainer group
+   within the available height, so the shared page-background layer
+   (#backgroundLayer, QuestionOptions.css) shows above AND below a short
+   question instead of only below it. Universal (touch included, not
+   scoped to html:not(.is-touch-device) - unlike the padding rule above,
+   which stays desktop-only since touch uses a different chrome-clearance
+   margin instead): `safe center` centers when there is room, and
+   automatically falls back to start-alignment whenever centering would
+   push any part of the content out of view, so a question taller than the
+   viewport can never be stranded off-screen with no way to scroll back to
+   it - the exact risk plain `center` would reintroduce. flex-start is
+   declared first as the fallback for browsers that don't yet recognise the
+   `safe` keyword: an unsupported value makes that whole declaration
+   invalid and it is dropped, leaving flex-start (today's existing
+   behaviour, not a regression) rather than unsafe plain centering. */
+html body {
     justify-content: flex-start;
+    justify-content: safe center;
 }
 
 @media (min-width: 901px) {
@@ -599,14 +618,18 @@ html:not(.is-touch-device) body {
 
 
 /* ---------------------------------------------------------------
-   Empty page area must be white.
+   Empty page area: shared background image when one is configured,
+   otherwise white.
    This template links Color.css AFTER this file, and Color.css's
-   `body { background: var(--app-bg) }` (#f3f4f6) therefore beat the
+   `body { background: var(--app-bg) }` (#f3f4f6) would otherwise beat the
    `body { background-color: #ffffff }` declared above at equal
-   specificity, painting the unused space below the question card
-   grey. `html body` (0,0,2) outranks `body` (0,0,1) so it wins
-   regardless of load order. Background only - no layout, no logic.
-   --------------------------------------------------------------- */
+   specificity, painting the unused space around the question card grey.
+   `html body` (0,0,2) outranks `body` (0,0,1) so it wins regardless of
+   load order. Plain white, not var(--bg-image): #backgroundLayer
+   (position:fixed, painted above this as a positioned/z-index:1+ sibling
+   stack - see QuestionOptions.css) is the single active background layer;
+   duplicating the image here would just be a second layer painting the
+   same pixels underneath it. */
 html body {
     background: #ffffff;
 }

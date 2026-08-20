@@ -2,6 +2,9 @@
   "quizButton": "Submit",
   "AlertText": "Please select an answer.",
   "Questiontext": "<i>Select the correct answers and click <b>Submit.</b></i>",
+  "background": {
+    "visible": false
+  },
   "question": {
     "question": "What are the advantages of having neurodiverse employees on your team?",
     "options": [

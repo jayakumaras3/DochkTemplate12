@@ -33,6 +33,11 @@ document.addEventListener("DOMContentLoaded", function() {
     function loadQuestion() {
         if (parent.hideShellSpinner) parent.hideShellSpinner();
 		console.log(" "+parent.mainData.quizButton);
+		// Shared mechanism (theme/scripts/backgroundLayer.js, loaded in SCQ.html's
+		// <head>) - same function MCQ/Quiz/Custom HTML use. "background" is a
+		// top-level key in question.json, sibling to quizButton/AlertText, so it
+		// comes through on parent.mainData like everything else read here.
+		if (typeof applyBackground === 'function') applyBackground(parent.mainData.background);
         questionData = parent.mainData.question;
         attemptsLeft = questionData.attempts || 2; // Get attempts from JSON or default to 2
         const backgroundImage = questionData.image;

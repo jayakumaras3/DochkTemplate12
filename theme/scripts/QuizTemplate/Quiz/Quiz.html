@@ -122,8 +122,14 @@
     <link rel="stylesheet" href="../../../css/QuestionOptions.css">
     <!-- Common theme layer - must stay LAST so it is the final colour word. -->
     <link rel="stylesheet" href="../../../css/theme-overrides.css">
+    <!-- Shared background mechanism (also used by SCQ/MCQ/Custom HTML) -
+         must load before quiz.js calls applyBackground(). -->
+    <script src="../../backgroundLayer.js"></script>
 </head>
 <body>
+ <!-- Ships hidden; applyBackground() (theme/scripts/backgroundLayer.js)
+      turns it on only when the quiz JSON's background.visible is true. -->
+ <div id="backgroundLayer" aria-hidden="true" hidden></div>
  <div id="parentquizContainer">	</div>
 	 <div id="quizContainer"></div>
 

@@ -7,6 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet"/>
+<!-- Shared background mechanism (also used by SCQ/MCQ/Quiz) - must load
+     before the inline script below calls applyBackground(). -->
+<script src="../../../theme/scripts/backgroundLayer.js"></script>
+<!-- Layout-only styling (page container, image/content split, feature
+     cards, responsive breakpoints) - see the file header for what lives
+     here vs. in the <style> block below. -->
+<link rel="stylesheet" href="../../../theme/css/page-layout.css"/>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -64,13 +71,11 @@
   --shadow-card:      0 2px 12px rgba(15,23,42,0.07), 0 0 0 1px rgba(15,23,42,0.04);
   --transition:       0.22s cubic-bezier(0.4,0,0.2,1);
   --layout-direction: row;
-  --media-basis:      46%;
-  --content-basis:    54%;
-  --layout-gap:       52px;
-  --card-padding:     52px;
-  --page-max-width:   1120px;
-  --page-h-pad:       clamp(16px, 4vw, 56px);
 }
+/* Layout dimensions (page max-width, image/content split, gaps, card
+   padding, feature-card styling, the responsive breakpoints) live in
+   theme/css/page-layout.css, linked above - not here and not in page.json.
+   That file is the single place a redesign touches. */
 
 html { font-size: 16px; scroll-behavior: smooth; }
 body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-text); min-height: 100vh; -webkit-font-smoothing: antialiased; line-height: 1.6; }
@@ -97,11 +102,6 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 }
 #backgroundLayer[hidden] { display: none; }
 
-/* Lifts the content above #backgroundLayer. position:relative only
-   establishes the z-index; it changes no geometry, since #page-shell is
-   already a normal-flow block. */
-#page-shell { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; max-width: var(--page-max-width); margin: 0 auto; padding: 0 var(--page-h-pad); }
-
 #page-header { padding: clamp(36px,6vh,64px) 0 clamp(20px,3vh,36px); }
 
 .page-eyebrow { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-heading); font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--c-primary); margin-bottom: 14px; }
@@ -117,80 +117,11 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .title-bar--center { margin: 16px auto 0; }
 .title-bar--right { margin-left: auto; margin-top: 16px; }
 
-/* min-height:0 lets #page-main shrink below its content's intrinsic height.
-   Without it a flex item's default min-height:auto floors it at content
-   size, which is what stops any descendant from ever fitting. */
-#page-main { flex: 1 1 auto; min-height: 0; display: flex; }
-
-.layout-card { flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; flex-direction: row; gap: var(--layout-gap); align-items: stretch; background: var(--c-surface); border-radius: var(--radius-xl); padding: var(--card-padding); box-shadow: var(--shadow-card); border: 1px solid var(--c-border); overflow: hidden; position: relative; transition: flex-direction 0s; }
-.layout-card::before { content: ''; position: absolute; top: 0; right: 0; width: 320px; height: 320px; background: radial-gradient(circle at top right, rgba(26,86,219,.06), transparent 70%); pointer-events: none; border-radius: var(--radius-xl); }
-
-.layout-card.image-left { flex-direction: row; }
-.layout-card.image-right { flex-direction: row-reverse; }
-.layout-card.top-image { flex-direction: column; }
-.layout-card.bottom-image { flex-direction: column-reverse; }
-.layout-card.full-content { flex-direction: column; }
-.layout-card.full-content .media-panel { display: none; }
-.layout-card.full-content .content-panel { flex: 1 1 100%; max-width: 100%; }
-
-.layout-card.top-image .media-panel, .layout-card.bottom-image .media-panel { flex: 0 0 100%; width: 100%; max-width: 100%; }
-.layout-card.top-image .content-panel, .layout-card.bottom-image .content-panel { flex: 1 1 100%; width: 100%; max-width: 100%; }
-
-/* ------------------------------------------------------------------
-   MEDIA: FIT-TO-CONTAINER (never crop, never stretch)
-   ------------------------------------------------------------------
-   The panel takes its width from --media-basis (JSON mediaRatio) and its
-   HEIGHT from the card, because .layout-card is align-items:stretch and the
-   text column is usually the taller of the two. The image is then fitted
-   into that box with object-fit:contain and centred, so the whole image is
-   always visible and its aspect ratio is never distorted.
-
-   min-width/min-height:0 on the panel and figure are required: a flex item
-   defaults to min-*:auto, which refuses to shrink below the intrinsic size
-   of its content and is the usual reason "the image won't fit".
-
-   max-height caps the figure to the height actually visible in the frame
-   (--available-h, published by initResponsiveFit; 100% if JS is
-   unavailable) so a long text column can never drive the image taller than
-   the screen.
-   ------------------------------------------------------------------ */
-.media-panel { flex: 0 0 var(--media-basis); max-width: var(--media-basis); min-width: 0; min-height: 0; position: relative; display: flex; }
-.media-figure {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  /* Responsive floor, not a fixed 320px: keeps a sensible size on tall
-     screens but is free to shrink on short ones. */
-  min-height: min(320px, 38vh);
-  max-height: var(--available-h, 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  position: relative;
-  /* Transparent, not the placeholder tint: with `contain` the leftover
-     space is now visible, and it should read as the card, not as a band of
-     colour around the artwork. */
-  background: transparent;
-}
-.media-img {
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  min-width: 0;
-  min-height: 0;
-  object-fit: contain;
-  object-position: center center;
-  display: block;
-  border-radius: var(--radius-lg);
-}
-/* The former :hover scale(1.03) is deliberately gone. Inside an
-   overflow:hidden figure it clipped ~1.5% off each fitted edge, which
-   contradicts "the complete image must always be visible". Restore by
-   re-adding a transform here if the zoom is wanted more than the guarantee. */
+/* #page-main, .layout-card (+ .image-left/.image-right/.top-image/
+   .bottom-image/.full-content), .media-panel and .media-figure/.media-img
+   sizing all live in theme/css/page-layout.css now - see that file for the
+   fit-to-container reasoning. .media-placeholder/.media-video/.media-caption
+   below are per-media-type skins, not layout, so they stay here. */
 
 .media-placeholder { width: 100%; min-height: 340px; border-radius: var(--radius-lg); background: linear-gradient(135deg, var(--c-primary-lt) 0%, #DBEAFE 50%, #E0F2FE 100%); border: 2px dashed rgba(26,86,219,.25); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--c-primary); }
 .media-placeholder svg { opacity: .45; }
@@ -200,39 +131,9 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .media-video iframe, .media-video video { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 .media-caption { margin-top: 10px; font-size: .78rem; color: var(--c-text-3); text-align: center; font-style: italic; }
 
-/* flex-basis comes from JSON contentRatio, but grow AND shrink stay enabled:
-   mediaRatio + contentRatio + the gap sum to more than 100%, so the content
-   column absorbs the gap by shrinking. That is what keeps the row from
-   overflowing horizontally at any width, whatever ratios are configured.
-   min-height:0 lets a long column scroll rather than force the card taller. */
-.content-panel { flex: 1 1 var(--content-basis, 0); min-width: 0; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 22px; overflow-y: auto; }
-.content-heading { font-family: var(--font-heading); font-size: clamp(1.15rem, 2.4vw, 1.6rem); font-weight: 700; line-height: 1.28; letter-spacing: -.025em; color: var(--c-text); }
-
-.content-body { font-size: clamp(.88rem, 1.4vw, .98rem); color: var(--c-text-2); line-height: 1.78; }
-.content-body p + p { margin-top: .7em; }
-.content-body ul, .content-body ol { padding-left: 1.3em; }
-.content-body li { margin-bottom: .35em; }
-.content-body strong { color: var(--c-text); font-weight: 600; }
-.content-body em { font-style: italic; }
-.content-body a { color: var(--c-primary); text-underline-offset: 3px; }
-.content-body table { width: 100%; border-collapse: collapse; font-size: .875rem; }
-.content-body th { background: var(--c-primary-lt); color: var(--c-primary-dk); padding: 8px 12px; text-align: left; font-weight: 700; }
-.content-body td { padding: 8px 12px; border-bottom: 1px solid var(--c-border); color: var(--c-text-2); }
-.content-body code { font-size: .83em; background: var(--c-surface-2); border: 1px solid var(--c-border); border-radius: 4px; padding: 1px 5px; }
-.content-body blockquote { border-left: 3px solid var(--c-primary); padding-left: 1rem; color: var(--c-text-2); font-style: italic; }
-
-.feature-list { display: flex; flex-direction: column; gap: 10px; list-style: none; }
-.feature-item { display: flex; align-items: flex-start; gap: 14px; padding: 15px 17px; background: var(--c-surface-2); border: 1px solid var(--c-border); border-radius: var(--radius); cursor: default; transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition); }
-.feature-item:hover, .feature-item:focus-within { background: var(--c-primary-lt); border-color: rgba(26,86,219,.35); transform: translateX(5px); box-shadow: var(--shadow-sm); outline: none; }
-.feature-item[tabindex]:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
-
-.feature-icon { flex-shrink: 0; width: 38px; height: 38px; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--c-primary-lt), rgba(26,86,219,.12)); border: 1px solid rgba(26,86,219,.15); display: flex; align-items: center; justify-content: center; color: var(--c-primary); transition: background var(--transition); }
-.feature-item:hover .feature-icon { background: linear-gradient(135deg, rgba(26,86,219,.15), rgba(6,182,212,.15)); color: var(--c-primary-dk); }
-.feature-icon svg { width: 17px; height: 17px; }
-
-.feature-text { flex: 1; min-width: 0; }
-.feature-title { font-family: var(--font-heading); font-weight: 700; font-size: .9rem; color: var(--c-text); margin-bottom: 2px; }
-.feature-desc { font-size: .82rem; color: var(--c-text-2); line-height: 1.55; }
+/* .content-panel sizing, .content-heading/.content-body typography and
+   .feature-list/.feature-item/.feature-icon/.feature-text/.feature-title/
+   .feature-desc all live in theme/css/page-layout.css now. */
 
 .callout { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-radius: var(--radius); font-size: .88rem; line-height: 1.6; }
 .callout--info { background: var(--c-primary-lt); border-left: 3px solid var(--c-primary); color: var(--c-primary-dk); }
@@ -343,48 +244,16 @@ body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-te
 .loader-ring { width: 42px; height: 42px; border: 3px solid var(--c-border); border-top-color: var(--c-primary); border-radius: 50%; animation: spin .75s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-@media (max-width: 860px) {
-  .layout-card, .layout-card.image-left, .layout-card.image-right, .layout-card.top-image, .layout-card.bottom-image { flex-direction: column !important; padding: clamp(20px, 4vw, 36px); gap: 28px; }
-  .layout-card .media-panel, .layout-card .content-panel { flex: 0 0 auto !important; width: 100% !important; max-width: 100% !important; }
-  .layout-card.image-right { flex-direction: column !important; }
-  /* Stacked layout: the image is no longer sharing a row with the text, so
-     it takes its natural height. max-height:none releases the --available-h
-     cap (which exists to stop a tall text column squeezing a side-by-side
-     image) and display:block drops the centring flexbox the row layout
-     needs — otherwise a height:auto flex child gets stretched here. */
-  .media-figure { min-height: 0; height: auto; max-height: none; display: block; overflow: visible; }
-  .media-img {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    max-height: none;
-    object-fit: contain;
-    aspect-ratio: auto !important;
-  }
-  /* No column to shrink into once stacked; let it size to its content. */
-  .content-panel { min-height: 0; overflow-y: visible; }
-}
+/* The 860px stacking breakpoint for .layout-card/.media-panel/.media-figure/
+   .media-img/.content-panel lives in theme/css/page-layout.css now. */
 
 @media (max-width: 560px) {
-  #page-shell { padding: 0 clamp(10px, 3.5vw, 16px); }
+  /* #page-shell padding, .layout-card gap and the .content-body wrapping/
+     table rules at this breakpoint live in theme/css/page-layout.css now. */
   .nav-row { flex-direction: column; align-items: stretch; }
   .btn-primary, .btn-secondary { justify-content: center; }
   .progress-wrap { max-width: 100%; }
   .stat-grid { grid-template-columns: repeat(2, 1fr); }
-  .layout-card { gap: 18px; }
-  .content-body,
-  .content-body p,
-  .content-body li {
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-  .content-body table {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
   .media-video,
   .media-video iframe,
   .media-video video {
@@ -459,39 +328,11 @@ const uid = () => Math.random().toString(36).slice(2, 8);
    No theme is read from JSON and none is injected here at runtime. */
 
 /* Background image.
-   JSON supplies the FILENAME ONLY - nothing here hardcodes an image name or
-   an on/off state, and no sizing, position, repeat, opacity or layering is
-   emitted; all of that is #backgroundLayer's job in the stylesheet.
-
-   Shown only when visible is exactly true AND a non-empty filename is
-   present, so `{"visible": true}` with no image, a missing `background`
-   block, or an older page.json without one all resolve to "off" instead of
-   loading `url(undefined)`.
-
-   The filename is relative to this document, which is what makes
-   "Background.png" resolve inside assets/html/customHTML/. encodeURI keeps
-   spaces and quotes in a filename from breaking out of the url() token. */
-function applyBackground(bg) {
-  const layer = document.getElementById('backgroundLayer');
-  if (!layer) return;
-
-  const cfg = bg || {};
-  const file = typeof cfg.image === 'string' ? cfg.image.trim() : '';
-  // Accept boolean true and the string "true" - configs in this package are
-  // hand-edited and sometimes quote their values. Everything else, including
-  // the string "false", counts as off, so a typo can never leave it stuck on.
-  const visible = cfg.visible === true ||
-    (typeof cfg.visible === 'string' && cfg.visible.trim().toLowerCase() === 'true');
-  const on = visible && file !== '';
-
-  if (on) {
-    layer.style.setProperty('--bg-image', `url("${encodeURI(file)}")`);
-    layer.hidden = false;
-  } else {
-    layer.style.removeProperty('--bg-image');
-    layer.hidden = true;
-  }
-}
+   applyBackground() itself now lives in theme/scripts/backgroundLayer.js -
+   the SAME implementation SCQ/MCQ/Quiz use, loaded via <script src> in
+   <head> above - so there is exactly one shared mechanism instead of a
+   copy per page type. It reads #backgroundLayer here exactly as before;
+   nothing about the call below changed. */
 
 /* Responsive fit.
    The fitting itself is pure CSS (object-fit + flex), so it already survives
@@ -544,7 +385,6 @@ function applyLayout(l = {}) {
   if (typeof l === 'string') l = { type: l };
   const layoutType = LAYOUT_TYPES.includes(l.type) ? l.type : 'image-left';
   const card = document.getElementById('layout-card');
-  const root = document.documentElement;
 
   if (card) {
     card.classList.remove(...LAYOUT_TYPES);
@@ -552,11 +392,10 @@ function applyLayout(l = {}) {
     card.dataset.layout = layoutType;
   }
 
-  root.style.setProperty('--media-basis', l.mediaRatio || '46%');
-  root.style.setProperty('--content-basis', l.contentRatio || '54%');
-  root.style.setProperty('--layout-gap', l.gap || '52px');
-  root.style.setProperty('--card-padding', l.cardPadding || '52px');
-  root.style.setProperty('--page-max-width', l.maxWidth || '1120px');
+  // Sizing (media/content ratio, gap, card padding, max-width) is no longer
+  // read from JSON or written here - it comes entirely from the custom
+  // properties in theme/css/page-layout.css. layout.type above only ever
+  // toggles which CSS class applies.
 
   const mp = document.getElementById('media-panel');
   if (mp) {
@@ -576,7 +415,8 @@ setTimeout(() => {
   }, 1000);
 
   const header = document.getElementById('page-header');
-  if (!h.visible) { header && (header.hidden = true); return; }
+  if (!h.visible) { header && (header.hidden = true, header.classList.add('hide-header')); return; }
+  if (header) header.classList.remove('hide-header');
   const eyebrow = document.getElementById('hdr-eyebrow');
   const eyebrowTxt = document.getElementById('eyebrow-text');
   const title = document.getElementById('hdr-title');
@@ -591,8 +431,9 @@ setTimeout(() => {
 function renderMedia(m = {}) {
   const panel = document.getElementById('media-panel');
   if (!panel) return;
-  if (!m.visible) { panel.hidden = true; return; }
+  if (!m.visible) { panel.hidden = true; panel.classList.add('hide-media'); return; }
   panel.hidden = false;
+  panel.classList.remove('hide-media');
   // aspectRatio is layout data and stays author-controlled from JSON.
   // The corner radius is NOT emitted here any more - .media-figure,
   // .media-placeholder and .media-video already carry
@@ -614,8 +455,9 @@ function renderMedia(m = {}) {
 function renderContent(c = {}) {
   const panel = document.getElementById('content-panel');
   if (!panel) return;
-  if (!c.visible) { panel.hidden = true; return; }
+  if (!c.visible) { panel.hidden = true; panel.classList.add('hide-content'); return; }
   panel.hidden = false;
+  panel.classList.remove('hide-content');
   const hTag = c.headingTag || 'h2';
   let html = '';
   if (c.heading) html += `<${hTag} class="content-heading anim anim-d2">${esc(c.heading)}</${hTag}>`;

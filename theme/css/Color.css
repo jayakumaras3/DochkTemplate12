@@ -397,7 +397,6 @@ video::cue {
 }
 
 .exitClass,
-.exitClass1,
 .muteClass,
 .unmuteClass,
 .playClass,
@@ -449,20 +448,8 @@ video::cue {
     box-shadow: none !important;
 }
 
-.headingcloser {
-    position: absolute !important;
-    inset: 0 !important;
-    z-index: 1004 !important;
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0 !important;
-    background: rgba(15, 23, 42, 0.14) !important;
-    cursor: pointer;
-}
-
-.headingcloser #TmenuIcon {
-    display: none !important;
-}
+/* .headingcloser rules removed: the class is never added anywhere. Its sole
+   appearance in any script is jMain.js `classList.remove("headingcloser")`. */
 
 .logo {
     display: block;
@@ -472,12 +459,7 @@ video::cue {
     padding: 0 !important;
 }
 
-.sideBarHeader1 {
-    display: none;
-    height: 0;
-    margin: 0;
-    padding: 0;
-}
+/* .sideBarHeader1 removed: never applied (the markup uses sideBarHeader). */
 
 .sideBar #sideBarHeader {
     display: flex !important;
@@ -1210,16 +1192,7 @@ html.menu-open-body {
     background: #eef2f8;
 }
 
-.headingcloser {
-    z-index: 1004 !important;
-    background: transparent !important;
-    width: clamp(52px, 4.6vw, 72px) !important;
-    height: var(--player-header-height) !important;
-    inset: auto !important;
-    left: 0 !important;
-    top: 0 !important;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
-}
+/* .headingcloser removed here too - class never applied (see note above). */
 
 .sideBar {
     top: 0 !important;
@@ -1545,8 +1518,9 @@ body,
 }
 
 /* Hard lock menu trigger alignment across all open/close states */
-#clickableDiv.headingArea1,
-#clickableDiv.headingcloser {
+/* The dead .headingcloser arm was dropped from this group; .headingArea1 is
+   the live one. */
+#clickableDiv.headingArea1 {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
@@ -1560,7 +1534,6 @@ body,
     background: transparent !important;
 }
 
-#clickableDiv.headingcloser #TmenuIcon,
 #clickableDiv.headingArea1 #TmenuIcon {
     display: block !important;
     margin: 0 !important;
@@ -1697,58 +1670,24 @@ body,
     }
 }
 
-#tocData > span > li > span.toc-row-item:hover {
-    background: #EEF7FA;
-    color: #005E80;
-}
+/* ------------------------------------------------------------------
+   Removed: the legacy `#tocData > ...` row-state rules (:hover,
+   :hover .toc-item-icon, :focus, :focus-visible, .selectedToc,
+   .selectedToc::after, .selectedToc .toc-item-icon, .visitedTOC,
+   .visitedTOC .toc-item-icon).
 
-#tocData > span > li > span.toc-row-item:hover .toc-item-icon {
-    opacity: 1;
-}
+   All nine were dead. The shipped menu panel is `<div id="Tmenu"
+   class="sideBar">`, so the later "MENU (sidebar) UI REFRESH" block wins
+   with three IDs against this block's one: the live counterparts are the
+   #Tmenu.sideBar #tocData rules further down this file.
 
-#tocData > span > li > span.toc-row-item:focus {
-    outline: none;
-}
+   .selectedToc::after was doubly dead - it declared no `content`
+   property at all, so the pseudo-element was never generated even before
+   specificity was considered.
 
-#tocData > span > li > span.toc-row-item:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px #3B82F6;
-}
-
-#tocData > span > li > span.toc-row-item.selectedToc {
-    background: #D8E9F0;
-    color: #005E80;
-    font-weight: 700;
-    border-radius: 0;
-    padding-left: 5px;
-    position: relative;
-}
-
-#tocData > span > li > span.toc-row-item.selectedToc::after {
-  
-    position: absolute;
-    left: auto;
-    right: 24px;
-    top: 50%;
-    width: 48px;
-    height: 2px;
-    background: #D8E9F0;
-    transform: translateY(-50%);
-}
-
-#tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
-    color: #005E80;
-    opacity: 1;
-}
-
-#tocData > span > li > span.toc-row-item.visitedTOC {
-    color: #475569;
-}
-
-#tocData > span > li > span.toc-row-item.visitedTOC .toc-item-icon {
-    opacity: 0.65;
-}
-
+   The rule immediately below is NOT part of that set and is LIVE: it has
+   no #Tmenu counterpart for .toc-item-text. Do not remove it.
+   ------------------------------------------------------------------ */
 #tocData > span > li > span.toc-row-item.selectedToc .toc-item-text,
 #tocData > span > li > span.toc-row-item.selectedToc .toc-item-icon {
     color: inherit;
@@ -1763,18 +1702,8 @@ body,
     list-style: none;
 }
 
-.sideBar.collapsed #tocData > span {
-    grid-template-columns: 1fr;
-}
-
-.sideBar.collapsed #tocData > span > li > span.toc-row-item {
-    justify-content: center;
-    gap: 0;
-}
-
-.sideBar.collapsed .toc-item-text {
-    display: none;
-}
+/* Removed: the three .sideBar.collapsed rules. The `collapsed` class is never
+   applied - no markup carries it and no script adds it. */
 
 #tocData > span > p.tickSymbol,
 #tocData > span > p.tickSymbol1 {

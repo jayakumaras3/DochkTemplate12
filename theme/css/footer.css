@@ -142,13 +142,9 @@
     margin-right: 27px !important;
     margin-top: 15px !important;
 }
-.exitClass1
-{
-	height: 29px;
-    background-image: url("../images/footer-menu/Setting.png");
-    background-repeat: no-repeat;
-    width:59px;
-}
+/* .exitClass1 removed: never applied. theme/Json/config.json binds
+   "exitClass" (no trailing 1) via content.html's ng-class. Its background
+   also pointed at Setting.png, which does not exist in the package. */
 .exitClass
 {
 	display:none;
@@ -188,13 +184,10 @@
     top:7px;
     border-radius:50%;
 }
-.replayClass
-{
-    background-image: url("../images/footer-menu/replay.png");
-    background-repeat: no-repeat;
-    width:59px;
-    height: 29px;
-}
+/* Duplicate .replayClass removed: byte-identical to the rule earlier in this
+   file except that the earlier one also carries `display:none !important`.
+   Since this copy declared no `display`, the earlier !important won
+   regardless, making this block 100% redundant. */
 .navCircleHighlight
 {
     background-color: #79aebf;

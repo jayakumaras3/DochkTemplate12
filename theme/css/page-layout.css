@@ -1,0 +1,384 @@
+/* ==========================================================================
+   page-layout.css
+   Layout-only styling for the JSON-driven eLearning page
+   (assets/html/customHTML/index.html).
+
+   page.json controls content, structure and visibility ONLY. layout.type
+   picks which of the classes below applies, but no size/spacing/ratio value
+   is ever read from JSON or written here by JavaScript. Redesigning the
+   page (wider cards, a different image/content split, more breathing room)
+   means editing the custom properties below - nothing in the HTML or JS
+   needs to change.
+
+   Depends on --c-surface, --c-border, the --radius- tokens, --shadow-card
+   and --font-heading, defined in index.html's own <style> (the colour and
+   typography source of truth) - this file only adds the layout-specific
+   tokens below it.
+
+   WARNING: never write a bare "*" immediately followed by "/" anywhere in a
+   comment in this file (for example the glob spelling of the --radius-
+   token names). CSS comments do not nest, so that two-byte pair terminates
+   this header comment early; the prose after it is then parsed as a
+   selector prelude that swallows the :root rule below, silently dropping
+   every custom property and collapsing the whole layout.
+   ========================================================================== */
+:root {
+  --page-max-width:    1120px;
+  --page-gap:          52px;
+  --page-card-padding: 52px;
+  --page-media-width:  50%;
+  --page-content-width: 50%;
+  --page-h-pad:        clamp(16px, 4vw, 56px);
+}
+
+/* --- Main page container -------------------------------------------------
+   position:relative + z-index:1 lift the whole page above #backgroundLayer
+   (position:fixed, z-index:0, defined in index.html) without changing any
+   geometry here - #page-shell is already a normal-flow block. */
+#page-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: var(--page-max-width, 1120px);
+  margin: 0 auto;
+  padding: 0 var(--page-h-pad, clamp(16px, 4vw, 56px));
+}
+
+/* min-height:0 lets #page-main shrink below its content's intrinsic height.
+   Without it a flex item's default min-height:auto floors it at content
+   size, which is what stops any descendant from ever fitting.
+
+   align-items:stretch (the flex default, stated explicitly) makes
+   .layout-card fill the height #page-main was given, which is what the
+   reference shows: the white card reaches the bottom of the frame rather
+   than stopping at its content and leaving a band of page background
+   underneath it. The media panel stretches with it, so the image has room
+   to be large. An earlier revision used flex-start here to kill blank space
+   INSIDE a nearly-empty card; that trade is no longer right - the card now
+   fills the frame and .content-panel is top-aligned, so short content
+   leaves its slack at the bottom of the text column rather than making the
+   card itself look truncated. */
+#page-main { flex: 1 1 auto; min-height: 0; display: flex; align-items: stretch; }
+
+/* --- Image/content split layout -------------------------------------------
+   layout.type in page.json only ever selects one of these classes; every
+   dimension comes from the custom properties above, never from JSON. */
+.layout-card {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+  gap: var(--page-gap, 52px);
+  align-items: stretch;
+  background: var(--c-surface);
+  border-radius: var(--radius-xl);
+  padding: var(--page-card-padding, 52px);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--c-border);
+  overflow: hidden;
+  position: relative;
+  transition: flex-direction 0s;
+}
+.layout-card::before { content: ''; position: absolute; top: 0; right: 0; width: 320px; height: 320px; background: radial-gradient(circle at top right, rgba(26,86,219,.06), transparent 70%); pointer-events: none; border-radius: var(--radius-xl); }
+
+.layout-card.image-left { flex-direction: row; }
+.layout-card.image-right { flex-direction: row-reverse; }
+.layout-card.top-image { flex-direction: column; }
+.layout-card.bottom-image { flex-direction: column-reverse; }
+.layout-card.full-content { flex-direction: column; }
+.layout-card.full-content .media-panel { display: none; }
+.layout-card.full-content .content-panel { flex: 1 1 100%; max-width: 100%; }
+
+.layout-card.top-image .media-panel, .layout-card.bottom-image .media-panel { flex: 0 0 100%; width: 100%; max-width: 100%; }
+.layout-card.top-image .content-panel, .layout-card.bottom-image .content-panel { flex: 1 1 100%; width: 100%; max-width: 100%; }
+
+/* --- Image size: fill the column, never crop, never letterbox ------------
+   The panel is --page-media-width wide and, because .layout-card is
+   align-items:stretch, as tall as the card. The image is width:100% /
+   height:auto so its own aspect ratio decides its height, and it is bounded
+   by max-height:100% of that stretched box so it can never overflow.
+
+   max-height must be a percentage of the box, NOT an absolute ceiling. An
+   absolute cap (the old --media-height / calc(--available-h ...) version)
+   shrank the image's rendered height while its BOX stayed width:100%, and
+   object-fit:contain then centred the picture inside that box - producing a
+   band of empty card either side of the image. That is the letterboxing
+   visible in the "not per reference" screenshots. Bounding by the box
+   instead keeps the image flush to its column, as the reference shows.
+
+   min-width/min-height:0 on the panel are required: a flex item defaults to
+   min-*:auto, which refuses to shrink below the intrinsic size of its
+   content and is the usual reason "the image won't fit". */
+/* align-items:center (not the stretch default) lets .media-figure hug the
+   image's own height and sit centred in the column, instead of being
+   stretched to the card's full height. */
+.media-panel { flex: 0 0 var(--page-media-width, 50%); max-width: var(--page-media-width, 50%); min-width: 0; min-height: 0; position: relative; display: flex; align-items: center; }
+.media-figure {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+  /* block, not flex: the figure now wraps the image exactly, so there is no
+     leftover box to centre anything inside. */
+  display: block;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  background: transparent;
+}
+.media-img {
+  /* width:100% + height:auto and NO height ceiling. The image fills the
+     column and its own aspect ratio sets its height, which is exactly what
+     the reference shows.
+
+     Do not reintroduce a max-height here. Any height ceiling (absolute like
+     --media-height/calc(--available-h ...), or a percentage like 100% of a
+     stretched panel) shrinks the picture while its BOX stays width:100%,
+     and object-fit:contain then centres it inside that box - leaving white
+     card either side of the image. Every "not as per reference" round of
+     this bug traced back to that. Height is bounded structurally instead:
+     .layout-card is capped at 100% of the frame and the short-viewport
+     tiers below trim the surrounding spacing. */
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  min-width: 0;
+  /* Neutralises the inline style="aspect-ratio:..." that renderMedia() in
+     index.html emits from page.json's media.aspectRatio. !important is
+     required because that is an inline style and would otherwise win.
+
+     That value (4/3) describes a landscape box, while the actual asset is
+     portrait, so it forced a 4:3 box and object-fit:contain letterboxed the
+     picture inside it - white card either side, the image never filling its
+     column. It is also a SIZING value arriving from JSON, which this
+     refactor moved into CSS everywhere else; the max-width:860px block
+     below has always overridden it for the same reason. Letting the image
+     keep its own ratio is what makes it fill the column, per the reference. */
+  aspect-ratio: auto !important;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  border-radius: var(--radius-lg);
+}
+
+/* --- Content spacing / typography spacing ---------------------------------
+   flex-basis comes from --page-content-width, but grow AND shrink stay
+   enabled: --page-media-width + --page-content-width + --page-gap can sum
+   to more than 100%, so the content column absorbs the gap by shrinking.
+   That is what keeps the row from overflowing horizontally at any
+   configured ratio.
+   min-height:0 lets a long column scroll rather than force the card taller. */
+/* overflow-x:hidden is deliberate and must stay paired with overflow-y:auto:
+   per spec, when one axis is not `visible` the other computes to `auto`, so
+   the y-axis scroller alone would silently enable an x-axis scrollbar too.
+   Stating x explicitly guarantees no horizontal scrollbar can ever appear
+   here, whatever a child does. */
+/* justify-content MUST stay flex-start, never center. A centered flex column
+   that overflows spills equally off BOTH ends, so the heading gets clipped
+   above the panel's top edge where scrolling cannot reach it - the content is
+   simply gone. flex-start also matches the reference, where the heading is
+   top-aligned with the top of the image. */
+.content-panel { flex: 1 1 var(--page-content-width, 50%); min-width: 0; min-height: 0; display: flex; flex-direction: column; justify-content: flex-start; gap: 22px; overflow-y: auto; overflow-x: hidden; }
+.content-heading { font-family: var(--font-heading); font-size: clamp(1.15rem, 2.4vw, 1.6rem); font-weight: 700; line-height: 1.28; letter-spacing: -.025em; color: var(--c-text); }
+
+.content-body { font-size: clamp(.88rem, 1.4vw, .98rem); color: var(--c-text-2); line-height: 1.78; }
+.content-body p + p { margin-top: .7em; }
+.content-body ul, .content-body ol { padding-left: 1.3em; }
+.content-body li { margin-bottom: .35em; }
+.content-body strong { color: var(--c-text); font-weight: 600; }
+.content-body em { font-style: italic; }
+.content-body a { color: var(--c-primary); text-underline-offset: 3px; }
+.content-body table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+.content-body th { background: var(--c-primary-lt); color: var(--c-primary-dk); padding: 8px 12px; text-align: left; font-weight: 700; }
+.content-body td { padding: 8px 12px; border-bottom: 1px solid var(--c-border); color: var(--c-text-2); }
+.content-body code { font-size: .83em; background: var(--c-surface-2); border: 1px solid var(--c-border); border-radius: 4px; padding: 1px 5px; }
+.content-body blockquote { border-left: 3px solid var(--c-primary); padding-left: 1rem; color: var(--c-text-2); font-style: italic; }
+
+/* --- Feature card styling ------------------------------------------------- */
+.feature-list { display: flex; flex-direction: column; gap: 10px; list-style: none; }
+.feature-item { display: flex; align-items: flex-start; gap: 14px; padding: 15px 17px; background: var(--c-surface-2); border: 1px solid var(--c-border); border-radius: var(--radius); cursor: default; transition: background var(--transition), border-color var(--transition), box-shadow var(--transition); }
+/* No transform on hover. The former `translateX(5px)` shifted the card 5px
+   to the right, which pushed it past .content-panel's right edge and made a
+   horizontal scrollbar appear and disappear as the pointer moved over the
+   list - the visible "jerk". Colour/border/shadow still give the hover cue
+   without moving anything, so nothing can overflow. These cards are
+   non-interactive (cursor: default) so there is no affordance to lose. */
+.feature-item:hover, .feature-item:focus-within { background: var(--c-primary-lt); border-color: rgba(26,86,219,.35); box-shadow: var(--shadow-sm); outline: none; }
+.feature-item[tabindex]:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+
+.feature-icon { flex-shrink: 0; width: 38px; height: 38px; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--c-primary-lt), rgba(26,86,219,.12)); border: 1px solid rgba(26,86,219,.15); display: flex; align-items: center; justify-content: center; color: var(--c-primary); transition: background var(--transition); }
+.feature-item:hover .feature-icon { background: linear-gradient(135deg, rgba(26,86,219,.15), rgba(6,182,212,.15)); color: var(--c-primary-dk); }
+.feature-icon svg { width: 17px; height: 17px; }
+
+.feature-text { flex: 1; min-width: 0; }
+.feature-title { font-family: var(--font-heading); font-weight: 700; font-size: .9rem; color: var(--c-text); margin-bottom: 2px; }
+.feature-desc { font-size: .82rem; color: var(--c-text-2); line-height: 1.55; }
+
+/* --- Show/hide (page.json visibility flags) --------------------------------
+   index.html's boot script adds these classes exactly when header.visible /
+   media.visible / content.visible is false, alongside the `hidden`
+   attribute it already set before (kept, since initResponsiveFit reads it
+   for its height calculation) - so this is the CSS-authoritative hide
+   mechanism the visibility flags map to now. */
+.hide-header,
+.hide-media,
+.hide-content {
+  display: none;
+}
+
+/* --- Fit the whole page inside the frame (desktop / side-by-side only) -----
+   The course player gives this page a fixed-height iframe. Without a cap the
+   card grows to its content's natural height, overflows that iframe and the
+   player shows a scrollbar with the last feature card cut off.
+
+   height (not min-height) pins #page-shell to the frame; #page-main already
+   has min-height:0 so it can shrink. With #page-main at align-items:stretch,
+   .layout-card fills exactly the height left after the header and footer -
+   matching the reference, where the card reaches the bottom of the frame -
+   and can never exceed it. .content-panel's own overflow-y:auto absorbs any
+   genuine excess by scrolling just that column, never the whole page.
+
+   The image needs NO rule here: .media-img is bounded by max-height:100% of
+   its stretched panel (see that rule above), which already keeps it inside
+   the frame. An absolute calc() ceiling was tried here and removed - it
+   letterboxed the image inside a full-width box instead of fitting it.
+
+   Scoped to min-width:861px, the exact complement of the max-width:860px
+   stacking breakpoint below: once the layout stacks, the page is SUPPOSED to
+   grow and scroll normally, so none of this applies there. */
+@media (min-width: 861px) {
+  #page-shell {
+    height: 100vh;
+    min-height: 0;
+  }
+
+  .layout-card {
+    max-height: 100%;
+  }
+}
+
+/* Short viewports (laptops at 768/800px tall, minus the player's own chrome)
+   need the vertical rhythm tightened or the content column cannot fit however
+   small the image gets. Two tiers, so a 700px-tall frame is trimmed harder
+   than an 800px one. Spacing and leading only - the 50/50 split, colours and
+   font SIZES are untouched.
+
+   These redefine --page-card-padding rather than setting .layout-card's
+   padding directly, so the .media-img height calc above (which subtracts
+   2 * that variable) stays in agreement with the padding actually applied.
+   Overriding the property alone would leave the calc subtracting the old
+   52px and mis-sizing the image on exactly the screens that can least
+   afford it. */
+@media (min-width: 861px) and (max-height: 820px) {
+  :root {
+    --page-card-padding: 34px;
+    --page-gap: 40px;
+  }
+
+  #page-header {
+    padding: clamp(14px, 2.6vh, 30px) 0 clamp(8px, 1.4vh, 16px);
+  }
+
+  .content-panel {
+    gap: 13px;
+  }
+
+  .content-body {
+    line-height: 1.6;
+  }
+
+  .feature-list {
+    gap: 8px;
+  }
+
+  .feature-item {
+    padding: 10px 13px;
+  }
+
+  .feature-desc {
+    line-height: 1.45;
+  }
+}
+
+@media (min-width: 861px) and (max-height: 700px) {
+  :root {
+    --page-card-padding: 24px;
+    --page-gap: 30px;
+  }
+
+  #page-header {
+    padding: clamp(10px, 1.8vh, 20px) 0 clamp(6px, 1vh, 12px);
+  }
+
+  .content-panel {
+    gap: 10px;
+  }
+
+  .content-body {
+    line-height: 1.5;
+  }
+
+  .feature-list {
+    gap: 6px;
+  }
+
+  .feature-item {
+    padding: 8px 11px;
+  }
+
+  .feature-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* --- Responsive behaviour ---------------------------------------------------
+   Below 860px every layout type stacks to a single column: image, then
+   content, full width. flex-direction is forced with !important because the
+   desktop rules above set row/row-reverse per layout.type; the whole point
+   of this breakpoint is to always win over that regardless of type. */
+@media (max-width: 860px) {
+  .layout-card, .layout-card.image-left, .layout-card.image-right, .layout-card.top-image, .layout-card.bottom-image { flex-direction: column !important; padding: clamp(20px, 4vw, 36px); gap: 28px; }
+  .layout-card .media-panel, .layout-card .content-panel { flex: 0 0 auto !important; width: 100% !important; max-width: 100% !important; }
+  .layout-card.image-right { flex-direction: column !important; }
+  /* Stacked layout: the image is no longer sharing a row with the text, so
+     it takes its natural height. max-height:none releases the --media-height
+     cap (which exists to stop an unusually tall image blowing out the
+     card) and display:block drops the centring flexbox the row layout
+     needs - otherwise a height:auto flex child gets stretched here. */
+  .media-figure { min-height: 0; height: auto; max-height: none; display: block; overflow: visible; }
+  .media-img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+    aspect-ratio: auto !important;
+  }
+  /* No column to shrink into once stacked; let it size to its content.
+     `overflow` (both axes), not just overflow-y: the desktop rule sets
+     overflow-x:hidden, and leaving x hidden here would force this y:visible
+     back to `auto` per the same computed-value rule, reintroducing an
+     internal scroller on mobile instead of letting the page scroll. */
+  .content-panel { min-height: 0; overflow: visible; }
+}
+
+@media (max-width: 560px) {
+  #page-shell { padding: 0 clamp(10px, 3.5vw, 16px); }
+  .layout-card { gap: 18px; }
+  .content-body,
+  .content-body p,
+  .content-body li {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .content-body table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -54,38 +54,16 @@ async function loadPageData(jsonPath = PAGE_JSON_PATH) {
    ─────────────────────────────────────────────────────────── */
 
 /* ── 2a. Background Image Applier ────────────────────────────
-   JSON supplies the FILENAME ONLY. Nothing here hardcodes an image name or
-   an on/off state, and no sizing, position, repeat, opacity or layering is
-   emitted - all of that belongs to #backgroundLayer in page.css.
-
-   Shown only when visible is exactly true AND a non-empty filename is
-   present, so `{"visible": true}` with no image, a missing `background`
-   block, or an older page.json without one all resolve to "off" rather than
-   loading `url(undefined)`.
-
-   The filename resolves relative to the host document, which is what makes
-   "Background.png" load from this folder. encodeURI keeps spaces and quotes
-   in a filename from breaking out of the url() token.
+   The implementation was consolidated into theme/scripts/backgroundLayer.js
+   so there is exactly one shared background mechanism across every page
+   type (Custom HTML, SCQ, MCQ, Quiz) instead of a copy per page. That file
+   sets window.applyBackground; this orphaned page.js (nothing loads it —
+   see the file header) simply forwards to it so no second, competing
+   implementation exists here even as dead-code reference material.
    ─────────────────────────────────────────────────────────── */
 function applyBackground(background) {
-  const layer = document.getElementById('backgroundLayer');
-  if (!layer) return;
-
-  const cfg = background || {};
-  const file = typeof cfg.image === 'string' ? cfg.image.trim() : '';
-  // Accept boolean true and the string "true" - configs in this package are
-  // hand-edited and sometimes quote their values. Everything else, including
-  // the string "false", counts as off, so a typo can never leave it stuck on.
-  const visible = cfg.visible === true ||
-    (typeof cfg.visible === 'string' && cfg.visible.trim().toLowerCase() === 'true');
-  const enabled = visible && file !== '';
-
-  if (enabled) {
-    layer.style.setProperty('--bg-image', `url("${encodeURI(file)}")`);
-    layer.hidden = false;
-  } else {
-    layer.style.removeProperty('--bg-image');
-    layer.hidden = true;
+  if (typeof window !== 'undefined' && typeof window.applyBackground === 'function' && window.applyBackground !== applyBackground) {
+    return window.applyBackground(background);
   }
 }
 

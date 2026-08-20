@@ -13,6 +13,65 @@
    the "identical across templates" guarantee holds.
    ========================================================================== */
 
+/* --- Shared background layer --------------------------------------------
+   One rule set for all three templates, painted by theme/scripts/
+   backgroundLayer.js (applyBackground()) — the same shared mechanism the
+   Custom HTML page uses. position:fixed + inset:0 covers the full iframe
+   viewport at every size with no per-breakpoint CSS needed, and
+   pointer-events:none guarantees it can never intercept a click/tap.
+
+   #parentquizContainer/#quizContainer are promoted to position:relative so
+   they keep painting ABOVE this fixed layer: a position:fixed element at
+   z-index:0 forms its own stacking context that outranks ordinary static
+   siblings regardless of DOM order, so without this they would render
+   BEHIND the background image instead of on top of it. position:relative
+   with no top/left/right/bottom offset changes no geometry — verified
+   nothing in Quiz_style.css/SCQ_style.css/MCQ_style.css sets an offset on
+   either selector at any breakpoint, so this is a pure stacking fix. */
+#backgroundLayer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: var(--bg-image, none);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+#backgroundLayer[hidden] {
+    display: none;
+}
+
+#parentquizContainer,
+#quizContainer {
+    position: relative;
+    z-index: 1;
+}
+
+/* SCQ_style.css/MCQ_style.css switch #quizContainer to flex:0 0 auto (i.e.
+   content-sized, not filling the page) inside this same
+   @media(min-width:901px){html:not(.is-touch-device) ...} block, so it is
+   the only condition where body has leftover vertical space to give it.
+   margin-top/bottom:auto (not justify-content:center on body) is the
+   mechanism: it centers #quizContainer within that leftover space without
+   any dependency on the `safe` alignment keyword, which is unsupported on
+   some embedded/older Chromium-based LMS players and is silently dropped
+   there (the declaration is invalid CSS to them, so it never overrides
+   flex-start) — the exact "gap only below, never above" symptom this
+   fixes. Auto margins are overflow-safe by construction: when content is
+   taller than the available space they resolve to 0 (same as flex-start),
+   they cannot go negative, so this can never push the card above the
+   viewport. Quiz.html's own #quizContainer stays flex:1 (its
+   .questionContainer child is what becomes content-sized instead — see
+   Quiz_style.css), so these auto margins have no leftover space to absorb
+   there and are a safe no-op, not a fix for that template. */
+@media (min-width: 901px) {
+    html:not(.is-touch-device) #quizContainer {
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+}
+
 /* --- Option list -------------------------------------------------------- */
 .options,
 .options1 {

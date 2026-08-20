@@ -104,7 +104,11 @@ function getRandomQuestionsAndAnswers(answers, questions) {
 	parent.setPassScore(quizData.passingScore);
 	retryButton=quizData.retryButton
 	TimeUpte=quizData.TimeUpte;
-	
+	// Relayed to quiz.js (in the nested #contentFrame iframe) as parent.background,
+	// same pattern as every other value above. Shared shape with SCQ/MCQ's
+	// "background" key; resolved by the shared theme/scripts/backgroundLayer.js.
+	background=quizData.background;
+
 
 	parent.parent.QuizAttemptLimit=QuizAttempt;
 	

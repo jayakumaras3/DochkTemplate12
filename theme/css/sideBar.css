@@ -97,22 +97,14 @@
 .transcriptClass {
     padding: 5% 5% 60px 5%;
 }
- .sideBarHeader1 {
-  /*  padding: 8px;*/
-    font-size: 20px;
-    font-weight: bold;
-}
+/* .sideBarHeader1 removed: never applied (the markup uses sideBarHeader). */
 .sideBarHeader {
     padding: 8px;
     font-size: 16px;
     font-weight: bold;
 }
 
-.sideBartopicHeader {
-    padding: 4px;
-    font-size: 16px;
-    font-weight: bold;
-}
+/* .sideBartopicHeader removed: never applied. */
 #tocData li
 {
     list-style: none;
@@ -207,50 +199,11 @@ body {
     content: '\2713'; /* Unicode for the tick symbol */
      /*margin-left: 10px; Optional: add some spacing between the tick and existing content */
 }
-.toggle-box {
-    display: none;
-}
-
-.toggle-box + label {
-    cursor: pointer;
-    display: block;
-    width:100% !important;
-    font-weight: bold;
-    line-height: 21px;
-    margin-top: 0px;    
-    margin-left:0px;
-}
-
-.toggle-box + label + ul {
-    display: none;
-    margin-bottom: 10px;
-    margin-left:0px;
-}
-
-.toggle-box:checked + label + ul {
-    display: block;
-}
-
-.toggle-box + label:before {
-    background-color: #fff;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    color: #333;
-    content: "+";
-    display: block;
-    float: left;
-    font-weight: bold;
-    height: 20px;
-    line-height: 20px;
-    margin-right: 5px;
-    text-align: center;
-    width: 20px;    font-size: 12px;
-}
-
-.toggle-box:checked + label:before {
-    content: "\2212";
-}
+/* The .toggle-box accordion family (6 rules) removed: nothing in the package
+   ever emits class="toggle-box". Its only appearances in script are read-only
+   jQuery selectors that operate on an empty set - main.js
+   $(".toggle-box").not(...).prop('checked', false) and
+   footerBarController.js $(".toggle-box").removeProp('checked'). */
 
 .glossary_Index
 { 

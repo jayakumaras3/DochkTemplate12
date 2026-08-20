@@ -484,7 +484,12 @@ body {
 }
 
 /* Color.css forces `body { display: block !important }`; this beats it via
-   specificity (html body > body) so the Quiz page's flex column applies. */
+   specificity (html body > body) so the Quiz page's flex column applies.
+   Plain white, not var(--bg-image): #backgroundLayer (position:fixed,
+   painted above this as a positioned/z-index:1+ sibling stack - see
+   QuestionOptions.css) is the single active background layer; duplicating
+   the image here would just be a second layer painting the same pixels
+   underneath it. */
 html body {
     background: #ffffff;
     color: #2f2524;
@@ -520,7 +525,8 @@ html body {
     align-items: center;
     flex: 1;
     min-height: 0;
-    margin: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     overflow: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -538,7 +544,10 @@ html body {
     justify-content: center;
     align-items: center;
     min-height: 0;
-    background: #ffffff;
+    /* Transparent, not white: #Startpageid (the Assessment card) already
+       paints its own complete card. This outer box is just the centering
+       wrapper, so the shared #backgroundLayer image shows through it. */
+    background: transparent;
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -546,6 +555,12 @@ html body {
 }
 
 #quizContainer:not(.quiz-start-view):not(:has(.results)) {
+    /* Transparent, not the base rule's white: .questionContainer already
+       paints its own complete card. Scoped to this view only (not the
+       shared base #quizContainer rule) so .quiz-start-view (has its own
+       explicit background: #ffffff above) and :has(.results) (still
+       inherits the base rule's white) are unaffected. */
+    background: transparent;
     justify-content: flex-start;
     align-items: center;
     padding: clamp(10px, 1.8vw, 18px) clamp(12px, 2.4vw, 24px) clamp(12px, 2vw, 20px);
@@ -857,6 +872,10 @@ html body {
 }
 
 #quizContainer:has(.results) {
+    /* Transparent, not the base rule's white: .results (the result card)
+       already paints its own complete card, same as #Startpageid and
+       .questionContainer for the other two views. */
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1640,19 +1659,31 @@ html:not(.is-touch-device) body {
     padding-top: var(--outer-header-overlap, 0px);
 }
 
-/* body is a flex COLUMN (the html body rule above), and the legacy
-   `body { justify-content: center }` near the top of this file therefore
-   centers the page VERTICALLY. A centered flex column whose content is
-   taller than the container overflows at BOTH ends -- so whenever a
-   question renders taller than the viewport (short windows inside the
-   SCORM player; touch layouts where applyMobileScrollFix gives
-   #quizContainer min-height:100%), the "Questions X of Y" bar is pushed
-   ABOVE the viewport top and clipped with every scroller still at 0.
-   Anchor the column to the top instead: with #quizContainer at flex:1
-   this renders identically whenever content fits, and overflow now
-   happens only at the bottom, where it can scroll. */
+/* body is a flex COLUMN (the html body rule above). Centers the group
+   within the available height, so the shared page-background layer
+   (#backgroundLayer, QuestionOptions.css) shows above AND below a short
+   question instead of only below it.
+
+   This used to be an unconditional flex-start: a plainly-centered flex
+   column whose content is taller than the container overflows at BOTH
+   ends, so whenever a question rendered taller than the viewport (short
+   windows inside the SCORM player; touch layouts where
+   applyMobileScrollFix gives #quizContainer min-height:100%), the
+   "Questions X of Y" bar was pushed ABOVE the viewport top and clipped
+   with every scroller still at 0 - unreachable.
+
+   `safe center` fixes that at the source: it centers when there is room,
+   and automatically falls back to start-alignment whenever centering
+   would push any part of the content out of view, so that stranding can
+   no longer happen - eliminating the need to choose center vs flex-start
+   per device. flex-start is declared first as the fallback for browsers
+   that don't yet recognise the `safe` keyword: an unsupported value makes
+   that whole declaration invalid and it is dropped, leaving flex-start
+   (today's pre-existing behaviour, not a regression) rather than unsafe
+   plain centering. */
 html body {
     justify-content: flex-start;
+    justify-content: safe center;
 }
 
 /* Whenever anything scrolls the "Questions X of Y" bar into view (anchor

@@ -35,6 +35,9 @@
   "viewResult": "View Result",
   "clicknote": "Click <strong>Start</strong> to begin.",
   "TimeUpte": "Oops! Time's up!",
+  "background": {
+    "visible": true
+  },
   "questions": [
     {
       "question": "sIdentify the primary shaft that rotates due to the explosions caused by the chemical reaction of the combustible fluid.Identify the primary shaft that rotates due to the explosions caused by the chemical reaction of the combustible fluid.",
